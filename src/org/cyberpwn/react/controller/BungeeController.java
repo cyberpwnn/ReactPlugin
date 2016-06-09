@@ -61,7 +61,7 @@ public class BungeeController extends Controller implements PluginMessageListene
 			return;
 		}
 		
-		new Task(react, 100)
+		new Task(100)
 		{
 			public void run()
 			{
@@ -77,7 +77,7 @@ public class BungeeController extends Controller implements PluginMessageListene
 			}
 		};
 				
-		new Task(getReact(), cc.getInt("interval"))
+		new Task(cc.getInt("interval"))
 		{
 			public void run()
 			{

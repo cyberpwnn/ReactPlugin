@@ -29,7 +29,7 @@ public class SamplePHTimings extends Sample
 	{
 		value.setNumber(1);
 		
-		new Task(getSampleController().getReact(), 8)
+		new Task(8)
 		{
 			public void run()
 			{

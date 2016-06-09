@@ -2,7 +2,6 @@ package org.cyberpwn.react.util;
 
 import java.util.Iterator;
 
-import org.cyberpwn.react.React;
 import org.cyberpwn.react.object.GList;
 
 public class ExecutiveIterator<T>
@@ -13,7 +12,7 @@ public class ExecutiveIterator<T>
 	{
 		this.it = data.iterator();
 		
-		new Task(React.instance(), 0)
+		new Task(0)
 		{
 			public void run()
 			{
