@@ -46,7 +46,7 @@ public class ActionCullEntities extends Action implements Listener
 		{
 			final Iterator<Chunk> it = new GList<Chunk>(i.getLoadedChunks()).iterator();
 			
-			new Task(getActionController().getReact(), 0)
+			new Task(0)
 			{
 				public void run()
 				{

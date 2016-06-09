@@ -83,7 +83,7 @@ public class ActionPurgeChunks extends Action implements Listener
 			p.sendMessage(Info.TAG + ChatColor.GREEN + "Started Cull @ " + world.getName());
 		}
 		
-		new Task(actionController.getReact(), 0)
+		new Task(0)
 		{
 			public void run()
 			{
