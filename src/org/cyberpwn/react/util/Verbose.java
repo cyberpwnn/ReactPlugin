@@ -8,7 +8,7 @@ import org.cyberpwn.react.object.GList;
 
 public class Verbose
 {
-	public static GList<Player> mx = new GList<Player>();
+	public static GList<Player> mrx = new GList<Player>();
 	
 	public static void x(String s, String msg)
 	{
@@ -17,9 +17,9 @@ public class Verbose
 			Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + s + ChatColor.AQUA + " >> " + ChatColor.GREEN + msg);
 		}
 		
-		if(!mx.isEmpty())
+		if(!mrx.isEmpty())
 		{
-			for(Player i : mx)
+			for(Player i : mrx)
 			{
 				i.sendMessage(ChatColor.LIGHT_PURPLE + s + ChatColor.AQUA + " >> " + ChatColor.GREEN + msg);
 			}

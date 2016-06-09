@@ -1,8 +1,6 @@
-package org.cyberpwn.react.bungeecord;
+package org.cyberpwn.react.object;
 
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.Value;
 
 public class MonitorPacket
 {

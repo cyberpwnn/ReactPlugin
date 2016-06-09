@@ -14,8 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.cyberpwn.react.bungeecord.MonitorPacket;
-import org.cyberpwn.react.bungeecord.ServerThread;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -35,6 +33,7 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.FCCallback;
 import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.object.MonitorPacket;
 import org.cyberpwn.react.object.PlayerData;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
@@ -45,12 +44,12 @@ import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.HeartBeat;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.PlaceholderHook;
 import org.cyberpwn.react.util.PluginUtil;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
-import org.cyberpwn.react.util.Metrics.Graph;
-import org.cyberpwn.react.util.Metrics.Plotter;
 
 public class React extends JavaPlugin implements Configurable
 {
@@ -90,7 +89,6 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private Dispatcher d;
 	private Metrics metrics;
-	private ServerThread serverThread;
 	private HeartBeat hbt;
 	private int saved;
 	
@@ -607,11 +605,6 @@ public class React extends JavaPlugin implements Configurable
 	public BungeeController getBungeeController()
 	{
 		return bungeeController;
-	}
-	
-	public ServerThread getServerThread()
-	{
-		return serverThread;
 	}
 	
 	public static boolean isStaticy()
