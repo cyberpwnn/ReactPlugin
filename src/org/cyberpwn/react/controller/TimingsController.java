@@ -65,7 +65,7 @@ public class TimingsController extends Controller
 		{
 			sup = false;
 			
-			new Task(react, 1)
+			new Task(1)
 			{
 				public void run()
 				{
@@ -136,7 +136,7 @@ public class TimingsController extends Controller
 		{
 			sup = true;
 			
-			new Task(react, 1)
+			new Task(1)
 			{
 				public void run()
 				{
