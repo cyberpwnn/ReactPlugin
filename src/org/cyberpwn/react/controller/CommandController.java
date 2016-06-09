@@ -229,15 +229,15 @@ public class CommandController extends Controller implements CommandExecutor
 				{
 					if(isPlayer)
 					{
-						if(Verbose.mx.contains(p))
+						if(Verbose.mrx.contains(p))
 						{
-							Verbose.mx.remove(p);
+							Verbose.mrx.remove(p);
 							p.sendMessage(ChatColor.RED + L.MESSAGE_VERBOSEOFF);
 						}
 						
 						else
 						{
-							Verbose.mx.add(p);
+							Verbose.mrx.add(p);
 							p.sendMessage(ChatColor.GREEN + L.MESSAGE_VERBOSEON);
 						}
 					}
