@@ -46,7 +46,7 @@ public class SampleDrops extends Sample
 		{
 			final Iterator<Chunk> it = new GList<Chunk>(i.getLoadedChunks()).iterator();
 			
-			new Task(getSampleController().getReact(), 0)
+			new Task(0)
 			{
 				public void run()
 				{

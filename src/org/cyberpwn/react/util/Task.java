@@ -4,13 +4,11 @@ import org.cyberpwn.react.React;
 
 public class Task implements Runnable
 {
-	private React pl;
 	private int[] task;
 	
-	public Task(React pl, int interval)
+	public Task(int interval)
 	{
-		this.pl = pl;
-		this.task = new int[] { pl.scheduleSyncRepeatingTask(0, interval, this) };
+		this.task = new int[] { React.instance().scheduleSyncRepeatingTask(0, interval, this) };
 	}
 	
 	@Override
@@ -21,6 +19,6 @@ public class Task implements Runnable
 	
 	public void cancel()
 	{
-		pl.cancelTask(task[0]);
+		React.instance().cancelTask(task[0]);
 	}
 }
