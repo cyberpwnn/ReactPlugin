@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 
@@ -15,7 +16,7 @@ public class SampleChunksLoaded extends Sample
 		maxDelay = 5;
 		idealDelay = 5;
 		target = "Lower is better. However this will vary.";
-		explaination = "Counts all chunks in all loaded worlds.";
+		explaination = L.SAMPLER_CHUNK_LOADED;
 	}
 	
 	public void onTick()

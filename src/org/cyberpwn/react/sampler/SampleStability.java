@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -20,7 +21,7 @@ public class SampleStability extends Sample
 		idealDelay = 5;
 		tps = new GList<Double>();
 		target = "Higher is better. 100% is perfect, above 80% is good.";
-		explaination = "This percent is determined by your TPS, MEM, and more over large periods of time.";
+		explaination = L.SAMPLER_GENERAL_STABILITY;
 	}
 	
 	public void onTick()

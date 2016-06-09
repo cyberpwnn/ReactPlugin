@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 
@@ -17,7 +18,7 @@ public class SampleTimings extends Sample
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Take this relativley, not compared to anything externally.";
-		explaination = "Check the hardest hitting timings value.";
+		explaination = L.SAMPLER_GENERAL_TIMINGS;
 	}
 	
 	public void onTick()

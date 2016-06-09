@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.HitRateCache;
 import org.cyberpwn.react.object.InstabilityCause;
 import org.cyberpwn.react.object.ValueType;
@@ -22,7 +23,7 @@ public class SampleHitRate extends Sample
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Monitors the hit rate of how much react is detecting. There is no correct number here.";
-		explaination = "Determines the hit rate of reacts reactions. For example, what percent of the time does react detect something specific.";
+		explaination = L.SAMPLER_GENERAL_HITRATE;
 	}
 	
 	public void onTick()

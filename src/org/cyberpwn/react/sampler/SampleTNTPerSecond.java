@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -21,7 +22,7 @@ public class SampleTNTPerSecond extends Sample implements Listener
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Lower is better. However this will vary.";
-		explaination = "The average tnt primes per second.";
+		explaination = L.SAMPLER_WORLD_TNT;
 		
 		average = new GList<Integer>();
 	}

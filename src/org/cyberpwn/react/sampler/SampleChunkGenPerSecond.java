@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -21,7 +22,7 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Lower is better. However this will vary.";
-		explaination = "The average chunks generated per second.";
+		explaination = L.SAMPLER_CHUNK_GEN;
 		
 		average = new GList<Integer>();
 	}

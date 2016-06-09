@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -23,7 +24,7 @@ public class SampleEntities extends Sample
 		idealDelay = 100;
 		entities = 0;
 		target = "Lower is better. However this will vary.";
-		explaination = "Counts all entities loaded on all worlds.";
+		explaination = L.SAMPLER_WORLD_ENTITIES;
 	}
 	
 	public void onTick()
