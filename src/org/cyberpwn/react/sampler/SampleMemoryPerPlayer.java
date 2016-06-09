@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.PlayerCache;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -18,7 +19,7 @@ public class SampleMemoryPerPlayer extends Sample
 		idealDelay = 100;
 		cache = new PlayerCache();
 		target = "Lower is better. However this will vary.";
-		explaination = "A very rough estimate of how many megabytes a player takes up.";
+		explaination = L.SAMPLER_MEMORY_PLAYERS;
 	}
 	
 	public void onTick()

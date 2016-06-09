@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.api.SpikeEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.GTime;
 import org.cyberpwn.react.object.ValueType;
@@ -29,7 +30,7 @@ public class SampleTicksPerSecond extends Sample
 		tickThreshold = 20;
 		samples = new GList<Double>();
 		target = "Higher is better. 20 is perfect, above 18 is good.";
-		explaination = "Twenty times a second the server 'ticks'. This is where all the action happens on the cpu. If this number is lower than 17 you will start to expirience server lag.";
+		explaination = L.SAMPLER_GENERAL_TPS;
 	}
 	
 	public double getPercent()

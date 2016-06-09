@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GMap;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -24,7 +25,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Lower is better. However this will vary.";
-		explaination = "Redstone Updates per Second. Every time redstone updates at all.";
+		explaination = L.SAMPLER_WORLD_REDSTONE;
 		chunkMap = new GMap<Chunk, Integer>();
 		chunk = null;
 	}

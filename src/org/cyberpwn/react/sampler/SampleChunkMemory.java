@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
@@ -16,7 +17,7 @@ public class SampleChunkMemory extends Sample
 		maxDelay = 1;
 		idealDelay = 1;
 		target = "Lower is better. However this will vary directly with loaded chunks.";
-		explaination = "Counts all chunks in all loaded worlds and determines the memory consumption.";
+		explaination = L.SAMPLER_CHUNK_MEMORY;
 	}
 	
 	public void onTick()

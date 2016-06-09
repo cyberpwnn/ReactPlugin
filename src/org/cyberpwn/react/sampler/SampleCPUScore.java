@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.Average;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.CPUTest;
@@ -18,7 +19,7 @@ public class SampleCPUScore extends Sample
 		maxDelay = 200;
 		idealDelay = 200;
 		target = "Take this relativley, not compared to anything externally.";
-		explaination = "This calculates the single threaded performance of your cpu while under (or not) load.";
+		explaination = L.SAMPLER_GENERAL_CPUSCORE;
 		
 		avg = new Average(8);
 	}

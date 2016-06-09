@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 
@@ -16,7 +17,7 @@ public class SamplePlayers extends Sample
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Samples the amount of players online";
-		explaination = "Samples how many players are connected to the servr.";
+		explaination = L.SAMPLER_GENERAL_PLAYERS;
 	}
 	
 	public void onTick()

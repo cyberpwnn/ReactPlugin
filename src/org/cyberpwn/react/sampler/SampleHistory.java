@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 
 public class SampleHistory extends Sample
@@ -16,7 +17,7 @@ public class SampleHistory extends Sample
 		maxDelay = 13500;
 		idealDelay = 13500;
 		target = "View this on the lower quadrant";
-		explaination = "View this on the lower right quadrant on the map.";
+		explaination = L.SAMPLER_GENERAL_HISTORY;
 	}
 	
 	public void onTick()

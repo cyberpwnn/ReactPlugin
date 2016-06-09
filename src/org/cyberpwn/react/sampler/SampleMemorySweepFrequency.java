@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.Average;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -25,7 +26,7 @@ public class SampleMemorySweepFrequency extends Sample
 		idealDelay = 1;
 		avg = new Average(12);
 		target = "Lower is better. However this number will drasticaly vary from server to server.";
-		explaination = "When the server uses memory, and is done using it, it marks it as trash. This sample measures how often it 'cleans' the trash.";
+		explaination = L.SAMPLER_MEMORY_GC;
 	}
 	
 	public void onMetricsPlot(Graph graph)

@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -23,7 +24,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		maxDelay = 1;
 		idealDelay = 1;
 		target = "Lower is better.";
-		explaination = "This measures the rate the server consumes memory. Note that more than 90% of this memory will be quickly restored for reuse.";
+		explaination = L.SAMPLER_MEMORY_MAHS;
 	}
 	
 	public void onMetricsPlot(Graph graph)
