@@ -1,5 +1,1 @@
-# React #
-
-## Todo ##
-* ~~Do it~~ - Done!
-
+# ReactPlugin
