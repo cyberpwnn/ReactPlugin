@@ -1,0 +1,125 @@
+package org.cyberpwn.react.action;
+
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.cyberpwn.react.controller.ActionController;
+import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.MathUtils;
+
+import net.md_5.bungee.api.ChatColor;
+
+public class ActionSuppressRedstone extends Action implements Listener
+{
+	private boolean frozen;
+	private boolean freezeAll;
+	
+	public ActionSuppressRedstone(ActionController actionController)
+	{
+		super(actionController, Material.REDSTONE, "cull-redstone", "ActionSuppressRedstone", 20, "Redstone Suppression", "Suppresses redstone if and only if the instability threshold reaches a limit for redstone.", true);
+		frozen = false;
+		freezeAll = false;
+	}
+	
+	public void act()
+	{
+		
+	}
+	
+	public void freezeAll()
+	{
+		if(cc.getBoolean(getCodeName() + ".freeze-all-redstone-on-lag"))
+		{
+			freezeAll = true;
+		}
+	}
+	
+	public void unfreezeAll()
+	{
+		freezeAll = false;
+	}
+	
+	public void freeze()
+	{
+		if(cc.getBoolean(getCodeName() + ".freeze-all-redstone-on-lag"))
+		{
+			frozen = true;
+		}
+	}
+	
+	public void unfreeze()
+	{
+		frozen = false;
+	}
+	
+	public void manual(final CommandSender p)
+	{
+		super.manual(p);
+		final long ms = System.currentTimeMillis();
+		freeze();
+		
+		getActionController().getReact().scheduleSyncTask(20, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				unfreeze();
+				p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+			}
+		});
+	}
+	
+	public void start()
+	{
+		getActionController().getReact().register(this);
+	}
+	
+	public void stop()
+	{
+		getActionController().getReact().unRegister(this);
+	}
+	
+	public void onNewConfig()
+	{
+		super.onNewConfig();
+		
+		cc.set(getCodeName() + ".freeze-all-redstone-on-lag", true);
+		cc.set(getCodeName() + ".freeze-radius", 64);
+	}
+	
+	@EventHandler
+	public void onRedstone(BlockPhysicsEvent e)
+	{
+		if(freezeAll)
+		{
+			if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+			{
+				e.setCancelled(true);
+			}
+			
+			return;
+		}
+		
+		if(frozen)
+		{
+			if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+			{
+				try
+				{
+					if(MathUtils.isWithin(e.getBlock().getChunk(), getActionController().getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk(), cc.getInt(getCodeName() + ".freeze-radius")))
+					{
+						e.setCancelled(true);
+					}
+				}
+				
+				catch(Exception ex)
+				{
+					
+				}
+			}
+		}
+	}
+}

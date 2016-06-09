@@ -1,0 +1,40 @@
+package org.cyberpwn.react.sampler;
+
+import org.bukkit.ChatColor;
+import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.object.ValueType;
+import org.cyberpwn.react.util.F;
+
+public class SampleMonitoredPlugins extends Sample
+{
+	public SampleMonitoredPlugins(SampleController sampleController)
+	{
+		super(sampleController, "SampleMonitoredPlugins", ValueType.DOUBLE, "PLG", "Monitored Plugins");
+		
+		minDelay = 200;
+		maxDelay = 200;
+		idealDelay = 200;
+		target = "This notes how many plugins react is monitoring";
+		explaination = "React tracks and communicates with other plugins. They are typically common plugins that lots of servers use.";
+	}
+	
+	public void onTick()
+	{
+		getValue().setNumber(sampleController.getExternalSamples().size());
+	}
+	
+	public void onStart()
+	{
+		value.setNumber(0);
+	}
+	
+	public String formatted()
+	{
+		return F.f(getValue().getInteger()) + " PLG";
+	}
+	
+	public ChatColor color()
+	{
+		return ChatColor.AQUA;
+	}
+}

@@ -1,0 +1,28 @@
+name: React
+main: org.cyberpwn.react.React
+version: 2.2.3p
+description: React is a smart performance plugin designed to automatically fix lag from the source. This is different from lag clearers.
+author: cyberpwn
+authors: [cyberpwn]
+website: http://bit.ly/react-plugin
+softdepend: [WorldEdit, AsyncWorldEdit, WorldBorder, PlaceholderAPI, ProtocolLib]
+commands:
+  react:
+    aliases: [re, ract, stability, st]
+permissions:
+  react.*:
+    description: Gives access to all React permissions
+    default: op
+    children:
+      react.monitor: true
+      react.act: true
+      react.reload: true
+  react.monitor:
+    description: Gives access to react monitoring
+    default: op
+  react.act: 
+    description: Gives access to react actions
+    default: op
+  react.reload:
+    description: Allows the use of reloading
+    default: op
