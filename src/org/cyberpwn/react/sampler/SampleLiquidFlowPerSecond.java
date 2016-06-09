@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 
@@ -20,7 +21,7 @@ public class SampleLiquidFlowPerSecond extends Sample implements Listener
 		maxDelay = 20;
 		idealDelay = 20;
 		target = "Lower is better. However this will vary.";
-		explaination = "Liquid Flows per Second. This is when liquid expands or drains.";
+		explaination = L.SAMPLER_WORLD_LIQUIDFLOW;
 	}
 	
 	public void onTick()

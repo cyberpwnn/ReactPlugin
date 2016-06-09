@@ -8,6 +8,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -25,7 +26,7 @@ public class SampleDrops extends Sample
 		idealDelay = 100;
 		drops = 0;
 		target = "Lower is better. However this will vary.";
-		explaination = "Counts all drops loaded on all worlds.";
+		explaination = L.SAMPLER_WORLD_DROPS;
 	}
 	
 	public void onTick()

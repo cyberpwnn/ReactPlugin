@@ -10,7 +10,38 @@ public class L
 	public static String REACTIONS = "Reactions";
 	public static String SAMPLERS = "Samplers";
 	public static String MONITORING = "Monitoring";
-		
+	
+	public static String SAMPLER_CHUNK_GEN = "The average chunks generated per second.";
+	public static String SAMPLER_CHUNK_LOAD = "The average chunks loaded per second.";
+	public static String SAMPLER_CHUNK_MEMORY = "Counts all chunks in all loaded worlds and determines the memory consumption.";
+	public static String SAMPLER_CHUNK_LOADED = "Counts all chunks in all loaded worlds.";
+	
+	public static String SAMPLER_WORLD_DROPS = "Counts all drops loaded on all worlds.";
+	public static String SAMPLER_WORLD_ENTITIES = "Counts all entities loaded on all worlds.";
+	public static String SAMPLER_WORLD_LIQUIDFLOW = "Liquid Flows per Second. This is when liquid expands or drains.";
+	public static String SAMPLER_WORLD_TNT = "The average tnt primes per second.";
+	public static String SAMPLER_WORLD_REDSTONE = "Redstone Updates per Second. Every time redstone updates at all.";
+	
+	public static String SAMPLER_MEMORY_GARBAGEDIRECTION = "When the server uses memory, and is done using it, it marks it as trash. This sample measures the direction of it.";
+	public static String SAMPLER_MEMORY_MAHS = "This measures the rate the server consumes memory. Note that more than 90% of this memory will be quickly restored for reuse.";
+	public static String SAMPLER_MEMORY_PLAYERS = "A very rough estimate of how many megabytes a player takes up.";
+	public static String SAMPLER_MEMORY_GC = "When the server uses memory, and is done using it, it marks it as trash. This sample measures how often it 'cleans' the trash.";
+	public static String SAMPLER_MEMORY_USED = "Memory (RAM) is temporary storage for short term data such as player position, chunks, and more. This measures how much memory you are using.";
+	
+	public static String SAMPLER_GENERAL_HISTORY = "View this on the lower right quadrant on the map.";
+	public static String SAMPLER_GENERAL_HITRATE = "Determines the hit rate of reacts reactions. For example, what percent of the time does react detect something specific.";
+	public static String SAMPLER_GENERAL_CPUSCORE = "This calculates the single threaded performance of your cpu while under (or not) load.";
+	public static String SAMPLER_GENERAL_PLUGINS = "React tracks and communicates with other plugins. They are typically common plugins that lots of servers use.";
+	public static String SAMPLER_GENERAL_PLAYERS = "Samples how many players are connected to the server.";
+	public static String SAMPLER_GENERAL_REACTIONTIME = "Counts the ammount of time in miliseconds it takes react to do everything it is scheduled to do. One tick is 50ms, so typically react is under 3ms";
+	public static String SAMPLER_GENERAL_STABILITY = "This percent is determined by your TPS, MEM, and more over large periods of time.";
+	public static String SAMPLER_GENERAL_TPS = "Twenty times a second the server 'ticks'. This is where all the action happens on the cpu. If this number is lower than 17 you will start to expirience server lag.";
+	public static String SAMPLER_GENERAL_TIMINGS = "Check the hardest hitting timings value.";
+	
+	
+	
+	
+	
 	public static String BOOK_SAMPLES_TITLE = "Samples";
 	public static String BOOK_SAMPLES_TEXT = "For React to accuratley judge lag, you cannot simply track the Ticks per second. If you dont know what is CAUSING the lag, you can't guarantee a fix. Welcome to react!";
 	public static String BOOK_REACTIONS_TITLE = "Reactions";

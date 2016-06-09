@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.GTime;
 import org.cyberpwn.react.object.ValueType;
@@ -25,7 +26,7 @@ public class SampleMemoryUsed extends Sample
 		maxDelay = 1;
 		idealDelay = 1;
 		target = "Lower is better, however it will not impact you unless it is dangerously high (your max memory)";
-		explaination = "Memory (RAM) is temporary storage for short term data such as player position, chunks, and more. This measures how much memory you are using.";
+		explaination = L.SAMPLER_MEMORY_USED;
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
@@ -22,7 +23,7 @@ public class SampleReactionTime extends Sample
 		idealDelay = 1;
 		max = 0;
 		target = "Lower is better. Remember, 50ms is an entire tick.";
-		explaination = "Counts the ammount of time in miliseconds it takes react to do everything it is scheduled to do. One tick is 50ms, so typically react is under 3ms";
+		explaination = L.SAMPLER_GENERAL_REACTIONTIME;
 		
 		average = new GList<Long>();
 	}

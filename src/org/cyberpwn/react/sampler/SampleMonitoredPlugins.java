@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 
@@ -15,7 +16,7 @@ public class SampleMonitoredPlugins extends Sample
 		maxDelay = 200;
 		idealDelay = 200;
 		target = "This notes how many plugins react is monitoring";
-		explaination = "React tracks and communicates with other plugins. They are typically common plugins that lots of servers use.";
+		explaination = L.SAMPLER_GENERAL_PLUGINS;
 	}
 	
 	public void onTick()
