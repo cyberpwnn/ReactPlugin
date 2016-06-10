@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -60,6 +62,14 @@ public class Action implements Actionable, Configurable
 	
 	public void manual(CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
+		
 		p.sendMessage(Info.TAG + ChatColor.YELLOW + L.MESSAGE_MANUAL + getName() + L.MESSAGE_MANUAL_STARTED);
 	}
 	
