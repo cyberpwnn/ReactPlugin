@@ -126,7 +126,7 @@ public class TimingsController extends Controller
 					
 					catch(Exception e)
 					{
-						e.printStackTrace();
+						
 					}
 				}
 			};
@@ -169,7 +169,7 @@ public class TimingsController extends Controller
 					
 					catch(Exception e)
 					{
-						e.printStackTrace();
+						
 					}
 				}
 			};
