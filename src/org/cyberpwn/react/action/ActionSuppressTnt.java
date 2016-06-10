@@ -7,6 +7,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -42,6 +44,14 @@ public class ActionSuppressTnt extends Action implements Listener
 	
 	public void manual(final CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
+		
 		super.manual(p);
 		final long ms = System.currentTimeMillis();
 		freeze();

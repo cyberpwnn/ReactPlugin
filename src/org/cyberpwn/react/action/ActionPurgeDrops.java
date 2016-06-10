@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -27,6 +29,14 @@ public class ActionPurgeDrops extends Action implements Listener
 	
 	public void manual(CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
+		
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		
