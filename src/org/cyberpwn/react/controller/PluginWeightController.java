@@ -262,9 +262,15 @@ public class PluginWeightController extends Controller implements Configurable
 		}
 	}
 	
+	public boolean enabledTimings()
+	{
+		return cc.getBoolean("timings.processing.enabled");
+	}
+	
 	@Override
 	public void onNewConfig()
 	{
+		cc.set("timings.processing.enabled", true);
 		cc.set("timings.notifier.flush-list-delay", 1200);
 		cc.set("timings.notifier.enable", true);
 		cc.set("timings.notifier.considered-high-ms", 9.5);
