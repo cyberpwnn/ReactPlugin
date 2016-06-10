@@ -593,7 +593,7 @@ public class ActionInstabilityCause extends Action
 		cc.set(getCodeName() + ".high.liquid", 4096);
 		cc.set(getCodeName() + ".high.redstone", 4096);
 		cc.set(getCodeName() + ".high.tnt", 256);
-		cc.set(getCodeName() + ".high.chunk.gen", 64);
+		cc.set(getCodeName() + ".high.chunk.generation", 18);
 		cc.set(getCodeName() + ".high.entity.count", 8192);
 		cc.set(getCodeName() + ".high.drop.count", 1024);
 		cc.set(getCodeName() + ".high.worldedit.bps", 10000);
