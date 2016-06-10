@@ -39,8 +39,20 @@ public class L
 	public static String SAMPLER_GENERAL_TIMINGS = "Check the hardest hitting timings value.";
 	
 	
-	
-	
+	public static String ACTION_GARBAGECOLLECTION = "This takes out the virtual trash (sometimes frees memory up). Warning this will freeze the server for 1-5 seconds. This is only used automatically if it is configured to do so.";
+	public static String ACTION_CULLDROPS = "Drops are determined by their worth within the configs. This will then determine weather react should cull 30 pieces of dirt, or 20 diamonds. Basically, friendly drop culling.";
+	public static String ACTION_CULLENTITIES = "Removes excess mobs from highly populated chunks. Additionally prevents spawning if the limit is reached.";
+	public static String ACTION_HEAVYCHUNK = "Teleports you close to the chunk with the most entities in it. If there are no heavy chunks, you may not be teleported or it may not be that laggy at all.";
+	public static String ACTION_INSTABILITYCAUSE = "If any sort of instability is detected, react begins to collect evidence and determine the right thing to do. ";
+	public static String ACTION_PURGECHUNKS = "This action purges chunks that have not unloaded. MANUAL ONLY";
+	public static String ACTION_PURGEDROPS = "Removes ALL DROPS in ALL WORLDS";
+	public static String ACTION_PURGEENTITIES = "Removes ALL ENTITY TYPES DEFINED IN THIS CONFIG in ALL WORLDS";
+	public static String ACTION_SUPPRESSGROWTH = "This dynamically changes the growth modifiers depending on how dense the growth is.";
+	public static String ACTION_SUPPRESSLIQUID = "Suppresses liquid if and only if the instability threshold reaches a limit for liquid.";
+	public static String ACTION_SUPPRESSREDSTONE = "Suppresses redstone if and only if the instability threshold reaches a limit for redstone.";
+	public static String ACTION_SUPPRESSTNT = "Suppresses tnt if and only if the instability threshold reaches a limit for tnt.";
+	public static String ACTION_TELEPORTDROPS = "When enabled, some drops will be teleported and given to the player who broke the block only when the server has too many drops or is lagging.";
+
 	
 	public static String BOOK_SAMPLES_TITLE = "Samples";
 	public static String BOOK_SAMPLES_TEXT = "For React to accuratley judge lag, you cannot simply track the Ticks per second. If you dont know what is CAUSING the lag, you can't guarantee a fix. Welcome to react!";

@@ -17,7 +17,7 @@ public class ActionHeavyChunk extends Action implements Listener
 {
 	public ActionHeavyChunk(ActionController actionController)
 	{
-		super(actionController, Material.GRASS, "hc", "ActionLaggedChunk", 100, "Find Heaviest Chunk", "Teleports you close to the chunk with the most entities in it. If there are no heavy chunks, you may not be teleported or it may not be that laggy at all.", true);
+		super(actionController, Material.GRASS, "hc", "ActionLaggedChunk", 100, "Find Heaviest Chunk", L.ACTION_HEAVYCHUNK, true);
 	}
 	
 	public void act()

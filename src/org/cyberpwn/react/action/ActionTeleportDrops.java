@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.cyberpwn.react.controller.ActionController;
+import org.cyberpwn.react.lang.L;
 
 public class ActionTeleportDrops extends Action implements Listener
 {
@@ -16,7 +17,7 @@ public class ActionTeleportDrops extends Action implements Listener
 	
 	public ActionTeleportDrops(ActionController actionController)
 	{
-		super(actionController, Material.STONE, "x", "ActionTeleportDrops", 100, "Teleport Drops", "When enabled, some drops will be teleported and given to the player who broke the block only when the server has too many drops or is lagging.", false);
+		super(actionController, Material.STONE, "x", "ActionTeleportDrops", 100, "Teleport Drops", L.ACTION_TELEPORTDROPS, false);
 		on = false;
 	}
 	

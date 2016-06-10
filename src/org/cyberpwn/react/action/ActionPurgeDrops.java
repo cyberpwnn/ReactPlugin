@@ -17,7 +17,7 @@ public class ActionPurgeDrops extends Action implements Listener
 {
 	public ActionPurgeDrops(ActionController actionController)
 	{
-		super(actionController, Material.FLINT_AND_STEEL, "purge-drops", "ActionPurgeDrops", 100, "Purge Drops", "Removes ALL DROPS in ALL WORLDS", true);
+		super(actionController, Material.FLINT_AND_STEEL, "purge-drops", "ActionPurgeDrops", 100, "Purge Drops", L.ACTION_PURGEDROPS, true);
 	}
 	
 	public void act()
