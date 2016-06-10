@@ -164,8 +164,8 @@ public class React extends JavaPlugin implements Configurable
 		actionController = new ActionController(this);
 		networkController = new NetworkController(this);
 		bungeeController = new BungeeController(this);
-		timingsController = new TimingsController(this);
 		pluginWeightController = new PluginWeightController(this);
+		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
 		dataController.load(null, this);
 		Info.rebuildLang();
@@ -180,11 +180,19 @@ public class React extends JavaPlugin implements Configurable
 		
 		for(Controllable i : controllers)
 		{
-			Timer t = new Timer();
-			t.start();
-			i.start();
-			t.stop();
-			d.w("Started " + i.getClass().getSimpleName() + " in " + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + "ms");
+			try
+			{
+				Timer t = new Timer();
+				t.start();
+				i.start();
+				t.stop();
+				d.w("Started " + i.getClass().getSimpleName() + " in " + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + "ms");
+			}
+			
+			catch(Exception e)
+			{
+				React.fail(e);
+			}
 		}
 		
 		if(stats)
