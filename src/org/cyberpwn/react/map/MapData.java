@@ -1,6 +1,6 @@
 package org.cyberpwn.react.map;
 
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 
 public class MapData
 {

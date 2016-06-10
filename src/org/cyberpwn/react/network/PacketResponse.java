@@ -2,7 +2,7 @@ package org.cyberpwn.react.network;
 
 import org.cyberpwn.react.json.JSONArray;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 
 public class PacketResponse
 {

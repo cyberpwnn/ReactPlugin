@@ -3,8 +3,8 @@ package org.cyberpwn.react.controller;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.object.Failure;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.Failure;
+import org.cyberpwn.react.util.GList;
 
 import net.md_5.bungee.api.ChatColor;
 

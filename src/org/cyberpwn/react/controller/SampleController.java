@@ -5,9 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.Value;
 import org.cyberpwn.react.sampler.ExternalSampleWorldBorder;
 import org.cyberpwn.react.sampler.ExternallySamplable;
 import org.cyberpwn.react.sampler.Samplable;
@@ -36,6 +33,9 @@ import org.cyberpwn.react.sampler.SampleStability;
 import org.cyberpwn.react.sampler.SampleTNTPerSecond;
 import org.cyberpwn.react.sampler.SampleTicksPerSecond;
 import org.cyberpwn.react.sampler.SampleTimings;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Value;
 
 public class SampleController extends Controller
 {

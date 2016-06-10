@@ -3,9 +3,9 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.PlayerCache;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.PlayerCache;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleMemoryPerPlayer extends Sample
 {

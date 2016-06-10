@@ -1,7 +1,7 @@
 package org.cyberpwn.react.sampler;
 
 import org.cyberpwn.react.controller.SampleController;
-import org.cyberpwn.react.object.ValueType;
+import org.cyberpwn.react.util.ValueType;
 
 public class ExternalSample extends Sample implements ExternallySamplable
 {

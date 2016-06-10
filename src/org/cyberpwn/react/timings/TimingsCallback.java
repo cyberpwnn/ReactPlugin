@@ -1,8 +1,8 @@
 package org.cyberpwn.react.timings;
 
 import org.cyberpwn.react.cluster.ClusterConfig;
-import org.cyberpwn.react.object.GBook;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GBook;
+import org.cyberpwn.react.util.GMap;
 
 public class TimingsCallback implements Runnable
 {

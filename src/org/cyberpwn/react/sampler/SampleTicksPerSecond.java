@@ -4,11 +4,11 @@ import org.bukkit.ChatColor;
 import org.cyberpwn.react.api.SpikeEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GTime;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
 
 public class SampleTicksPerSecond extends Sample

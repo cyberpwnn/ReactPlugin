@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Reflection;
 
 import com.avaje.ebeaninternal.api.ClassUtil;

@@ -2,8 +2,8 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.ValueType;
 
 public class SamplePHTimings extends Sample
 {

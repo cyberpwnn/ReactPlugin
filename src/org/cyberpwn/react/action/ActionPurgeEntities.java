@@ -14,7 +14,7 @@ import org.cyberpwn.react.json.VersionBukkit;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMS;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 
 import net.md_5.bungee.api.ChatColor;
 

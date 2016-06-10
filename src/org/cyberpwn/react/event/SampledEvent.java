@@ -1,6 +1,6 @@
 package org.cyberpwn.react.event;
 
-import org.cyberpwn.react.object.GTime;
+import org.cyberpwn.react.util.GTime;
 
 public class SampledEvent extends ReactEvent
 {

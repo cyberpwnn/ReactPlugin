@@ -1,4 +1,4 @@
-package org.cyberpwn.react.object;
+package org.cyberpwn.react.util;
 
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;

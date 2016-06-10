@@ -15,19 +15,16 @@ public class L
 	public static String SAMPLER_CHUNK_LOAD = "The average chunks loaded per second.";
 	public static String SAMPLER_CHUNK_MEMORY = "Counts all chunks in all loaded worlds and determines the memory consumption.";
 	public static String SAMPLER_CHUNK_LOADED = "Counts all chunks in all loaded worlds.";
-	
 	public static String SAMPLER_WORLD_DROPS = "Counts all drops loaded on all worlds.";
 	public static String SAMPLER_WORLD_ENTITIES = "Counts all entities loaded on all worlds.";
 	public static String SAMPLER_WORLD_LIQUIDFLOW = "Liquid Flows per Second. This is when liquid expands or drains.";
 	public static String SAMPLER_WORLD_TNT = "The average tnt primes per second.";
 	public static String SAMPLER_WORLD_REDSTONE = "Redstone Updates per Second. Every time redstone updates at all.";
-	
 	public static String SAMPLER_MEMORY_GARBAGEDIRECTION = "When the server uses memory, and is done using it, it marks it as trash. This sample measures the direction of it.";
 	public static String SAMPLER_MEMORY_MAHS = "This measures the rate the server consumes memory. Note that more than 90% of this memory will be quickly restored for reuse.";
 	public static String SAMPLER_MEMORY_PLAYERS = "A very rough estimate of how many megabytes a player takes up.";
 	public static String SAMPLER_MEMORY_GC = "When the server uses memory, and is done using it, it marks it as trash. This sample measures how often it 'cleans' the trash.";
 	public static String SAMPLER_MEMORY_USED = "Memory (RAM) is temporary storage for short term data such as player position, chunks, and more. This measures how much memory you are using.";
-	
 	public static String SAMPLER_GENERAL_HISTORY = "View this on the lower right quadrant on the map.";
 	public static String SAMPLER_GENERAL_HITRATE = "Determines the hit rate of reacts reactions. For example, what percent of the time does react detect something specific.";
 	public static String SAMPLER_GENERAL_CPUSCORE = "This calculates the single threaded performance of your cpu while under (or not) load.";
@@ -37,7 +34,6 @@ public class L
 	public static String SAMPLER_GENERAL_STABILITY = "This percent is determined by your TPS, MEM, and more over large periods of time.";
 	public static String SAMPLER_GENERAL_TPS = "Twenty times a second the server 'ticks'. This is where all the action happens on the cpu. If this number is lower than 17 you will start to expirience server lag.";
 	public static String SAMPLER_GENERAL_TIMINGS = "Check the hardest hitting timings value.";
-	
 	
 	public static String ACTION_GARBAGECOLLECTION = "This takes out the virtual trash (sometimes frees memory up). Warning this will freeze the server for 1-5 seconds. This is only used automatically if it is configured to do so.";
 	public static String ACTION_CULLDROPS = "Drops are determined by their worth within the configs. This will then determine weather react should cull 30 pieces of dirt, or 20 diamonds. Basically, friendly drop culling.";
@@ -52,7 +48,6 @@ public class L
 	public static String ACTION_SUPPRESSREDSTONE = "Suppresses redstone if and only if the instability threshold reaches a limit for redstone.";
 	public static String ACTION_SUPPRESSTNT = "Suppresses tnt if and only if the instability threshold reaches a limit for tnt.";
 	public static String ACTION_TELEPORTDROPS = "When enabled, some drops will be teleported and given to the player who broke the block only when the server has too many drops or is lagging.";
-
 	
 	public static String BOOK_SAMPLES_TITLE = "Samples";
 	public static String BOOK_SAMPLES_TEXT = "For React to accuratley judge lag, you cannot simply track the Ticks per second. If you dont know what is CAUSING the lag, you can't guarantee a fix. Welcome to react!";
@@ -139,6 +134,8 @@ public class L
 	public static String MESSAGE_ISSUES = "Stabilizing...";
 	public static String MESSAGE_FIXED = "Fixed!";
 	public static String MESSAGE_RELOADED = "React Reloaded";
+	public static String MESSAGE_SLOWED = "Your fly speed has been lowered for the time being. Once chunks stop spiking the server, your speed will restored.";
+	public static String MESSAGE_SLOWED_FIXED = "Your fly speed has been restored.";
 	public static String MESSAGE_MANUAL = "Manual Action: ";
 	public static String MESSAGE_MANUAL_STARTED = " started.";
 	public static String MESSAGE_MANUAL_FINISH = "Manual Action: ";

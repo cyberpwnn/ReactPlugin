@@ -1,6 +1,4 @@
-package org.cyberpwn.react.object;
-
-import org.cyberpwn.react.util.M;
+package org.cyberpwn.react.util;
 
 public class Average
 {

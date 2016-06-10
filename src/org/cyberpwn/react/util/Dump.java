@@ -11,7 +11,6 @@ import org.cyberpwn.react.Version;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.sampler.Samplable;
 
 public class Dump implements Configurable

@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
 
 public class ClusterConfig
 {

@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
-import org.cyberpwn.react.object.GBook;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.GPage;
-import org.cyberpwn.react.object.Severity;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GBook;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.GPage;
+import org.cyberpwn.react.util.Severity;
 
 public class PaperTimingsProcessor extends Thread
 {

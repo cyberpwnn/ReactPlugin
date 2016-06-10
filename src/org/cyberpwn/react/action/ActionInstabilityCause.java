@@ -19,20 +19,21 @@ import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GBook;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.GPage;
-import org.cyberpwn.react.object.GStub;
-import org.cyberpwn.react.object.GTime;
-import org.cyberpwn.react.object.InstabilityCause;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GBook;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.GPage;
+import org.cyberpwn.react.util.GStub;
+import org.cyberpwn.react.util.GTime;
+import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.MathUtils;
 import org.cyberpwn.react.util.Verbose;
 
 public class ActionInstabilityCause extends Action
 {
+	private GMap<Player, Float> speeds;
 	private final GMap<InstabilityCause, Integer> problems;
 	private final GList<InstabilityCause> notified;
 	private boolean force;
@@ -47,6 +48,7 @@ public class ActionInstabilityCause extends Action
 		problems = new GMap<InstabilityCause, Integer>();
 		notified = new GList<InstabilityCause>();
 		stubs = new GList<GStub>();
+		speeds = new GMap<Player, Float>();
 		force = false;
 		maxRedstone = -1;
 	}
@@ -70,6 +72,31 @@ public class ActionInstabilityCause extends Action
 				if(i.equals(InstabilityCause.LAG))
 				{
 					continue;
+				}
+				
+				if(i.equals(InstabilityCause.CHUNK_GEN))
+				{
+					if(cc.getBoolean(getCodeName() + ".slow-fast-flyers-temporarily"))
+					{
+						if(!speeds.isEmpty())
+						{
+							for(Player k : speeds.k())
+							{
+								try
+								{
+									k.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SLOWED_FIXED);
+									k.setFlySpeed(speeds.get(k));
+								}
+								
+								catch(Exception e)
+								{
+									
+								}
+							}
+						}
+					}
+					
+					speeds.clear();
 				}
 				
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
@@ -144,10 +171,23 @@ public class ActionInstabilityCause extends Action
 				Verbose.x("instability", "- TNT: " + tnt);
 			}
 			
-			if(chunkGenPerSecond > cc.getInt(getCodeName() + ".high.chunk.gen"))
+			if(chunkGenPerSecond > cc.getInt(getCodeName() + ".high.chunk.generation"))
 			{
-				problems.put(InstabilityCause.CHUNK_GEN, 30);
+				problems.put(InstabilityCause.CHUNK_GEN, 15);
 				Verbose.x("instability", "- CHUNKGEN/s: " + chunkGenPerSecond);
+				
+				if(cc.getBoolean(getCodeName() + ".slow-fast-flyers-temporarily"))
+				{
+					for(Player i : getActionController().getReact().onlinePlayers())
+					{
+						if(i.isFlying() && i.getFlySpeed() > 0.4 && !speeds.containsKey(i))
+						{
+							speeds.put(i, i.getFlySpeed());
+							i.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_SLOWED);
+							i.setFlySpeed(0.4f);
+						}
+					}
+				}
 			}
 			
 			if(entities > cc.getInt(getCodeName() + ".high.entity.count"))
@@ -553,10 +593,11 @@ public class ActionInstabilityCause extends Action
 		cc.set(getCodeName() + ".high.liquid", 4096);
 		cc.set(getCodeName() + ".high.redstone", 4096);
 		cc.set(getCodeName() + ".high.tnt", 256);
-		cc.set(getCodeName() + ".high.chunk.gen", 64);
+		cc.set(getCodeName() + ".high.chunk.generation", 18);
 		cc.set(getCodeName() + ".high.entity.count", 8192);
 		cc.set(getCodeName() + ".high.drop.count", 1024);
 		cc.set(getCodeName() + ".high.worldedit.bps", 10000);
+		cc.set(getCodeName() + ".slow-fast-flyers-temporarily", true);
 	}
 	
 	public GPage queryPlugin(String name)

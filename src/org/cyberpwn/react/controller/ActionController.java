@@ -16,8 +16,8 @@ import org.cyberpwn.react.action.ActionSuppressTnt;
 import org.cyberpwn.react.action.ActionTeleportDrops;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
 
 public class ActionController extends Controller
 {

@@ -10,8 +10,8 @@ import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GTime;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Timer;
 
 import net.md_5.bungee.api.ChatColor;

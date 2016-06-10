@@ -13,7 +13,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
 

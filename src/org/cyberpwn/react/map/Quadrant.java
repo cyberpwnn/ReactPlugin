@@ -2,8 +2,8 @@ package org.cyberpwn.react.map;
 
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapPalette;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
 
 public class Quadrant
 {

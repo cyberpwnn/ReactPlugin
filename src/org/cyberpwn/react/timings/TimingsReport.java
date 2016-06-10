@@ -1,7 +1,7 @@
 package org.cyberpwn.react.timings;
 
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.Severity;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Severity;
 
 public class TimingsReport
 {
