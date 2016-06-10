@@ -20,7 +20,7 @@ public class ActionSuppressGrowth extends Action implements Listener
 	
 	public ActionSuppressGrowth(ActionController actionController)
 	{
-		super(actionController, Material.STONE, "x", "ActionSuppressGrowth", 100, "Growth Suppression", "This dynamically changes the growth modifiers depending on how dense the growth is.", false);
+		super(actionController, Material.STONE, "x", "ActionSuppressGrowth", 100, "Growth Suppression", L.ACTION_SUPPRESSGROWTH, false);
 		
 		maxPerInterval = 5;
 		cache = new GMap<Chunk, Integer>();

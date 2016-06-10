@@ -42,7 +42,7 @@ public class ActionInstabilityCause extends Action
 	
 	public ActionInstabilityCause(ActionController actionController)
 	{
-		super(actionController, Material.STONE, "x", "ActionInstabilityCause", 10, "Instability Trace", "If any sort of instability is detected, react begins to collect evidence and determine the right thing to do. ", false);
+		super(actionController, Material.STONE, "x", "ActionInstabilityCause", 10, "Instability Trace", L.ACTION_INSTABILITYCAUSE, false);
 		
 		problems = new GMap<InstabilityCause, Integer>();
 		notified = new GList<InstabilityCause>();

@@ -22,7 +22,7 @@ public class ActionCollectGarbage extends Action implements Listener
 	
 	public ActionCollectGarbage(ActionController actionController)
 	{
-		super(actionController, Material.BLAZE_POWDER, "gc", "ActionCollectGarbage", 20, "Garbage Collection", "This takes out the virtual trash (sometimes frees memory up). Warning this will freeze the server for 1-5 seconds. This is only used automatically if it is configured to do so.", true);
+		super(actionController, Material.BLAZE_POWDER, "gc", "ActionCollectGarbage", 20, "Garbage Collection", L.ACTION_GARBAGECOLLECTION, true);
 		
 		load = 0;
 		last = System.currentTimeMillis();

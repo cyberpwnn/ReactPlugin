@@ -28,7 +28,7 @@ public class ActionCullEntities extends Action implements Listener
 {
 	public ActionCullEntities(ActionController actionController)
 	{
-		super(actionController, Material.SHEARS, "cull-mobs", "ActionCullEntities", 100, "Mob Culler", "Removes excess mobs from highly populated chunks. Additionally prevents spawning if the limit is reached.", true);
+		super(actionController, Material.SHEARS, "cull-mobs", "ActionCullEntities", 100, "Mob Culler", L.ACTION_CULLENTITIES, true);
 	}
 	
 	public void act()

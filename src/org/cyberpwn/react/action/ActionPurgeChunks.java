@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Task;
@@ -22,7 +23,7 @@ public class ActionPurgeChunks extends Action implements Listener
 	
 	public ActionPurgeChunks(ActionController actionController)
 	{
-		super(actionController, Material.GRASS, "purge-chunks", "ActionPurgeChunks", 20, "Purge Chunks", "This action purges chunks that have not unloaded. MANUAL ONLY", true);
+		super(actionController, Material.GRASS, "purge-chunks", "ActionPurgeChunks", 20, "Purge Chunks", L.ACTION_PURGECHUNKS, true);
 		
 		limit = 60;
 	}
