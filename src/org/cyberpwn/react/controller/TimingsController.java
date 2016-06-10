@@ -1,7 +1,5 @@
 package org.cyberpwn.react.controller;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
@@ -53,13 +51,13 @@ public class TimingsController extends Controller
 	
 	public void start()
 	{
-		File f = new File(React.instance().getDataFolder(), "crx345w");
-		pt = new PaperTimings(getReact());
-		
-		if(f.exists())
+		if(!getReact().getPluginWeightController().enabledTimings())
 		{
+			f("Timings Processing Disabled");
 			return;
 		}
+		
+		pt = new PaperTimings(getReact());
 		
 		if(Bukkit.getVersion().contains("Paper") || Bukkit.getVersion().contains("Taco"))
 		{
