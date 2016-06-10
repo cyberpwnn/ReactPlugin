@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -38,6 +40,14 @@ public class ActionSuppressGrowth extends Action implements Listener
 	
 	public void manual(final CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
+		
 		p.sendMessage(Info.TAG + ChatColor.GREEN + getName() + L.MESSAGE_ACTION_FULLY_AUTOMATIC);
 	}
 	

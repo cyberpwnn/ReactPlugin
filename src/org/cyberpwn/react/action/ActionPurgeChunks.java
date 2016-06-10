@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Listener;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -46,6 +48,14 @@ public class ActionPurgeChunks extends Action implements Listener
 	
 	public void manual(final CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
+		
 		super.manual(p);
 		
 		actionController.getReact().scheduleSyncTask(1, new Runnable()
