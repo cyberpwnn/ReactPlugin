@@ -39,6 +39,7 @@ public class NetworkController extends Controller
 					
 					catch(IOException e)
 					{
+						React.fail(e, "Failed to bind to port.");
 						React.instance().getD().f("FAILED TO BIND TO PORT: " + cc.getInt("react-remote.port"));
 						React.instance().getD().f("React Server failed to bind to the target address");
 						React.instance().getD().w("1. React Failed to shut down the server previously");
