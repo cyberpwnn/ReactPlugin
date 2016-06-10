@@ -21,6 +21,7 @@ import org.cyberpwn.react.controller.BungeeController;
 import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
+import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
@@ -83,6 +84,7 @@ public class React extends JavaPlugin implements Configurable
 	private ActionController actionController;
 	private LanguageController languageController;
 	private NetworkController networkController;
+	private FailureController failureController;
 	private PacketController packetController;
 	public static String MKX = ".com/cyberpwnn/React";
 	private BungeeController bungeeController;
@@ -92,6 +94,7 @@ public class React extends JavaPlugin implements Configurable
 	private HeartBeat hbt;
 	private int saved;
 	
+	@SuppressWarnings("null")
 	public void onEnable()
 	{
 		d = new Dispatcher("React");
@@ -139,6 +142,7 @@ public class React extends JavaPlugin implements Configurable
 		instance = this;
 		packet = new MonitorPacket();
 		
+		failureController = new FailureController(this);
 		packetController = new PacketController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
@@ -155,6 +159,17 @@ public class React extends JavaPlugin implements Configurable
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
+		
+		try
+		{
+			File f = null;
+			f.getAbsolutePath();
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "React failed to do something that should have failed in the first place.");
+		}
 		
 		if(fcx.exists())
 		{
@@ -212,7 +227,6 @@ public class React extends JavaPlugin implements Configurable
 		d.v("Preparing HeartBeatThread Connector...");
 		scheduleSyncRepeatingTask(1, 0, new Runnable()
 		{
-			
 			@Override
 			public void run()
 			{
@@ -765,5 +779,15 @@ public class React extends JavaPlugin implements Configurable
 	public NetworkController getNetworkController()
 	{
 		return networkController;
+	}
+
+	public FailureController getFailureController()
+	{
+		return failureController;
+	}
+	
+	public static void fail(Exception e, String msg)
+	{
+		instance.getFailureController().fail(e, msg);
 	}
 }
