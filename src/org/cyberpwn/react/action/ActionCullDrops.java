@@ -32,7 +32,7 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public ActionCullDrops(ActionController actionController)
 	{
-		super(actionController, Material.SHEARS, "cull-drops", "ActionCullDrops", 1200, "Cull Drops", "Drops are determined by their worth within the configs. This will then determine weather react should cull 30 pieces of dirt, or 20 diamonds. Basically, friendly drop culling.", true);
+		super(actionController, Material.SHEARS, "cull-drops", "ActionCullDrops", 1200, "Cull Drops", L.ACTION_CULLDROPS, true);
 		worth = new GMap<String, GBiset<Double, GList<Material>>>();
 		undefinedWorth = 100.0;
 		worths = new GMap<Double, String>();

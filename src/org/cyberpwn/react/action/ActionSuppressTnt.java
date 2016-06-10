@@ -19,7 +19,7 @@ public class ActionSuppressTnt extends Action implements Listener
 	
 	public ActionSuppressTnt(ActionController actionController)
 	{
-		super(actionController, Material.TNT, "purge-tnt", "ActionSuppressTnt", 20, "TNT Suppression", "Suppresses tnt if and only if the instability threshold reaches a limit for tnt.", true);
+		super(actionController, Material.TNT, "purge-tnt", "ActionSuppressTnt", 20, "TNT Suppression", L.ACTION_SUPPRESSTNT, true);
 	}
 	
 	public void act()

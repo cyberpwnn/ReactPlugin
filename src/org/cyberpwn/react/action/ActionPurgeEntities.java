@@ -20,7 +20,7 @@ public class ActionPurgeEntities extends Action implements Listener
 {
 	public ActionPurgeEntities(ActionController actionController)
 	{
-		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", "Removes ALL ENTITY TYPES DEFINED IN THIS CONFIG in ALL WORLDS", true);
+		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", L.ACTION_PURGEENTITIES, true);
 	}
 	
 	public void act()

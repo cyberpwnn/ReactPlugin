@@ -18,7 +18,7 @@ public class ActionSuppressLiquid extends Action implements Listener
 	
 	public ActionSuppressLiquid(ActionController actionController)
 	{
-		super(actionController, Material.WATER_BUCKET, "cull-liquid", "ActionSuppressLiquid", 20, "Liquid Suppression", "Suppresses liquid if and only if the instability threshold reaches a limit for liquid.", true);
+		super(actionController, Material.WATER_BUCKET, "cull-liquid", "ActionSuppressLiquid", 20, "Liquid Suppression", L.ACTION_SUPPRESSLIQUID, true);
 	}
 	
 	public void act()

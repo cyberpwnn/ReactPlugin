@@ -19,7 +19,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 	
 	public ActionSuppressRedstone(ActionController actionController)
 	{
-		super(actionController, Material.REDSTONE, "cull-redstone", "ActionSuppressRedstone", 20, "Redstone Suppression", "Suppresses redstone if and only if the instability threshold reaches a limit for redstone.", true);
+		super(actionController, Material.REDSTONE, "cull-redstone", "ActionSuppressRedstone", 20, "Redstone Suppression", L.ACTION_SUPPRESSREDSTONE, true);
 		frozen = false;
 		freezeAll = false;
 	}
