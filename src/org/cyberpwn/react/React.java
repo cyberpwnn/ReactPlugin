@@ -164,8 +164,8 @@ public class React extends JavaPlugin implements Configurable
 		actionController = new ActionController(this);
 		networkController = new NetworkController(this);
 		bungeeController = new BungeeController(this);
-		timingsController = new TimingsController(this);
 		pluginWeightController = new PluginWeightController(this);
+		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
 		dataController.load(null, this);
 		Info.rebuildLang();
