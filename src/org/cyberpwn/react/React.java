@@ -180,11 +180,19 @@ public class React extends JavaPlugin implements Configurable
 		
 		for(Controllable i : controllers)
 		{
-			Timer t = new Timer();
-			t.start();
-			i.start();
-			t.stop();
-			d.w("Started " + i.getClass().getSimpleName() + " in " + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + "ms");
+			try
+			{
+				Timer t = new Timer();
+				t.start();
+				i.start();
+				t.stop();
+				d.w("Started " + i.getClass().getSimpleName() + " in " + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + "ms");
+			}
+			
+			catch(Exception e)
+			{
+				React.fail(e);
+			}
 		}
 		
 		if(stats)
