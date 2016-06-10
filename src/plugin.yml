@@ -3,7 +3,7 @@ main: org.cyberpwn.react.React
 version: 2.2.5p
 description: React is a smart performance plugin designed to automatically fix lag from the source. This is different from lag clearers.
 author: cyberpwn
-authors: [cyberpwn]
+authors: [cyberpwn, Puretie]
 website: http://bit.ly/react-plugin
 softdepend: [WorldEdit, AsyncWorldEdit, WorldBorder, PlaceholderAPI, ProtocolLib]
 commands:
