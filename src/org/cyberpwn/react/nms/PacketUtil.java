@@ -2,6 +2,7 @@ package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.cyberpwn.react.React;
 
 public class PacketUtil
 {
@@ -37,7 +38,15 @@ public class PacketUtil
 			return;
 		}
 		
-		NMS.instance().packetTitle(player, title, subTitle, in, out, stay);
+		try
+		{
+			NMS.instance().packetTitle(player, title, subTitle, in, out, stay);
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "Failed to send title packet to player:" + player.getName() + "stay: " + stay + " in:" + in + " out:" + out + " >> " + title + " <> " + subTitle);
+		}
 	}
 	
 	public static void clearTitle(Player player)
@@ -46,8 +55,15 @@ public class PacketUtil
 		{
 			return;
 		}
+		try
+		{
+			NMS.instance().clearTitle(player);
+		}
 		
-		NMS.instance().clearTitle(player);
+		catch(Exception e)
+		{
+			React.fail(e, "Failed to send cleartitle packet to player:" + player.getName());
+		}
 	}
 	
 	public static void sendActionBar(Player player, String message)
@@ -57,6 +73,14 @@ public class PacketUtil
 			return;
 		}
 		
-		NMS.instance().packetActionTitle(player, message);
+		try
+		{
+			NMS.instance().packetActionTitle(player, message);
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "Failed to send actionbar packet to player:" + player.getName() + " msg:" + message);
+		}
 	}
 }
