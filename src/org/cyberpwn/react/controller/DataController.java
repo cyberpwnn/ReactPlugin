@@ -136,6 +136,19 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
+			File file = null;
+			
+			if(category == null)
+			{
+				file = new File(dataFolder, c.getCodeName() + ".yml");
+			}
+			
+			else
+			{
+				file = new File(new File(dataFolder, category), c.getCodeName() + ".yml");
+			}
+			
+			React.fail(e, "Failed to save file:" + file.getAbsolutePath());
 			f("============ DATA FAILURE ============");
 			f("A file has failed to save it's data to");
 			f("your server. If this persists, please ");
@@ -182,6 +195,19 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
+			File file = null;
+			
+			if(category == null)
+			{
+				file = new File(dataFolder, c.getCodeName() + ".yml");
+			}
+			
+			else
+			{
+				file = new File(new File(dataFolder, category), c.getCodeName() + ".yml");
+			}
+			
+			React.fail(e, "Failed to load file:" + file.getAbsolutePath());
 			f("============ DATA FAILURE ============");
 			f("A file has failed to load it's data to");
 			f("your server. If this persists, please ");
@@ -192,7 +218,6 @@ public class DataController extends Controller
 			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
 			f("TC: " + ChatColor.YELLOW + e.getStackTrace()[0].getClassName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
 			f("============ ============ ============");
-			e.printStackTrace();
 		}
 	}
 	
@@ -248,6 +273,7 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
+			React.fail(e);
 			f("============ DATA FAILURE ============");
 			f("A file has failed to load it's data to");
 			f("your server. If this persists, please ");
@@ -256,7 +282,6 @@ public class DataController extends Controller
 			f("EX: " + ChatColor.YELLOW + e.getClass().getSimpleName());
 			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
 			f("============ ============ ============");
-			e.printStackTrace();
 		}
 		
 		return fc;
@@ -271,6 +296,7 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
+			React.fail(e);
 			f("============ DATA FAILURE ============");
 			f("A file has failed to save it's data to");
 			f("your server. If this persists, please ");
@@ -295,6 +321,7 @@ public class DataController extends Controller
 			
 			catch(Exception e)
 			{
+				React.fail(e);
 				f("============ DATA FAILURE ============");
 				f("A file has failed to save it's data to");
 				f("your server. If this persists, please ");
@@ -322,6 +349,7 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
+			React.fail(e);
 			f("============ DATA FAILURE ============");
 			f("A file has failed to save it's data to");
 			f("your server. If this persists, please ");
