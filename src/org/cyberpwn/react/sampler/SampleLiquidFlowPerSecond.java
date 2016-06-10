@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleLiquidFlowPerSecond extends Sample implements Listener
 {

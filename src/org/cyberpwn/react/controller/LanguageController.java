@@ -12,7 +12,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.FCCallback;
 import org.cyberpwn.react.network.Fetcher;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 
 public class LanguageController extends Controller
 {

@@ -4,10 +4,10 @@ import org.bukkit.ChatColor;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.SampleController;
-import org.cyberpwn.react.object.Value;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.Value;
+import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
 
 public class Sample implements Samplable, Configurable

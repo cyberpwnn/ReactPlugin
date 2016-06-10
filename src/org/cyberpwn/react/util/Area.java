@@ -1,4 +1,4 @@
-package org.cyberpwn.react.object;
+package org.cyberpwn.react.util;
 
 import java.util.Random;
 

@@ -16,10 +16,10 @@ import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GBiset;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.MaterialList;
+import org.cyberpwn.react.util.GBiset;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.MaterialList;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
 

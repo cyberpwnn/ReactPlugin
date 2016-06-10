@@ -11,7 +11,7 @@ import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GMap;
 
 import net.md_5.bungee.api.ChatColor;
 

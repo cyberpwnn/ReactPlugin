@@ -7,7 +7,6 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
-import org.cyberpwn.react.object.GList;
 import org.cyberpwn.react.sampler.Samplable;
 
 import me.clip.placeholderapi.external.EZPlaceholderHook;

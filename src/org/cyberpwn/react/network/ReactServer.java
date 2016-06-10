@@ -11,7 +11,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ReactRunnable;
 
 public class ReactServer extends Thread

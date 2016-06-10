@@ -1,4 +1,4 @@
-package org.cyberpwn.react.object;
+package org.cyberpwn.react.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

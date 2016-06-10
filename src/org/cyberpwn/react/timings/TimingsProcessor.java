@@ -10,12 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
-import org.cyberpwn.react.object.GBook;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.GPage;
-import org.cyberpwn.react.object.Severity;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GBook;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.GPage;
+import org.cyberpwn.react.util.Severity;
 import org.cyberpwn.react.util.Timer;
 import org.spigotmc.CustomTimingsHandler;
 

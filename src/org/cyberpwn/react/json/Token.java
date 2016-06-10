@@ -1,6 +1,6 @@
 package org.cyberpwn.react.json;
 
-import org.cyberpwn.react.object.GMap;
+import org.cyberpwn.react.util.GMap;
 
 public class Token
 {

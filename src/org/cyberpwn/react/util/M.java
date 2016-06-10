@@ -1,7 +1,5 @@
 package org.cyberpwn.react.util;
 
-import org.cyberpwn.react.object.GList;
-
 public class M
 {
 	public static double tps(long ns, int rad)

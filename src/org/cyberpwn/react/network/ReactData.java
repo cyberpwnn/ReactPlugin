@@ -1,8 +1,8 @@
 package org.cyberpwn.react.network;
 
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.object.GMap;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.GMap;
 
 public class ReactData
 {

@@ -1,8 +1,8 @@
 package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
-import org.cyberpwn.react.object.Value;
-import org.cyberpwn.react.object.ValueType;
+import org.cyberpwn.react.util.Value;
+import org.cyberpwn.react.util.ValueType;
 
 public interface ExternallySamplable
 {

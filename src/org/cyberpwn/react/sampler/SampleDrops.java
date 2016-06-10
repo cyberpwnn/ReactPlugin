@@ -9,10 +9,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleDrops extends Sample
 {

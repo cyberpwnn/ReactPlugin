@@ -1,7 +1,7 @@
 package org.cyberpwn.react.cluster;
 
 import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
-import org.cyberpwn.react.object.GList;
+import org.cyberpwn.react.util.GList;
 
 public class ClusterStringList extends Cluster
 {

@@ -1,16 +1,14 @@
-package org.cyberpwn.react.object;
+package org.cyberpwn.react.util;
 
-public class GTriset<A, B, C>
+public class GBiset<A, B>
 {
 	private A a;
 	private B b;
-	private C c;
 	
-	public GTriset(A a, B b, C c)
+	public GBiset(A a, B b)
 	{
 		this.a = a;
 		this.b = b;
-		this.c = c;
 	}
 	
 	public A getA()
@@ -31,15 +29,5 @@ public class GTriset<A, B, C>
 	public void setB(B b)
 	{
 		this.b = b;
-	}
-	
-	public C getC()
-	{
-		return c;
-	}
-	
-	public void setC(C c)
-	{
-		this.c = c;
 	}
 }

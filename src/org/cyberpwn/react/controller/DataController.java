@@ -17,10 +17,10 @@ import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.GTimeBank;
-import org.cyberpwn.react.object.PlayerData;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.GTimeBank;
+import org.cyberpwn.react.util.PlayerData;
 
 public class DataController extends Controller
 {

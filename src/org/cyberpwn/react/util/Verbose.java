@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.object.GList;
 
 public class Verbose
 {

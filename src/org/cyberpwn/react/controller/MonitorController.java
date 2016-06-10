@@ -37,11 +37,11 @@ import org.cyberpwn.react.network.FCCallback;
 import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.nms.PacketUtil;
 import org.cyberpwn.react.nms.Title;
-import org.cyberpwn.react.object.GBiset;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.MonitorScreen;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GBiset;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.MonitorScreen;
 import org.cyberpwn.react.util.Verbose;
 
 public class MonitorController extends Controller implements Configurable

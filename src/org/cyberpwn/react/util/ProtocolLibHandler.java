@@ -2,7 +2,6 @@ package org.cyberpwn.react.util;
 
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.object.GMap;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;

@@ -8,9 +8,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.GMap;
-import org.cyberpwn.react.object.ValueType;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 {

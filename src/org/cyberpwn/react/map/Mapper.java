@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapPalette;
 import org.cyberpwn.react.controller.SampleController;
-import org.cyberpwn.react.object.GTimeBank;
+import org.cyberpwn.react.util.GTimeBank;
 
 public class Mapper
 {

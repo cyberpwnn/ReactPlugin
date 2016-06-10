@@ -1,18 +1,16 @@
-package org.cyberpwn.react.object;
+package org.cyberpwn.react.util;
 
-public class GQuadraset<A, B, C, D>
+public class GTriset<A, B, C>
 {
 	private A a;
 	private B b;
 	private C c;
-	private D d;
 	
-	public GQuadraset(A a, B b, C c, D d)
+	public GTriset(A a, B b, C c)
 	{
 		this.a = a;
 		this.b = b;
 		this.c = c;
-		this.d = d;
 	}
 	
 	public A getA()
@@ -43,15 +41,5 @@ public class GQuadraset<A, B, C, D>
 	public void setC(C c)
 	{
 		this.c = c;
-	}
-	
-	public D getD()
-	{
-		return d;
-	}
-	
-	public void setD(D d)
-	{
-		this.d = d;
 	}
 }

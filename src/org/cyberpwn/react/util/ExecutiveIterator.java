@@ -2,8 +2,6 @@ package org.cyberpwn.react.util;
 
 import java.util.Iterator;
 
-import org.cyberpwn.react.object.GList;
-
 public class ExecutiveIterator<T>
 {
 	private Iterator<T> it;

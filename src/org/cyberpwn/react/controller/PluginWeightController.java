@@ -11,10 +11,10 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
-import org.cyberpwn.react.object.GList;
-import org.cyberpwn.react.object.GMap;
 import org.cyberpwn.react.timings.TimingsReport;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
 
 public class PluginWeightController extends Controller implements Configurable
 {

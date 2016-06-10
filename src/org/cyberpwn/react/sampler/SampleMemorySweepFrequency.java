@@ -3,10 +3,10 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.object.Average;
-import org.cyberpwn.react.object.ValueType;
+import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
 
 public class SampleMemorySweepFrequency extends Sample
