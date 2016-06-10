@@ -21,6 +21,7 @@ import org.cyberpwn.react.controller.BungeeController;
 import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
+import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
@@ -83,6 +84,7 @@ public class React extends JavaPlugin implements Configurable
 	private ActionController actionController;
 	private LanguageController languageController;
 	private NetworkController networkController;
+	private FailureController failureController;
 	private PacketController packetController;
 	public static String MKX = ".com/cyberpwnn/React";
 	private BungeeController bungeeController;
@@ -93,6 +95,20 @@ public class React extends JavaPlugin implements Configurable
 	private int saved;
 	
 	public void onEnable()
+	{
+		try
+		{
+			doEnable();
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "React Failed to load correctly. Attempting to force start.");
+			doEnable();
+		}
+	}
+	
+	public void doEnable()
 	{
 		d = new Dispatcher("React");
 		instance = this;
@@ -139,6 +155,7 @@ public class React extends JavaPlugin implements Configurable
 		instance = this;
 		packet = new MonitorPacket();
 		
+		failureController = new FailureController(this);
 		packetController = new PacketController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
@@ -198,7 +215,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(IOException e)
 			{
-				
+				React.fail(e, "React failed to connect to metrics for some reason.");
 			}
 		}
 		
@@ -212,7 +229,6 @@ public class React extends JavaPlugin implements Configurable
 		d.v("Preparing HeartBeatThread Connector...");
 		scheduleSyncRepeatingTask(1, 0, new Runnable()
 		{
-			
 			@Override
 			public void run()
 			{
@@ -329,7 +345,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(MalformedURLException e)
 			{
-				
+				React.fail(e);
 			}
 		}
 		
@@ -377,7 +393,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(MalformedURLException e)
 		{
-			
+			React.fail(e);
 		}
 	}
 	
@@ -414,7 +430,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(Exception e)
 		{
-			
+			React.fail(e, "Update failure.");
 		}
 	}
 	
@@ -528,7 +544,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			React.fail(e, "Failed to write dump file.");
 		}
 	}
 	
@@ -765,5 +781,20 @@ public class React extends JavaPlugin implements Configurable
 	public NetworkController getNetworkController()
 	{
 		return networkController;
+	}
+
+	public FailureController getFailureController()
+	{
+		return failureController;
+	}
+	
+	public static void fail(Exception e, String msg)
+	{
+		instance.getFailureController().fail(e, msg);
+	}
+	
+	public static void fail(Exception e)
+	{
+		instance.getFailureController().fail(e);
 	}
 }

@@ -47,8 +47,16 @@ public class Title
 	
 	public void send(Player p)
 	{
-		PacketUtil.sendTitle(p, fadeIn, stayTime, fadeOut, title, subTitle);
-		PacketUtil.sendActionBar(p, action);
+		try
+		{
+			PacketUtil.sendTitle(p, fadeIn, stayTime, fadeOut, title, subTitle);
+			PacketUtil.sendActionBar(p, action);
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
 	}
 	
 	public String getTitle()
