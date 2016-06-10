@@ -94,8 +94,21 @@ public class React extends JavaPlugin implements Configurable
 	private HeartBeat hbt;
 	private int saved;
 	
-	@SuppressWarnings("null")
 	public void onEnable()
+	{
+		try
+		{
+			doEnable();
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "React Failed to load correctly. Attempting to force start.");
+			doEnable();
+		}
+	}
+	
+	public void doEnable()
 	{
 		d = new Dispatcher("React");
 		instance = this;
@@ -160,17 +173,6 @@ public class React extends JavaPlugin implements Configurable
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
 		
-		try
-		{
-			File f = null;
-			f.getAbsolutePath();
-		}
-		
-		catch(Exception e)
-		{
-			React.fail(e, "React failed to do something that should have failed in the first place.");
-		}
-		
 		if(fcx.exists())
 		{
 			fcx.delete();
@@ -213,7 +215,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(IOException e)
 			{
-				
+				React.fail(e, "React failed to connect to metrics for some reason.");
 			}
 		}
 		
@@ -343,7 +345,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(MalformedURLException e)
 			{
-				
+				React.fail(e);
 			}
 		}
 		
@@ -391,7 +393,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(MalformedURLException e)
 		{
-			
+			React.fail(e);
 		}
 	}
 	
@@ -428,7 +430,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(Exception e)
 		{
-			
+			React.fail(e, "Update failure.");
 		}
 	}
 	
@@ -542,7 +544,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(IOException e)
 		{
-			e.printStackTrace();
+			React.fail(e, "Failed to write dump file.");
 		}
 	}
 	
@@ -789,5 +791,10 @@ public class React extends JavaPlugin implements Configurable
 	public static void fail(Exception e, String msg)
 	{
 		instance.getFailureController().fail(e, msg);
+	}
+	
+	public static void fail(Exception e)
+	{
+		instance.getFailureController().fail(e);
 	}
 }
