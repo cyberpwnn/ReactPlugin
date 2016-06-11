@@ -43,9 +43,9 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HeartBeat;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
+import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.PluginUtil;
@@ -790,7 +790,7 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return networkController;
 	}
-
+	
 	public FailureController getFailureController()
 	{
 		return failureController;
