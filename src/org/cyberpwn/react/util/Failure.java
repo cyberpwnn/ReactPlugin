@@ -25,6 +25,18 @@ public class Failure
 		return stackTrace;
 	}
 	
+	public GList<String> getStackTraceStrings()
+	{
+		GList<String> sts = new GList<String>();
+		
+		for(StackTraceElement e : getStackTrace())
+		{
+			sts.add("at " + e.getClassName() + "." + e.getMethodName() + "(" + e.getLineNumber() + ")");
+		}
+		
+		return sts;
+	}
+	
 	public String getMessage()
 	{
 		return message;
