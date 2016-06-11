@@ -15,7 +15,6 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
-import org.cyberpwn.react.json.VersionBukkit;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMS;
@@ -23,6 +22,7 @@ import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
+import org.cyberpwn.react.util.VersionBukkit;
 
 import net.md_5.bungee.api.ChatColor;
 
