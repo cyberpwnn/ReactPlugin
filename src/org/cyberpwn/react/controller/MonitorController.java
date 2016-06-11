@@ -28,7 +28,6 @@ import org.cyberpwn.react.api.SpikeEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.json.VersionBukkit;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.map.MapGraph;
@@ -43,6 +42,7 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.MonitorScreen;
 import org.cyberpwn.react.util.Verbose;
+import org.cyberpwn.react.util.VersionBukkit;
 
 public class MonitorController extends Controller implements Configurable
 {

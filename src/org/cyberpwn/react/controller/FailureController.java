@@ -47,4 +47,9 @@ public class FailureController extends Controller
 	{
 		fail(e, "React has not yet been prepared for this type of error. Please Report this!");
 	}
+
+	public GList<Failure> getFailures()
+	{
+		return failures;
+	}
 }

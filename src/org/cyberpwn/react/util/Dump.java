@@ -31,6 +31,15 @@ public class Dump implements Configurable
 		cc.set("react.ai.version-code", Version.C);
 		cc.set("react.ai.digest.md5sha256sha512", pl.mdsha.toString());
 		
+		cc.set("machine.processor.cores", Runtime.getRuntime().availableProcessors());
+		
+		for(Failure i : React.instance().getFailureController().getFailures())
+		{
+			cc.set("react.failures.all." + "time-" + i.getTime() + ".message", i.getMessage());
+			cc.set("react.failures.all." + "time-" + i.getTime() + ".type", i.getType());
+			cc.set("react.failures.all." + "time-" + i.getTime() + ".trace", i.getStackTraceStrings());
+		}
+		
 		for(Samplable i : pl.getSampleController().getSamples().k())
 		{
 			Configurable c = (Configurable) i;
