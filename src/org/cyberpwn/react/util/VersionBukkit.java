@@ -1,4 +1,4 @@
-package org.cyberpwn.react.json;
+package org.cyberpwn.react.util;
 
 import org.bukkit.Bukkit;
 
