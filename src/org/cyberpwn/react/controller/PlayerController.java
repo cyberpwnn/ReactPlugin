@@ -1,5 +1,8 @@
 package org.cyberpwn.react.controller;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.util.GMap;
@@ -39,7 +42,7 @@ public class PlayerController extends Controller
 		}
 		
 		PlayerData pd = new PlayerData(p.getUniqueId());
-		getReact().getDataController().load("player", pd);
+		getReact().getDataController().load("playerdata", pd);
 		cache.put(p, pd);
 	}
 	
@@ -50,8 +53,16 @@ public class PlayerController extends Controller
 			return;
 		}
 		
-		PlayerData pd = new PlayerData(p.getUniqueId());
-		getReact().getDataController().save("player", pd);
-		cache.put(p, pd);
+		try
+		{
+			cache.get(p).onNewConfig();
+			cache.get(p).getConfiguration().toYaml().save(new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml"));
+		}
+		
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+		cache.remove(p);
 	}
 }
