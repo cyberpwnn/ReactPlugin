@@ -13,6 +13,8 @@ public class PlayerData implements Configurable
 	private Boolean monitoring;
 	private Boolean lockedTab;
 	private Boolean mapping;
+	private Boolean verbose;
+	private Boolean monitorVerbose;
 	
 	public PlayerData(UUID uuid)
 	{
@@ -22,6 +24,8 @@ public class PlayerData implements Configurable
 		this.monitoring = false;
 		this.lockedTab = false;
 		this.mapping = false;
+		this.verbose = false;
+		this.monitorVerbose = false;
 	}
 	
 	@Override
@@ -31,7 +35,9 @@ public class PlayerData implements Configurable
 		cc.set("monitor.options.monitoring.enabled", monitoring);
 		cc.set("monitor.options.monitoring.current", monitoringTab);
 		cc.set("monitor.options.monitoring.locked", lockedTab);
+		cc.set("monitor.options.monitoring.verbose", monitorVerbose);
 		cc.set("monitor.options.mapping.enabled", mapping);
+		cc.set("monitor.options.verbose", verbose);
 	}
 	
 	@Override
@@ -41,7 +47,9 @@ public class PlayerData implements Configurable
 		monitoringTab = cc.getInt("monitor.options.monitoring.current");
 		monitoring = cc.getBoolean("monitor.options.monitoring.enabled");
 		lockedTab = cc.getBoolean("monitor.options.monitoring.locked");
+		monitorVerbose = cc.getBoolean("monitor.options.monitoring.verbose");
 		mapping = cc.getBoolean("monitor.options.mapping.enabled");
+		verbose = cc.getBoolean("monitor.options.verbose");
 	}
 	
 	@Override
@@ -99,5 +107,55 @@ public class PlayerData implements Configurable
 	public void setMapping(Boolean mapping)
 	{
 		this.mapping = mapping;
+	}
+
+	public ClusterConfig getCc()
+	{
+		return cc;
+	}
+
+	public void setCc(ClusterConfig cc)
+	{
+		this.cc = cc;
+	}
+
+	public Boolean getVerbose()
+	{
+		return verbose;
+	}
+
+	public void setVerbose(Boolean verbose)
+	{
+		this.verbose = verbose;
+	}
+
+	public Boolean getMonitorVerbose()
+	{
+		return monitorVerbose;
+	}
+
+	public void setMonitorVerbose(Boolean monitorVerbose)
+	{
+		this.monitorVerbose = monitorVerbose;
+	}
+
+	public Boolean getMonitoring()
+	{
+		return monitoring;
+	}
+
+	public Boolean getLockedTab()
+	{
+		return lockedTab;
+	}
+
+	public Boolean getMapping()
+	{
+		return mapping;
+	}
+
+	public void setUuid(UUID uuid)
+	{
+		this.uuid = uuid;
 	}
 }
