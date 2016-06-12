@@ -100,4 +100,34 @@ public class PlayerData implements Configurable
 	{
 		this.mapping = mapping;
 	}
+	
+	public ClusterConfig getCc()
+	{
+		return cc;
+	}
+	
+	public void setCc(ClusterConfig cc)
+	{
+		this.cc = cc;
+	}
+	
+	public Boolean getMonitoring()
+	{
+		return monitoring;
+	}
+	
+	public Boolean getLockedTab()
+	{
+		return lockedTab;
+	}
+	
+	public Boolean getMapping()
+	{
+		return mapping;
+	}
+	
+	public void setUuid(UUID uuid)
+	{
+		this.uuid = uuid;
+	}
 }

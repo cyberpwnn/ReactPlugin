@@ -41,6 +41,7 @@ import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.MonitorScreen;
+import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -63,6 +64,7 @@ public class MonitorController extends Controller implements Configurable
 	private String disp;
 	private int dispTicks;
 	private int overflow;
+	private PlayerController pc;
 	
 	public MonitorController(React react)
 	{
@@ -89,6 +91,7 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void start()
 	{
+		pc = getReact().getPlayerController();
 		react.getDataController().load("cache", this);
 	}
 	
@@ -231,7 +234,7 @@ public class MonitorController extends Controller implements Configurable
 					
 					monitors.get(i).setB(cg);
 					monitors.get(i).setA(his);
-					React.gpd(i).setMonitoringTab(cg);
+					pc.gpd(i).setMonitoringTab(cg);
 				}
 			}
 			
@@ -376,7 +379,7 @@ public class MonitorController extends Controller implements Configurable
 			}
 		}
 		
-		React.gpd(p).setMapping(true);
+		pc.gpd(p).setMapping(true);
 		mappers.put(p, new MapGraph());
 		Verbose.x("monitor", p.getName() + ": Mapping enabled");
 		
@@ -403,7 +406,7 @@ public class MonitorController extends Controller implements Configurable
 		cc.set("mappers", cc.getStringList("mappers").qdel(p.getUniqueId().toString()));
 		ItemStack map = new ItemStack(Material.MAP);
 		map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		React.gpd(p).setMapping(false);
+		pc.gpd(p).setMapping(false);
 		
 		if(p.getInventory().contains(map))
 		{
@@ -470,27 +473,26 @@ public class MonitorController extends Controller implements Configurable
 		if(locks.containsKey(p))
 		{
 			locks.remove(p);
-			React.gpd(p).setLockedTab(false);
+			pc.gpd(p).setLockedTab(false);
 			p.sendMessage(Info.TAG + ChatColor.GREEN + "Monitor Unlocked. Use shift + scroll to change tabs.");
 		}
 		
 		else
 		{
 			locks.put(p, monitors.get(p).getB());
-			React.gpd(p).setLockedTab(true);
-			React.gpd(p).setMonitoringTab(monitors.get(p).getB());
+			pc.gpd(p).setLockedTab(true);
+			pc.gpd(p).setMonitoringTab(monitors.get(p).getB());
 			p.sendMessage(Info.TAG + ChatColor.GREEN + "Monitor Tab Locked. Until you use (/re mon -lock)");
 		}
 	}
 	
 	public void stopMonitoring(Player p)
 	{
-		React.gpd(p).setMonitoringTab(monitors.get(p).getB());
 		monitors.remove(p);
 		p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_MONITORING_DISABLED);
 		PacketUtil.sendActionBar(p, "  ");
 		PacketUtil.clearTitle(p);
-		React.gpd(p).setMonitoring(false);
+		pc.gpd(p).setMonitoring(false);
 		cc.set("monitors", cc.getStringList("monitors").qdel(p.getUniqueId().toString()));
 	}
 	
@@ -510,13 +512,13 @@ public class MonitorController extends Controller implements Configurable
 			return;
 		}
 		
-		React.gpd(p).setMonitoring(true);
+		pc.gpd(p).setMonitoring(true);
 		cc.set("monitors", cc.getStringList("monitors").qadd(p.getUniqueId().toString()).removeDuplicates());
-		monitors.put(p, new GBiset<Integer, Integer>(p.getInventory().getHeldItemSlot(), React.gpd(p).getMonitoringTab()));
+		monitors.put(p, new GBiset<Integer, Integer>(p.getInventory().getHeldItemSlot(), pc.gpd(p).getMonitoringTab()));
 		
-		if(React.gpd(p).isLockedTab())
+		if(pc.gpd(p).isLockedTab())
 		{
-			locks.put(p, React.gpd(p).getMonitoringTab());
+			locks.put(p, pc.gpd(p).getMonitoringTab());
 		}
 		
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MONITORING_ENABLED);
@@ -600,17 +602,19 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(p.hasPermission(Info.PERM_MONITOR))
 		{
-			React.gpd(p).setMonitoring(isMonitoring(p));
-			React.gpd(p).setMapping(isMapping(p));
-			React.gpd(p).setLockedTab(locks.containsKey(p));
+			PlayerData pd = pc.gpd(p);
+			pd.setMonitoring(isMonitoring(p));
+			pd.setMapping(isMapping(p));
+			pd.setLockedTab(locks.containsKey(p));
 			
 			if(isMonitoring(p))
 			{
-				React.gpd(p).setMonitoringTab(monitors.get(p).getB());
+				pd.setMonitoringTab(monitors.get(p).getB());
 			}
+			
+			pc.spd(p, pd);
+			pc.save(p);
 		}
-		
-		React.spd(p);
 		
 		if(p.getInventory().contains(map))
 		{
@@ -664,7 +668,7 @@ public class MonitorController extends Controller implements Configurable
 						}
 						
 						startMonitoring(e.getPlayer());
-						monitors.get(e.getPlayer()).setB(React.gpd(e.getPlayer()).getMonitoringTab());
+						monitors.get(e.getPlayer()).setB(pc.gpd(e.getPlayer()).getMonitoringTab());
 					}
 				}
 				
@@ -677,7 +681,7 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 		});
-		
+				
 		if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 		{
 			react.scheduleSyncTask(5, new Runnable()
