@@ -19,7 +19,6 @@ public class PlayerController extends Controller
 		this.cache = new GMap<Player, PlayerData>();
 	}
 	
-<<<<<<< HEAD
 	public void start()
 	{
 		
@@ -34,11 +33,11 @@ public class PlayerController extends Controller
 				save(i);
 			}
 		}
-=======
+	}
+	
 	public boolean exists(Player p)
 	{
 		return new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml").exists();
->>>>>>> refs/remotes/origin/master
 	}
 	
 	public PlayerData gpd(Player p)
