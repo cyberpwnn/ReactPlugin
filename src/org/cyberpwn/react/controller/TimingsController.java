@@ -149,7 +149,7 @@ public class TimingsController extends Controller
 					{
 						getReact().getPluginWeightController().scan();
 						
-						tm = new TimingsProcessor(react.getDataFolder(), new TimingsCallback()
+						tm = new TimingsProcessor(new TimingsCallback()
 						{
 							public void run()
 							{
