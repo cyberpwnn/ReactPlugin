@@ -6,26 +6,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GTimeBank;
-import org.cyberpwn.react.util.PlayerData;
 
 public class DataController extends Controller
 {
 	private File dataFolder;
-	private GMap<UUID, PlayerData> pd;
 	private GTimeBank tb;
 	
 	public DataController(React react)
@@ -34,30 +28,8 @@ public class DataController extends Controller
 		
 		dataFolder = react.getDataFolder();
 		tb = new GTimeBank();
-		pd = new GMap<UUID, PlayerData>();
 	}
-	
-	public PlayerData gpd(Player player)
-	{
-		if(pd.containsKey(player.getUniqueId()))
-		{
-			return pd.get(player.getUniqueId());
-		}
 		
-		PlayerData p = new PlayerData(player.getUniqueId());
-		load("playerdata", p);
-		pd.put(player.getUniqueId(), p);
-		return p;
-	}
-	
-	public void spd(Player p)
-	{
-		if(pd.containsKey(p.getUniqueId()))
-		{
-			save("playerdata", pd.get(p.getUniqueId()));
-		}
-	}
-	
 	public void start()
 	{
 		File fx = new File(new File(dataFolder, "cache"), "history.cch");
@@ -82,14 +54,6 @@ public class DataController extends Controller
 			verifyFile(fx);
 			serialize(fx, tb);
 		}
-		
-		for(Player i : react.onlinePlayers())
-		{
-			if(i.hasPermission(Info.PERM_MONITOR))
-			{
-				gpd(i);
-			}
-		}
 	}
 	
 	public void stop()
@@ -97,11 +61,6 @@ public class DataController extends Controller
 		File fx = new File(new File(dataFolder, "cache"), "history.cch");
 		verifyFile(fx);
 		serialize(fx, tb);
-		
-		for(UUID i : pd.k())
-		{
-			save("playerdata", pd.get(i));
-		}
 	}
 	
 	public void save(String category, Configurable c)
