@@ -19,6 +19,11 @@ public class PlayerController extends Controller
 		this.cache = new GMap<Player, PlayerData>();
 	}
 	
+	public boolean exists(Player p)
+	{
+		return new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml").exists();
+	}
+	
 	public PlayerData gpd(Player p)
 	{
 		if(!cache.containsKey(p))

@@ -516,6 +516,12 @@ public class MonitorController extends Controller implements Configurable
 		cc.set("monitors", cc.getStringList("monitors").qadd(p.getUniqueId().toString()).removeDuplicates());
 		monitors.put(p, new GBiset<Integer, Integer>(p.getInventory().getHeldItemSlot(), pc.gpd(p).getMonitoringTab()));
 		
+		if(!pc.exists(p))
+		{
+			Title t = new Title("", ChatColor.AQUA + "" + ChatColor.BOLD + "<SHIFT> + Scroll Your Mouse", 20, 20, 30);
+			t.send(p);
+		}
+		
 		if(pc.gpd(p).isLockedTab())
 		{
 			locks.put(p, pc.gpd(p).getMonitoringTab());
