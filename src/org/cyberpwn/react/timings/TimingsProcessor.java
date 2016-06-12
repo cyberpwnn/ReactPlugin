@@ -1,14 +1,12 @@
 package org.cyberpwn.react.timings;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.PrintStream;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
@@ -27,13 +25,11 @@ public class TimingsProcessor extends Thread
 	private GMap<String, TimingsObject> tasks;
 	private GMap<String, TimingsObject> normal;
 	private TimingsCallback cb;
-	private File df;
 	private String hh;
 	private Double ms;
 	
-	public TimingsProcessor(File df, TimingsCallback cb)
+	public TimingsProcessor(TimingsCallback cb)
 	{
-		this.df = df;
 		this.cb = cb;
 		cc = new ClusterConfig();
 		data = new GList<String>();
@@ -51,7 +47,6 @@ public class TimingsProcessor extends Thread
 	{
 		try
 		{
-			File fcx = new File(new File(df, "cache"), "timings.yml");
 			Timer t = new Timer();
 			t.start();
 			ByteArrayOutputStream bs = new ByteArrayOutputStream();
@@ -98,8 +93,6 @@ public class TimingsProcessor extends Thread
 			}
 			
 			GMap<String, TimingsReport> reports = analyze(normal, tasks, events);
-			FileConfiguration fc = cc.toYaml();
-			fc.save(fcx);
 			GBook k = getAllProc(reports);
 			t.stop();
 			cb.run(reports, k, hh, ms, cc);

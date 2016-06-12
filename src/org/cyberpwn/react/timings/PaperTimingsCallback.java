@@ -16,6 +16,7 @@ public class PaperTimingsCallback implements Runnable
 		all = k;
 		this.hh = hh;
 		this.ms = ms;
+		
 		run();
 	}
 	

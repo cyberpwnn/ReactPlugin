@@ -32,7 +32,6 @@ public class TimingsController extends Controller
 	private ClusterConfig cx;
 	private Double ms;
 	
-	// TODO temp
 	private int s = 0;
 	
 	public TimingsController(React react)
@@ -63,18 +62,18 @@ public class TimingsController extends Controller
 		{
 			sup = false;
 			
-			new Task(1)
+			new Task(20)
 			{
 				public void run()
 				{
 					s++;
 					
-					if(s >= 300*20)
+					if(s >= 300)
 					{
 						s = 0;
 					}
 					
-					int seconds = s/20;
+					int seconds = s;
 					
 					GTime gt = new GTime(0, 0, 0, 300 - seconds, 0);
 										
@@ -150,7 +149,7 @@ public class TimingsController extends Controller
 					{
 						getReact().getPluginWeightController().scan();
 						
-						tm = new TimingsProcessor(react.getDataFolder(), new TimingsCallback()
+						tm = new TimingsProcessor(new TimingsCallback()
 						{
 							public void run()
 							{
