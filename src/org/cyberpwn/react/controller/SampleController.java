@@ -8,7 +8,6 @@ import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.sampler.ExternalSampleWorldBorder;
 import org.cyberpwn.react.sampler.ExternallySamplable;
 import org.cyberpwn.react.sampler.Samplable;
-import org.cyberpwn.react.sampler.SampleCPUScore;
 import org.cyberpwn.react.sampler.SampleChunkGenPerSecond;
 import org.cyberpwn.react.sampler.SampleChunkLoadPerSecond;
 import org.cyberpwn.react.sampler.SampleChunkMemory;
@@ -65,7 +64,6 @@ public class SampleController extends Controller
 	private final SampleHitRate sampleHitRate;
 	private final SampleHistory sampleHistory;
 	private final SamplePlayers samplePlayers;
-	private final SampleCPUScore sampleCPUScore;
 	private final SampleTimings sampleTimings;
 	private final SamplePHTimings samplePHTimings;
 	private final SamplePHEntities samplePHEntities;
@@ -101,7 +99,6 @@ public class SampleController extends Controller
 		sampleHitRate = new SampleHitRate(this);
 		sampleHistory = new SampleHistory(this);
 		samplePlayers = new SamplePlayers(this);
-		sampleCPUScore = new SampleCPUScore(this);
 		sampleTimings = new SampleTimings(this);
 		samplePHTimings = new SamplePHTimings(this);
 		samplePHEntities = new SamplePHEntities(this);
@@ -403,11 +400,6 @@ public class SampleController extends Controller
 		return samplePlayers;
 	}
 	
-	public SampleCPUScore getSampleCPUScore()
-	{
-		return sampleCPUScore;
-	}
-	
 	public SampleTimings getSampleTimings()
 	{
 		return sampleTimings;
@@ -422,7 +414,7 @@ public class SampleController extends Controller
 	{
 		return samplePHEntities;
 	}
-
+	
 	public SampleGarbageDirection getSampleGarbageDirection()
 	{
 		return sampleGarbageDirection;
