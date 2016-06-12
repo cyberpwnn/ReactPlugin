@@ -160,6 +160,7 @@ public class React extends JavaPlugin implements Configurable
 		packetController = new PacketController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
+		playerController = new PlayerController(this);
 		monitorController = new MonitorController(this);
 		commandController = new CommandController(this);
 		actionController = new ActionController(this);
