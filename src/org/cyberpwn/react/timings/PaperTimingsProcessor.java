@@ -32,9 +32,12 @@ public class PaperTimingsProcessor extends Thread
 		scanPlugins();
 		scanRest();
 		
+		GBook k = k();
+		String hh = hh();
+		
 		if(reports.containsKey("Server") && reports.get("Server").getData().containsKey("FullServerTick"))
 		{
-			tc.run(reports, k(), hh(), reports.get("Server").getData().get("FullServerTick").getMs());
+			tc.run(reports, k, hh, reports.get("Server").getData().get("FullServerTick").getMs());
 		}
 	}
 	
