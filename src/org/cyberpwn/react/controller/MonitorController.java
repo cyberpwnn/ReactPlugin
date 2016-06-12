@@ -41,6 +41,7 @@ import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.MonitorScreen;
+import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -72,7 +73,6 @@ public class MonitorController extends Controller implements Configurable
 		packeted = new GMap<Player, Integer>();
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		currentDelay = 0;
-		pc = getReact().getPlayerController();
 		disp = "";
 		level = 0;
 		mLevel = 0;
@@ -91,6 +91,7 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void start()
 	{
+		pc = getReact().getPlayerController();
 		react.getDataController().load("cache", this);
 	}
 	
@@ -601,16 +602,20 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(p.hasPermission(Info.PERM_MONITOR))
 		{
-			pc.gpd(p).setMonitoring(isMonitoring(p));
-			pc.gpd(p).setMapping(isMapping(p));
-			pc.gpd(p).setLockedTab(locks.containsKey(p));
+			PlayerData pd = pc.gpd(p);
+			pd.setMonitoring(isMonitoring(p));
+			pd.setMapping(isMapping(p));
+			pd.setLockedTab(locks.containsKey(p));
 			
 			if(isMonitoring(p))
 			{
-				pc.gpd(p).setMonitoringTab(monitors.get(p).getB());
+				pd.setMonitoringTab(monitors.get(p).getB());
 			}
+			
+			pc.spd(p, pd);
+			pc.save(p);
 		}
-				
+		
 		if(p.getInventory().contains(map))
 		{
 			p.getInventory().remove(map);
@@ -676,7 +681,7 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 		});
-		
+				
 		if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 		{
 			react.scheduleSyncTask(5, new Runnable()
