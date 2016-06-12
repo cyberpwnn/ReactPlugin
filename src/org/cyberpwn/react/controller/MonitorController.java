@@ -63,6 +63,7 @@ public class MonitorController extends Controller implements Configurable
 	private String disp;
 	private int dispTicks;
 	private int overflow;
+	private PlayerController pc;
 	
 	public MonitorController(React react)
 	{
@@ -71,6 +72,7 @@ public class MonitorController extends Controller implements Configurable
 		packeted = new GMap<Player, Integer>();
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		currentDelay = 0;
+		pc = getReact().getPlayerController();
 		disp = "";
 		level = 0;
 		mLevel = 0;

@@ -26,6 +26,7 @@ import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PacketController;
+import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.TimingsController;
@@ -47,7 +48,6 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
-import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.PluginUtil;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
@@ -77,6 +77,7 @@ public class React extends JavaPlugin implements Configurable
 	private ClusterConfig cc;
 	public static String muix;
 	private DataController dataController;
+	private PlayerController playerController;
 	private SampleController sampleController;
 	private MonitorController monitorController;
 	private CommandController commandController;
@@ -736,16 +737,6 @@ public class React extends JavaPlugin implements Configurable
 		return d;
 	}
 	
-	public static PlayerData gpd(Player p)
-	{
-		return instance.getDataController().gpd(p);
-	}
-	
-	public static void spd(Player p)
-	{
-		instance.getDataController().spd(p);
-	}
-	
 	public Metrics getMetrics()
 	{
 		return metrics;
@@ -804,5 +795,10 @@ public class React extends JavaPlugin implements Configurable
 	public static void fail(Exception e)
 	{
 		instance.getFailureController().fail(e);
+	}
+
+	public PlayerController getPlayerController()
+	{
+		return playerController;
 	}
 }
