@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -26,11 +27,12 @@ public class ReactServer extends Thread
 	
 	public ReactServer(int port, ClusterConfig config) throws IOException
 	{
+		React.instance().getD().info("Starting React Server @port/" + port);
 		reactData = new ReactData();
 		cc = config;
 		runnables = new GList<ReactRunnable>();
 		serverSocket = new ServerSocket(port);
-		serverSocket.setSoTimeout(50);
+		serverSocket.setSoTimeout(500);
 		actions = new GList<String>();
 		
 		for(Actionable i : React.instance().getActionController().getActions().k())
@@ -118,6 +120,13 @@ public class ReactServer extends Thread
 		{
 			response.put("type", PacketResponseType.OK);
 			response.put("actions", actions);
+		}
+		
+		else if(command.equals(PacketRequestType.GET_BASIC.toString()))
+		{
+			response.put("type", PacketResponseType.OK);
+			response.put("version", Bukkit.getVersion());
+			response.put("bukkit-version", Bukkit.getBukkitVersion());
 		}
 		
 		else if(command.startsWith("ACTION "))

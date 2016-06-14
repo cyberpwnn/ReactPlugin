@@ -1,5 +1,6 @@
 package org.cyberpwn.react.sampler;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
@@ -21,7 +22,7 @@ public class SampleMonitoredPlugins extends Sample
 	
 	public void onTick()
 	{
-		getValue().setNumber(sampleController.getExternalSamples().size());
+		getValue().setNumber(Bukkit.getPluginManager().getPlugins().length);
 	}
 	
 	public void onStart()
