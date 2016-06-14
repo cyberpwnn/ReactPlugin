@@ -114,6 +114,9 @@ public class ReactServer extends Thread
 			{
 				response.put(i, reactData.getSamples().get(i));
 			}
+			
+			response.put("memory-max", Runtime.getRuntime().maxMemory() / 1024 / 1024);
+			response.put("processor-cores", Runtime.getRuntime().availableProcessors());
 		}
 		
 		else if(command.equals(PacketRequestType.GET_ACTIONS.toString()))
