@@ -649,6 +649,7 @@ public class CommandController extends Controller implements CommandExecutor
 					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
 					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
 					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
+					p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
 					p.sendMessage(Info.HR);
 				}
 				

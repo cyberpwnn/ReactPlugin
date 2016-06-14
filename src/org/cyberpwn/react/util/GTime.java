@@ -190,27 +190,22 @@ public class GTime
 		
 		if(days > 0)
 		{
-			sb.append(days + " d ");
+			sb.append(days + " Day(s) ");
 		}
 		
 		if(hours > 0)
 		{
-			sb.append(hours + " hr ");
+			sb.append(hours + " Hour(s) ");
 		}
 		
 		if(minutes > 0)
 		{
-			sb.append(minutes + " min ");
+			sb.append(minutes + " Minute(s) ");
 		}
 		
 		if(seconds > 0)
 		{
-			sb.append(seconds + " sec");
-		}
-		
-		if(milliseconds > 0)
-		{
-			sb.append(milliseconds + " ms");
+			sb.append(seconds + " Second(s)");
 		}
 		
 		return sb.toString().trim();

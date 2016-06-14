@@ -41,8 +41,10 @@ import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.HeartBeat;
 import org.cyberpwn.react.util.JavaPlugin;
+import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
@@ -94,9 +96,12 @@ public class React extends JavaPlugin implements Configurable
 	private Metrics metrics;
 	private HeartBeat hbt;
 	private int saved;
+	private long start;
 	
 	public void onEnable()
 	{
+		start = M.ms();
+		
 		try
 		{
 			doEnable();
@@ -801,5 +806,10 @@ public class React extends JavaPlugin implements Configurable
 	public PlayerController getPlayerController()
 	{
 		return playerController;
+	}
+	
+	public GTime getUptime()
+	{
+		return new GTime(M.ms() - start);
 	}
 }

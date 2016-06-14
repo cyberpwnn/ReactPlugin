@@ -107,6 +107,7 @@ public class L
 	public static String MESSAGE_GARBAGE = "Garbage: ";
 	public static String MESSAGE_PLAYERS = "Players: ";
 	public static String MESSAGE_CHUNKS = "Chunks: ";
+	public static String MESSAGE_UPTIME = "Uptime: ";
 	public static String MESSAGE_PLUGINS = "Plugins/Other: ";
 	public static String MESSAGE_WORLD_WARNING = "WARNING: SERVER WAS LAGGING HARD ON THE LAST TICK";
 	public static String MESSAGE_WORLD_SAVEINVALID = "Not Saving... We Just Saved!";
