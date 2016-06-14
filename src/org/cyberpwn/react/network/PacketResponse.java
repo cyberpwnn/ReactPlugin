@@ -75,6 +75,11 @@ public class PacketResponse
 		return js.getBoolean(s);
 	}
 	
+	public String toString()
+	{
+		return js.toString();
+	}
+	
 	public GList<String> getStringList(String s)
 	{
 		GList<String> list = new GList<String>();
