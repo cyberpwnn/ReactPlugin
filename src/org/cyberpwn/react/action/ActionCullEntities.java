@@ -106,6 +106,11 @@ public class ActionCullEntities extends Action implements Listener
 				return;
 			}
 			
+			if(i.getType().toString().equals("ARMOR_STAND"))
+			{
+				continue;
+			}
+			
 			if(cc.getStringList(getCodeName() + ".cullable").contains(i.getType().toString()))
 			{
 				if(NMS.instance().getEntityName(i) != null)
