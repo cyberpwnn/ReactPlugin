@@ -77,6 +77,7 @@ public class React extends JavaPlugin implements Configurable
 	public final int[] tskx = { 0 };
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
+	public String uid = "%%__NONCE__%%";
 	public static String muix;
 	private DataController dataController;
 	private PlayerController playerController;
@@ -806,6 +807,11 @@ public class React extends JavaPlugin implements Configurable
 	public PlayerController getPlayerController()
 	{
 		return playerController;
+	}
+	
+	public String uix()
+	{
+		return uid;
 	}
 	
 	public GTime getUptime()
