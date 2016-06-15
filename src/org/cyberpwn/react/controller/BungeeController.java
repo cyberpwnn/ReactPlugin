@@ -170,7 +170,7 @@ public class BungeeController extends Controller implements PluginMessageListene
 			try
 			{
 				msgout.writeUTF(name);
-				msgout.writeUTF(React.packet.toJSON().toString());
+				msgout.writeUTF(React.getPacket().toJSON().toString());
 			}
 			
 			catch(IOException e)

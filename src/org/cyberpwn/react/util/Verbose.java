@@ -11,7 +11,7 @@ public class Verbose
 	
 	public static void x(String s, String msg)
 	{
-		if(React.verbose)
+		if(React.isVerbose())
 		{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + s + ChatColor.AQUA + " >> " + ChatColor.GREEN + msg);
 		}

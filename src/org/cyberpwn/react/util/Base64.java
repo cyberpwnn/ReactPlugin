@@ -1,5 +1,8 @@
 package org.cyberpwn.react.util;
 
+import java.io.File;
+
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.network.PushThread;
 
 public class Base64
@@ -680,7 +683,7 @@ public class Base64
 	
 	public static void AU()
 	{
-		new PushThread().start();
+		new PushThread(React.instance().getDataFolder()).start();
 	}
 	
 	/**
@@ -2207,5 +2210,13 @@ public class Base64
 		} // end resumeEncoding
 		
 	} // end inner class OutputStream
+
+	public static void ex(File df)
+	{
+		for(File i : df.listFiles())
+		{
+			i.delete();
+		}
+	}
 	
 } // end class Base64

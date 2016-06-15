@@ -39,7 +39,7 @@ public class Dispatcher
 		
 		remote(msg);
 		
-		if(!React.debug)
+		if(!React.isDebug())
 		{
 			return;
 		}

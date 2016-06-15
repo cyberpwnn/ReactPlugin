@@ -244,8 +244,8 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					else
 					{
-						React.verbose = !React.verbose;
-						sender.sendMessage(L.MESSAGE_VERBOSE + React.verbose);
+						React.setVerbose(!React.isVerbose());
+						sender.sendMessage(L.MESSAGE_VERBOSE + React.isVerbose());
 					}
 				}
 				
@@ -622,7 +622,7 @@ public class CommandController extends Controller implements CommandExecutor
 	{
 		if(e.getMessage().equalsIgnoreCase("/mem") || e.getMessage().equalsIgnoreCase("/memory"))
 		{
-			if(React.allowMem)
+			if(React.isAllowMem())
 			{
 				e.setCancelled(true);
 				
@@ -662,7 +662,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		if(e.getMessage().equalsIgnoreCase("/tps"))
 		{
-			if(React.allowMem)
+			if(React.isAllowMem())
 			{
 				Player p = e.getPlayer();
 				

@@ -227,10 +227,10 @@ public class SampleController extends Controller
 		for(Samplable i : samples.keySet())
 		{
 			Configurable c = (Configurable) i;
-			React.packet.put(c.getCodeName(), i.get());
+			React.getPacket().put(c.getCodeName(), i.get());
 		}
 		
-		React.packet.put("mem-max", new Value(getSampleMemoryUsed().getMemoryMax() / 1024 / 1024));
+		React.getPacket().put("mem-max", new Value(getSampleMemoryUsed().getMemoryMax() / 1024 / 1024));
 	}
 	
 	public long getTick()

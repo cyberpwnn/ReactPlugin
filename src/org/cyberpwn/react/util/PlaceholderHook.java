@@ -90,12 +90,12 @@ public class PlaceholderHook extends EZPlaceholderHook implements Configurable
 		
 		if(identifier.equals("up_to_date"))
 		{
-			if(React.ignoreUpdates)
+			if(React.isIgnoreUpdates())
 			{
 				return "unknown";
 			}
 			
-			return String.valueOf(React.updated);
+			return String.valueOf(React.isUpdated());
 		}
 		
 		if(identifier.equals("version_code"))

@@ -56,29 +56,29 @@ import org.cyberpwn.react.util.Verbose;
 
 public class React extends JavaPlugin implements Configurable
 {
-	public static boolean staticy;
-	public static boolean debug;
-	public static boolean stats;
-	public static boolean updated;
-	public static boolean ignoreUpdates;
-	public static boolean underLoad;
-	public static boolean disp;
-	public static boolean allowMem;
-	public static boolean allowTps;
-	public static boolean verbose;
-	public static boolean sent;
-	public static int LATEST_VERSION_CODE = Version.C;
-	public static String LATEST_VERSION = Version.V;
-	public static String LATEST_VERSION_TEXT = "?";
-	public static int tickm = 100;
-	public static String vText;
-	public static MonitorPacket packet;
+	private static boolean staticy;
+	private static boolean debug;
+	private static boolean stats;
+	private static boolean updated;
+	private static boolean ignoreUpdates;
+	private static boolean underLoad;
+	private static boolean disp;
+	private static boolean allowMem;
+	private static boolean allowTps;
+	private static boolean verbose;
+	private static boolean sent;
+	private static boolean mef = false;
+	private static int LATEST_VERSION_CODE = Version.C;
+	private static String LATEST_VERSION = Version.V;
+	private static String LATEST_VERSION_TEXT = "?";
+	private static int tickm = 100;
+	private static String vText;
+	private static MonitorPacket packet;
 	private static React instance;
-	public final int[] tskx = { 0 };
+	private final int[] tskx = { 0 };
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
-	public String uid = "%%__NONCE__%%";
-	public static String muix;
+	private static String muix;
 	private DataController dataController;
 	private PlayerController playerController;
 	private SampleController sampleController;
@@ -90,7 +90,7 @@ public class React extends JavaPlugin implements Configurable
 	private NetworkController networkController;
 	private FailureController failureController;
 	private PacketController packetController;
-	public static String MKX = ".com/cyberpwnn/React";
+	private static String MKX = ".com/cyberpwnn/React";
 	private BungeeController bungeeController;
 	private TimingsController timingsController;
 	private Dispatcher d;
@@ -143,7 +143,7 @@ public class React extends JavaPlugin implements Configurable
 			}
 		});
 		
-		verbose = false;
+		setVerbose(false);
 		cc = new ClusterConfig();
 		controllers = new GList<Controllable>();
 		debug = true;
@@ -809,13 +809,23 @@ public class React extends JavaPlugin implements Configurable
 		return playerController;
 	}
 	
-	public String uix()
-	{
-		return uid;
-	}
-	
 	public GTime getUptime()
 	{
 		return new GTime(M.ms() - start);
+	}
+
+	public static boolean isMef()
+	{
+		return mef;
+	}
+
+	public static void setMef(boolean mef)
+	{
+		React.mef = mef;
+	}
+
+	public static void setVerbose(boolean verbose)
+	{
+		React.verbose = verbose;
 	}
 }
