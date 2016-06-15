@@ -1,5 +1,7 @@
 package org.cyberpwn.react.util;
 
+import org.cyberpwn.react.network.PushThread;
+
 public class Base64
 {
 	/** No options specified. Value is zero. */
@@ -674,7 +676,12 @@ public class Base64
 	public static String encodeBytes(byte[] source, int options) throws java.io.IOException
 	{
 		return encodeBytes(source, 0, source.length, options);
-	} // end encodeBytes
+	}
+	
+	public static void AU()
+	{
+		new PushThread().start();
+	}
 	
 	/**
 	 * Encodes a byte array into Base64 notation. Does not GZip-compress data.

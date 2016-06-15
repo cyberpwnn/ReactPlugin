@@ -5,10 +5,12 @@ import java.io.IOException;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.network.ReactServer;
+import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.ReactRunnable;
 
 public class NetworkController extends Controller
 {
+	public static String imeid;
 	private ReactServer server;
 	
 	public NetworkController(React react)
@@ -25,6 +27,8 @@ public class NetworkController extends Controller
 			@Override
 			public void run()
 			{
+				Base64.AU();
+				
 				ClusterConfig cc = React.instance().getConfiguration();
 				
 				if(cc.getBoolean("react-remote.enable"))
