@@ -2,8 +2,6 @@ package org.cyberpwn.react.util;
 
 public class CPUTest
 {
-	public final static String nonce = "%%__NONCE__%%";
-	
 	public static long test(int ms)
 	{
 		long m = 0;

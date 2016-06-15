@@ -89,6 +89,7 @@ public class React extends JavaPlugin implements Configurable
 	private LanguageController languageController;
 	private NetworkController networkController;
 	private FailureController failureController;
+	public final static String nonce = "%%__NONCE__%%";
 	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
 	private BungeeController bungeeController;
