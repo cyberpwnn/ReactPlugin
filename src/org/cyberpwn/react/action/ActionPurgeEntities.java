@@ -49,6 +49,11 @@ public class ActionPurgeEntities extends Action implements Listener
 			{
 				if(cc.getStringList(getCodeName() + ".cullable").contains(j.getType().toString()))
 				{
+					if(j.getType().toString().equals("ARMOR_STAND"))
+					{
+						continue;
+					}
+					
 					if(NMS.instance().getEntityName(j) != null)
 					{
 						if(cc.getBoolean(getCodeName() + ".filter.ignore-named-entities"))
