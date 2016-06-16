@@ -15,6 +15,8 @@ public interface Samplable
 	
 	void onMetricsPlot(Graph graph);
 	
+	void handleAction();
+	
 	ValueType getType();
 	
 	Value get();
