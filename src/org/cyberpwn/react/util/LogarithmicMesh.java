@@ -6,12 +6,12 @@ import java.util.Iterator;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.sampler.Samplable;
 
-public class LogMesh
+public class LogarithmicMesh
 {
 	private GMap<Samplable, Double> base;
 	private GMap<Samplable, Double> range;
 	
-	public LogMesh()
+	public LogarithmicMesh()
 	{
 		base = new GMap<Samplable, Double>();
 		range = new GMap<Samplable, Double>();

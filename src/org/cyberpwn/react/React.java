@@ -775,4 +775,19 @@ public class React extends JavaPlugin implements Configurable
 	{
 		React.verbose = verbose;
 	}
+
+	public static String getNonce()
+	{
+		return nonce;
+	}
+
+	public static String getHashed()
+	{
+		return hashed;
+	}
+
+	public long getStart()
+	{
+		return start;
+	}
 }
