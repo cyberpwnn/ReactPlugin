@@ -9,7 +9,7 @@ public class M
 			return 0;
 		}
 		
-		return range / base;
+		return ((range - base) / base);
 	}
 	
 	public static double tps(long ns, int rad)
