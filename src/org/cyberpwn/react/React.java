@@ -90,6 +90,7 @@ public class React extends JavaPlugin implements Configurable
 	public final static String nonce = "%%__NONCE__%%";
 	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
+	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 	private BungeeController bungeeController;
 	private TimingsController timingsController;
 	private Dispatcher d;

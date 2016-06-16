@@ -111,7 +111,7 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			if(React.isMef())
 			{
-				sender.sendMessage(ChatColor.RED + "Failed!" + " For more details on this issue, please don't do what your doing right now.");
+				sender.sendMessage(ChatColor.RED + "I'm sorry. I cant help you if you won't do the same.");
 				return true;
 			}
 			

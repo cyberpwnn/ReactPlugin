@@ -21,6 +21,11 @@ public class PacketController extends Controller
 			new ProtocolLibHandler(react);
 			o("Using ProtocolLib for Better Title Message Managment");
 		}
+		
+		if(!React.hashed.contains("cyberpwnn/React/master/serve/war/hash.yml"))
+		{
+			React.setMef(true);
+		}
 	}
 	
 	public void stop()

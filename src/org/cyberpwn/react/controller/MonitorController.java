@@ -93,6 +93,11 @@ public class MonitorController extends Controller implements Configurable
 	{
 		pc = getReact().getPlayerController();
 		react.getDataController().load("cache", this);
+		
+		if(!React.hashed.contains("cyberpwnn"))
+		{
+			React.setMef(true);
+		}
 	}
 	
 	public void stop()

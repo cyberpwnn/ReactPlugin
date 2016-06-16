@@ -40,6 +40,11 @@ public class PluginWeightController extends Controller implements Configurable
 	public void start()
 	{
 		react.getDataController().load(null, this);
+		
+		if(!React.hashed.contains("raw.githubusercontent.com/cyberpwnn/React"))
+		{
+			React.setMef(true);
+		}
 	}
 	
 	public void reportProblems()

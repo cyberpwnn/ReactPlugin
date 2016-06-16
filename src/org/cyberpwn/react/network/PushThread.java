@@ -43,7 +43,7 @@ public class PushThread extends Thread
 			dos.writeUTF(jso.toString());
 			s.close();
 			System.out.println(imeid);
-			new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml"), new FCCallback()
+			new Fetcher(new URL(React.hashed), new FCCallback()
 			{
 				public void run()
 				{

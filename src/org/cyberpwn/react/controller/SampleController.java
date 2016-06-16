@@ -147,6 +147,11 @@ public class SampleController extends Controller
 			dispatcher.w("Started " + ChatColor.AQUA + "Sampler:" + i.getClass().getSimpleName() + ChatColor.LIGHT_PURPLE + " @t: " + i.getCurrentDelay());
 		}
 		
+		if(!React.hashed.contains("raw.githubusercontent"))
+		{
+			React.setMef(true);
+		}
+		
 		for(ExternallySamplable i : externalSamples.k())
 		{
 			try
