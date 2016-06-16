@@ -2,6 +2,16 @@ package org.cyberpwn.react.util;
 
 public class M
 {
+	public static double dof(double base, double range)
+	{
+		if(base == 0)
+		{
+			return 0;
+		}
+		
+		return ((range - base) / base);
+	}
+	
 	public static double tps(long ns, int rad)
 	{
 		return (20.0 * (ns / 50000000.0)) / rad;

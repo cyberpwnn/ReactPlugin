@@ -279,4 +279,10 @@ public class Sample implements Samplable, Configurable
 	{
 		return "Problem";
 	}
+
+	@Override
+	public void handleAction()
+	{
+		
+	}
 }
