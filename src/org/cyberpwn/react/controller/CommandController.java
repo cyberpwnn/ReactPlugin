@@ -26,6 +26,7 @@ import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.ReactServer;
+import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.F;
@@ -33,9 +34,9 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
-import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
+import org.cyberpwn.react.util.Verbose;
 
 public class CommandController extends Controller implements CommandExecutor
 {
@@ -137,6 +138,64 @@ public class CommandController extends Controller implements CommandExecutor
 				else if(sub.equalsIgnoreCase("update") || sub.equalsIgnoreCase("u"))
 				{
 					React.instance().update(sender);
+				}
+				
+				else if(sub.equalsIgnoreCase("ping") || sub.equalsIgnoreCase("pong"))
+				{
+					sender.sendMessage(String.format(Info.HRN, "Pong"));
+					
+					int highest = Integer.MIN_VALUE;
+					int lowest = Integer.MAX_VALUE;
+					String nh = "";
+					String nl = "";
+					
+					for(Player i : getReact().onlinePlayers())
+					{
+						try
+						{
+							int ping = NMS.instance().ping(i);
+							
+							if(ping > highest)
+							{
+								highest = ping;
+								nh = i.getName();
+							}
+							
+							if(ping < lowest)
+							{
+								lowest = ping;
+								nl = i.getName();
+							}
+						}
+						
+						catch(Exception e)
+						{
+							sender.sendMessage(ChatColor.RED + "Failed to Ping... Unknown Version?");
+							break;
+						}
+					}
+					
+					if(!nh.equals(""))
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "Highest: " + ChatColor.GOLD + nh + " (" + highest + "ms)");
+					}
+					
+					if(!nl.equals(""))
+					{
+						sender.sendMessage(Info.TAG + ChatColor.GREEN + "Lowest: " + ChatColor.AQUA + nl + " (" + lowest + "ms)");
+					}
+					
+					try
+					{
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping((Player) sender) + "ms");
+					}
+					
+					catch(Exception e)
+					{
+						
+					}
+					
+					sender.sendMessage(Info.HR);
 				}
 				
 				else if(sub.equalsIgnoreCase("timings") || sub.equalsIgnoreCase("t"))

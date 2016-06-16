@@ -14,7 +14,7 @@ public interface AbstractNMS
 	 * @return true if it is capable of executing packets.
 	 */
 	boolean isCapable(String version);
-	
+		
 	/**
 	 * If the current version is capable of working with the current version
 	 * 
