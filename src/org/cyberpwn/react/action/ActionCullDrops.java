@@ -16,6 +16,7 @@ import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
@@ -115,7 +116,7 @@ public class ActionCullDrops extends Action implements Listener
 		
 		while(!drops.isEmpty() && drops.size() > Math.abs(cc.getInt("drops-per-chunk")))
 		{
-			drops.get(0).remove();
+			E.r(drops.get(0));
 			drops.remove(0);
 			ix++;
 		}

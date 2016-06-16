@@ -29,6 +29,7 @@ import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GMap;
@@ -611,7 +612,7 @@ public class CommandController extends Controller implements CommandExecutor
 						if(sender instanceof Player)
 						{
 							final Gui ui = new Gui((Player) sender, react);
-							Pane pane = ui.new Pane(L.GUI_ACTIONS);
+							final Pane pane = ui.new Pane(L.GUI_ACTIONS);
 							Integer x = 0;
 							
 							for(final Actionable i : react.getActionController().getActions().k())
@@ -767,7 +768,7 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			if(bm.getAuthor().equals(Info.NAME))
 			{
-				e.getItemDrop().remove();
+				E.r(e.getItemDrop());
 			}
 		}
 	}

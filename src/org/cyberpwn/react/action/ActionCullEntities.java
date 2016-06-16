@@ -19,6 +19,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.util.Area;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
@@ -106,6 +107,36 @@ public class ActionCullEntities extends Action implements Listener
 				return;
 			}
 			
+			if(i.getType().toString().equals("PLAYER"))
+			{
+				continue;
+			}
+			
+			if(i.getType().toString().equals("COMPLEX_PART"))
+			{
+				continue;
+			}
+			
+			if(i.getType().toString().equals("PAINTING"))
+			{
+				continue;
+			}
+			
+			if(i.getType().toString().equals("PAINTING"))
+			{
+				continue;
+			}
+			
+			if(i.getType().toString().equals("ITEM_FRAME"))
+			{
+				continue;
+			}
+			
+			if(i.getType().toString().equals("WITHER_SKULL"))
+			{
+				continue;
+			}
+			
 			if(i.getType().toString().equals("ARMOR_STAND"))
 			{
 				continue;
@@ -129,7 +160,7 @@ public class ActionCullEntities extends Action implements Listener
 					}
 				}
 				
-				i.remove();
+				E.r(i);
 				a--;
 			}
 		}
@@ -168,7 +199,7 @@ public class ActionCullEntities extends Action implements Listener
 		{
 			if(cc.getStringList(getCodeName() + ".cullable").contains(i.getType().toString()))
 			{
-				i.remove();
+				E.r(i);
 				return;
 			}
 		}
@@ -177,6 +208,41 @@ public class ActionCullEntities extends Action implements Listener
 	@EventHandler(priority = EventPriority.LOW)
 	public void onEntitySpawn(EntitySpawnEvent e)
 	{
+		if(e.getEntityType().toString().equals("PLAYER"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("COMPLEX_PART"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("PAINTING"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("PAINTING"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("ITEM_FRAME"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("WITHER_SKULL"))
+		{
+			return;
+		}
+		
+		if(e.getEntityType().toString().equals("ARMOR_STAND"))
+		{
+			return;
+		}
+		
 		if(e.getEntityType().equals(EntityType.PLAYER) || !cc.getStringList(getCodeName() + ".cullable").contains(e.getEntityType().toString()))
 		{
 			return;

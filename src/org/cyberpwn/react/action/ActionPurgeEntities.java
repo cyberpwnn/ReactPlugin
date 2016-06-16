@@ -13,6 +13,7 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMS;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -49,7 +50,37 @@ public class ActionPurgeEntities extends Action implements Listener
 			{
 				if(cc.getStringList(getCodeName() + ".cullable").contains(j.getType().toString()))
 				{
+					if(j.getType().toString().equals("PLAYER"))
+					{
+						continue;
+					}
+					
+					if(j.getType().toString().equals("COMPLEX_PART"))
+					{
+						continue;
+					}
+					
+					if(j.getType().toString().equals("PAINTING"))
+					{
+						continue;
+					}
+					
+					if(j.getType().toString().equals("PAINTING"))
+					{
+						continue;
+					}
+					
+					if(j.getType().toString().equals("ITEM_FRAME"))
+					{
+						continue;
+					}
+					
 					if(j.getType().toString().equals("ARMOR_STAND"))
+					{
+						continue;
+					}
+					
+					if(j.getType().toString().equals("WITHER_SKULL"))
 					{
 						continue;
 					}
@@ -70,7 +101,7 @@ public class ActionPurgeEntities extends Action implements Listener
 						}
 					}
 					
-					j.remove();
+					E.r(j);
 				}
 			}
 		}

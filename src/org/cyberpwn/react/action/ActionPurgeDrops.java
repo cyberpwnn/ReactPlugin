@@ -12,6 +12,7 @@ import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.E;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -46,7 +47,7 @@ public class ActionPurgeDrops extends Action implements Listener
 			{
 				if(j.getType().equals(EntityType.DROPPED_ITEM))
 				{
-					j.remove();
+					E.r(j);
 				}
 			}
 		}
