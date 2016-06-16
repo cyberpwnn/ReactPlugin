@@ -8,8 +8,8 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.HitRateCache;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.ValueType;
+import org.cyberpwn.react.util.Metrics.Graph;
 
 public class SampleHitRate extends Sample
 {

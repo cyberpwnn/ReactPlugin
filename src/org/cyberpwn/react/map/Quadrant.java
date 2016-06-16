@@ -1,7 +1,12 @@
 package org.cyberpwn.react.map;
 
 import org.bukkit.map.MapCanvas;
+import org.bukkit.map.MapFont;
 import org.bukkit.map.MapPalette;
+import org.bukkit.map.MinecraftFont;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 
@@ -13,6 +18,8 @@ public class Quadrant
 	private GMap<Byte, Double> logv;
 	private GMap<Byte, GList<Double>> data;
 	private GMap<Byte, Integer> pData;
+	private Samplable sxm;
+	private int xx = 0;
 	
 	public Quadrant(int sx, int sy)
 	{
@@ -21,6 +28,7 @@ public class Quadrant
 		logv = new GMap<Byte, Double>();
 		data = new GMap<Byte, GList<Double>>();
 		pData = new GMap<Byte, Integer>();
+		sxm = React.instance().getSampleController().getSamples().k().pickRandom();
 	}
 	
 	public void render(MapCanvas canvas)
@@ -128,65 +136,19 @@ public class Quadrant
 	
 	public void renderLogLog(MapCanvas canvas)
 	{
-		for(Byte i : data.k())
+		xx++;
+		
+		if(xx > 44)
 		{
-			double max = 1.0;
-			
-			for(Double j : data.get(i))
-			{
-				if(j > max)
-				{
-					max = j;
-				}
-			}
-			
-			int x = 1;
-			
-			while(x < max)
-			{
-				x *= 2;
-			}
-			
-			logv.put(i, (double) (x));
+			xx = 0;
+			sxm = React.instance().getSampleController().getSamples().k().pickRandom();
 		}
 		
-		for(Byte i : data.keySet())
-		{
-			int x = sx;
-			
-			for(Double jx : data.get(i))
-			{
-				Double j = jx;
-				j = j / (logv.get(i));
-				j = 1.0 - j;
-				int y = (int) ((double) ((64 * j))) + sy;
-				drawm(canvas, i, x, y);
-				
-				if(pData.containsKey(i) && x > sx)
-				{
-					int oy = pData.get(i);
-					
-					if(oy > y)
-					{
-						for(int k = y; k < oy; k++)
-						{
-							drawm(canvas, i, x, k);
-						}
-					}
-					
-					if(oy < y)
-					{
-						for(int k = oy; k < y; k++)
-						{
-							drawm(canvas, i, x, k);
-						}
-					}
-				}
-				
-				x++;
-				pData.put(i, y);
-			}
-		}
+		
+		MapFont mf = MinecraftFont.Font;
+		canvas.drawText(5, 50, mf, F.f(React.instance().getSampleController().getSampleTicksPerSecond().get().getDouble(), 1) + " TPS");
+		canvas.drawText(70, 5, mf, F.f(React.instance().getSampleController().getSampleMemoryUsed().get().getDouble(), 0) + " MB");
+		canvas.drawText(5, 90, mf, sxm.formatted());
 	}
 	
 	@SuppressWarnings("deprecation")

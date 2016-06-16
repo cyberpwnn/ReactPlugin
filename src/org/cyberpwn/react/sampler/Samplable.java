@@ -1,9 +1,9 @@
 package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
-import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Value;
 import org.cyberpwn.react.util.ValueType;
+import org.cyberpwn.react.util.Metrics.Graph;
 
 public interface Samplable
 {
