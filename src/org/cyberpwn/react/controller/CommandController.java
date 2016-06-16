@@ -32,9 +32,9 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
-import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
+import org.cyberpwn.react.util.Verbose;
 
 public class CommandController extends Controller implements CommandExecutor
 {

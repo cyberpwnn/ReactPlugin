@@ -289,11 +289,7 @@ public class MonitorController extends Controller implements Configurable
 			
 			if(getReact().getActionController().getActionInstabilityCause().issues())
 			{
-				tx.setAction(ChatColor.RED + org.apache.commons.lang.StringUtils.repeat(">", level)
-						
-						+ " " + ChatColor.RESET + tx.getAction() + ChatColor.RED + " " +
-						
-						org.apache.commons.lang.StringUtils.repeat("<", level));
+				tx.setAction(ChatColor.RED + org.apache.commons.lang.StringUtils.repeat(">", level) + " " + ChatColor.RESET + tx.getAction() + ChatColor.RED + " " + org.apache.commons.lang.StringUtils.repeat("<", level));
 			}
 			
 			tx.send(i);

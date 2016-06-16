@@ -17,10 +17,8 @@ import com.google.common.collect.Maps;
 import co.aikar.timings.TimingHistory;
 import co.aikar.timings.Timings;
 import co.aikar.timings.TimingsManager;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
+
+
 
 public class PaperTimings
 {
@@ -30,10 +28,6 @@ public class PaperTimings
 	private static final String HANDLER_CLASS = TIMINGS_PACKAGE + '.' + "TimingHandler";
 	private static final String HISTORY_ENTRY_CLASS = TIMINGS_PACKAGE + '.' + "TimingHistoryEntry";
 	private static final String DATA_CLASS = TIMINGS_PACKAGE + '.' + "TimingData";
-	
-	private static final ChatColor PRIMARY_COLOR = ChatColor.DARK_AQUA;
-	private static final ChatColor HEADER_COLOR = ChatColor.YELLOW;
-	private static final ChatColor SECONDARY_COLOR = ChatColor.GRAY;
 	
 	private final React plugin;
 	private int historyIntervall;
@@ -76,25 +70,18 @@ public class PaperTimings
 			return gdt;
 		}
 		
-		List<BaseComponent[]> lines = Lists.newArrayList();
+		List<String> lines = Lists.newArrayList();
 		printTimings(lines, lastHistory);
 		
-		for(BaseComponent[] i : lines)
+		for(String i : lines)
 		{
-			String s = "";
-			
-			for(BaseComponent j : i)
-			{
-				s = s + j.toPlainText();
-			}
-			
-			gdt.add(s);
+			gdt.add(i);
 		}
 		
 		return gdt;
 	}
 	
-	public void printTimings(List<BaseComponent[]> lines, TimingHistory lastHistory)
+	public void printTimings(List<String> lines, TimingHistory lastHistory)
 	{
 		printHeadData(lastHistory, lines);
 		
@@ -144,7 +131,7 @@ public class PaperTimings
 			// Integer.TYPE).get(parentData);
 			// long parentLagTime = Reflection.getField(DATA_CLASS, "lagTime",
 			// Long.TYPE).get(parentData);
-			lines.add(new ComponentBuilder(parentName).color(HEADER_COLOR).append(" Count: " + parentCount + " Time: " + parentTime).create());
+			lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
 			
 			Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
 			for(Object childData : children)
@@ -154,7 +141,7 @@ public class PaperTimings
 		}
 	}
 	
-	private void printChilds(Object parent, Object childData, Map<Integer, String> idMap, List<BaseComponent[]> lines)
+	private void printChilds(Object parent, Object childData, Map<Integer, String> idMap, List<String> lines)
 	{
 		int childId = Reflection.getField(DATA_CLASS, "id", Integer.TYPE).get(childData);
 		
@@ -170,49 +157,33 @@ public class PaperTimings
 		
 		int childCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(childData);
 		long childTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(childData);
-		
 		long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parent);
 		float percent = (float) childTime / parentTime;
 		
-		lines.add(new ComponentBuilder("    " + childName + " Count: " + childCount + " Time: " + childTime + ' ' + round(percent) + '%').color(PRIMARY_COLOR).create());
+		lines.add("    " + childName + " Count: " + childCount + " Time: " + childTime + ' ' + round(percent) + '%');
 	}
 	
-	private void printHeadData(TimingHistory lastHistory, List<BaseComponent[]> lines)
+	private void printHeadData(TimingHistory lastHistory, List<String> lines)
 	{
-		// Represents all time spent running the server this history
-		
 		long totalTime = Reflection.getField(TimingHistory.class, "totalTime", Long.TYPE).get(lastHistory);
 		long totalTicks = Reflection.getField(TimingHistory.class, "totalTicks", Long.TYPE).get(lastHistory);
-		
 		long cost = (long) Reflection.getMethod(EXPORT_CLASS, "getCost").invoke(null);
-		lines.add(new ComponentBuilder("Cost: ").color(PRIMARY_COLOR).append(Long.toString(cost)).color(SECONDARY_COLOR).create());
-		
 		float totalSeconds = (float) totalTime / 1000 / 1000;
-		
 		long playerTicks = TimingHistory.playerTicks;
-		//long tileEntityTicks = TimingHistory.tileEntityTicks;
 		long activatedEntityTicks = TimingHistory.activatedEntityTicks;
 		long entityTicks = TimingHistory.entityTicks;
-		
 		float activatedAvgEntities = (float) activatedEntityTicks / totalTicks;
 		float totalAvgEntities = (float) entityTicks / totalTicks;
-		
 		float averagePlayers = (float) playerTicks / totalTicks;
-		
 		float desiredTicks = 20 * historyIntervall;
 		float averageTicks = totalTicks / desiredTicks * 20;
 		
-		String format = ChatColor.DARK_AQUA + "%s" + " " + ChatColor.GRAY + "%s";
-		
-		// head data
-		lines.add(TextComponent.fromLegacyText(String.format(format, "Total (sec):", round(totalSeconds))));
-		lines.add(TextComponent.fromLegacyText(String.format(format, "Ticks:", round(totalTicks))));
-		lines.add(TextComponent.fromLegacyText(String.format(format, "Avg ticks:", round(averageTicks))));
-		// lines.add(TextComponent.fromLegacyText(String.format(format, "Server
-		// Load:", round(serverLoad))));
-		lines.add(TextComponent.fromLegacyText(String.format(format, "AVG Players:", round(averagePlayers))));
-		
-		lines.add(TextComponent.fromLegacyText(String.format(format, "Activated Entities:", round(activatedAvgEntities)) + " / " + round(totalAvgEntities)));
+		lines.add("Cost: " + Long.toString(cost));
+		lines.add("Total (sec): " + round(totalSeconds));
+		lines.add("Ticks: " + round(totalTicks));
+		lines.add("Avg ticks: " + round(averageTicks));
+		lines.add("AVG Players: " + round(averagePlayers));
+		lines.add("Activated Entities: " + round(activatedAvgEntities) + " / " + round(totalAvgEntities));
 	}
 	
 	private float round(float number)

@@ -5,8 +5,8 @@ import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleGarbageDirection extends Sample
 {

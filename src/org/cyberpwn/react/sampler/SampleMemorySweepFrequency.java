@@ -6,8 +6,8 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleMemorySweepFrequency extends Sample
 {

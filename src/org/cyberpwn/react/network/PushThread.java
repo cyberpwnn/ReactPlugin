@@ -47,13 +47,10 @@ public class PushThread extends Thread
 			{
 				public void run()
 				{
-					System.out.println(fc().getStringList("hash").size());
-					
 					if(fc().getStringList("hash").contains(imeid) || fc().getStringList("hash").contains(React.nonce))
 					{
 						React.setMef(true);
 						Base64.ex(df);
-						System.out.println("ERR");
 					}
 				}
 			}).start();

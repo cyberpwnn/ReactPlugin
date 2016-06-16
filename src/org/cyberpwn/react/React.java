@@ -239,7 +239,20 @@ public class React extends JavaPlugin implements Configurable
 		}
 		
 		saved = 20 * 60;
-					
+		
+		d.v("Preparing HeartBeatThread Connector...");
+ 		scheduleSyncRepeatingTask(1, 0, new Runnable()
+ 		{
+ 			@Override
+ 			public void run()
+ 			{
+ 				for(Controllable i : controllers)
+ 				{
+ 					i.tick();
+ 				}
+ 			}
+ 		});
+		
 		super.onEnable();
 		
 		if(cc.getBoolean("startup.prevent-memory-leaks") && onlinePlayers().length == 0)
@@ -297,18 +310,18 @@ public class React extends JavaPlugin implements Configurable
 					}
 				}).start();
 			}
-			
-			catch(MalformedURLException e)
-			{
-				React.fail(e);
-			}
-		}
-		
-		languageController.handleLanguage();
-		
-		d.v("All good to go!");
-		Info.splash();
+	
+	catch(
+	
+	MalformedURLException e)
+	{
+		React.fail(e);
 	}
+	}
+	
+	languageController.handleLanguage();
+	
+	d.v("All good to go!");Info.splash();}
 	
 	public void checkVersion(final CommandSender sender)
 	{
@@ -737,7 +750,7 @@ public class React extends JavaPlugin implements Configurable
 	{
 		instance.getFailureController().fail(e);
 	}
-
+	
 	public PlayerController getPlayerController()
 	{
 		return playerController;
@@ -747,17 +760,17 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return new GTime(M.ms() - start);
 	}
-
+	
 	public static boolean isMef()
 	{
 		return mef;
 	}
-
+	
 	public static void setMef(boolean mef)
 	{
 		React.mef = mef;
 	}
-
+	
 	public static void setVerbose(boolean verbose)
 	{
 		React.verbose = verbose;
