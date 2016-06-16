@@ -49,7 +49,7 @@ public class Action implements Actionable, Configurable
 	
 	public void preAct()
 	{
-		if(enabled)
+		if(enabled && !React.isMef())
 		{
 			act();
 		}

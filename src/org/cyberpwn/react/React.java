@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -42,7 +41,6 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
-import org.cyberpwn.react.util.HeartBeat;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Metrics;
@@ -96,7 +94,6 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private Dispatcher d;
 	private Metrics metrics;
-	private HeartBeat hbt;
 	private int saved;
 	private long start;
 	
@@ -159,7 +156,6 @@ public class React extends JavaPlugin implements Configurable
 		ignoreUpdates = false;
 		tickm = 100;
 		vText = "Unknown";
-		hbt = new HeartBeat();
 		instance = this;
 		packet = new MonitorPacket();
 		
@@ -242,55 +238,6 @@ public class React extends JavaPlugin implements Configurable
 		}
 		
 		saved = 20 * 60;
-		
-		d.v("Preparing HeartBeatThread Connector...");
-		scheduleSyncRepeatingTask(1, 0, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				for(Controllable i : controllers)
-				{
-					i.tick();
-				}
-				
-				if(HeartBeat.warning)
-				{
-					d.f(L.MESSAGE_WORLD_WARNING);
-					
-					if(saved < 20 * 60)
-					{
-						d.w(L.MESSAGE_WORLD_SAVEINVALID);
-						return;
-					}
-					
-					saved = 0;
-					
-					if(cc.getBoolean("heartbeat.save-before-crash"))
-					{
-						d.f(L.MESSAGE_WORLD_PRECAUTION);
-						d.w(L.MESSAGE_WORLD_PLAYERSAVE);
-						Bukkit.savePlayers();
-						
-						for(World i : Bukkit.getWorlds())
-						{
-							d.w(L.MESSAGE_WORLD_SAVE + i.getName() + "...");
-							i.save();
-						}
-						
-						d.s(L.MESSAGE_WORLD_SUCCESS);
-					}
-					
-					else
-					{
-						d.s(L.MESSAGE_WORLD_DISABLE);
-					}
-				}
-				
-				HeartBeat.beat();
-				saved++;
-			}
-		});
 					
 		super.onEnable();
 		
@@ -308,16 +255,6 @@ public class React extends JavaPlugin implements Configurable
 				}
 			});
 		}
-		
-		scheduleSyncTask(20, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				d.o(L.MESSAGE_HEARTBEAT_START);
-				hbt.start();
-			}
-		});
 		
 		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
 		{
@@ -416,6 +353,11 @@ public class React extends JavaPlugin implements Configurable
 	
 	public void update(final CommandSender sender)
 	{
+		if(React.isMef())
+		{
+			return;
+		}
+		
 		try
 		{
 			sender.sendMessage(String.format(Info.HRN, "Updater"));
@@ -460,11 +402,6 @@ public class React extends JavaPlugin implements Configurable
 	{
 		try
 		{
-			d.o("STOPPING HEART BEAT THREAD");
-			HeartBeat.end();
-			hbt.interrupt();
-			hbt = null;
-			
 			for(Controllable i : controllers)
 			{
 				i.stop();
@@ -703,11 +640,6 @@ public class React extends JavaPlugin implements Configurable
 	public TimingsController getTimingsController()
 	{
 		return timingsController;
-	}
-	
-	public HeartBeat getHbt()
-	{
-		return hbt;
 	}
 	
 	public int getSaved()

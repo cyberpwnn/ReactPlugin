@@ -15,7 +15,6 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GTime;
-import org.cyberpwn.react.util.HeartBeat;
 import org.cyberpwn.react.util.Task;
 
 public class TimingsController extends Controller
@@ -175,7 +174,7 @@ public class TimingsController extends Controller
 	
 	public void tick()
 	{
-		HeartBeat.beat();
+
 	}
 	
 	public void stop()

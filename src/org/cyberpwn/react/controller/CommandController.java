@@ -109,6 +109,12 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		if(cmd.getName().equalsIgnoreCase(Info.COMMAND))
 		{
+			if(React.isMef())
+			{
+				sender.sendMessage(ChatColor.RED + "Failed!" + " For more details on this issue, please don't do what your doing right now.");
+				return true;
+			}
+			
 			if(!sender.hasPermission(Info.PERM_ACT) && !sender.hasPermission(Info.PERM_MONITOR) && !sender.hasPermission(Info.PERM_RELOAD))
 			{
 				sender.sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);

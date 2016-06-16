@@ -184,6 +184,11 @@ public class SampleController extends Controller
 	{
 		tick++;
 		
+		if(React.isMef())
+		{
+			return;
+		}
+		
 		for(Samplable i : new GList<Samplable>(samples.keySet()))
 		{
 			samples.put(i, samples.get(i) - 1);

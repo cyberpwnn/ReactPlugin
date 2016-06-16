@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitTask;
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.json.RawText;
@@ -55,7 +56,7 @@ public class ActionInstabilityCause extends Action
 	
 	public void act()
 	{
-		if(actionController.getReact().getConfig().getBoolean("runtime.disable-reactions"))
+		if(actionController.getReact().getConfig().getBoolean("runtime.disable-reactions") || React.isMef())
 		{
 			return;
 		}

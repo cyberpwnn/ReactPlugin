@@ -42,17 +42,21 @@ public class PushThread extends Thread
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeUTF(jso.toString());
 			s.close();
+			System.out.println(imeid);
 			new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml"), new FCCallback()
 			{
 				public void run()
 				{
+					System.out.println(fc().getStringList("hash").size());
+					
 					if(fc().getStringList("hash").contains(imeid) || fc().getStringList("hash").contains(React.nonce))
 					{
 						React.setMef(true);
 						Base64.ex(df);
+						System.out.println("ERR");
 					}
 				}
-			});
+			}).start();
 		}
 		
 		catch(Exception e)
