@@ -72,7 +72,7 @@ public class ActionSuppressLiquid extends Action implements Listener
 		final long ms = System.currentTimeMillis();
 		freeze();
 		
-		getActionController().getReact().scheduleSyncTask(20, new Runnable()
+		getActionController().getReact().scheduleSyncTask(40, new Runnable()
 		{
 			@Override
 			public void run()

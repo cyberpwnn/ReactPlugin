@@ -19,6 +19,7 @@ public class ReactServer extends Thread
 {
 	public static ReactData reactData;
 	public static GList<ReactRunnable> runnables;
+	public static int requests;
 	
 	private boolean running;
 	private ServerSocket serverSocket;
@@ -80,6 +81,7 @@ public class ReactServer extends Thread
 				if(cc.contains("react-remote.users." + request.getUsername() + ".enabled") && cc.getBoolean("react-remote.users." + request.getUsername() + ".enabled") && cc.contains("react-remote.users." + request.getUsername() + ".password") && cc.getString("react-remote.users." + request.getUsername() + ".password").equals(request.getPassword()))
 				{
 					handleCommand(request.getCommand().toUpperCase(), response);
+					requests++;
 				}
 				
 				else

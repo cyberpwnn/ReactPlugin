@@ -25,6 +25,7 @@ import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.F;
@@ -258,6 +259,19 @@ public class CommandController extends Controller implements CommandExecutor
 				else if(sub.equalsIgnoreCase("cpu-score") || sub.equalsIgnoreCase("cs"))
 				{
 					sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + "CPU Score: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.test(50)));
+				}
+				
+				else if(sub.equalsIgnoreCase("client") || sub.equalsIgnoreCase("net"))
+				{
+					sender.sendMessage(String.format(Info.HRN, "React Server"));
+					
+					if(!React.instance().getConfiguration().getBoolean("react-remote.enable"))
+					{
+						sender.sendMessage(Info.TAG + ChatColor.GOLD + "(!) React server is disabled.");
+					}
+					
+					sender.sendMessage(Info.TAG + ChatColor.AQUA + "Requests: " + ChatColor.GREEN + F.f(ReactServer.requests));
+					sender.sendMessage(Info.HR);
 				}
 				
 				else if(sub.equalsIgnoreCase("servers") || sub.equalsIgnoreCase("list"))

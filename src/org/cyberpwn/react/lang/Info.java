@@ -43,8 +43,8 @@ public class Info
 	public static String CH_LANG = String.format(Info.COMMAND_HELP, "lang,l [lang]", "Change or list supported languages").trim();
 	public static String ELEMENT_NORMAL = "%s ";
 	public static String ELEMENT_BAD = ChatColor.UNDERLINE + "%s ";
-	public static String HR = COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 70);
-	public static String HRN = COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 30) + ChatColor.RESET + COLOR_A + "  %s  " + COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 30);
+	public static String HR = COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 75);
+	public static String HRN = COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 28) + ChatColor.RESET + COLOR_A + "  %s  " + COLOR_C + ChatColor.STRIKETHROUGH + StringUtils.repeat(" ", 28);
 	public static String CH_ALL = String.format(HRN, "React") + "\n" + CH_HELP + "\n" + CH_PLUGINS + "\n" + CH_UPDATE + "\n" + CH_ACT + "\n" + CH_TIMINGS + "\n" + CH_LANG + "\n" + CH_RELOAD + "\n" + CH_MONITOR + "\n" + CH_MAP + "\n" + CH_BOOK + "\n" + CH_QUERY + "\n" + CH_CPU + "\n" + CH_LIST + "\n" + CH_GUESS + "\n" + CH_GUESSM + "\n" + CH_VERSION + "\n" + HR;
 	
 	public static void splash()

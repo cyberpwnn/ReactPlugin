@@ -5,7 +5,6 @@ import org.bukkit.map.MapFont;
 import org.bukkit.map.MapPalette;
 import org.bukkit.map.MinecraftFont;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
@@ -18,17 +17,16 @@ public class Quadrant
 	private GMap<Byte, Double> logv;
 	private GMap<Byte, GList<Double>> data;
 	private GMap<Byte, Integer> pData;
-	private Samplable sxm;
-	private int xx = 0;
+	private MapFont mf;
 	
 	public Quadrant(int sx, int sy)
 	{
 		this.sx = sx;
 		this.sy = sy;
+		mf = MinecraftFont.Font;
 		logv = new GMap<Byte, Double>();
 		data = new GMap<Byte, GList<Double>>();
 		pData = new GMap<Byte, Integer>();
-		sxm = React.instance().getSampleController().getSamples().k().pickRandom();
 	}
 	
 	public void render(MapCanvas canvas)
@@ -136,19 +134,8 @@ public class Quadrant
 	
 	public void renderLogLog(MapCanvas canvas)
 	{
-		xx++;
-		
-		if(xx > 44)
-		{
-			xx = 0;
-			sxm = React.instance().getSampleController().getSamples().k().pickRandom();
-		}
-		
-		
-		MapFont mf = MinecraftFont.Font;
 		canvas.drawText(5, 50, mf, F.f(React.instance().getSampleController().getSampleTicksPerSecond().get().getDouble(), 1) + " TPS");
 		canvas.drawText(70, 5, mf, F.f(React.instance().getSampleController().getSampleMemoryUsed().get().getDouble(), 0) + " MB");
-		canvas.drawText(5, 90, mf, sxm.formatted());
 	}
 	
 	@SuppressWarnings("deprecation")
