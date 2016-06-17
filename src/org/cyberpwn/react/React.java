@@ -29,6 +29,7 @@ import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.TimingsController;
+import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.FCCallback;
@@ -86,6 +87,7 @@ public class React extends JavaPlugin implements Configurable
 	private ActionController actionController;
 	private LanguageController languageController;
 	private NetworkController networkController;
+	private WorldController worldController;
 	private FailureController failureController;
 	public final static String nonce = "%%__NONCE__%%";
 	private PacketController packetController;
@@ -173,6 +175,7 @@ public class React extends JavaPlugin implements Configurable
 		pluginWeightController = new PluginWeightController(this);
 		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
+		worldController = new WorldController(this);
 		dataController.load(null, this);
 		Info.rebuildLang();
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
@@ -789,5 +792,10 @@ public class React extends JavaPlugin implements Configurable
 	public long getStart()
 	{
 		return start;
+	}
+
+	public WorldController getWorldController()
+	{
+		return worldController;
 	}
 }
