@@ -1,14 +1,17 @@
 package org.cyberpwn.react.util;
 
+import java.util.Iterator;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.BlockFace;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.util.Vector;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
@@ -63,26 +66,19 @@ public class ReactWorld implements Configurable, Listener
 				if(l == null)
 				{
 					e.setCancelled(true);
-					
-					new TaskLater(0)
-					{
-						public void run()
-						{
-							e.getBlock().setType(Material.AIR);
-						}
-					};
+					e.getBlock().setType(Material.AIR);
 				}
 				
 				else
 				{
 					e.setCancelled(true);
+					l.getBlock().setType(e.getBlock().getType());
 					
 					new TaskLater(0)
 					{
 						public void run()
 						{
 							e.getBlock().setType(Material.AIR);
-							l.getBlock().setType(e.getBlock().getType());
 						}
 					};
 				}
@@ -95,21 +91,33 @@ public class ReactWorld implements Configurable, Listener
 	{
 		if(cc.getBoolean("physics.fast-decay"))
 		{
-			for(BlockFace i : BlockFace.values())
+			Cuboid c = new Cuboid(e.getBlock().getLocation().clone().add(new Vector(3, 6, 3)), e.getBlock().getLocation().clone().add(new Vector(-3, -2, -3)));
+			final Iterator<Block> it = c.iterator();
+			final Material m = e.getBlock().getType();
+			
+			new Task(0)
 			{
-				if(e.getBlock().getRelative(i).getType().equals(Material.LEAVES) || e.getBlock().getRelative(i).getType().equals(Material.LEAVES_2))
+				public void run()
 				{
-					e.getBlock().breakNaturally();
+					long ms = M.ms();
 					
-					for(BlockFace j : BlockFace.values())
+					while(it.hasNext() && M.ms() - ms < 1)
 					{
-						if(e.getBlock().getRelative(j).getType().equals(Material.LEAVES) || e.getBlock().getRelative(j).getType().equals(Material.LEAVES_2))
+						Block b = it.next();
+						
+						if(b.getType().equals(m))
 						{
-							e.getBlock().breakNaturally();
+							b.breakNaturally();
 						}
 					}
+					
+					if(!it.hasNext())
+					{
+						cancel();
+					}
 				}
-			}
+			};
+			
 		}
 	}
 }
