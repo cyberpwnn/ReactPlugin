@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -45,6 +46,13 @@ public class ActionCollectGarbage extends Action implements Listener
 	
 	public void manual(final CommandSender p)
 	{
+		ManualActionEvent mae = new ManualActionEvent(p, this);
+		React.instance().getServer().getPluginManager().callEvent(mae);
+		
+		if(mae.isCancelled())
+		{
+			return;
+		}
 		super.manual(p);
 		final long ms = System.currentTimeMillis();
 		
@@ -63,7 +71,7 @@ public class ActionCollectGarbage extends Action implements Listener
 	{
 		GTime gt = new GTime(System.currentTimeMillis() - last);
 		
-		return gt.getMinutes() >= cc.getInt(getCodeName() + ".auto.conditions.minutes-per") ;
+		return gt.getMinutes() >= cc.getInt(getCodeName() + ".auto.conditions.minutes-per");
 	}
 	
 	public void takeOutTrash()
@@ -91,7 +99,7 @@ public class ActionCollectGarbage extends Action implements Listener
 			{
 				load += 4;
 			}
-						
+			
 			if(load > cc.getInt(getCodeName() + ".auto.conditions.chunkloads") && canGC())
 			{
 				long mem = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryUsed();
