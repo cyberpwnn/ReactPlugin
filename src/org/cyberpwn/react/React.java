@@ -265,7 +265,7 @@ public class React extends JavaPlugin implements Configurable
 				@Override
 				public void run()
 				{
-					d.s(ChatColor.BLUE + L.MESSAGE_CPUSCORE + F.f(CPUTest.test(50)));
+					d.s(ChatColor.BLUE + L.MESSAGE_CPUSCORE + F.f(CPUTest.singleThreaded(50)));
 					long mem = sampleController.getSampleMemoryUsed().getMemoryUsed();
 					System.gc();
 					d.s("Released " + F.mem((mem - sampleController.getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + " of memory.");

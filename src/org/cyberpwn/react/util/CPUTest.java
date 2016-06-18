@@ -2,7 +2,7 @@ package org.cyberpwn.react.util;
 
 public class CPUTest
 {
-	public static long test(int ms)
+	public static long singleThreaded(int ms)
 	{
 		long m = 0;
 		long ns = System.nanoTime();

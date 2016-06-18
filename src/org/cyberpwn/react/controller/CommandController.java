@@ -318,7 +318,7 @@ public class CommandController extends Controller implements CommandExecutor
 				
 				else if(sub.equalsIgnoreCase("cpu-score") || sub.equalsIgnoreCase("cs"))
 				{
-					sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + "CPU Score: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.test(50)));
+					sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + "CPU Score: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.singleThreaded(50)));
 				}
 				
 				else if(sub.equalsIgnoreCase("client") || sub.equalsIgnoreCase("net"))
