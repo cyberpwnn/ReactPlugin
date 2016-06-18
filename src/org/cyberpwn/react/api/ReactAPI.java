@@ -3,10 +3,24 @@ package org.cyberpwn.react.api;
 import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
+import org.cyberpwn.react.controller.ActionController;
+import org.cyberpwn.react.controller.SampleController;
 
 public class ReactAPI
 {
 	private static React r = null;
+	
+	public static SampleController getSampleController()
+	{
+		init();
+		return r.getSampleController();
+	}
+	
+	public static ActionController getActionController()
+	{
+		init();
+		return r.getActionController();
+	}
 	
 	public static double getMemoryUsed()
 	{

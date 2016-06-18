@@ -102,7 +102,7 @@ public class ActionInstabilityCause extends Action
 				
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 				{
-					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative())
+					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
 					{
 						j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
 					}
@@ -238,11 +238,14 @@ public class ActionInstabilityCause extends Action
 							Verbose.x("instability", "- REDSTONE: TPS: < 11tps!!!");
 							if(problems.containsKey(InstabilityCause.REDSTONE))
 							{
-								for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
+								if(React.isNf())
 								{
-									if(j.hasPermission(Info.PERM_MONITOR))
+									for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 									{
-										j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + ChatColor.RED + " Applying Force.");
+										if(j.hasPermission(Info.PERM_MONITOR))
+										{
+											j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + ChatColor.RED + " Applying Force.");
+										}
 									}
 								}
 								
@@ -262,11 +265,14 @@ public class ActionInstabilityCause extends Action
 									{
 										Verbose.x("instability", "- REDSTONE: TOO LONG TO FIX: FORCE: TRUE");
 										
-										for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
+										if(React.isNf())
 										{
-											if(j.hasPermission(Info.PERM_MONITOR))
+											for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 											{
-												j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + ChatColor.RED + " Applying Force.");
+												if(j.hasPermission(Info.PERM_MONITOR))
+												{
+													j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + ChatColor.RED + " Applying Force.");
+												}
 											}
 										}
 										
@@ -373,7 +379,7 @@ public class ActionInstabilityCause extends Action
 				
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 				{
-					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative())
+					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
 					{
 						if(i.equals(InstabilityCause.REDSTONE))
 						{

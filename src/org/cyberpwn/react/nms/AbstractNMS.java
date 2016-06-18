@@ -14,7 +14,7 @@ public interface AbstractNMS
 	 * @return true if it is capable of executing packets.
 	 */
 	boolean isCapable(String version);
-		
+	
 	/**
 	 * If the current version is capable of working with the current version
 	 * 
@@ -31,6 +31,12 @@ public interface AbstractNMS
 	 */
 	int ping(Player player);
 	
+	/**
+	 * Clears the player title settings
+	 * 
+	 * @param player
+	 *            the player
+	 */
 	void clearTitle(Player player);
 	
 	/**
@@ -159,5 +165,12 @@ public interface AbstractNMS
 	 */
 	void packetActionTitle(Player player, String actionTitle);
 	
+	/**
+	 * Get the entity name safely
+	 * 
+	 * @param e
+	 *            the entity
+	 * @return the name of the entity
+	 */
 	String getEntityName(Entity e);
 }

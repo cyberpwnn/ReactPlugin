@@ -72,6 +72,7 @@ public class React extends JavaPlugin implements Configurable
 	private static String LATEST_VERSION_TEXT = "?";
 	private static int tickm = 100;
 	private static String vText;
+	private static boolean nf;
 	private static MonitorPacket packet;
 	private static React instance;
 	private final int[] tskx = { 0 };
@@ -377,7 +378,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		try
 		{
-			sender.sendMessage(String.format(Info.HRN, "Updater"));
+			sender.sendMessage(String.format(Info.HRN, "Update"));
 			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + " Metadata");
 			URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
 			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + L.MESSAGE_KEX_START);
@@ -391,6 +392,10 @@ public class React extends JavaPlugin implements Configurable
 			}
 			
 			File ffx = new File(new File(React.getInstance().getDataFolder().getParentFile(), "update"), sfn);
+			
+			final String hr = Info.HR;
+			String hrn = String.format(Info.HRN, "Install");
+			sender.sendMessage(hrn);
 			sender.sendMessage(ChatColor.GOLD + "> Decoding" + ChatColor.GREEN + " Update file...");
 			
 			if(!ffx.getParentFile().exists())
@@ -399,9 +404,18 @@ public class React extends JavaPlugin implements Configurable
 			}
 			
 			FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
-			sender.sendMessage(ChatColor.GREEN + L.MESSAGE_UPDATE_COMPLETE);
-			Bukkit.getConsoleSender().sendMessage(L.MESSAGE_CONSOLE_COMPLETE);
-			sender.sendMessage(Info.HR);
+			sender.sendMessage(ChatColor.GOLD + "> Installing...");
+			
+			scheduleSyncTask(1, new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
+					sender.sendMessage(ChatColor.GREEN + "Complete!");
+					sender.sendMessage(hr);
+				}
+			});
 		}
 		
 		catch(Exception e)
@@ -474,6 +488,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("heartbeat.save-before-crash", true);
 		cc.set("commands.override.memory", true);
 		cc.set("commands.override.tps", true);
+		cc.set("messages.notify-instability", true);
 		cc.set("lang", "en");
 	}
 	
@@ -488,6 +503,7 @@ public class React extends JavaPlugin implements Configurable
 		tickm = cc.getInt("react-remote.interval");
 		allowMem = cc.getBoolean("commands.override.memory");
 		allowTps = cc.getBoolean("commands.override.tps");
+		nf = cc.getBoolean("messages.notify-instability");
 		Info.NAME = Info.COLOR_A + cc.getString("lang.tag-name");
 		
 		if(cc.contains("placeholders"))
@@ -797,5 +813,10 @@ public class React extends JavaPlugin implements Configurable
 	public WorldController getWorldController()
 	{
 		return worldController;
+	}
+
+	public static boolean isNf()
+	{
+		return nf;
 	}
 }
