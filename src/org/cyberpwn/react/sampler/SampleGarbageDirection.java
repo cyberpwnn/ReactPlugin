@@ -5,13 +5,14 @@ import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleGarbageDirection extends Sample
 {
 	private long lastSample;
 	private long direction;
+	private long overhead;
 	
 	public SampleGarbageDirection(SampleController sampleController)
 	{
@@ -21,6 +22,7 @@ public class SampleGarbageDirection extends Sample
 		minDelay = 1;
 		maxDelay = 1;
 		idealDelay = 1;
+		overhead = 1;
 		direction = 1;
 		target = "Lower is better. However this number will drasticaly vary from server to server.";
 		explaination = L.SAMPLER_MEMORY_GARBAGEDIRECTION;
@@ -58,6 +60,14 @@ public class SampleGarbageDirection extends Sample
 		}
 		
 		lastSample = currentSample;
+		
+		if(direction != 0)
+		{
+			if(direction < 0)
+			{
+				overhead = -direction;
+			}
+		}
 	}
 	
 	public void onStart()
@@ -93,5 +103,20 @@ public class SampleGarbageDirection extends Sample
 	public ChatColor color()
 	{
 		return ChatColor.GOLD;
+	}
+
+	public long getLastSample()
+	{
+		return lastSample;
+	}
+
+	public long getDirection()
+	{
+		return direction;
+	}
+
+	public long getOverhead()
+	{
+		return overhead;
 	}
 }
