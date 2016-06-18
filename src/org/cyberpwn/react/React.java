@@ -111,7 +111,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(Exception e)
 		{
-			React.fail(e, "React Failed to load correctly. Attempting to force start.");
+			React.fail(e, L.MESSAGE_LOAD_FAIL);
 			doEnable();
 		}
 	}
@@ -232,7 +232,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(IOException e)
 			{
-				React.fail(e, "React failed to connect to metrics for some reason.");
+				React.fail(e, L.MESSAGE_METRIC_FAIL);
 			}
 		}
 		
@@ -356,7 +356,7 @@ public class React extends JavaPlugin implements Configurable
 					
 					else
 					{
-						sender.sendMessage(Info.TAG + ChatColor.GREEN + "> You have the latest version!");
+						sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_ERROR_LATESTVERSION);
 					}
 				}
 			}).start();
@@ -380,9 +380,9 @@ public class React extends JavaPlugin implements Configurable
 			sender.sendMessage(String.format(Info.HRN, "Updater"));
 			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + " Metadata");
 			URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
-			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + " Kexxed Update...");
+			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + L.MESSAGE_KEX_START);
 			FileUtils.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
-			sender.sendMessage(ChatColor.GOLD + "> Un-Kexxing" + ChatColor.GREEN + " Update...");
+			sender.sendMessage(ChatColor.GOLD + L.MESSAGE_KEX_FINISH1 + ChatColor.GREEN + L.MESSAGE_KEX_FINISH2);
 			String sfn = PluginUtil.getPluginFileName("React");
 			
 			if(sfn == null)
@@ -399,14 +399,14 @@ public class React extends JavaPlugin implements Configurable
 			}
 			
 			FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
-			sender.sendMessage(ChatColor.GREEN + "Complete! Restart your server to update!");
-			Bukkit.getConsoleSender().sendMessage("React has downloaded an update! Restart your server to update!");
+			sender.sendMessage(ChatColor.GREEN + L.MESSAGE_UPDATE_COMPLETE);
+			Bukkit.getConsoleSender().sendMessage(L.MESSAGE_CONSOLE_COMPLETE);
 			sender.sendMessage(Info.HR);
 		}
 		
 		catch(Exception e)
 		{
-			React.fail(e, "Update failure.");
+			React.fail(e, L.MESSAGE_UPDATE_FAIL);
 		}
 	}
 	
@@ -515,7 +515,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(IOException e)
 		{
-			React.fail(e, "Failed to write dump file.");
+			React.fail(e, L.MESSAGE_DUMP_FAIL);
 		}
 	}
 	

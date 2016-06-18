@@ -142,6 +142,15 @@ public class L
 	public static String MESSAGE_MANUAL_FINISH = "Manual Action: ";
 	public static String MESSAGE_MANUAL_FINISHED = " finished ";
 	public static String MESSAGE_UPDATE = "Update Found! ";
+	public static String MESSAGE_LOAD_FAIL = "React Failed to load correctly. Attempting to force start.";
+	public static String MESSAGE_METRIC_FAIL = "React failed to connect to metrics for some reason.";
+	public static String MESSAGE_KEX_START = " Kexxed Update...";
+	public static String MESSAGE_KEX_FINISH1 = "Un-Kexxing";
+	public static String MESSAGE_KEX_FINISH2 = " Update...";
+	public static String MESSAGE_UPDATE_COMPLETE = "Complete! Restart your server to update!";
+	public static String MESSAGE_CONSOLE_COMPLETE = "React has downloaded an update! Restart your server to update!";
+	public static String MESSAGE_UPDATE_FAIL = "Update failure.";
+	public static String MESSAGE_DUMP_FAIL = "Failed to write dump file.";
 	
 	public static String COMMAND_STATUS = "Sends a book of updated issues React finds.";
 	public static String COMMAND_CPUSCORE = "Get your server's CPU score.";
