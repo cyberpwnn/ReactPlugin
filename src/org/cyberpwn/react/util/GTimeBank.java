@@ -21,6 +21,16 @@ public class GTimeBank implements Serializable
 	
 	public void push(String name, double value)
 	{
+		if(data == null)
+		{
+			this.data = new GMap<String, GList<Double>>();
+		}
+		
+		if(name == null)
+		{
+			return;
+		}
+		
 		if(!data.containsKey(name))
 		{
 			data.put(name, new GList<Double>());
