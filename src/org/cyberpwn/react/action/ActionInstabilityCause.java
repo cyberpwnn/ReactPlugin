@@ -38,6 +38,7 @@ public class ActionInstabilityCause extends Action
 	private final GMap<InstabilityCause, Integer> problems;
 	private final GList<InstabilityCause> notified;
 	private boolean force;
+	private boolean lagging;
 	private long maxRedstone;
 	private final GList<GStub> stubs;
 	public static GList<GStub> issues = new GList<GStub>();
@@ -50,6 +51,7 @@ public class ActionInstabilityCause extends Action
 		notified = new GList<InstabilityCause>();
 		stubs = new GList<GStub>();
 		speeds = new GMap<Player, Float>();
+		lagging = false;
 		force = false;
 		maxRedstone = -1;
 	}
@@ -133,6 +135,7 @@ public class ActionInstabilityCause extends Action
 		
 		if(tps < cc.getDouble(getCodeName() + ".low.tps"))
 		{
+			lagging = true;
 			Verbose.x("instability", "LOW TPS: Analysing...");
 			
 			if(s.getExternalSampleWorldBorder().filling())
@@ -200,6 +203,8 @@ public class ActionInstabilityCause extends Action
 		
 		else
 		{
+			lagging = false;
+			
 			if(redstone > maxRedstone)
 			{
 				maxRedstone = redstone;
@@ -574,6 +579,11 @@ public class ActionInstabilityCause extends Action
 	public void stop()
 	{
 		
+	}
+	
+	public boolean isLagging()
+	{
+		return lagging;
 	}
 	
 	public int level(World w, int x, int z)
