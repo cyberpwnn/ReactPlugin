@@ -56,7 +56,6 @@ public class ReactWorld implements Configurable, Listener
 	
 	public boolean canSave()
 	{
-		System.out.println(sinceLastSave());
 		if(sinceLastSave() > cc.getInt("save.timings.min-wait-minutes"))
 		{
 			return true;
