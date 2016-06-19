@@ -10,6 +10,11 @@ public class ReactAPI
 {
 	private static React r = null;
 	
+	public static boolean isLagging()
+	{
+		return r.getActionController().getActionInstabilityCause().isLagging();
+	}
+	
 	public static SampleController getSampleController()
 	{
 		init();

@@ -5,8 +5,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.ReactWorld;
+import org.cyberpwn.react.util.Task;
 
 public class WorldController extends Controller
 {
@@ -25,6 +27,22 @@ public class WorldController extends Controller
 		{
 			worlds.put(i, new ReactWorld(i));
 		}
+		
+		new Task(10)
+		{
+			public void run()
+			{
+				for(World i : worlds.k())
+				{
+					worlds.get(i).save(false);
+				}
+			}
+		};
+	}
+	
+	public void tick()
+	{
+		
 	}
 	
 	@EventHandler
@@ -32,6 +50,15 @@ public class WorldController extends Controller
 	{
 		getReact().unRegister(worlds.get(e.getWorld()));
 		worlds.remove(e.getWorld());
+	}
+	
+	@EventHandler
+	public void gc(PostGCEvent e)
+	{
+		for(World i : worlds.k())
+		{
+			worlds.get(i).save(true);
+		}
 	}
 	
 	@EventHandler
