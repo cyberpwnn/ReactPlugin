@@ -131,6 +131,10 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			else
 			{
+				
+				 ////////////////////////////////////////////////////////////////////
+				//////////////////////    TODO COMMANDS     //////////////////////////
+				 ////////////////////////////////////////////////////////////////////
 				if(sub.equalsIgnoreCase("reload") || sub.equalsIgnoreCase("restart"))
 				{
 					react.onReload(sender);
