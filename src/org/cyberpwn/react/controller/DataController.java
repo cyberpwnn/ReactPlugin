@@ -343,7 +343,6 @@ public class DataController extends Controller
 		
 		catch(IOException e)
 		{
-			e.printStackTrace();
 			try
 			{
 				ois.close();

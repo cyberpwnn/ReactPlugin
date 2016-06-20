@@ -1,9 +1,11 @@
 package org.cyberpwn.react.util;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
-public class GTime
+public class GTime implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private final long days, hours, minutes, seconds, milliseconds;
 	
 	public GTime(long d, long h, long m, long s, long ms)
