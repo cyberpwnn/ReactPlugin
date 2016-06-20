@@ -332,13 +332,9 @@ public class TimingsProcessor extends Thread
 			return null;
 		}
 		
-		for(char i : line.toCharArray())
+		for(int i = 0; i < line.length(); i++)
 		{
 			boolean b = false;
-			if(i == key.charAt(0))
-			{
-				
-			}
 			
 			if(line.substring(ind, ind + key.length()).equals(key))
 			{

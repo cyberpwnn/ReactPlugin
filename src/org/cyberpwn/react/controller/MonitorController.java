@@ -42,6 +42,7 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.MonitorScreen;
 import org.cyberpwn.react.util.PlayerData;
+import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -131,7 +132,23 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 			
+			Timer t = new Timer();
+			t.start();
 			dispatch();
+			t.stop();
+			delay = (int) (2.0 * ((double)t.getTime() / 1000000.0));
+			
+			if(delay > 2)
+			{
+				delay = 2;
+			}
+			
+			if(delay < 1)
+			{
+				delay = 0;
+			}
+			
+			System.out.println("Delay: " + delay);
 		}
 		
 		if(dTick)

@@ -2,12 +2,17 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
-public class SampleChunksLoaded extends Sample
+public class SampleChunksLoaded extends Sample implements Listener
 {
 	public SampleChunksLoaded(SampleController sampleController)
 	{
@@ -21,6 +26,11 @@ public class SampleChunksLoaded extends Sample
 	
 	public void onTick()
 	{
+		
+	}
+	
+	public void onStart()
+	{
 		int chunksLoaded = 0;
 		
 		for(World i : sampleController.getReact().getServer().getWorlds())
@@ -29,11 +39,7 @@ public class SampleChunksLoaded extends Sample
 		}
 		
 		value.setNumber(chunksLoaded);
-	}
-	
-	public void onStart()
-	{
-		value.setNumber(1);
+		getSampleController().getReact().register(this);
 	}
 	
 	public String formatted()
@@ -44,5 +50,17 @@ public class SampleChunksLoaded extends Sample
 	public ChatColor color()
 	{
 		return ChatColor.RED;
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	public void onChunk(ChunkLoadEvent e)
+	{
+		value.setNumber(value.getInteger() + 1);
+	}
+	
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+	public void onChunk(ChunkUnloadEvent e)
+	{
+		value.setNumber(value.getInteger() - 1);
 	}
 }

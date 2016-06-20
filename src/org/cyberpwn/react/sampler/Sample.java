@@ -27,12 +27,14 @@ public class Sample implements Samplable, Configurable
 	protected Integer idealDelay;
 	protected Integer currentDelay;
 	protected Long reactionTime;
+	protected String codeName;
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description)
 	{
 		this.sampleController = sampleController;
 		this.name = name;
 		this.cname = cname;
+		this.codeName = F.cname(cname);
 		this.type = type;
 		this.value = new Value((int) 0);
 		this.lastTick = System.currentTimeMillis();
@@ -223,7 +225,7 @@ public class Sample implements Samplable, Configurable
 	@Override
 	public String getCodeName()
 	{
-		return F.cname(cname);
+		return codeName;
 	}
 	
 	@Override
