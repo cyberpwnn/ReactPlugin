@@ -561,12 +561,12 @@ public class React extends JavaPlugin implements Configurable
 		{
 			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
 			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
-			sender.sendMessage(ChatColor.GREEN + L.MESSAGE_RELOADED);
+			sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_RELOADED);
 		}
 		
 		else
 		{
-			sender.sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+			sender.sendMessage(Info.TAG + L.MESSAGE_INSUFFICIENT_PERMISSION);
 		}
 	}
 	

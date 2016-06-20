@@ -175,7 +175,7 @@ public class ActionInstabilityCause extends Action
 				Verbose.x("instability", "- TNT: " + tnt);
 			}
 			
-			if(chunkGenPerSecond > cc.getInt(getCodeName() + ".high.chunk.generation"))
+			if(chunkGenPerSecond / 2 > cc.getInt(getCodeName() + ".high.chunk.generation"))
 			{
 				problems.put(InstabilityCause.CHUNK_GEN, 15);
 				Verbose.x("instability", "- CHUNKGEN/s: " + chunkGenPerSecond);

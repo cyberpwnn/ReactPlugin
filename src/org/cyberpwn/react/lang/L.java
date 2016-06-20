@@ -152,6 +152,10 @@ public class L
 	public static String MESSAGE_UPDATE_FAIL = "Update failure.";
 	public static String MESSAGE_DUMP_FAIL = "Failed to write dump file.";
 	
+	public static String COMMAND_CLIENT = "View information on connected react clients.";
+	public static String COMMAND_VERBOSE = "Turn on verbose information ingame/console";
+	public static String COMMAND_DUMP = "Dump information to a file for review";
+	public static String COMMAND_PING = "Shows highest ping, lowest, and yours.";
 	public static String COMMAND_STATUS = "Sends a book of updated issues React finds.";
 	public static String COMMAND_CPUSCORE = "Get your server's CPU score.";
 	public static String COMMAND_SERVERS = "List all servers on the network with data.";
