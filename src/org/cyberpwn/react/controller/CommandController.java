@@ -35,6 +35,7 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
+import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.Verbose;
@@ -131,15 +132,11 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			else
 			{
-				
-				////////////////////////////////////////////////////////////////////
-				////////////////////// TODO COMMANDS //////////////////////////
-				////////////////////////////////////////////////////////////////////
 				if(sub.equalsIgnoreCase("tasks") || sub.equalsIgnoreCase("tl"))
 				{
 					sender.sendMessage(String.format(Info.HRN, "Tasks"));
 					
-					if(getReact().getActionController().getActionInstabilityCause().getProblems().isEmpty())
+					if(getReact().getActionController().getActionInstabilityCause().getProblems().k().qdel(InstabilityCause.LAG).isEmpty())
 					{
 						sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Mode: " + ChatColor.AQUA + "Passive");
 					}
@@ -147,7 +144,7 @@ public class CommandController extends Controller implements CommandExecutor
 					else
 					{
 						sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Mode: " + ChatColor.GOLD + "Active");
-						sender.sendMessage(Info.TAG + ChatColor.RED + "Problems: " + ChatColor.YELLOW + getReact().getActionController().getActionInstabilityCause().getProblems().k().stringList().toString(", "));
+						sender.sendMessage(Info.TAG + ChatColor.RED + "> Problems: " + ChatColor.YELLOW + getReact().getActionController().getActionInstabilityCause().getProblems().k().qdel(InstabilityCause.LAG).stringList().toString(", ").toLowerCase().replaceAll("_", " "));
 					}
 					
 					sender.sendMessage(Info.HR);
