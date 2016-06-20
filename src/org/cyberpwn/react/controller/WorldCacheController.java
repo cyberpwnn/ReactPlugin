@@ -1,20 +1,23 @@
 package org.cyberpwn.react.controller;
 
+import java.io.File;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.world.WorldSaveEvent;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GQuadraset;
 
 public class WorldCacheController extends Controller
 {
-	private GMap<GQuadraset<String, Integer, Integer, Integer>, String> cache;
+	private static GMap<GQuadraset<String, Integer, Integer, Integer>, String> cache;
 	
 	public WorldCacheController(React react)
 	{
@@ -25,7 +28,20 @@ public class WorldCacheController extends Controller
 	
 	public void start()
 	{
+		File r = new File(new File(getReact().getDataFolder(), "cache"), "world");
 		
+		if(r.exists())
+		{
+			for(World i : Bukkit.getWorlds())
+			{
+				File f = new File(r, i.getName());
+				
+				if(f.exists())
+				{
+					
+				}
+			}
+		}
 	}
 	
 	public void tick()
@@ -36,16 +52,6 @@ public class WorldCacheController extends Controller
 	public void stop()
 	{
 		
-	}
-	
-	public void write()
-	{
-		
-	}
-	
-	public GBiset<Integer, Integer> bi(int id, int met)
-	{
-		return new GBiset<Integer, Integer>(id, met);
 	}
 	
 	public GQuadraset<String, Integer, Integer, Integer> quad(Location l)
