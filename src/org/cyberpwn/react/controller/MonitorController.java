@@ -147,8 +147,6 @@ public class MonitorController extends Controller implements Configurable
 			{
 				delay = 0;
 			}
-			
-			System.out.println("Delay: " + delay);
 		}
 		
 		if(dTick)
