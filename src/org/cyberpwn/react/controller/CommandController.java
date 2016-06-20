@@ -138,7 +138,18 @@ public class CommandController extends Controller implements CommandExecutor
 				if(sub.equalsIgnoreCase("tasks") || sub.equalsIgnoreCase("tl"))
 				{
 					sender.sendMessage(String.format(Info.HRN, "Tasks"));
-					sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Example");
+					
+					if(getReact().getActionController().getActionInstabilityCause().getProblems().isEmpty())
+					{
+						sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Mode: " + ChatColor.AQUA + "Passive");
+					}
+					
+					else
+					{
+						sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Mode: " + ChatColor.GOLD + "Active");
+						sender.sendMessage(Info.TAG + ChatColor.RED + "Problems: " + ChatColor.YELLOW + getReact().getActionController().getActionInstabilityCause().getProblems().k().stringList().toString(", "));
+					}
+					
 					sender.sendMessage(Info.HR);
 				}
 				
