@@ -135,6 +135,12 @@ public class CommandController extends Controller implements CommandExecutor
 				 ////////////////////////////////////////////////////////////////////
 				//////////////////////    TODO COMMANDS     //////////////////////////
 				 ////////////////////////////////////////////////////////////////////
+				if(sub.equalsIgnoreCase("tasks") || sub.equalsIgnoreCase("tl"))
+				{
+					sender.sendMessage(String.format(Info.HRN, "Tasks"));
+					sender.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Example" );
+					sender.sendMessage(Info.HR);
+				}
 				if(sub.equalsIgnoreCase("reload") || sub.equalsIgnoreCase("restart"))
 				{
 					react.onReload(sender);
