@@ -22,6 +22,21 @@ public class NMS17 implements AbstractNMS
 	@Override
 	public int ping(Player player)
 	{
+		try
+		{
+			String bukkitversion = Bukkit.getServer().getClass().getPackage().getName().substring(23);
+			Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitversion + ".entity.CraftPlayer");
+			Object handle = craftPlayer.getMethod("getHandle").invoke(player);
+			Integer ping = (Integer) handle.getClass().getDeclaredField("ping").get(handle);
+
+			return ping.intValue();
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
+		
 		return -1;
 	}
 	
