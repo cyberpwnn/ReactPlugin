@@ -21,6 +21,17 @@ public class ClusterConfig
 		this.data = new GMap<String, Cluster>();
 	}
 	
+	public ClusterConfig copy()
+	{
+		return new ClusterConfig().qset(this.data);
+	}
+	
+	public ClusterConfig qset(GMap<String, Cluster> data)
+	{
+		this.data = data;
+		return this;
+	}
+	
 	public void set(FileConfiguration fc)
 	{
 		for(String i : fc.getKeys(true))
