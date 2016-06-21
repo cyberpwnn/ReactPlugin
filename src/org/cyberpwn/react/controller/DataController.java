@@ -150,6 +150,8 @@ public class DataController extends Controller
 			
 			loadConfigurableSettings(file, c);
 			c.onReadConfig();
+			getReact().getConfigurationController().registerConfiguration(c, file);
+			o("Registered " + ChatColor.YELLOW + c.getCodeName() + "-" + file.getPath() + ChatColor.AQUA + " Cybercache (ClusterConfig) into dynamic space");
 		}
 		
 		catch(Exception e)

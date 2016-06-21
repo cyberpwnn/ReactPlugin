@@ -60,7 +60,7 @@ public class Gui implements Listener
 		OPEN, CLOSED
 	}
 	
-	private ArrayList<Pane> panes;
+	private GList<Pane> panes;
 	private Player player;
 	private UUID openPane;
 	private UUID defaultPane;
@@ -76,7 +76,7 @@ public class Gui implements Listener
 		
 		c = pl.getServer().getConsoleSender();
 		uuid = UUID.randomUUID();
-		panes = new ArrayList<Gui.Pane>();
+		panes = new GList<Gui.Pane>();
 		closing = false;
 		
 		pl.getServer().getPluginManager().registerEvents(this, pl);
@@ -110,7 +110,7 @@ public class Gui implements Listener
 		return panes;
 	}
 	
-	public void setPanes(ArrayList<Pane> panes)
+	public void setPanes(GList<Pane> panes)
 	{
 		this.panes = panes;
 	}
@@ -279,7 +279,7 @@ public class Gui implements Listener
 			return;
 		}
 		
-		for(Pane i : panes)
+		for(Pane i : panes.copy())
 		{
 			if(i.getTitle().equals(e.getInventory().getTitle()))
 			{

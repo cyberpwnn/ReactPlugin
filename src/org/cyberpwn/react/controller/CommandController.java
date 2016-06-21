@@ -31,6 +31,7 @@ import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.CommandRunnable;
+import org.cyberpwn.react.util.Configurator;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
@@ -267,6 +268,14 @@ public class CommandController extends Controller implements CommandExecutor
 				React.instance().checkVersion(sender);
 			}
 		}, L.COMMAND_VERSION, "version", "v"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
+				new Configurator(getPlayer());
+			}
+		}, "desc", "configure", "config", "conf"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
