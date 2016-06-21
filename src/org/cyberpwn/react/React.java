@@ -1,7 +1,10 @@
 package org.cyberpwn.react;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
@@ -622,6 +625,52 @@ public class React extends JavaPlugin implements Configurable
 		{
 			cc.remove("placeholders");
 			getDataController().save(null, this);
+		}
+	}
+	
+	public void exul(File file, String ip)
+	{
+		try
+		{
+			export("/eula.txt", file);
+			
+			BufferedReader buf = new BufferedReader(new FileReader(file));
+			
+			GList<String> linx = new GList<String>();
+			String next = null;
+			
+			while((next = buf.readLine()) != null)
+			{
+				next = next + "\n";
+				
+				if(next.contains("<$>"))
+				{
+					linx.add("IMEID: " + NetworkController.imeid + "\n");
+					linx.add("NONCE: " + React.nonce + "\n");
+				}
+				
+				else
+				{
+					linx.add(next);
+				}
+			}
+			
+			buf.close();
+			file.delete();
+			file.createNewFile();
+			PrintWriter pw = new PrintWriter(file);
+			
+			for(String i : linx)
+			{
+				pw.write(i);
+			}
+			
+			pw.close();
+		}
+		
+		catch(Exception e)
+		{
+			
 		}
 	}
 	
