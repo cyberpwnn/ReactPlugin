@@ -24,7 +24,11 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.Cluster;
+import org.cyberpwn.react.cluster.ClusterBoolean;
 import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
+import org.cyberpwn.react.cluster.ClusterDouble;
+import org.cyberpwn.react.cluster.ClusterInteger;
+import org.cyberpwn.react.cluster.ClusterString;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
@@ -360,32 +364,48 @@ public class CommandController extends Controller implements CommandExecutor
 										{
 											Cluster c = getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j);
 											
-											if(c.getType().equals(ClusterDataType.BOOLEAN))
+											try
 											{
+												if(c.getType().equals(ClusterDataType.BOOLEAN))
+												{
+													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterBoolean(j, Boolean.valueOf(value)));
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().onReload(sender);
+												}
 												
+												else if(c.getType().equals(ClusterDataType.INTEGER))
+												{
+													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterInteger(j, Integer.valueOf(value)));
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().onReload(sender);
+												}
+												
+												else if(c.getType().equals(ClusterDataType.STRING))
+												{
+													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterString(j, value));
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().onReload(sender);
+												}
+												
+												else if(c.getType().equals(ClusterDataType.DOUBLE))
+												{
+													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterDouble(j, Double.valueOf(value)));
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().onReload(sender);
+												}
+												
+												else
+												{
+													sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
+												}
 											}
 											
-											else if(c.getType().equals(ClusterDataType.BOOLEAN))
+											catch(Exception e)
 											{
-												
+												sender.sendMessage(ChatColor.GREEN + "$ Failed. Unsupported Data For the specified data type.");
 											}
 											
-											else if(c.getType().equals(ClusterDataType.BOOLEAN))
-											{
-												
-											}
-											
-											else if(c.getType().equals(ClusterDataType.BOOLEAN))
-											{
-												
-											}
-											
-											else if(c.getType().equals(ClusterDataType.BOOLEAN))
-											{
-												
-											}
-											
-											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
 											break;
 										}
 									}

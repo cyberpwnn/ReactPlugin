@@ -187,22 +187,6 @@ public class React extends JavaPlugin implements Configurable
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
 		
-		try
-		{
-			if(new File(getDataFolder(), "eula.txt").exists())
-			{
-				new File(getDataFolder(), "eula.txt").delete();
-			}
-			
-			export("/eula.txt", new File(getDataFolder(), "eula.txt"));
-		}
-		
-		catch(Exception e)
-		{
-			fail(e);
-			React.setMef(true);
-		}
-		
 		if(fcx.exists())
 		{
 			fcx.delete();
