@@ -31,7 +31,7 @@ You shall use React  in compliance with all applicable laws and not for any unla
 
 Each licensed copy of React  may be used on one single computer location by one user. Use of React  means that you have loaded, installed, or run React  on a computer or similar device. If you install React  onto a multi-user platform, server or network, each and every individual user of React  must be licensed separately.
 
-You may make one copy of React  for backup purposes, providing you only have one copy installed on one computer being used by one person. Other users may not use your copy of React  . The assignment, sublicense, networking, sale, or distribution of copies of React  are strictly forbidden without the prior written consent of Overcode Technologies (cyberpwn). It is a violation of this agreement to assign, sell, share, loan, rent, lease, borrow, network or transfer the use of React . If any person other than yourself uses React  registered in your name, regardless of whether it is at the same time or different times, then this agreement is being violated and you are responsible for that violation!
+Other users may not use your copy of React  . The assignment, sublicense, networking, sale, or distribution of copies of React are strictly forbidden without the prior written consent of Overcode Technologies (cyberpwn). It is a violation of this agreement to assign, sell, share, loan, rent, lease, borrow, network or transfer the use of React . If any person other than yourself uses React  registered in your name, regardless of whether it is at the same time or different times, then this agreement is being violated and you are responsible for that violation!
 
 3.3 Copyright Restriction
 
