@@ -187,6 +187,22 @@ public class React extends JavaPlugin implements Configurable
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
 		
+		try
+		{
+			if(new File(getDataFolder(), "eula.txt").exists())
+			{
+				new File(getDataFolder(), "eula.txt").delete();
+			}
+			
+			export("/eula.txt", new File(getDataFolder(), "eula.txt"));
+		}
+		
+		catch(Exception e)
+		{
+			fail(e);
+			React.setMef(true);
+		}
+		
 		if(fcx.exists())
 		{
 			fcx.delete();
@@ -424,7 +440,7 @@ public class React extends JavaPlugin implements Configurable
 							}
 						}).start();
 					}
-					
+									
 					catch(MalformedURLException e)
 					{
 						React.fail(e);
@@ -931,219 +947,226 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return nf;
 	}
-
+	
 	public static void setStaticy(boolean staticy)
 	{
 		React.staticy = staticy;
 	}
-
+	
 	public static void setDebug(boolean debug)
 	{
 		React.debug = debug;
 	}
-
+	
 	public static void setStats(boolean stats)
 	{
 		React.stats = stats;
 	}
-
+	
 	public static void setUpdated(boolean updated)
 	{
 		React.updated = updated;
 	}
-
+	
 	public static void setIgnoreUpdates(boolean ignoreUpdates)
 	{
 		React.ignoreUpdates = ignoreUpdates;
 	}
-
+	
 	public static void setUnderLoad(boolean underLoad)
 	{
 		React.underLoad = underLoad;
 	}
-
+	
 	public static void setDisp(boolean disp)
 	{
 		React.disp = disp;
 	}
-
+	
 	public static void setAllowMem(boolean allowMem)
 	{
 		React.allowMem = allowMem;
 	}
-
+	
 	public static void setAllowTps(boolean allowTps)
 	{
 		React.allowTps = allowTps;
 	}
-
+	
 	public static void setSent(boolean sent)
 	{
 		React.sent = sent;
 	}
-
+	
 	public static void setLATEST_VERSION_CODE(int lATEST_VERSION_CODE)
 	{
 		LATEST_VERSION_CODE = lATEST_VERSION_CODE;
 	}
-
+	
 	public static void setLATEST_VERSION(String lATEST_VERSION)
 	{
 		LATEST_VERSION = lATEST_VERSION;
 	}
-
+	
 	public static void setLATEST_VERSION_TEXT(String lATEST_VERSION_TEXT)
 	{
 		LATEST_VERSION_TEXT = lATEST_VERSION_TEXT;
 	}
-
+	
 	public static void setTickm(int tickm)
 	{
 		React.tickm = tickm;
 	}
-
+	
 	public static void setvText(String vText)
 	{
 		React.vText = vText;
 	}
-
+	
 	public static void setNf(boolean nf)
 	{
 		React.nf = nf;
 	}
-
+	
 	public static void setPacket(MonitorPacket packet)
 	{
 		React.packet = packet;
 	}
-
+	
 	public static void setInstance(React instance)
 	{
 		React.instance = instance;
 	}
-
+	
 	public void setControllers(GList<Controllable> controllers)
 	{
 		this.controllers = controllers;
 	}
-
+	
 	public void setCc(ClusterConfig cc)
 	{
 		this.cc = cc;
 	}
-
+	
 	public static void setMuix(String muix)
 	{
 		React.muix = muix;
 	}
-
+	
 	public void setConfigurationController(ConfigurationController configurationController)
 	{
 		this.configurationController = configurationController;
 	}
-
+	
 	public void setDataController(DataController dataController)
 	{
 		this.dataController = dataController;
 	}
-
+	
 	public void setPlayerController(PlayerController playerController)
 	{
 		this.playerController = playerController;
 	}
-
+	
 	public void setSampleController(SampleController sampleController)
 	{
 		this.sampleController = sampleController;
 	}
-
+	
 	public void setMonitorController(MonitorController monitorController)
 	{
 		this.monitorController = monitorController;
 	}
-
+	
 	public void setCommandController(CommandController commandController)
 	{
 		this.commandController = commandController;
 	}
-
+	
 	public void setPluginWeightController(PluginWeightController pluginWeightController)
 	{
 		this.pluginWeightController = pluginWeightController;
 	}
-
+	
 	public void setActionController(ActionController actionController)
 	{
 		this.actionController = actionController;
 	}
-
+	
 	public void setLanguageController(LanguageController languageController)
 	{
 		this.languageController = languageController;
 	}
-
+	
 	public void setNetworkController(NetworkController networkController)
 	{
 		this.networkController = networkController;
 	}
-
+	
 	public void setWorldController(WorldController worldController)
 	{
 		this.worldController = worldController;
 	}
-
+	
 	public void setFailureController(FailureController failureController)
 	{
 		this.failureController = failureController;
 	}
-
+	
 	public void setPacketController(PacketController packetController)
 	{
 		this.packetController = packetController;
 	}
-
+	
 	public static void setMKX(String mKX)
 	{
 		MKX = mKX;
 	}
-
+	
 	public static void setHashed(String hashed)
 	{
 		React.hashed = hashed;
 	}
-
+	
 	public void setBungeeController(BungeeController bungeeController)
 	{
 		this.bungeeController = bungeeController;
 	}
-
+	
 	public void setTimingsController(TimingsController timingsController)
 	{
 		this.timingsController = timingsController;
 	}
-
+	
 	public void setD(Dispatcher d)
 	{
 		this.d = d;
 	}
-
+	
 	public void setMetrics(Metrics metrics)
 	{
 		this.metrics = metrics;
 	}
-
+	
 	public void setSaved(int saved)
 	{
 		this.saved = saved;
 	}
-
+	
 	public void setStart(long start)
 	{
 		this.start = start;
 	}
-
+	
 	public ConfigurationController getConfigurationController()
 	{
 		return configurationController;
+	}
+	
+	public void export(String resourceName, File file) throws Exception
+	{
+		URL inputUrl = getClass().getResource(resourceName);
+		File dest = new File(file.getPath());
+		FileUtils.copyURLToFile(inputUrl, dest);
 	}
 }

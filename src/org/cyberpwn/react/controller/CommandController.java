@@ -1,5 +1,6 @@
 package org.cyberpwn.react.controller;
 
+import java.io.File;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,6 +23,8 @@ import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.api.ReactAPI;
+import org.cyberpwn.react.cluster.Cluster;
+import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
@@ -275,7 +278,166 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				new Configurator(getPlayer());
 			}
-		}, "desc", "configure", "config", "conf"));
+		}, "Configure React ingame via inventory gui's", "configure", "config", "conf"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
+				CommandSender sender = getSender();
+				String[] args = getArgs();
+				
+				if(args.length < 3)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.AQUA + "/re cfs [path] [params...]");
+					sender.sendMessage(Info.TAG + ChatColor.AQUA + "/re cfs [/,nm] [-list,-get,-set:val,-reset]");
+					sender.sendMessage(Info.TAG + ChatColor.AQUA + "/re cfs /root/ -list");
+				}
+				
+				else if(args[1].equalsIgnoreCase("/root/"))
+				{
+					if(args[2].equalsIgnoreCase("-list") || args[2].equalsIgnoreCase("-get"))
+					{
+						for(File i : getReact().getConfigurationController().getConfigurations().k())
+						{
+							sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName());
+						}
+					}
+					
+					if(args[2].equalsIgnoreCase("-reset"))
+					{
+						for(File i : getReact().getConfigurationController().getConfigurations().k())
+						{
+							getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
+							getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+							sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
+						}
+						
+						getReact().onReload(sender);
+					}
+				}
+				
+				else
+				{
+					String r = args[1];
+					
+					if(args[1].contains("/"))
+					{
+						r = args[1].split("/")[0];
+						String k = args[1].split("/")[1];
+						
+						if(args[2].equalsIgnoreCase("-list") || args[2].equalsIgnoreCase("-get"))
+						{
+							for(File i : getReact().getConfigurationController().getConfigurations().k())
+							{
+								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
+								{
+									for(String j : getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().k())
+									{
+										if(j.equalsIgnoreCase(k))
+										{
+											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+											break;
+										}
+									}
+									
+									break;
+								}
+							}
+						}
+						
+						if(args[2].toLowerCase().startsWith("-set:"))
+						{
+							String value = args[2].substring(5);
+							
+							for(File i : getReact().getConfigurationController().getConfigurations().k())
+							{
+								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
+								{
+									for(String j : getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().k())
+									{
+										if(j.equalsIgnoreCase(k))
+										{
+											Cluster c = getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j);
+											
+											if(c.getType().equals(ClusterDataType.BOOLEAN))
+											{
+												
+											}
+											
+											else if(c.getType().equals(ClusterDataType.BOOLEAN))
+											{
+												
+											}
+											
+											else if(c.getType().equals(ClusterDataType.BOOLEAN))
+											{
+												
+											}
+											
+											else if(c.getType().equals(ClusterDataType.BOOLEAN))
+											{
+												
+											}
+											
+											else if(c.getType().equals(ClusterDataType.BOOLEAN))
+											{
+												
+											}
+											
+											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+											break;
+										}
+									}
+									
+									break;
+								}
+							}
+						}
+						
+						if(args[2].equalsIgnoreCase("-reset"))
+						{
+							sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
+						}
+					}
+					
+					else
+					{
+						if(args[2].equalsIgnoreCase("-list") || args[2].equalsIgnoreCase("-get"))
+						{
+							for(File i : getReact().getConfigurationController().getConfigurations().k())
+							{
+								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
+								{
+									for(String j : getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().k())
+									{
+										sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+									}
+									
+									break;
+								}
+							}
+						}
+						
+						if(args[2].equalsIgnoreCase("-reset"))
+						{
+							for(File i : getReact().getConfigurationController().getConfigurations().k())
+							{
+								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
+								{
+									getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
+									getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+									sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
+									break;
+								}
+							}
+							
+							getReact().onReload(sender);
+						}
+					}
+				}
+			}
+		}, "Directly manipulate config values without gui access.", "cfs"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
