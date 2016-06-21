@@ -8,12 +8,14 @@ import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Task;
@@ -103,10 +105,29 @@ public class ActionPurgeChunks extends Action implements Listener
 				
 				while(it.hasNext() && M.ms() - ms < limit)
 				{
-					if(it.next().unload(true, true))
-						;
+					Chunk c = it.next();
+					boolean safe = true;
+					
+					for(Entity i : c.getEntities())
 					{
-						m++;
+						if(E.isNPC(i))
+						{
+							safe = false;
+							break;
+						}
+					}
+					
+					if(safe)
+					{
+						if(c.unload(true, true))
+						{
+							m++;
+						}
+					}
+					
+					else
+					{
+						Verbose.x("Purger", "Ignoring Chunk @ " + c.getWorld().getName() + " [" + c.getX() + "," + c.getZ() + "]" + " as it has npcs in it.");
 					}
 				}
 				

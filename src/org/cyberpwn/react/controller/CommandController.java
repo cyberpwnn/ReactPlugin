@@ -50,12 +50,14 @@ public class CommandController extends Controller implements CommandExecutor
 	private GBook bookSamplers;
 	private GBook bookMonitoring;
 	private GList<ReactCommand> commands;
+	private GList<GList<ReactCommand>> tabulations;
 	
 	public CommandController(final React react)
 	{
 		super(react);
 		
 		commands = new GList<ReactCommand>();
+		tabulations = new GList<GList<ReactCommand>>();
 		react.getCommand(Info.COMMAND).setExecutor(this);
 		
 		react.scheduleSyncTask(0, new Runnable()
@@ -732,6 +734,25 @@ public class CommandController extends Controller implements CommandExecutor
 				getReact().onReload(sender);
 			}
 		}, L.COMMAND_RELOAD, "reload", "reset", "restart", "reboot"));
+		
+		GList<ReactCommand> co = commands.copy();
+		
+		while(!co.isEmpty())
+		{
+			GList<ReactCommand> inx = new GList<ReactCommand>();
+			
+			for(int i = 0; i < 8; i++)
+			{
+				if(co.isEmpty())
+				{
+					break;
+				}
+				
+				inx.add(co.pop());
+			}
+			
+			tabulations.add(inx);
+		}
 	}
 	
 	public void start()
@@ -762,6 +783,79 @@ public class CommandController extends Controller implements CommandExecutor
 		sender.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_ERROR_NOTCOMMAND);
 	}
 	
+	public void tabulate(CommandSender sender, int tab)
+	{
+		if(tab <= tabulations.size() && tab > 0)
+		{
+			sender.sendMessage(String.format(Info.HRN, "Commands " + ChatColor.LIGHT_PURPLE + "[" + tab + "/" + tabulations.size() + "]"));
+			sender.sendMessage(ChatColor.DARK_GRAY + "Hover over any element for more information.");
+			
+			int dist = 0;
+			
+			for(ReactCommand i : tabulations.get(tab - 1))
+			{
+				if(dist < i.getTriggers().get(0).length())
+				{
+					dist = i.getTriggers().get(0).length();
+				}
+			}
+			
+			for(ReactCommand i : tabulations.get(tab - 1))
+			{
+				RawText rt = new RawText();
+				rt.addTextWithHover("/react", RawText.COLOR_AQUA, "Use /re for short", RawText.COLOR_AQUA, true, false, false, false, false);
+				rt.addText(" ");
+				rt.addTextWithHover(i.getTriggers().get(0), RawText.COLOR_LIGHT_PURPLE, "All aliases include: " + i.getTriggers().toString(", "), RawText.COLOR_LIGHT_PURPLE, false, true, false, false, false);
+				rt.addText(" ");
+				rt.addText(StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()));
+				rt.addText(" = ", RawText.COLOR_DARK_AQUA, false, false, false, true, false);
+				rt.addText(" ");
+				
+				if(i.getDescription().length() > 35)
+				{
+					String des = i.getDescription().substring(0, 24) + "...";
+					String lef = "..." + i.getDescription().substring(20);
+					rt.addTextWithHover(des, RawText.COLOR_DARK_AQUA, lef, RawText.COLOR_DARK_AQUA);
+				}
+				
+				else
+				{
+					rt.addText(i.getDescription(), RawText.COLOR_DARK_AQUA);
+				}
+				
+				rt.tellRawTo(getReact(), (Player) sender);
+			}
+			
+			RawText rt = new RawText();
+			
+			if(tab == 1)
+			{
+				rt.addTextWithHover("<=<", RawText.COLOR_DARK_GRAY, "You are on the first page.", RawText.COLOR_RED, true, false, false, true, false);
+			}
+			
+			else
+			{
+				rt.addTextWithHoverCommand("<=<", RawText.COLOR_LIGHT_PURPLE, "/re " + (tab - 1), "Previous Page", RawText.COLOR_LIGHT_PURPLE, true, false, false, true, false);
+			}
+			
+			rt.addText(StringUtils.repeat(" ", 70), RawText.COLOR_DARK_GRAY, false, false, false, true, false);
+			
+			if(tab == tabulations.size())
+			{
+				rt.addTextWithHover(">=>", RawText.COLOR_DARK_GRAY, "You are on the last page.", RawText.COLOR_RED, true, false, false, true, false);
+			}
+			
+			else
+			{
+				rt.addTextWithHoverCommand(">=>", RawText.COLOR_LIGHT_PURPLE, "/re " + (tab + 1), "Next Page", RawText.COLOR_LIGHT_PURPLE, true, false, false, true, false);
+			}
+			
+			sender.sendMessage(ChatColor.DARK_GRAY + "Click the " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "<=>" + ChatColor.RESET + ChatColor.DARK_GRAY + " buttons to navigate.");
+			
+			rt.tellRawTo(getReact(), (Player) sender);
+		}
+	}
+	
 	public boolean onCommand(final CommandSender sender, Command cmd, String name, String[] args)
 	{
 		int len = args.length;
@@ -783,62 +877,48 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			if(len == 0)
 			{
-				sender.sendMessage(String.format(Info.HRN, "Commands"));
-				
-				int dist = 0;
-				
-				for(ReactCommand i : commands)
-				{
-					if(dist < i.getTriggers().get(0).length())
-					{
-						dist = i.getTriggers().get(0).length();
-					}
-				}
-				
 				if(sender instanceof Player)
 				{
-					sender.sendMessage(ChatColor.GREEN + "Hover over any element for more information.");
-					
-					for(ReactCommand i : commands)
-					{
-						RawText rt = new RawText();
-						rt.addTextWithHover("/react", RawText.COLOR_AQUA, "Use /re for short", RawText.COLOR_AQUA, true, false, false, false, false);
-						rt.addText(" ");
-						rt.addTextWithHover(i.getTriggers().get(0), RawText.COLOR_LIGHT_PURPLE, "All aliases include: " + i.getTriggers().toString(", "), RawText.COLOR_LIGHT_PURPLE, false, true, false, false, false);
-						rt.addText(" ");
-						rt.addText(StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()));
-						rt.addText(" = ", RawText.COLOR_YELLOW, false, false, false, true, false);
-						rt.addText(" ");
-						
-						if(i.getDescription().length() > 35)
-						{
-							String des = i.getDescription().substring(0, 24) + "...";
-							String lef = "..." + i.getDescription().substring(20);
-							rt.addTextWithHover(des, RawText.COLOR_YELLOW, lef, RawText.COLOR_YELLOW);
-						}
-						
-						else
-						{
-							rt.addText(i.getDescription(), RawText.COLOR_YELLOW);
-						}
-						
-						rt.tellRawTo(getReact(), (Player) sender);
-					}
+					tabulate(sender, 1);
 				}
 				
 				else
 				{
+					int dist = 0;
+					
 					for(ReactCommand i : commands)
 					{
-						sender.sendMessage(ChatColor.AQUA + "/react " + ChatColor.LIGHT_PURPLE + i.getTriggers().get(0) + ChatColor.YELLOW + StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()) + " - " + i.getDescription());
+						if(dist < i.getTriggers().get(0).length())
+						{
+							dist = i.getTriggers().get(0).length();
+						}
+					}
+					
+					for(ReactCommand i : commands)
+					{
+						sender.sendMessage(ChatColor.AQUA + "/react " + ChatColor.LIGHT_PURPLE + i.getTriggers().get(0) + ChatColor.DARK_GRAY + StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()) + " - " + i.getDescription());
 					}
 				}
-				
-				sender.sendMessage(Info.HR);
 			}
 			
 			else
 			{
+				try
+				{
+					int m = Integer.valueOf(sub);
+					
+					if(m <= tabulations.size() && m > 0)
+					{
+						tabulate(sender, m);
+						return true;
+					}
+				}
+				
+				catch(NumberFormatException e)
+				{
+					
+				}
+				
 				fireCommand(sender, sub, args);
 			}
 			
