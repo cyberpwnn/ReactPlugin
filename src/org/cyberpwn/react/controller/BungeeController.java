@@ -61,7 +61,7 @@ public class BungeeController extends Controller implements PluginMessageListene
 			return;
 		}
 		
-		new Task(100)
+		new Task(150)
 		{
 			public void run()
 			{
