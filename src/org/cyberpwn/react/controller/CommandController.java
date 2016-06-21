@@ -647,10 +647,32 @@ public class CommandController extends Controller implements CommandExecutor
 						p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_BOOK);
 					}
 				}
-					
+				
 				else
 				{
+					if(getArgs().length == 2)
+					{
+						if(react.getTimingsController().getAll() == null)
+						{
+							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							return;
+						}
+						
+						GBook book = react.getTimingsController().getAll();
+						book.filterTiming(getArgs()[1]);
+						sender.sendMessage(book.toString());
+					}
 					
+					else
+					{
+						if(react.getTimingsController().getAll() == null)
+						{
+							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							return;
+						}
+						
+						sender.sendMessage(react.getTimingsController().getAll().toString());
+					}
 				}
 			}
 		}, L.COMMAND_TIMINGS, "timings", "t", "tim"));
