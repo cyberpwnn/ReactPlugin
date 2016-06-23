@@ -18,7 +18,6 @@ import org.bukkit.event.Listener;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
-import org.cyberpwn.react.controller.BungeeController;
 import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
@@ -102,7 +101,6 @@ public class React extends JavaPlugin implements Configurable
 	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
-	private BungeeController bungeeController;
 	private TimingsController timingsController;
 	private Dispatcher d;
 	private Metrics metrics;
@@ -191,13 +189,11 @@ public class React extends JavaPlugin implements Configurable
 		commandController = new CommandController(this);
 		actionController = new ActionController(this);
 		networkController = new NetworkController(this);
-		bungeeController = new BungeeController(this);
 		pluginWeightController = new PluginWeightController(this);
 		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
 		dataController.load(null, this);
-		dataController.load(null, bungeeController);
 		Info.rebuildLang();
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -802,11 +798,6 @@ public class React extends JavaPlugin implements Configurable
 		return packet;
 	}
 	
-	public BungeeController getBungeeController()
-	{
-		return bungeeController;
-	}
-	
 	public static boolean isStaticy()
 	{
 		return staticy;
@@ -1195,11 +1186,6 @@ public class React extends JavaPlugin implements Configurable
 	public static void setHashed(String hashed)
 	{
 		React.hashed = hashed;
-	}
-	
-	public void setBungeeController(BungeeController bungeeController)
-	{
-		this.bungeeController = bungeeController;
 	}
 	
 	public void setTimingsController(TimingsController timingsController)

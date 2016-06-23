@@ -109,11 +109,6 @@ public class ActionInstabilityCause extends Action
 						j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
 					}
 				}
-				
-				if(i.isTalkative())
-				{
-					getActionController().getReact().getBungeeController().broadcast(ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + L.MESSAGE_FIXED);
-				}
 			}
 		}
 		
@@ -369,17 +364,6 @@ public class ActionInstabilityCause extends Action
 				if(i.equals(InstabilityCause.LAG))
 				{
 					continue;
-				}
-				
-				if(i.equals(InstabilityCause.REDSTONE))
-				{
-					Chunk c = actionController.getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk();
-					getActionController().getReact().getBungeeController().broadcast(ChatColor.RED + i.getName() + ": " + L.MESSAGE_ISSUES + ChatColor.GOLD + " at " + c.getWorld().getName() + " [" + c.getX() + "," + c.getZ() + "]");
-				}
-				
-				else
-				{
-					getActionController().getReact().getBungeeController().broadcast(i.getName() + ": " + L.MESSAGE_ISSUES);
 				}
 				
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())

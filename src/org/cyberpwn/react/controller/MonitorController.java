@@ -27,7 +27,6 @@ import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.api.SpikeEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.map.MapGraph;
@@ -582,25 +581,6 @@ public class MonitorController extends Controller implements Configurable
 				startMapping(i);
 			}
 		}
-	}
-	
-	public String fromServer(String server)
-	{
-		JSONObject jsx = getReact().getBungeeController().get(server);
-		JSONObject js = jsx.getJSONObject("data");
-		
-		if(js != null)
-		{
-			String msg = " ";
-			
-			msg = msg + ChatColor.GREEN + F.f(js.getDouble("sample-ticks-per-second"), 1) + " tps ";
-			msg = msg + ChatColor.GOLD + F.f(js.getDouble("sample-memory-used"), 0) + " mb ";
-			msg = msg + ChatColor.RED + F.f(js.getDouble("sample-chunks-loaded"), 0) + " chunks ";
-			
-			return msg;
-		}
-		
-		return ChatColor.RED + "Unknown";
 	}
 	
 	@Override

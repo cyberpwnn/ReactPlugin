@@ -29,7 +29,6 @@ import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
 import org.cyberpwn.react.cluster.ClusterDouble;
 import org.cyberpwn.react.cluster.ClusterInteger;
 import org.cyberpwn.react.cluster.ClusterString;
-import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -43,7 +42,6 @@ import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
@@ -102,17 +100,6 @@ public class CommandController extends Controller implements CommandExecutor
 				bookAbout.addPage(new GPage().put(L.BOOK_CONFIGURATION_TITLE, L.BOOK_CONFIGURATION_TEXT));
 			}
 		});
-		
-		// commands.add(new ReactCommand(new CommandRunnable()
-		// {
-		// public void run()
-		// {
-		// Player p = getPlayer();
-		// CommandSender sender = getSender();
-		// String[] args = getArgs();
-		// Boolean isPlayer = isPlayer();
-		// }
-		// }, "example"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -647,39 +634,6 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_QUERY, "query", "q"));
-					
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
-			public void run()
-			{
-				CommandSender sender = getSender();
-				
-				if(getReact().getBungeeController().getConfiguration().getBoolean("support-bungeecord"))
-				{
-					if(getReact().getBungeeController().getName().equals("1337"))
-					{
-						sender.sendMessage(ChatColor.RED + L.MESSAGE_NO_DATA + ChatColor.GOLD + " If you are on a network, give react at least one minute after startup to talk to the other servers.");
-					}
-					
-					else
-					{
-						GMap<String, JSONObject> da = getReact().getBungeeController().getData();
-						sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.AQUA + L.MESSAGE_SERVERCOUNT_A + (da.size() + 1) + L.MESSAGE_SERVERCOUNT_B);
-						sender.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_SERVERCURRENT + getReact().getBungeeController().getName());
-						
-						for(String i : da.keySet())
-						{
-							sender.sendMessage(ChatColor.LIGHT_PURPLE + i + ChatColor.RESET + getReact().getMonitorController().fromServer(i));
-						}
-					}
-				}
-					
-				else
-				{
-					sender.sendMessage(L.MESSAGE_BUNGEEOFF);
-				}
-			}
-		}, L.COMMAND_SERVERS, "servers", "list", "serverlist", "l"));
 				
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
