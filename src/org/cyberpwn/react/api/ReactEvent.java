@@ -1,4 +1,4 @@
-package org.cyberpwn.react.event;
+package org.cyberpwn.react.api;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

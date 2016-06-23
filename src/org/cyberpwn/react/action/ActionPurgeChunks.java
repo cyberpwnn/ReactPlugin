@@ -11,6 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ChunkPurgeEvent;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -72,6 +73,10 @@ public class ActionPurgeChunks extends Action implements Listener
 	
 	public void purge(CommandSender p)
 	{
+		ChunkPurgeEvent cpe = new ChunkPurgeEvent();
+		React.instance().getServer().getPluginManager().callEvent(cpe);
+		GList<Chunk> ignore = new GList<Chunk>(cpe.getIgnore());
+		
 		long limit = cc.getInt("limit-ms");
 		long mlimit = limit / Bukkit.getServer().getWorlds().size();
 		
@@ -82,11 +87,11 @@ public class ActionPurgeChunks extends Action implements Listener
 		
 		for(World i : Bukkit.getServer().getWorlds())
 		{
-			purge(i, mlimit, p);
+			purge(i, mlimit, p, ignore);
 		}
 	}
 	
-	public void purge(final World world, final long limit, final CommandSender p)
+	public void purge(final World world, final long limit, final CommandSender p, final GList<Chunk> ignore)
 	{
 		final Iterator<Chunk> it = new GList<Chunk>(world.getLoadedChunks()).iterator();
 		final int[] mx = new int[] { 0 };
@@ -117,6 +122,11 @@ public class ActionPurgeChunks extends Action implements Listener
 						}
 					}
 					
+					if(ignore.contains(c))
+					{
+						safe = false;
+					}
+					
 					if(safe)
 					{
 						if(c.unload(true, true))
@@ -127,7 +137,7 @@ public class ActionPurgeChunks extends Action implements Listener
 					
 					else
 					{
-						Verbose.x("Purger", "Ignoring Chunk @ " + c.getWorld().getName() + " [" + c.getX() + "," + c.getZ() + "]" + " as it has npcs in it.");
+						Verbose.x("Purger", "Ignoring Chunk @ " + c.getWorld().getName() + " [" + c.getX() + "," + c.getZ() + "]" + " as it has npcs in it or has been ignored.");
 					}
 				}
 				

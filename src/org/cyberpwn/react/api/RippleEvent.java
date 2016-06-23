@@ -1,4 +1,4 @@
-package org.cyberpwn.react.event;
+package org.cyberpwn.react.api;
 
 public class RippleEvent extends ReactEvent
 {

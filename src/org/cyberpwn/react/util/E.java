@@ -1,6 +1,7 @@
 package org.cyberpwn.react.util;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 
@@ -31,8 +32,46 @@ public class E
 		return b;
 	}
 	
+	public static boolean isInArena(Location l)
+	{
+		if(Bukkit.getPluginManager().getPlugin("MobArena") == null)
+		{
+			return false;
+		}
+
+		Plugin c = Bukkit.getPluginManager().getPlugin("MobArena");
+		
+		try
+		{
+			Object master = c.getClass().getMethod("getArenaMaster").invoke(c);
+			Object a = master.getClass().getMethod("getArenaAtLocation", Location.class).invoke(master, l);
+			
+			if(a == null)
+			{
+				return false;
+			}
+			
+			else
+			{
+				return true;
+			}
+		}
+		
+		catch(Exception ex)
+		{
+			
+		}
+		
+		return false;
+	}
+	
 	public static void r(Entity e)
 	{
+		if(isInArena(e.getLocation()))
+		{
+			return;
+		}
+		
 		if(e.getType().toString().equals("PLAYER"))
 		{
 			return;

@@ -1,6 +1,5 @@
 package org.cyberpwn.react.api;
 
-import org.cyberpwn.react.event.SampledEvent;
 import org.cyberpwn.react.util.GTime;
 
 public class PostGCEvent extends SampledEvent
