@@ -86,6 +86,16 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		}
 	}
 	
+	public int getLoadedTick()
+	{
+		return loadedTick;
+	}
+
+	public GList<Integer> getAverage()
+	{
+		return average;
+	}
+
 	@Override
 	public boolean isProblematic()
 	{

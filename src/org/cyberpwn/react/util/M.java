@@ -1,5 +1,7 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.Chunk;
+
 public class M
 {
 	public static double dof(double base, double range)
@@ -50,5 +52,23 @@ public class M
 		{
 			doubles.remove(0);
 		}
+	}
+	
+	public static GList<Chunk> getChunks(Chunk center, int rad)
+	{
+		GList<Chunk> ck = new GList<Chunk>();
+		
+		int nx = center.getX() - rad;
+		int nz = center.getZ() - rad;
+		
+		for(int i = nx; i < nx + (rad * 2); i++)
+		{
+			for(int j = nz; j < nz + (rad * 2); j++)
+			{
+				ck.add(center.getWorld().getChunkAt(i, j));
+			}
+		}
+		
+		return ck;
 	}
 }

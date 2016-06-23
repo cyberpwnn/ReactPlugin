@@ -32,7 +32,16 @@ public class BungeeController extends Controller implements PluginMessageListene
 	{
 		super(react);
 		
+		cc = new ClusterConfig();
 		data = new GMap<String, JSONObject>();
+	}
+	
+	public void start()
+	{
+		if(!cc.getBoolean("support-bungeecord"))
+		{
+			return;
+		}
 		
 		try
 		{
@@ -51,14 +60,6 @@ public class BungeeController extends Controller implements PluginMessageListene
 		catch(Exception e)
 		{
 			
-		}
-	}
-	
-	public void start()
-	{
-		if(!cc.getBoolean("support-bungeecord"))
-		{
-			return;
 		}
 		
 		new Task(150)

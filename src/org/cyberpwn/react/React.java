@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -44,6 +43,7 @@ import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
+import org.cyberpwn.react.util.FU;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.JavaPlugin;
@@ -57,6 +57,7 @@ import org.cyberpwn.react.util.PluginUtil;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
+import org.cyberpwn.react.util.VersionBukkit;
 
 public class React extends JavaPlugin implements Configurable
 {
@@ -88,6 +89,7 @@ public class React extends JavaPlugin implements Configurable
 	private DataController dataController;
 	private PlayerController playerController;
 	private SampleController sampleController;
+	private boolean justUpdated;
 	private MonitorController monitorController;
 	private CommandController commandController;
 	private PluginWeightController pluginWeightController;
@@ -110,9 +112,19 @@ public class React extends JavaPlugin implements Configurable
 	public void onEnable()
 	{
 		start = M.ms();
-		
+		justUpdated = false;
 		try
 		{
+			if(new File(getDataFolder().getParentFile(), "update").exists())
+			{
+				for(File i : new File(getDataFolder().getParentFile(), "update").listFiles())
+				{
+					i.delete();
+				}
+				
+				new File(getDataFolder().getParentFile(), "update").delete();
+			}
+			
 			doEnable();
 		}
 		
@@ -185,6 +197,7 @@ public class React extends JavaPlugin implements Configurable
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
 		dataController.load(null, this);
+		dataController.load(null, bungeeController);
 		Info.rebuildLang();
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -251,7 +264,6 @@ public class React extends JavaPlugin implements Configurable
 		
 		saved = 20 * 60;
 		
-		d.v("Preparing HeartBeatThread Connector...");
 		scheduleSyncRepeatingTask(1, 0, new Runnable()
 		{
 			@Override
@@ -293,7 +305,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		Info.rebuildLang();
 		new File(React.instance.getDataFolder(), "react.dex.tmp").delete();
-		if(!ignoreUpdates)
+		if(!ignoreUpdates && !VersionBukkit.tc())
 		{
 			try
 			{
@@ -330,70 +342,105 @@ public class React extends JavaPlugin implements Configurable
 		
 		if(cc.getBoolean("startup.auto-update"))
 		{
-			new Task(20 * 60)
+			if(!cc.getBoolean("startup.skip-update-check") && !VersionBukkit.tc())
 			{
-				public void run()
+				new Task(20 * 60)
 				{
-					try
+					public void run()
 					{
-						new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
+						try
 						{
-							public void run()
+							if(cc.getBoolean("startup.skip-update-check"))
 							{
-								String desc = "";
-								final List<String> description = fc().getStringList("package.description");
-								
-								for(String i : description)
+								return;
+							}
+							
+							if(justUpdated)
+							{
+								return;
+							}
+							
+							new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
+							{
+								public void run()
 								{
-									desc = desc + Info.TAG + ChatColor.GREEN + "-> " + i + "\n";
-								}
-								
-								LATEST_VERSION_TEXT = desc;
-								LATEST_VERSION = fc().getString("package.version");
-								LATEST_VERSION_CODE = fc().getInt("package.version-code");
-								
-								if(LATEST_VERSION_CODE > Info.VERSION_CODE)
-								{
-									if(React.isMef())
+									if(justUpdated)
 									{
 										return;
 									}
 									
-									try
+									String desc = "";
+									final List<String> description = fc().getStringList("package.description");
+									
+									for(String i : description)
 									{
-										URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
-										FileUtils.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
-										String sfn = PluginUtil.getPluginFileName("React");
-										File ffx = new File(new File(React.getInstance().getDataFolder().getParentFile(), "update"), sfn);
-										final String hr = Info.HR;
-										final String hrn = String.format(Info.HRN, "Updated");
-										
-										if(!ffx.getParentFile().exists())
+										desc = desc + Info.TAG + ChatColor.GREEN + "-> " + i + "\n";
+									}
+									
+									LATEST_VERSION_TEXT = desc;
+									LATEST_VERSION = fc().getString("package.version");
+									LATEST_VERSION_CODE = fc().getInt("package.version-code");
+									
+									if(LATEST_VERSION_CODE > Info.VERSION_CODE)
+									{
+										if(React.isMef())
 										{
-											ffx.getParentFile().mkdirs();
+											return;
 										}
 										
-										FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
-										
-										scheduleSyncTask(1, new Runnable()
+										try
 										{
-											@Override
-											public void run()
+											URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
+											FU.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
+											String sfn = PluginUtil.getPluginFileName("React");
+											File ffx = new File(new File(React.getInstance().getDataFolder().getParentFile(), "update"), sfn);
+											final String hr = Info.HR;
+											final String hrn = String.format(Info.HRN, "Updated");
+											
+											if(!ffx.getParentFile().exists())
 											{
-												GList<Player> plr = new GList<Player>();
-												
-												for(Player i : onlinePlayers())
+												ffx.getParentFile().mkdirs();
+											}
+											
+											FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
+											
+											scheduleSyncTask(1, new Runnable()
+											{
+												@Override
+												public void run()
 												{
-													if(i.hasPermission(Info.PERM_MONITOR))
+													GList<Player> plr = new GList<Player>();
+													
+													for(Player i : onlinePlayers())
 													{
-														plr.add(i);
+														if(i.hasPermission(Info.PERM_MONITOR))
+														{
+															plr.add(i);
+														}
 													}
-												}
-												
-												PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
-												
-												for(Player i : plr)
-												{
+													
+													if(justUpdated)
+													{
+														return;
+													}
+													
+													justUpdated = true;
+													PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
+													
+													for(Player i : plr)
+													{
+														i.sendMessage(hrn);
+														i.sendMessage(ChatColor.LIGHT_PURPLE + "React has Updated to " + ChatColor.AQUA + "v" + LATEST_VERSION);
+														
+														for(String j : description)
+														{
+															i.sendMessage(ChatColor.AQUA + "- " + j);
+														}
+														
+														i.sendMessage(hr);
+													}
+													
+													CommandSender i = Bukkit.getConsoleSender();
 													i.sendMessage(hrn);
 													i.sendMessage(ChatColor.LIGHT_PURPLE + "React has Updated to " + ChatColor.AQUA + "v" + LATEST_VERSION);
 													
@@ -404,36 +451,25 @@ public class React extends JavaPlugin implements Configurable
 													
 													i.sendMessage(hr);
 												}
-												
-												CommandSender i = Bukkit.getConsoleSender();
-												i.sendMessage(hrn);
-												i.sendMessage(ChatColor.LIGHT_PURPLE + "React has Updated to " + ChatColor.AQUA + "v" + LATEST_VERSION);
-												
-												for(String j : description)
-												{
-													i.sendMessage(ChatColor.AQUA + "- " + j);
-												}
-												
-												i.sendMessage(hr);
-											}
-										});
-									}
-									
-									catch(Exception e)
-									{
-										React.fail(e, L.MESSAGE_UPDATE_FAIL);
+											});
+										}
+										
+										catch(Exception e)
+										{
+											React.fail(e, L.MESSAGE_UPDATE_FAIL);
+										}
 									}
 								}
-							}
-						}).start();
+							}).start();
+						}
+										
+						catch(MalformedURLException e)
+						{
+							React.fail(e);
+						}
 					}
-									
-					catch(MalformedURLException e)
-					{
-						React.fail(e);
-					}
-				}
-			};
+				};
+			}
 		}
 		
 		languageController.handleLanguage();
@@ -497,7 +533,7 @@ public class React extends JavaPlugin implements Configurable
 			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + " Metadata");
 			URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
 			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + L.MESSAGE_KEX_START);
-			FileUtils.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
+			FU.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
 			sender.sendMessage(ChatColor.GOLD + L.MESSAGE_KEX_FINISH1 + ChatColor.GREEN + L.MESSAGE_KEX_FINISH2);
 			String sfn = PluginUtil.getPluginFileName("React");
 			
@@ -1200,6 +1236,6 @@ public class React extends JavaPlugin implements Configurable
 	{
 		URL inputUrl = getClass().getResource(resourceName);
 		File dest = new File(file.getPath());
-		FileUtils.copyURLToFile(inputUrl, dest);
+		FU.copyURLToFile(inputUrl, dest);
 	}
 }

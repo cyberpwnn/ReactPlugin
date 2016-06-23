@@ -75,4 +75,14 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 	{
 		loadedTick++;
 	}
+	
+	public int getLoadedTick()
+	{
+		return loadedTick;
+	}
+	
+	public GList<Double> getAverage()
+	{
+		return average;
+	}
 }

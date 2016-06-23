@@ -22,6 +22,7 @@ public class ConfigurationController extends Controller
 		
 		configurations = new GMap<File, Configurable>();
 		cache = new GMap<File, ClusterConfig>();
+		
 	}
 	
 	public void flush(Player p)
