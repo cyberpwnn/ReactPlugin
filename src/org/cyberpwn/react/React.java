@@ -184,6 +184,7 @@ public class React extends JavaPlugin implements Configurable
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
 		dataController.load(null, this);
+		dataController.load(null, entityStackController);
 		dataController.load(null, updateController);
 		Info.rebuildLang();
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
