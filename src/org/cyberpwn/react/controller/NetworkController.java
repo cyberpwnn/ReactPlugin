@@ -55,6 +55,11 @@ public class NetworkController extends Controller
 		});
 	}
 	
+	public String getImeid()
+	{
+		return imeid;
+	}
+	
 	public void tick()
 	{
 		if(server == null)

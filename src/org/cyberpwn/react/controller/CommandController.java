@@ -64,6 +64,10 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands = new GList<ReactCommand>();
 		tabulations = new GList<GList<ReactCommand>>();
+	}
+	
+	public void start()
+	{
 		react.getCommand(Info.COMMAND).setExecutor(this);
 		
 		react.scheduleSyncTask(0, new Runnable()
@@ -259,7 +263,7 @@ public class CommandController extends Controller implements CommandExecutor
 			public void run()
 			{
 				CommandSender sender = getSender();
-				React.instance().checkVersion(sender);
+				React.instance().getUpdateController().checkVersion(sender);
 			}
 		}, L.COMMAND_VERSION, "version", "v"));
 		
@@ -888,8 +892,7 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			public void run()
 			{
-				CommandSender sender = getSender();
-				React.instance().update(sender);
+				React.instance().getUpdateController().update();
 			}
 		}, L.COMMAND_UPDATE, "update", "u", "up"));
 		
@@ -920,11 +923,6 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			tabulations.add(inx);
 		}
-	}
-	
-	public void start()
-	{
-		
 	}
 	
 	public void stop()

@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.plugin.IllegalPluginAccessException;
 import org.cyberpwn.react.React;
 
 public class Task implements Runnable
@@ -9,8 +10,16 @@ public class Task implements Runnable
 	
 	public Task(int interval)
 	{
-		this.running = true;
-		this.task = new int[] { React.instance().scheduleSyncRepeatingTask(0, interval, this) };
+		try
+		{
+			this.running = true;
+			this.task = new int[] { React.instance().scheduleSyncRepeatingTask(0, interval, this) };
+		}
+		
+		catch(IllegalPluginAccessException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

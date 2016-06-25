@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,11 +29,10 @@ import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.TimingsController;
+import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.network.FCCallback;
-import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
@@ -52,11 +49,8 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
-import org.cyberpwn.react.util.PluginUtil;
-import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
-import org.cyberpwn.react.util.VersionBukkit;
 
 public class React extends JavaPlugin implements Configurable
 {
@@ -95,6 +89,7 @@ public class React extends JavaPlugin implements Configurable
 	private ActionController actionController;
 	private LanguageController languageController;
 	private NetworkController networkController;
+	private UpdateController updateController;
 	private WorldController worldController;
 	private FailureController failureController;
 	public final static String nonce = "%%__NONCE__%%";
@@ -111,18 +106,9 @@ public class React extends JavaPlugin implements Configurable
 	{
 		start = M.ms();
 		justUpdated = false;
+		
 		try
 		{
-			if(new File(getDataFolder().getParentFile(), "update").exists())
-			{
-				for(File i : new File(getDataFolder().getParentFile(), "update").listFiles())
-				{
-					i.delete();
-				}
-				
-				new File(getDataFolder().getParentFile(), "update").delete();
-			}
-			
 			doEnable();
 		}
 		
@@ -193,7 +179,9 @@ public class React extends JavaPlugin implements Configurable
 		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
+		updateController = new UpdateController(this);
 		dataController.load(null, this);
+		dataController.load(null, updateController);
 		Info.rebuildLang();
 		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -271,9 +259,7 @@ public class React extends JavaPlugin implements Configurable
 				}
 			}
 		});
-		
-		super.onEnable();
-		
+				
 		if(cc.getBoolean("startup.prevent-memory-leaks") && onlinePlayers().length == 0)
 		{
 			scheduleSyncTask(20, new Runnable()
@@ -300,275 +286,10 @@ public class React extends JavaPlugin implements Configurable
 		}
 		
 		Info.rebuildLang();
-		new File(React.instance.getDataFolder(), "react.dex.tmp").delete();
-		if(!ignoreUpdates && !VersionBukkit.tc())
-		{
-			try
-			{
-				d.o("Fetching Update Manifest at " + "/cyberpwnn/React/master/remote/manifest.yml");
-				new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
-				{
-					public void run()
-					{
-						String desc = "";
-						List<String> description = fc().getStringList("pack.description");
-						
-						for(String i : description)
-						{
-							desc = desc + ChatColor.GREEN + i;
-						}
-						
-						LATEST_VERSION_TEXT = desc;
-						LATEST_VERSION = fc().getString("package.version");
-						LATEST_VERSION_CODE = fc().getInt("package.version-code");
-						
-						if(LATEST_VERSION_CODE > Info.VERSION_CODE)
-						{
-							updated = false;
-						}
-					}
-				}).start();
-			}
-			
-			catch(MalformedURLException e)
-			{
-				React.fail(e);
-			}
-		}
-		
-		if(cc.getBoolean("startup.auto-update"))
-		{
-			if(!cc.getBoolean("startup.skip-update-check") && !VersionBukkit.tc())
-			{
-				new Task(20 * 60)
-				{
-					public void run()
-					{
-						try
-						{
-							if(cc.getBoolean("startup.skip-update-check"))
-							{
-								return;
-							}
-							
-							if(justUpdated)
-							{
-								return;
-							}
-							
-							new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
-							{
-								public void run()
-								{
-									if(justUpdated)
-									{
-										return;
-									}
-									
-									String desc = "";
-									final List<String> description = fc().getStringList("package.description");
-									
-									for(String i : description)
-									{
-										desc = desc + Info.TAG + ChatColor.GREEN + "-> " + i + "\n";
-									}
-									
-									LATEST_VERSION_TEXT = desc;
-									LATEST_VERSION = fc().getString("package.version");
-									LATEST_VERSION_CODE = fc().getInt("package.version-code");
-									
-									if(LATEST_VERSION_CODE > Info.VERSION_CODE)
-									{
-										if(React.isMef())
-										{
-											return;
-										}
-										
-										try
-										{
-											URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
-											FU.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
-											String sfn = PluginUtil.getPluginFileName("React");
-											File ffx = new File(new File(React.getInstance().getDataFolder().getParentFile(), "update"), sfn);
-											final String hr = Info.HR;
-											final String hrn = String.format(Info.HRN, "Updated");
-											
-											if(!ffx.getParentFile().exists())
-											{
-												ffx.getParentFile().mkdirs();
-											}
-											
-											FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
-											
-											scheduleSyncTask(1, new Runnable()
-											{
-												@Override
-												public void run()
-												{
-													GList<Player> plr = new GList<Player>();
-													
-													for(Player i : onlinePlayers())
-													{
-														if(i.hasPermission(Info.PERM_MONITOR))
-														{
-															plr.add(i);
-														}
-													}
-													
-													if(justUpdated)
-													{
-														return;
-													}
-													
-													justUpdated = true;
-													PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
-													
-													for(Player i : plr)
-													{
-														i.sendMessage(hrn);
-														i.sendMessage(ChatColor.LIGHT_PURPLE + "React has Updated to " + ChatColor.AQUA + "v" + LATEST_VERSION);
-														
-														for(String j : description)
-														{
-															i.sendMessage(ChatColor.AQUA + "- " + j);
-														}
-														
-														i.sendMessage(hr);
-													}
-													
-													CommandSender i = Bukkit.getConsoleSender();
-													i.sendMessage(hrn);
-													i.sendMessage(ChatColor.LIGHT_PURPLE + "React has Updated to " + ChatColor.AQUA + "v" + LATEST_VERSION);
-													
-													for(String j : description)
-													{
-														i.sendMessage(ChatColor.AQUA + "- " + j);
-													}
-													
-													i.sendMessage(hr);
-												}
-											});
-										}
-										
-										catch(Exception e)
-										{
-											React.fail(e, L.MESSAGE_UPDATE_FAIL);
-										}
-									}
-								}
-							}).start();
-						}
-										
-						catch(MalformedURLException e)
-						{
-							React.fail(e);
-						}
-					}
-				};
-			}
-		}
-		
 		languageController.handleLanguage();
 		
 		d.v("All good to go!");
 		Info.splash();
-	}
-	
-	public void checkVersion(final CommandSender sender)
-	{
-		sender.sendMessage(Info.TAG + ChatColor.GREEN + "Running " + ChatColor.LIGHT_PURPLE + "v" + ChatColor.stripColor(Info.VERSION));
-		
-		try
-		{
-			new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
-			{
-				public void run()
-				{
-					String desc = "";
-					List<String> description = fc().getStringList("package.description");
-					
-					for(String i : description)
-					{
-						desc = desc + Info.TAG + ChatColor.GREEN + "-> " + i + "\n";
-					}
-					
-					LATEST_VERSION_TEXT = desc;
-					LATEST_VERSION = fc().getString("package.version");
-					LATEST_VERSION_CODE = fc().getInt("package.version-code");
-					
-					if(LATEST_VERSION_CODE > Info.VERSION_CODE)
-					{
-						sender.sendMessage(Info.TAG + ChatColor.YELLOW + "> Update Avalible: " + ChatColor.AQUA + "v" + ChatColor.stripColor(LATEST_VERSION));
-						sender.sendMessage(ChatColor.GREEN + LATEST_VERSION_TEXT);
-					}
-					
-					else
-					{
-						sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_ERROR_LATESTVERSION);
-					}
-				}
-			}).start();
-		}
-		
-		catch(MalformedURLException e)
-		{
-			React.fail(e);
-		}
-	}
-	
-	public void update(final CommandSender sender)
-	{
-		if(React.isMef())
-		{
-			return;
-		}
-		
-		try
-		{
-			sender.sendMessage(String.format(Info.HRN, "Update"));
-			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + " Metadata");
-			URL dex = new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar");
-			sender.sendMessage(ChatColor.YELLOW + "> Downloading" + ChatColor.GREEN + L.MESSAGE_KEX_START);
-			FU.copyURLToFile(dex, new File(React.instance.getDataFolder(), "react.kex.tmp"));
-			sender.sendMessage(ChatColor.GOLD + L.MESSAGE_KEX_FINISH1 + ChatColor.GREEN + L.MESSAGE_KEX_FINISH2);
-			String sfn = PluginUtil.getPluginFileName("React");
-			
-			if(sfn == null)
-			{
-				sender.sendMessage(ChatColor.LIGHT_PURPLE + "........................");
-			}
-			
-			File ffx = new File(new File(React.getInstance().getDataFolder().getParentFile(), "update"), sfn);
-			
-			final String hr = Info.HR;
-			String hrn = String.format(Info.HRN, "Install");
-			sender.sendMessage(hrn);
-			sender.sendMessage(ChatColor.GOLD + "> Decoding" + ChatColor.GREEN + " Update file...");
-			
-			if(!ffx.getParentFile().exists())
-			{
-				ffx.getParentFile().mkdirs();
-			}
-			
-			FM.parse(new File(React.instance.getDataFolder(), "react.kex.tmp"), ffx);
-			sender.sendMessage(ChatColor.GOLD + "> Installing...");
-			
-			scheduleSyncTask(1, new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
-					sender.sendMessage(ChatColor.GREEN + "Complete!");
-					sender.sendMessage(hr);
-				}
-			});
-		}
-		
-		catch(Exception e)
-		{
-			React.fail(e, L.MESSAGE_UPDATE_FAIL);
-		}
 	}
 	
 	public Player[] onlinePlayers()
@@ -622,8 +343,8 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("maps.display-static", false);
 		cc.set("startup.verbose", false);
 		cc.set("startup.anonymous-statistics", true);
-		cc.set("startup.skip-update-check", false);
-		cc.set("startup.auto-update", true);
+		cc.set("startup.skip-update-check", true);
+		cc.set("startup.auto-update", false);
 		cc.set("runtime.disable-reactions", false);
 		cc.set("lang.tag-name", "React");
 		cc.set("monitor.allow-title-verbose", true);
@@ -1173,11 +894,6 @@ public class React extends JavaPlugin implements Configurable
 		this.failureController = failureController;
 	}
 	
-	public void setPacketController(PacketController packetController)
-	{
-		this.packetController = packetController;
-	}
-	
 	public static void setMKX(String mKX)
 	{
 		MKX = mKX;
@@ -1223,5 +939,15 @@ public class React extends JavaPlugin implements Configurable
 		URL inputUrl = getClass().getResource(resourceName);
 		File dest = new File(file.getPath());
 		FU.copyURLToFile(inputUrl, dest);
+	}
+
+	public boolean isJustUpdated()
+	{
+		return justUpdated;
+	}
+
+	public UpdateController getUpdateController()
+	{
+		return updateController;
 	}
 }

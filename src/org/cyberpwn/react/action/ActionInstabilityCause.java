@@ -111,7 +111,7 @@ public class ActionInstabilityCause extends Action
 				}
 			}
 		}
-		
+				
 		final SampleController s = getActionController().getReact().getSampleController();
 		Long memoryMax = s.getSampleMemoryUsed().getMemoryMax();
 		Long memoryUsed = s.getSampleMemoryUsed().getValue().getLong();

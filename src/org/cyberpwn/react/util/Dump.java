@@ -29,7 +29,7 @@ public class Dump implements Configurable
 	{
 		cc.set("react.ai.version-name", Version.V);
 		cc.set("react.ai.version-code", Version.C);
-		cc.set("react.ai.digest.md5sha256sha512", pl.mdsha.toString());
+		cc.set("react.ai.digest.md5sha256sha512", pl.getNetworkController().getImeid());
 		
 		cc.set("machine.processor.cores", Runtime.getRuntime().availableProcessors());
 		
