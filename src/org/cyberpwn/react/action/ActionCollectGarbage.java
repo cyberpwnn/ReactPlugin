@@ -6,12 +6,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GTime;
+import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Timer;
 
 import net.md_5.bungee.api.ChatColor;

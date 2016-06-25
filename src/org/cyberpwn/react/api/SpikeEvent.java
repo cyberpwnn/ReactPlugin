@@ -1,6 +1,7 @@
 package org.cyberpwn.react.api;
 
 import org.cyberpwn.react.util.GTime;
+import org.cyberpwn.react.util.SampledEvent;
 
 public class SpikeEvent extends SampledEvent
 {

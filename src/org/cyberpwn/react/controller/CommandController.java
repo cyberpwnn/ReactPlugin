@@ -1169,7 +1169,7 @@ public class CommandController extends Controller implements CommandExecutor
 				
 				if(e.getPlayer().hasPermission("bukkit.command.tps"))
 				{
-					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(ReactAPI.getSampleTicksPerSecond(), 9));
+					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
 				}
 				
 				else

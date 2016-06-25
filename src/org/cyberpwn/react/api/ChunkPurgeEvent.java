@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Chunk;
 import org.bukkit.entity.LivingEntity;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.ReactEvent;
 
 public class ChunkPurgeEvent extends ReactEvent
 {

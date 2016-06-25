@@ -1,53 +1,88 @@
 package org.cyberpwn.react.api;
 
-import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
-import org.cyberpwn.react.controller.ActionController;
-import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.action.Actionable;
+import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.GList;
 
 public class ReactAPI
 {
-	private static React r = null;
+	public static String[] getActions()
+	{
+		GList<String> kx = new GList<String>();
+		
+		for(Actionable i : React.instance().getActionController().getActions().k())
+		{
+			if(i.isManual())
+			{
+				kx.add(i.getKey());
+			}
+		}
+		
+		return kx.toArray(new String[kx.size()]);
+	}
+	
+	public static String[] getSamplers()
+	{
+		GList<String> kx = new GList<String>();
+		
+		for(Samplable i : React.instance().getSampleController().getSamples().k())
+		{
+			kx.add(i.getName());
+		}
+		
+		return kx.toArray(new String[kx.size()]);
+	}
+	
+	public static void act(String action)
+	{
+		for(Actionable i : React.instance().getActionController().getActions().k())
+		{
+			if(i.isManual() && i.getKey().equals(action))
+			{
+				i.act();
+				return;
+			}
+		}
+	}
+	
+	public static Double sample(String sample)
+	{
+		for(Samplable i : React.instance().getSampleController().getSamples().k())
+		{
+			if(i.getName().equals(sample))
+			{
+				return i.get().getDouble();
+			}
+		}
+		
+		return null;
+	}
 	
 	public static boolean isLagging()
 	{
-		return r.getActionController().getActionInstabilityCause().isLagging();
-	}
-	
-	public static SampleController getSampleController()
-	{
-		init();
-		return r.getSampleController();
-	}
-	
-	public static ActionController getActionController()
-	{
-		init();
-		return r.getActionController();
+		return React.instance().getActionController().getActionInstabilityCause().isLagging();
 	}
 	
 	public static double getMemoryUsed()
 	{
-		return getSampleMemoryUsed();
+		return React.instance().getSampleController().getSampleMemoryUsed().getValue().getDouble();
 	}
 	
 	public static double getMemoryMax()
 	{
-		init();
-		return r.getSampleController().getSampleMemoryUsed().getMemoryMax();
+		return React.instance().getSampleController().getSampleMemoryUsed().getMemoryMax();
 	}
 	
 	public static double getMemoryFree()
 	{
-		init();
-		return r.getSampleController().getSampleMemoryUsed().getMemoryFree();
+		return React.instance().getSampleController().getSampleMemoryUsed().getMemoryFree();
 	}
 	
 	public static double getMemoryGarbage()
 	{
-		init();
-		double k = r.getSampleController().getSampleMemoryUsed().getMemoryUsed() / 1024 / 1024 - getMemoryUsed();
+		double k = React.instance().getSampleController().getSampleMemoryUsed().getMemoryUsed() / 1024 / 1024 - getMemoryUsed();
 		
 		if(k < 0)
 		{
@@ -55,150 +90,6 @@ public class ReactAPI
 		}
 		
 		return k;
-	}
-	
-	public static double getSampleTNTPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleTNTPerSecond().getValue().getDouble();
-	}
-	
-	public static double getSampleTicksPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleTicksPerSecond().getValue().getDouble();
-	}
-	
-	public static double getSampleStability()
-	{
-		init();
-		return r.getSampleController().getSampleStability().getValue().getDouble();
-	}
-	
-	public static double getSampleRedstoneUpdatesPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleRedstoneUpdatesPerSecond().getValue().getDouble();
-	}
-	
-	public static double getSampleReactionTime()
-	{
-		init();
-		return r.getSampleController().getSampleReactionTime().getValue().getDouble();
-	}
-	
-	public static double getSamplePlayers()
-	{
-		init();
-		return r.getSampleController().getSamplePlayers().getValue().getDouble();
-	}
-	
-	public static double getSampleMonitoredPlugins()
-	{
-		init();
-		return r.getSampleController().getSampleMonitoredPlugins().getValue().getDouble();
-	}
-	
-	public static double getSampleMemoryUsed()
-	{
-		init();
-		return r.getSampleController().getSampleMemoryUsed().getValue().getDouble();
-	}
-	
-	public static double getSampleMemorySweepFrequency()
-	{
-		init();
-		return r.getSampleController().getSampleMemorySweepFrequency().getValue().getDouble();
-	}
-	
-	public static double getSampleMemoryPerPlayer()
-	{
-		init();
-		return r.getSampleController().getSampleMemoryPerPlayer().getValue().getDouble();
-	}
-	
-	public static double getSampleMemoryAllocationsPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleMemoryVolatility().getValue().getDouble();
-	}
-	
-	public static double getSampleLiquidFlowPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleLiquidFlowPerSecond().getValue().getDouble();
-	}
-	
-	public static double getSampleEntities()
-	{
-		init();
-		return r.getSampleController().getSampleEntities().getValue().getDouble();
-	}
-	
-	public static double getSampleDrops()
-	{
-		init();
-		return r.getSampleController().getSampleDrops().getValue().getDouble();
-	}
-	
-	public static double getSampleChunksLoaded()
-	{
-		init();
-		return r.getSampleController().getSampleChunksLoaded().getValue().getDouble();
-	}
-	
-	public static double getSampleChunkMemory()
-	{
-		init();
-		return r.getSampleController().getSampleChunkMemory().getValue().getDouble();
-	}
-	
-	public static double getSampleChunkLoadPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleChunkLoadPerSecond().getValue().getDouble();
-	}
-	
-	public static double getSampleChunkGenPerSecond()
-	{
-		init();
-		return r.getSampleController().getSampleChunkGenPerSecond().getValue().getDouble();
-	}
-	
-	public static void callActionCollectGarbage()
-	{
-		init();
-		r.getActionController().getActionCollectGarbage().manual(Bukkit.getConsoleSender());
-	}
-	
-	public static void callActionCullDrops()
-	{
-		init();
-		r.getActionController().getActionCullDrops().act();
-	}
-	
-	public static void callActionCullEntities()
-	{
-		init();
-		r.getActionController().getActionCullEntities().act();
-	}
-	
-	public static void callActionSuppressLiquid()
-	{
-		init();
-		r.getActionController().getActionSuppressLiquid().act();
-	}
-	
-	public static void callActionSuppressRedstone()
-	{
-		init();
-		r.getActionController().getActionSuppressRedstone().manual(Bukkit.getConsoleSender());
-	}
-	
-	public static void callActionSuppressTNT()
-	{
-		init();
-		r.getActionController().getActionSuppressTnt().manual(Bukkit.getConsoleSender());
 	}
 	
 	public static String getVersion()
@@ -209,13 +100,5 @@ public class ReactAPI
 	public static int getVersionCode()
 	{
 		return Version.C;
-	}
-	
-	private static void init()
-	{
-		if(r == null)
-		{
-			r = React.instance();
-		}
 	}
 }

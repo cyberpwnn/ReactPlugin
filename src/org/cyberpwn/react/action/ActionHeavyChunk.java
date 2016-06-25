@@ -10,10 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ManualActionEvent;
 
 public class ActionHeavyChunk extends Action implements Listener
 {

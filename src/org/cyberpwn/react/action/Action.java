@@ -6,13 +6,13 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.ManualActionEvent;
 
 import net.md_5.bungee.api.ChatColor;
 

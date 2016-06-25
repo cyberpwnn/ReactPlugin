@@ -1,4 +1,4 @@
-package org.cyberpwn.react.api;
+package org.cyberpwn.react.util;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;

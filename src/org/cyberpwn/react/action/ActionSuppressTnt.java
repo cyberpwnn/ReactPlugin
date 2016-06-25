@@ -1,5 +1,6 @@
 package org.cyberpwn.react.action;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -8,20 +9,23 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ManualActionEvent;
 
 import net.md_5.bungee.api.ChatColor;
 
 public class ActionSuppressTnt extends Action implements Listener
 {
 	private boolean frozen;
+	private boolean dissd;
 	
 	public ActionSuppressTnt(ActionController actionController)
 	{
 		super(actionController, Material.TNT, "purge-tnt", "ActionSuppressTnt", 20, "TNT Suppression", L.ACTION_SUPPRESSTNT, true);
+		
+		dissd = false;
 	}
 	
 	public void act()
@@ -44,6 +48,11 @@ public class ActionSuppressTnt extends Action implements Listener
 	
 	public void manual(final CommandSender p)
 	{
+		if(dissd)
+		{
+			return;
+		}
+		
 		ManualActionEvent mae = new ManualActionEvent(p, this);
 		React.instance().getServer().getPluginManager().callEvent(mae);
 		
@@ -69,12 +78,35 @@ public class ActionSuppressTnt extends Action implements Listener
 	
 	public void start()
 	{
+		if(dissd)
+		{
+			return;
+		}
+		
 		getActionController().getReact().register(this);
 	}
 	
 	public void stop()
 	{
+		if(dissd)
+		{
+			return;
+		}
+		
 		getActionController().getReact().unRegister(this);
+	}
+	
+	public void onReadConfig()
+	{
+		super.onReadConfig();
+		
+		if(cc.getBoolean(getCodeName() + ".disable-if-factions-installed"))
+		{
+			if(Bukkit.getPluginManager().getPlugin("Factions") != null)
+			{
+				dissd = true;
+			}
+		}
 	}
 	
 	public void onNewConfig()
@@ -82,12 +114,18 @@ public class ActionSuppressTnt extends Action implements Listener
 		super.onNewConfig();
 		
 		cc.set(getCodeName() + ".freeze-all-tnt-on-lag", true);
+		cc.set(getCodeName() + ".disable-if-factions-installed", true);
 		cc.set(getCodeName() + ".max-tnt-per-chunk", 16);
 	}
 	
 	@EventHandler
 	public void onTNT(ExplosionPrimeEvent e)
 	{
+		if(dissd)
+		{
+			return;
+		}
+		
 		if(frozen)
 		{
 			e.setCancelled(true);
