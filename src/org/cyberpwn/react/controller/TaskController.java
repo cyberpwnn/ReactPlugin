@@ -26,7 +26,7 @@ public class TaskController extends Controller
 	}
 	
 	/**
-	 * Run a task, even if you are asyncronous, it will be executed sync
+	 * Run a task, even if you are async, it will be executed sync
 	 * @param r runnable
 	 */
 	public void newTask(Runnable r)
