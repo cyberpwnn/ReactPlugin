@@ -18,6 +18,11 @@ public class Area
 	private Location location;
 	private Double radius;
 	
+	public static boolean within(Location center, Location target, double rad)
+	{
+		return new Area(center, rad).isWithin(target);
+	}
+	
 	/**
 	 * Used to instantiate a new "area" in which you can check if entities are
 	 * within this area.
