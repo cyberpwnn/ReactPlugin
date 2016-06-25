@@ -20,6 +20,7 @@ import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
+import org.cyberpwn.react.controller.EntityStackController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
@@ -90,6 +91,7 @@ public class React extends JavaPlugin implements Configurable
 	private LanguageController languageController;
 	private NetworkController networkController;
 	private UpdateController updateController;
+	private EntityStackController entityStackController;
 	private WorldController worldController;
 	private FailureController failureController;
 	public final static String nonce = "%%__NONCE__%%";
@@ -180,6 +182,7 @@ public class React extends JavaPlugin implements Configurable
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
 		updateController = new UpdateController(this);
+		entityStackController = new EntityStackController(this);
 		dataController.load(null, this);
 		dataController.load(null, updateController);
 		Info.rebuildLang();
@@ -259,7 +262,7 @@ public class React extends JavaPlugin implements Configurable
 				}
 			}
 		});
-				
+		
 		if(cc.getBoolean("startup.prevent-memory-leaks") && onlinePlayers().length == 0)
 		{
 			scheduleSyncTask(20, new Runnable()
@@ -281,7 +284,9 @@ public class React extends JavaPlugin implements Configurable
 			if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
 			{
 				d.v(L.MESSAGE_HOOK_SUCCESS);
-				new PlaceholderHook(this).hook();
+				PlaceholderHook h = new PlaceholderHook(this);
+				dataController.load(null, h);
+				h.hook();
 			}
 		}
 		
@@ -299,18 +304,19 @@ public class React extends JavaPlugin implements Configurable
 	
 	public void onDisable()
 	{
-		try
+		for(Controllable i : controllers)
 		{
-			for(Controllable i : controllers)
+			try
 			{
 				i.stop();
 				Verbose.x("core", "Stopping Controller: " + i.getClass().getSimpleName());
+				
 			}
-		}
-		
-		catch(Exception e)
-		{
 			
+			catch(Exception e)
+			{
+				
+			}
 		}
 	}
 	
@@ -940,14 +946,19 @@ public class React extends JavaPlugin implements Configurable
 		File dest = new File(file.getPath());
 		FU.copyURLToFile(inputUrl, dest);
 	}
-
+	
 	public boolean isJustUpdated()
 	{
 		return justUpdated;
 	}
-
+	
 	public UpdateController getUpdateController()
 	{
 		return updateController;
+	}
+	
+	public EntityStackController getEntityStackController()
+	{
+		return entityStackController;
 	}
 }
