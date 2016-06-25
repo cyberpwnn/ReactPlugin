@@ -2,6 +2,7 @@ package org.cyberpwn.react.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -15,8 +16,6 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Verbose;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class EntityStackController extends Controller
 {
