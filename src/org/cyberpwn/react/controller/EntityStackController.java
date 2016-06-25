@@ -13,12 +13,15 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
+import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Verbose;
 
-public class EntityStackController extends Controller
+public class EntityStackController extends Controller implements Configurable
 {
+	private ClusterConfig cc;
 	private GMap<Integer, Integer> stacks;
 	
 	public EntityStackController(React react)
@@ -31,6 +34,11 @@ public class EntityStackController extends Controller
 	public boolean isStacked(LivingEntity e)
 	{
 		return stacks.containsKey(e.getEntityId());
+	}
+	
+	public boolean canTouch(LivingEntity e)
+	{
+		return true;
 	}
 	
 	public void stop()
@@ -211,5 +219,35 @@ public class EntityStackController extends Controller
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onNewConfig()
+	{
+		cc.set("stacker.enabled", false);
+		cc.set("stacker.ignore.named-entities", true);
+		cc.set("stacker.ignore.non-cullable-mobs", true);
+		cc.set("stacker.settings.stack-range", 4.3);
+		cc.set("stacker.settings.max-size", 16);
+		cc.set("stacker.lang.change-names", true);
+		cc.set("stacler.lang.name-format", "&a<number> X &b<mob>");
+	}
+
+	@Override
+	public void onReadConfig()
+	{
+		//Dynamic
+	}
+
+	@Override
+	public ClusterConfig getConfiguration()
+	{
+		return cc;
+	}
+
+	@Override
+	public String getCodeName()
+	{
+		return "entity-stacker";
 	}
 }
