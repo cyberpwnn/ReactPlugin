@@ -45,13 +45,6 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 		return getServer().getOnlinePlayers().toArray(new Player[getServer().getOnlinePlayers().size()]);
 	}
 	
-	public void export(String resourceName, File file) throws Exception
-	{
-		URL inputUrl = getClass().getResource(resourceName);
-		File dest = new File(file.getPath());
-		FU.copyURLToFile(inputUrl, dest);
-	}
-	
 	public void register(Listener listener)
 	{
 		getServer().getPluginManager().registerEvents(listener, this);
@@ -77,44 +70,57 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 		getServer().getScheduler().cancelTask(tid);
 	}
 	
-	public void exul(File file, String ip)
+	public void exul(final File file, String ip)
 	{
 		try
 		{
-			export("/eula.txt", file);
-			
-			BufferedReader buf = new BufferedReader(new FileReader(file));
-			
-			GList<String> linx = new GList<String>();
-			String next = null;
-			
-			while((next = buf.readLine()) != null)
-			{
-				next = next + "\n";
-				
-				if(next.contains("<$>"))
-				{
-					linx.add("IMEID: " + NetworkController.imeid + "\n");
-					linx.add("NONCE: " + React.nonce + "\n");
-				}
-				
-				else
-				{
-					linx.add(next);
-				}
-			}
-			
-			buf.close();
 			file.delete();
-			file.createNewFile();
-			PrintWriter pw = new PrintWriter(file);
 			
-			for(String i : linx)
+			new Download(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/eula.txt"), file, new Runnable()
 			{
-				pw.write(i);
-			}
-			
-			pw.close();
+				public void run()
+				{
+					try
+					{
+						BufferedReader buf = new BufferedReader(new FileReader(file));
+						GList<String> linx = new GList<String>();
+						String next = null;
+						
+						while((next = buf.readLine()) != null)
+						{
+							next = next + "\n";
+							
+							if(next.contains("<$>"))
+							{
+								linx.add("IMEID: " + NetworkController.imeid + "\n");
+								linx.add("NONCE: " + React.nonce + "\n");
+							}
+							
+							else
+							{
+								linx.add(next);
+							}
+						}
+						
+						buf.close();
+						file.delete();
+						file.createNewFile();
+						PrintWriter pw = new PrintWriter(file);
+						
+						for(String i : linx)
+						{
+							pw.write(i);
+						}
+						
+						pw.close();
+					}
+					
+					catch(Exception e)
+					{
+						
+					}
+				}
+			}).start();
 		}
 		
 		catch(Exception e)
