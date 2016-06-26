@@ -16,6 +16,9 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTimeBank;
+import org.cyberpwn.react.util.HitRateCache;
+import org.cyberpwn.react.util.PlayerCache;
+import org.cyberpwn.react.util.PlayerData;
 
 public class DataController extends Controller
 {
@@ -150,6 +153,27 @@ public class DataController extends Controller
 			
 			loadConfigurableSettings(file, c);
 			c.onReadConfig();
+			
+			if(c instanceof PlayerData)
+			{
+				return;
+			}
+			
+			if(c instanceof HitRateCache)
+			{
+				return;
+			}
+			
+			if(c instanceof PlayerCache)
+			{
+				return;
+			}
+			
+			if(c instanceof MonitorController)
+			{
+				return;
+			}
+			
 			getReact().getConfigurationController().registerConfiguration(c, file);
 		}
 		
