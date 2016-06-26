@@ -24,25 +24,43 @@ public class EntityStackController extends Controller implements Configurable
 	private ClusterConfig cc;
 	private GMap<Integer, Integer> stacks;
 	
+	private Boolean enabled;
+	
 	public EntityStackController(React react)
 	{
 		super(react);
 		
+		enabled = false;
 		stacks = new GMap<Integer, Integer>();
 	}
 	
 	public boolean isStacked(LivingEntity e)
 	{
+		if(!enabled)
+		{
+			return false;
+		}
+		
 		return stacks.containsKey(e.getEntityId());
 	}
 	
 	public boolean canTouch(LivingEntity e)
 	{
+		if(!enabled)
+		{
+			return false;
+		}
+		
 		return true;
 	}
 	
 	public void stop()
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		for(World i : Bukkit.getWorlds())
 		{
 			for(LivingEntity j : i.getLivingEntities())
@@ -60,6 +78,11 @@ public class EntityStackController extends Controller implements Configurable
 	@SuppressWarnings("deprecation")
 	public void update(LivingEntity e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		if(isStacked(e))
 		{
 			e.setCustomName(ChatColor.AQUA + "" + stacks.get(e.getEntityId()) + " X " + ChatColor.LIGHT_PURPLE + StringUtils.capitalise(e.getType().toString().toLowerCase().replaceAll("_", " ")));
@@ -76,6 +99,11 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntityDamageEvent e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		if(e.getEntity() instanceof LivingEntity)
 		{
 			if(isStacked((LivingEntity) e.getEntity()))
@@ -88,6 +116,11 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler
 	public void on(ChunkUnloadEvent e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		for(Entity i : e.getChunk().getEntities())
 		{
 			if(i instanceof LivingEntity)
@@ -106,6 +139,11 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntityDeathEvent e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		if(e.getEntity() instanceof LivingEntity)
 		{
 			if(isStacked(e.getEntity()))
@@ -137,6 +175,11 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntitySpawnEvent e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		if(e.getEntity() instanceof LivingEntity)
 		{
 			stack((LivingEntity) e.getEntity());
@@ -146,6 +189,11 @@ public class EntityStackController extends Controller implements Configurable
 	
 	public void stack(LivingEntity e)
 	{
+		if(!enabled)
+		{
+			return;
+		}
+		
 		if(isStacked(e))
 		{
 			Area a = new Area(e.getLocation(), 5.0);
@@ -236,7 +284,7 @@ public class EntityStackController extends Controller implements Configurable
 	@Override
 	public void onReadConfig()
 	{
-		//Dynamic
+		enabled = cc.getBoolean("stacker.enabled");
 	}
 
 	@Override
