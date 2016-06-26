@@ -144,4 +144,9 @@ public class GMap<K, V> extends ConcurrentHashMap<K, V>
 			put(k, v);
 		}
 	}
+	
+	public void put(GMap<K, V> kx)
+	{
+		put(kx.k(), kx.v());
+	}
 }
