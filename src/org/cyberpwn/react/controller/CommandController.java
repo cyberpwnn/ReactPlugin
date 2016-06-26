@@ -831,60 +831,78 @@ public class CommandController extends Controller implements CommandExecutor
 			public void run()
 			{
 				CommandSender sender = getSender();
-				sender.sendMessage(String.format(Info.HRN, "Pong"));
 				
-				int highest = Integer.MIN_VALUE;
-				int lowest = Integer.MAX_VALUE;
-				String nh = "";
-				String nl = "";
-				
-				for(Player i : getReact().onlinePlayers())
+				if(getArgs().length > 1)
 				{
+					if(react.canFindPlayer(getArgs()[1]))
+					{
+						Player p = react.findPlayer(getArgs()[1]);
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Pong[" + p.getName() + "]: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping(p) + "ms");
+					}
+					
+					else
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "Cannot find player.");
+					}
+				}
+				
+				else
+				{
+					sender.sendMessage(String.format(Info.HRN, "Pong"));
+					
+					int highest = Integer.MIN_VALUE;
+					int lowest = Integer.MAX_VALUE;
+					String nh = "";
+					String nl = "";
+					
+					for(Player i : getReact().onlinePlayers())
+					{
+						try
+						{
+							int ping = NMS.instance().ping(i);
+							
+							if(ping > highest)
+							{
+								highest = ping;
+								nh = i.getName();
+							}
+							
+							if(ping < lowest)
+							{
+								lowest = ping;
+								nl = i.getName();
+							}
+						}
+						
+						catch(Exception e)
+						{
+							sender.sendMessage(ChatColor.RED + "Failed to Ping... Unknown Version?");
+							break;
+						}
+					}
+					
+					if(!nh.equals(""))
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "Highest: " + ChatColor.GOLD + nh + " (" + highest + "ms)");
+					}
+					
+					if(!nl.equals(""))
+					{
+						sender.sendMessage(Info.TAG + ChatColor.GREEN + "Lowest: " + ChatColor.AQUA + nl + " (" + lowest + "ms)");
+					}
+					
 					try
 					{
-						int ping = NMS.instance().ping(i);
-						
-						if(ping > highest)
-						{
-							highest = ping;
-							nh = i.getName();
-						}
-						
-						if(ping < lowest)
-						{
-							lowest = ping;
-							nl = i.getName();
-						}
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping((Player) sender) + "ms");
 					}
-					
+						
 					catch(Exception e)
 					{
-						sender.sendMessage(ChatColor.RED + "Failed to Ping... Unknown Version?");
-						break;
+						
 					}
-				}
-				
-				if(!nh.equals(""))
-				{
-					sender.sendMessage(Info.TAG + ChatColor.RED + "Highest: " + ChatColor.GOLD + nh + " (" + highest + "ms)");
-				}
-				
-				if(!nl.equals(""))
-				{
-					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Lowest: " + ChatColor.AQUA + nl + " (" + lowest + "ms)");
-				}
-				
-				try
-				{
-					sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping((Player) sender) + "ms");
-				}
 					
-				catch(Exception e)
-				{
-					
+					sender.sendMessage(Info.HR);
 				}
-				
-				sender.sendMessage(Info.HR);
 			}
 		}, L.COMMAND_PING, "ping", "pong", "png"));
 				
