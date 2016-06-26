@@ -4,6 +4,12 @@ import org.bukkit.Chunk;
 
 public class M
 {
+	public static String kx()
+	{
+		String s = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
+		return s;
+	}
+	
 	public static double dof(double base, double range)
 	{
 		if(base == 0)

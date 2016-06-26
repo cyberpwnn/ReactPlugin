@@ -28,6 +28,7 @@ import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
@@ -86,7 +87,7 @@ public class React extends JavaPlugin implements Configurable
 	private EntityStackController entityStackController;
 	private WorldController worldController;
 	private FailureController failureController;
-	public final static String nonce = "%%__NONCE__%%";
+	public static String nonce = "%%__NONCE__%%";
 	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -394,6 +395,25 @@ public class React extends JavaPlugin implements Configurable
 			cc.remove("placeholders");
 			getDataController().save(null, this);
 		}
+	}
+	
+	public void aitr(String s)
+	{
+		String x = "GList<String>()";
+		
+		for(char i : s.toCharArray())
+		{
+			x = x + ".qadd(\"" + i + "\")";
+		}
+		
+		x = x + ";";
+		
+		System.out.println(x);
+	}
+	
+	public static void imx()
+	{
+		hashed = CFX.getx();
 	}
 	
 	@Override
