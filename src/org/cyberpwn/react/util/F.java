@@ -16,6 +16,26 @@ public class F
 		}
 	}
 	
+	public static String color(String msg)
+	{
+		String coloredMsg = "";
+		
+		for(int i = 0; i < msg.length(); i++)
+		{
+			if(msg.charAt(i) == '&')
+			{
+				coloredMsg += '§';
+			}
+			
+			else
+			{
+				coloredMsg += msg.charAt(i);
+			}
+		}
+		
+		return coloredMsg;
+	}
+	
 	public static String trim(String s, int l)
 	{
 		if(s.length() <= l)
