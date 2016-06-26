@@ -1,18 +1,11 @@
 package org.cyberpwn.react;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -40,7 +33,6 @@ import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
-import org.cyberpwn.react.util.FU;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.JavaPlugin;
@@ -298,11 +290,6 @@ public class React extends JavaPlugin implements Configurable
 		Info.splash();
 	}
 	
-	public Player[] onlinePlayers()
-	{
-		return getServer().getOnlinePlayers().toArray(new Player[getServer().getOnlinePlayers().size()]);
-	}
-	
 	public void onDisable()
 	{
 		for(Controllable i : controllers)
@@ -334,6 +321,27 @@ public class React extends JavaPlugin implements Configurable
 		{
 			sender.sendMessage(Info.TAG + L.MESSAGE_INSUFFICIENT_PERMISSION);
 		}
+	}
+	
+	public static void dump()
+	{
+		Dump dump = new Dump(instance);
+		dump.onNewConfig();
+		
+		try
+		{
+			dump.getConfiguration().toYaml().save(new File(new File(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
+		}
+		
+		catch(IOException e)
+		{
+			React.fail(e, L.MESSAGE_DUMP_FAIL);
+		}
+	}
+	
+	public void registerController(Controllable controllable)
+	{
+		controllers.add(controllable);
 	}
 	
 	@Override
@@ -388,102 +396,10 @@ public class React extends JavaPlugin implements Configurable
 		}
 	}
 	
-	public void exul(File file, String ip)
-	{
-		try
-		{
-			export("/eula.txt", file);
-			
-			BufferedReader buf = new BufferedReader(new FileReader(file));
-			
-			GList<String> linx = new GList<String>();
-			String next = null;
-			
-			while((next = buf.readLine()) != null)
-			{
-				next = next + "\n";
-				
-				if(next.contains("<$>"))
-				{
-					linx.add("IMEID: " + NetworkController.imeid + "\n");
-					linx.add("NONCE: " + React.nonce + "\n");
-				}
-				
-				else
-				{
-					linx.add(next);
-				}
-			}
-			
-			buf.close();
-			file.delete();
-			file.createNewFile();
-			PrintWriter pw = new PrintWriter(file);
-			
-			for(String i : linx)
-			{
-				pw.write(i);
-			}
-			
-			pw.close();
-		}
-		
-		catch(Exception e)
-		{
-			
-		}
-	}
-	
 	@Override
 	public String getCodeName()
 	{
 		return "config";
-	}
-	
-	public static void dump()
-	{
-		Dump dump = new Dump(instance);
-		dump.onNewConfig();
-		
-		try
-		{
-			dump.getConfiguration().toYaml().save(new File(new File(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
-		}
-		
-		catch(IOException e)
-		{
-			React.fail(e, L.MESSAGE_DUMP_FAIL);
-		}
-	}
-	
-	public void register(Listener listener)
-	{
-		getServer().getPluginManager().registerEvents(listener, this);
-	}
-	
-	public void unRegister(Listener listener)
-	{
-		HandlerList.unregisterAll(listener);
-	}
-	
-	public void registerController(Controllable controllable)
-	{
-		controllers.add(controllable);
-	}
-	
-	public int scheduleSyncRepeatingTask(int delay, int interval, Runnable runnable)
-	{
-		return getServer().getScheduler().scheduleSyncRepeatingTask(this, runnable, delay, interval);
-	}
-	
-	public int scheduleSyncTask(int delay, Runnable runnable)
-	{
-		return getServer().getScheduler().scheduleSyncDelayedTask(this, runnable, delay);
-	}
-	
-	public void cancelTask(int tid)
-	{
-		getServer().getScheduler().cancelTask(tid);
 	}
 	
 	public GList<Controllable> getControllers()
@@ -939,13 +855,6 @@ public class React extends JavaPlugin implements Configurable
 	public ConfigurationController getConfigurationController()
 	{
 		return configurationController;
-	}
-	
-	public void export(String resourceName, File file) throws Exception
-	{
-		URL inputUrl = getClass().getResource(resourceName);
-		File dest = new File(file.getPath());
-		FU.copyURLToFile(inputUrl, dest);
 	}
 	
 	public boolean isJustUpdated()
