@@ -10,6 +10,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -163,6 +164,28 @@ public class EntityStackController extends Controller implements Configurable
 			if(isStacked((LivingEntity) e.getEntity()) && canTouch((LivingEntity) e.getEntity()))
 			{
 				update((LivingEntity) e.getEntity());
+			}
+		}
+	}
+	
+	@EventHandler
+	public void on(ChunkLoadEvent e)
+	{
+		if(!enabled)
+		{
+			return;
+		}
+		
+		for(Entity i : e.getChunk().getEntities())
+		{
+			if(i instanceof LivingEntity)
+			{
+				LivingEntity x = (LivingEntity) i;
+				
+				if(canTouch(x))
+				{
+					stack(x);
+				}
 			}
 		}
 	}
