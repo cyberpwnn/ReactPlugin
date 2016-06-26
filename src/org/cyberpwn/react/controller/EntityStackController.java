@@ -2,7 +2,6 @@ package org.cyberpwn.react.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -16,8 +15,8 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.Area;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
-import org.cyberpwn.react.util.Verbose;
 
 public class EntityStackController extends Controller implements Configurable
 {
@@ -32,6 +31,7 @@ public class EntityStackController extends Controller implements Configurable
 		
 		enabled = false;
 		stacks = new GMap<Integer, Integer>();
+		cc = new ClusterConfig();
 	}
 	
 	public boolean isStacked(LivingEntity e)
@@ -47,6 +47,59 @@ public class EntityStackController extends Controller implements Configurable
 	public boolean canTouch(LivingEntity e)
 	{
 		if(!enabled)
+		{
+			return false;
+		}
+		
+		if(cc.getBoolean("stacker.ignore.named-entities"))
+		{
+			if(e.getCustomName() != null)
+			{
+				return false;
+			}
+		}
+		
+		if(cc.getBoolean("stacker.ignore.non-cullable-mobs"))
+		{
+			if(!getReact().getActionController().getActionCullEntities().getConfiguration().getStringList(getReact().getActionController().getActionCullEntities().getCodeName() + ".cullable").contains(e.getType().toString()))
+			{
+				return false;
+			}
+		}
+		
+		LivingEntity i = e;
+		
+		if(i.getType().toString().equals("PLAYER"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("COMPLEX_PART"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("PAINTING"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("PAINTING"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("ITEM_FRAME"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("WITHER_SKULL"))
+		{
+			return false;
+		}
+		
+		if(i.getType().toString().equals("ARMOR_STAND"))
 		{
 			return false;
 		}
@@ -83,17 +136,18 @@ public class EntityStackController extends Controller implements Configurable
 			return;
 		}
 		
-		if(isStacked(e))
+		if(isStacked(e) && cc.getBoolean("stacker.lang.change-names"))
 		{
-			e.setCustomName(ChatColor.AQUA + "" + stacks.get(e.getEntityId()) + " X " + ChatColor.LIGHT_PURPLE + StringUtils.capitalise(e.getType().toString().toLowerCase().replaceAll("_", " ")));
+			e.setCustomName(F.color(cc.getString("stacker.lang.name-format").replaceAll("<number>", stacks.get(e.getEntityId()) + "").replaceAll("<mob>", StringUtils.capitalise(e.getType().toString().toLowerCase().replaceAll("_", " ")))));
 		}
 		
 		else
 		{
-			e.setCustomName(null);
+			if(cc.getBoolean("stacker.lang.change-names"))
+			{
+				e.setCustomName(null);
+			}
 		}
-		
-		Verbose.x("STACKS", stacks.size() + " stacks");
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
@@ -106,7 +160,7 @@ public class EntityStackController extends Controller implements Configurable
 		
 		if(e.getEntity() instanceof LivingEntity)
 		{
-			if(isStacked((LivingEntity) e.getEntity()))
+			if(isStacked((LivingEntity) e.getEntity()) && canTouch((LivingEntity) e.getEntity()))
 			{
 				update((LivingEntity) e.getEntity());
 			}
@@ -127,7 +181,7 @@ public class EntityStackController extends Controller implements Configurable
 			{
 				LivingEntity x = (LivingEntity) i;
 				
-				if(isStacked(x))
+				if(isStacked(x) && canTouch(x))
 				{
 					x.setCustomName(null);
 					stacks.remove(x.getEntityId());
@@ -194,9 +248,14 @@ public class EntityStackController extends Controller implements Configurable
 			return;
 		}
 		
+		if(!canTouch(e))
+		{
+			return;
+		}
+		
 		if(isStacked(e))
 		{
-			Area a = new Area(e.getLocation(), 5.0);
+			Area a = new Area(e.getLocation(), cc.getDouble("stacker.settings.stack-range"));
 			
 			for(Entity i : a.getNearbyEntities())
 			{
@@ -208,7 +267,7 @@ public class EntityStackController extends Controller implements Configurable
 					{
 						if(isStacked(ex))
 						{
-							if(stacks.get(ex.getEntityId()) + stacks.get(e.getEntityId()) <= 16)
+							if(stacks.get(ex.getEntityId()) + stacks.get(e.getEntityId()) <= cc.getInt("stacker.settings.max-size"))
 							{
 								stacks.put(e.getEntityId(), stacks.get(ex.getEntityId()) + stacks.get(e.getEntityId()));
 								ex.remove();
@@ -220,7 +279,7 @@ public class EntityStackController extends Controller implements Configurable
 						
 						else
 						{
-							if(stacks.get(e.getEntityId()) + 1 <= 16)
+							if(stacks.get(e.getEntityId()) + 1 <= cc.getInt("stacker.settings.max-size"))
 							{
 								stacks.put(e.getEntityId(), stacks.get(e.getEntityId()) + 1);
 								ex.remove();
@@ -235,7 +294,7 @@ public class EntityStackController extends Controller implements Configurable
 		
 		else
 		{
-			Area a = new Area(e.getLocation(), 5.0);
+			Area a = new Area(e.getLocation(), cc.getDouble("stacker.settings.stack-range"));
 			
 			for(Entity i : a.getNearbyEntities())
 			{
@@ -247,7 +306,7 @@ public class EntityStackController extends Controller implements Configurable
 					{
 						if(isStacked(ex))
 						{
-							if(stacks.get(ex.getEntityId()) + 1 <= 16)
+							if(stacks.get(ex.getEntityId()) + 1 <= cc.getInt("stacker.settings.max-size"))
 							{
 								stacks.put(ex.getEntityId(), stacks.get(ex.getEntityId()) + 1);
 								e.remove();
@@ -268,7 +327,7 @@ public class EntityStackController extends Controller implements Configurable
 			}
 		}
 	}
-
+	
 	@Override
 	public void onNewConfig()
 	{
@@ -278,21 +337,21 @@ public class EntityStackController extends Controller implements Configurable
 		cc.set("stacker.settings.stack-range", 4.3);
 		cc.set("stacker.settings.max-size", 16);
 		cc.set("stacker.lang.change-names", true);
-		cc.set("stacler.lang.name-format", "&a<number> X &b<mob>");
+		cc.set("stacker.lang.name-format", "&a<number> X &b<mob>");
 	}
-
+	
 	@Override
 	public void onReadConfig()
 	{
 		enabled = cc.getBoolean("stacker.enabled");
 	}
-
+	
 	@Override
 	public ClusterConfig getConfiguration()
 	{
 		return cc;
 	}
-
+	
 	@Override
 	public String getCodeName()
 	{
