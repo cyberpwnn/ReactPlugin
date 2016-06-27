@@ -289,7 +289,7 @@ public class MonitorController extends Controller implements Configurable
 				return;
 			}
 			
-			Title tx = ms.update(monitors.get(i).getB());
+			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking());
 			
 			if(!ms.getIgnoreDisp().contains(i))
 			{

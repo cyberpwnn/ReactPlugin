@@ -26,7 +26,7 @@ public class SamplePHEntities extends Sample
 		value.setNumber(1);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return "E";
 	}

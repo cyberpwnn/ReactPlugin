@@ -30,7 +30,7 @@ public class SampleMonitoredPlugins extends Sample
 		value.setNumber(0);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + " PLG";
 	}

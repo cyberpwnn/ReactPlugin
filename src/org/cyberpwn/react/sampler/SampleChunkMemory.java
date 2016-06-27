@@ -66,7 +66,7 @@ public class SampleChunkMemory extends Sample
 		return getValue().getDouble() / getSampleController().getSampleMemoryUsed().getValue().getDouble();
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.mem(getValue().getLong()) + " (" + F.pc(getValue().getDouble() / getSampleController().getSampleMemoryUsed().getValue().getDouble(), 0) + ")" + ChatColor.YELLOW + " CMEM";
 	}

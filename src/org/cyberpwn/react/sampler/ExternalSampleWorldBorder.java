@@ -57,7 +57,7 @@ public class ExternalSampleWorldBorder extends ExternalSample
 		}
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return filling ? "FILLING" : "IDLE" + ChatColor.AQUA + " WB";
 	}

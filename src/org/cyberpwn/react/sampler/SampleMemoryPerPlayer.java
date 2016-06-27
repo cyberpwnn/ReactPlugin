@@ -56,7 +56,7 @@ public class SampleMemoryPerPlayer extends Sample
 		return cache.pull() / getSampleController().getSampleMemoryUsed().getValue().getLong();
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger(), 1) + ChatColor.DARK_RED + " MB/P";
 	}

@@ -38,7 +38,7 @@ public class SamplePHTimings extends Sample
 		};
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		String s = "";
 		ChatColor c = anim ? ChatColor.LIGHT_PURPLE : ChatColor.DARK_PURPLE;

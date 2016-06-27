@@ -76,7 +76,7 @@ public class SampleGarbageDirection extends Sample
 		value.setNumber(0);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		String s = ChatColor.GOLD + "" + lastSample + "M ";
 		

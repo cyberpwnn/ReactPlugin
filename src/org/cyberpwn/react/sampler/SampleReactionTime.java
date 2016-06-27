@@ -97,7 +97,7 @@ public class SampleReactionTime extends Sample
 		return (int) (getValue().getDouble() / 1000000.0);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.fd(getValue().getDouble() / 1000000.0, 2) + "ms";
 	}

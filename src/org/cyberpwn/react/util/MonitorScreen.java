@@ -61,13 +61,13 @@ public class MonitorScreen
 		
 		for(Samplable i : samplables)
 		{
-			s = s + " " + i.color() + i.formatted();
+			s = s + " " + i.color() + i.formatted(false);
 		}
 		
 		return s;
 	}
 	
-	public Title update(Integer cursor)
+	public Title update(Integer cursor, boolean acc)
 	{
 		Title t = new Title();
 		String disp = react.getMonitorController().getDisp();
@@ -94,23 +94,23 @@ public class MonitorScreen
 			{
 				if(cursor == -1)
 				{
-					t.setAction(t.getAction() + " " + i.color() + i.formatted());
+					t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
 				}
 				
 				else if(samplables.get(cursor).equals(i))
 				{
-					t.setAction(t.getAction() + " " + i.color() + i.formatted());
+					t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
 				}
 				
 				else
 				{
-					t.setAction(t.getAction() + " " + ChatColor.BLACK + ChatColor.stripColor(i.formatted()));
+					t.setAction(t.getAction() + " " + ChatColor.BLACK + ChatColor.stripColor(i.formatted(acc)));
 				}
 			}
 			
 			else
 			{
-				t.setAction(t.getAction() + " " + i.color() + i.formatted());
+				t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
 			}
 		}
 		
@@ -121,7 +121,7 @@ public class MonitorScreen
 			
 			for(Samplable i : elements.get(samplables.get(cursor)).getA())
 			{
-				t.setSubTitle(t.getSubTitle() + " " + ChatColor.DARK_GRAY + " " + i.color() + i.formatted());
+				t.setSubTitle(t.getSubTitle() + " " + ChatColor.DARK_GRAY + " " + i.color() + i.formatted(acc));
 				t.setTitle(disp);
 			}
 		}

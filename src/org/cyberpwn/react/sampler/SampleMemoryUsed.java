@@ -117,7 +117,7 @@ public class SampleMemoryUsed extends Sample
 		return (getAverage().doubleValue()) / (getMemoryMax().doubleValue() / 1024.0 / 1024.0);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		if(getPercent() > getSampleController().getReact().getActionController().getActionInstabilityCause().getConfiguration().getDouble(getSampleController().getReact().getActionController().getActionInstabilityCause().getCodeName() + ".high.memory.percent"))
 		{

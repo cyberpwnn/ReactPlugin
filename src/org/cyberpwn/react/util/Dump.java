@@ -46,7 +46,7 @@ public class Dump implements Configurable
 			ClusterConfig cx = c.getConfiguration();
 			
 			cc.set("react.controller.sample-controller." + c.getCodeName() + ".value", i.get().getDouble());
-			cc.set("react.controller.sample-controller." + c.getCodeName() + ".fvalue", ChatColor.stripColor(i.formatted()));
+			cc.set("react.controller.sample-controller." + c.getCodeName() + ".fvalue", ChatColor.stripColor(i.formatted(true)));
 			
 			for(String j : cx.getData().k())
 			{

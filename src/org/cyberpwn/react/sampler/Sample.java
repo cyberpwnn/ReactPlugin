@@ -6,9 +6,9 @@ import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Value;
 import org.cyberpwn.react.util.ValueType;
-import org.cyberpwn.react.util.Metrics.Graph;
 
 public class Sample implements Samplable, Configurable
 {
@@ -229,7 +229,7 @@ public class Sample implements Samplable, Configurable
 	}
 	
 	@Override
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return "?";
 	}

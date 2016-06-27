@@ -43,7 +43,7 @@ public class SampleChunksLoaded extends Sample implements Listener
 		getSampleController().getReact().register(this);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + " CHKS";
 	}

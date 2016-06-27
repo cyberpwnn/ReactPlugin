@@ -82,7 +82,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		return (getValue().getDouble() / (getSampleController().getSampleMemoryUsed().getAverage().doubleValue() * 8.0));
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getLong()) + ChatColor.YELLOW + " MAH/S";
 	}

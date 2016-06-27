@@ -35,7 +35,7 @@ public class SamplePlayers extends Sample
 		
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getDouble(), 1) + " PL";
 	}

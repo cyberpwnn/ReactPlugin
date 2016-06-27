@@ -86,7 +86,7 @@ public class CommandController extends Controller implements CommandExecutor
 				
 				for(Samplable i : react.getSampleController().getSamples().keySet())
 				{
-					bookSamplers.addPage(new GPage().put(i.getName() + "\n" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.stripColor(i.formatted()), i.getExplaination()));
+					bookSamplers.addPage(new GPage().put(i.getName() + "\n" + ChatColor.RESET + ChatColor.DARK_GREEN + ChatColor.stripColor(i.formatted(false)), i.getExplaination()));
 				}
 				
 				bookMonitoring = new GBook(ChatColor.GREEN + L.MONITORING);

@@ -116,7 +116,7 @@ public class SampleTicksPerSecond extends Sample
 		value.setNumber(20);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		String k = "";
 		

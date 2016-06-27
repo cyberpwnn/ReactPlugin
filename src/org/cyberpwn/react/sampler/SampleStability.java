@@ -68,7 +68,7 @@ public class SampleStability extends Sample
 		value.setNumber(1);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.pc(getValue().getDouble(), 1) + ChatColor.DARK_GREEN + " STABLE";
 	}

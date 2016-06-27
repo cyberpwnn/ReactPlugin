@@ -61,7 +61,7 @@ public class SampleTNTPerSecond extends Sample implements Listener
 		sampleController.getReact().unRegister(this);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " TNT/S";
 	}

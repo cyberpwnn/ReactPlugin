@@ -45,7 +45,7 @@ public interface Samplable
 	
 	void setCurrentDelay(Integer currentDelay);
 	
-	String formatted();
+	String formatted(boolean acc);
 	
 	ChatColor color();
 	

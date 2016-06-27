@@ -69,7 +69,7 @@ public class SampleEntities extends Sample
 		value.setNumber(0);
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + ChatColor.AQUA + " ENTS";
 	}

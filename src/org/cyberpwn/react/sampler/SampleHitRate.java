@@ -130,7 +130,7 @@ public class SampleHitRate extends Sample
 		cache.save();
 	}
 	
-	public String formatted()
+	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getDouble(), 1) + " HT";
 	}
