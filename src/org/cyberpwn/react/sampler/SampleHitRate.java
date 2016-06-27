@@ -3,13 +3,14 @@ package org.cyberpwn.react.sampler;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.HitRateCache;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleHitRate extends Sample
 {
@@ -79,7 +80,7 @@ public class SampleHitRate extends Sample
 		
 		if(ghit < 1)
 		{
-			hits = ChatColor.RED + "No Data.";
+			hits = Info.COLOR_ERR + "No Data.";
 			return hits;
 		}
 		
@@ -101,7 +102,7 @@ public class SampleHitRate extends Sample
 		
 		if(ghit < 1)
 		{
-			hits = ChatColor.RED + "No Data.\n" + ChatColor.BLACK + "This data records percentages of how often react detects lag sources versus unknown. No data means react has no found any issues yet!";
+			hits = Info.COLOR_ERR + "No Data.\n" + ChatColor.BLACK + "This data records percentages of how often react detects lag sources versus unknown. No data means react has no found any issues yet!";
 			return hits;
 		}
 		

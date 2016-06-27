@@ -132,7 +132,7 @@ public class CommandController extends Controller implements CommandExecutor
 						}
 					}
 					
-					sender.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_UNKNOWN_ACTION);
+					sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_UNKNOWN_ACTION);
 					for(final Actionable i : react.getActionController().getActions().k())
 					{
 						if(i.isManual())
@@ -246,7 +246,7 @@ public class CommandController extends Controller implements CommandExecutor
 						
 						else
 						{
-							msg(sender, ChatColor.RED + L.MESSAGE_UNKNOWN_BOOK);
+							msg(sender, Info.COLOR_ERR + L.MESSAGE_UNKNOWN_BOOK);
 						}
 					}
 				}
@@ -479,13 +479,13 @@ public class CommandController extends Controller implements CommandExecutor
 							
 							catch(Exception e)
 							{
-								sender.sendMessage(ChatColor.RED + L.MESSAGE_ERROR_NONUMBER + args[3]);
+								sender.sendMessage(Info.COLOR_ERR + L.MESSAGE_ERROR_NONUMBER + args[3]);
 							}
 						}
 							
 						else
 						{
-							sender.sendMessage(ChatColor.RED + L.MESSAGE_HELP_GUESS);
+							sender.sendMessage(Info.COLOR_ERR + L.MESSAGE_HELP_GUESS);
 						}
 					}
 				}
@@ -574,7 +574,7 @@ public class CommandController extends Controller implements CommandExecutor
 						}
 					}
 					
-					sender.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_ERROR_PLUGINUNKNOWN);
+					sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_ERROR_PLUGINUNKNOWN);
 				}
 				
 				else
@@ -600,7 +600,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					if(book == null)
 					{
-						msg(sender, ChatColor.RED + L.MESSAGE_ERROR_PLUGINUNKNOWN);
+						msg(sender, Info.COLOR_ERR + L.MESSAGE_ERROR_PLUGINUNKNOWN);
 					}
 					
 					else
@@ -678,7 +678,7 @@ public class CommandController extends Controller implements CommandExecutor
 					if(Verbose.mrx.contains(p))
 					{
 						Verbose.mrx.remove(p);
-						p.sendMessage(ChatColor.RED + L.MESSAGE_VERBOSEOFF);
+						p.sendMessage(Info.COLOR_ERR + L.MESSAGE_VERBOSEOFF);
 					}
 					
 					else
@@ -770,7 +770,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(react.getTimingsController().getAll() == null)
 						{
-							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Data has not been prepared yet. Please wait up to 5 minutes.");
 							return;
 						}
 						
@@ -786,7 +786,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(react.getTimingsController().getAll() == null)
 						{
-							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Data has not been prepared yet. Please wait up to 5 minutes.");
 							return;
 						}
 						
@@ -803,7 +803,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(react.getTimingsController().getAll() == null)
 						{
-							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Data has not been prepared yet. Please wait up to 5 minutes.");
 							return;
 						}
 						
@@ -816,7 +816,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(react.getTimingsController().getAll() == null)
 						{
-							sender.sendMessage(Info.TAG + ChatColor.RED + "Data has not been prepared yet. Please wait up to 5 minutes.");
+							sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Data has not been prepared yet. Please wait up to 5 minutes.");
 							return;
 						}
 						
@@ -842,7 +842,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					else
 					{
-						sender.sendMessage(Info.TAG + ChatColor.RED + "Cannot find player.");
+						sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Cannot find player.");
 					}
 				}
 				
@@ -876,14 +876,14 @@ public class CommandController extends Controller implements CommandExecutor
 						
 						catch(Exception e)
 						{
-							sender.sendMessage(ChatColor.RED + "Failed to Ping... Unknown Version?");
+							sender.sendMessage(Info.COLOR_ERR + "Failed to Ping... Unknown Version?");
 							break;
 						}
 					}
 					
 					if(!nh.equals(""))
 					{
-						sender.sendMessage(Info.TAG + ChatColor.RED + "Highest: " + ChatColor.GOLD + nh + " (" + highest + "ms)");
+						sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Highest: " + ChatColor.GOLD + nh + " (" + highest + "ms)");
 					}
 					
 					if(!nl.equals(""))
@@ -963,7 +963,7 @@ public class CommandController extends Controller implements CommandExecutor
 			}
 		}
 		
-		sender.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_ERROR_NOTCOMMAND);
+		sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_ERROR_NOTCOMMAND);
 	}
 	
 	public void tabulate(CommandSender sender, int tab)
@@ -1048,13 +1048,13 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			if(React.isMef())
 			{
-				sender.sendMessage(ChatColor.RED + "I'm sorry. I cant help you if you won't do the same.");
+				sender.sendMessage(Info.COLOR_ERR + "I'm sorry. I cant help you if you won't do the same.");
 				return true;
 			}
 			
 			if(!sender.hasPermission(Info.PERM_ACT) && !sender.hasPermission(Info.PERM_MONITOR) && !sender.hasPermission(Info.PERM_RELOAD))
 			{
-				sender.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_INSUFFICIENT_PERMISSION);
+				sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
 				return true;
 			}
 			

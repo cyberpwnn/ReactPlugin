@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
@@ -49,7 +50,7 @@ public class SampleChunksLoaded extends Sample implements Listener
 	
 	public ChatColor color()
 	{
-		return ChatColor.RED;
+		return Info.COLOR_ERR;
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

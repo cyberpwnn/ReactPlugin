@@ -60,7 +60,7 @@ public class ActionHeavyChunk extends Action implements Listener
 		
 		if(c == null)
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + "Could not find any chunks that have more than " + lim + " entities.");
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + "Could not find any chunks that have more than " + lim + " entities.");
 		}
 		
 		else

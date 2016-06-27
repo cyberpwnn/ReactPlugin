@@ -3,6 +3,7 @@ package org.cyberpwn.react.util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.lang.Info;
 
 public class Dispatcher
 {
@@ -80,7 +81,7 @@ public class Dispatcher
 	
 	public void failure(String... o)
 	{
-		log(DispatchType.FAILURE, "" + ChatColor.RED, o);
+		log(DispatchType.FAILURE, "" + Info.COLOR_ERR, o);
 	}
 	
 	public void f(String... o)

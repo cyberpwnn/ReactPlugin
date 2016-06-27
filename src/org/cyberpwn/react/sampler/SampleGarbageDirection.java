@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
@@ -83,7 +84,7 @@ public class SampleGarbageDirection extends Sample
 		{
 			if(direction > 0)
 			{
-				s = s + ChatColor.RED + "+" + direction;
+				s = s + Info.COLOR_ERR + "+" + direction;
 			}
 			
 			else

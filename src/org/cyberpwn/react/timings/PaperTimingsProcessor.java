@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
@@ -68,7 +69,7 @@ public class PaperTimingsProcessor extends Thread
 				String pa = "";
 				
 				pa = pa + ChatColor.BLUE + "Type: " + ChatColor.DARK_RED + type + "\n";
-				pa = pa + ChatColor.RED + "This is a " + severity + " issue." + "\n\n";
+				pa = pa + Info.COLOR_ERR + "This is a " + severity + " issue." + "\n\n";
 				pa = pa + ChatColor.BLUE + "Avg Timing: " + ChatColor.DARK_RED + ms + ChatColor.GOLD + "(" + pcot + ")" + "\n";
 				pa = pa + ChatColor.BLUE + "Hits: " + ChatColor.DARK_RED + hits + "\n";
 				pa = pa + ChatColor.BLUE + "Violations: " + ChatColor.DARK_RED + via + "\n";
@@ -121,7 +122,7 @@ public class PaperTimingsProcessor extends Thread
 				
 				if(reports.get(i).getProblems().containsKey(j))
 				{
-					severity = ChatColor.RED + "" + ChatColor.UNDERLINE + "" + StringUtils.capitalize(reports.get(i).getProblems().get(j).toString().toLowerCase()) + ChatColor.RESET + ChatColor.RED + " issue.";
+					severity = Info.COLOR_ERR + "" + ChatColor.UNDERLINE + "" + StringUtils.capitalize(reports.get(i).getProblems().get(j).toString().toLowerCase()) + ChatColor.RESET + Info.COLOR_ERR + " issue.";
 				}
 				
 				String pa = "";

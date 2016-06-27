@@ -182,7 +182,7 @@ public class ActionInstabilityCause extends Action
 						if(i.isFlying() && i.getFlySpeed() > 0.4 && !speeds.containsKey(i))
 						{
 							speeds.put(i, i.getFlySpeed());
-							i.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_SLOWED);
+							i.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_SLOWED);
 							i.setFlySpeed(0.4f);
 						}
 					}
@@ -244,7 +244,7 @@ public class ActionInstabilityCause extends Action
 									{
 										if(j.hasPermission(Info.PERM_MONITOR))
 										{
-											j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + ChatColor.RED + " Applying Force.");
+											j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + Info.COLOR_ERR + " Applying Force.");
 										}
 									}
 								}
@@ -271,7 +271,7 @@ public class ActionInstabilityCause extends Action
 											{
 												if(j.hasPermission(Info.PERM_MONITOR))
 												{
-													j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + ChatColor.RED + " Applying Force.");
+													j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + Info.COLOR_ERR + " Applying Force.");
 												}
 											}
 										}
@@ -382,7 +382,7 @@ public class ActionInstabilityCause extends Action
 						
 						else
 						{
-							j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.RED + ChatColor.BOLD + L.MESSAGE_ISSUES.replaceAll("\\.{3}", ChatColor.MAGIC + "..."));
+							j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + Info.COLOR_ERR + ChatColor.BOLD + L.MESSAGE_ISSUES.replaceAll("\\.{3}", ChatColor.MAGIC + "..."));
 						}
 					}
 				}
@@ -508,7 +508,7 @@ public class ActionInstabilityCause extends Action
 	
 	public GBook query()
 	{
-		GBook book = new GBook(ChatColor.RED + "" + problems.size() + " Server Issue(s)");
+		GBook book = new GBook(Info.COLOR_ERR + "" + problems.size() + " Server Issue(s)");
 		GPage status = new GPage();
 		GPage timings = new GPage();
 		GPage actions = new GPage();
@@ -528,7 +528,7 @@ public class ActionInstabilityCause extends Action
 		for(InstabilityCause i : problems.k().reverse())
 		{
 			GPage page = new GPage();
-			page.put(i.getName() + "\n" + ChatColor.RED + ChatColor.BOLD + " (Current Issue)", i.getProblem());
+			page.put(i.getName() + "\n" + Info.COLOR_ERR + ChatColor.BOLD + " (Current Issue)", i.getProblem());
 			book.addPage(page);
 			pgs++;
 		}
@@ -537,7 +537,7 @@ public class ActionInstabilityCause extends Action
 		{
 			GPage page = new GPage();
 			GTime time = new GTime(System.currentTimeMillis() - i.getTime().getTotalDuration());
-			page.put(i.getTitle() + "\n" + ChatColor.RED + ChatColor.BOLD + " (" + time.ago() + ")", i.getText());
+			page.put(i.getTitle() + "\n" + Info.COLOR_ERR + ChatColor.BOLD + " (" + time.ago() + ")", i.getText());
 			book.addPage(page);
 			pgs++;
 			
@@ -682,7 +682,7 @@ public class ActionInstabilityCause extends Action
 	
 	public String queryGuess(long mb)
 	{
-		return ChatColor.RED + "Guess: " + guessPlayerLimit(mb) + " ~ " + guessPlayerOneChunk(mb);
+		return Info.COLOR_ERR + "Guess: " + guessPlayerLimit(mb) + " ~ " + guessPlayerOneChunk(mb);
 	}
 	
 	public GBook queryGuess()

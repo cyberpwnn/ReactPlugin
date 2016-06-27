@@ -1,6 +1,5 @@
 package org.cyberpwn.react;
 
-import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
@@ -43,6 +42,7 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
+import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 
@@ -124,20 +124,20 @@ public class React extends JavaPlugin implements Configurable
 			@Override
 			public void run()
 			{
-				if(new File(getDataFolder(), "encrypt").exists())
+				if(new GFile(getDataFolder(), "encrypt").exists())
 				{
-					File fx = new File(getDataFolder(), "encrypted");
+					GFile fx = new GFile(getDataFolder(), "encrypted");
 					fx.delete();
 					fx.mkdir();
-					FM.createAll(new File(getDataFolder(), "encrypt"), fx);
+					FM.createAll(new GFile(getDataFolder(), "encrypt"), fx);
 				}
 				
-				if(new File(getDataFolder(), "decrypt").exists())
+				if(new GFile(getDataFolder(), "decrypt").exists())
 				{
-					File fx = new File(getDataFolder(), "decrypted");
+					GFile fx = new GFile(getDataFolder(), "decrypted");
 					fx.delete();
 					fx.mkdir();
-					FM.parseAll(new File(getDataFolder(), "decrypt"), fx);
+					FM.parseAll(new GFile(getDataFolder(), "decrypt"), fx);
 				}
 			}
 		});
@@ -180,7 +180,7 @@ public class React extends JavaPlugin implements Configurable
 		dataController.load(null, entityStackController);
 		dataController.load(null, updateController);
 		Info.rebuildLang();
-		File fcx = new File(new File(getDataFolder(), "cache"), "timings.yml");
+		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
 		
@@ -286,6 +286,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		Info.rebuildLang();
 		languageController.handleLanguage();
+		setTag();
 		
 		d.v("All good to go!");
 		Info.splash();
@@ -331,7 +332,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		try
 		{
-			dump.getConfiguration().toYaml().save(new File(new File(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
+			dump.getConfiguration().toYaml().save(new GFile(new GFile(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
 		}
 		
 		catch(IOException e)
@@ -362,7 +363,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("startup.skip-update-check", true);
 		cc.set("startup.auto-update", false);
 		cc.set("runtime.disable-reactions", false);
-		cc.set("lang.tag-name", "React");
+		cc.set("display.tag", "&b[&8React&b]:");
 		cc.set("monitor.allow-title-verbose", true);
 		cc.set("react-remote.enable", false);
 		cc.set("react-remote.port", 8118);
@@ -374,6 +375,11 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("commands.override.tps", true);
 		cc.set("messages.notify-instability", true);
 		cc.set("lang", "en");
+	}
+	
+	public void setTag()
+	{
+		Info.TAG = F.color(cc.getString("display.tag")) + " " + ChatColor.GRAY;
 	}
 	
 	@Override
@@ -388,7 +394,6 @@ public class React extends JavaPlugin implements Configurable
 		allowMem = cc.getBoolean("commands.override.memory");
 		allowTps = cc.getBoolean("commands.override.tps");
 		nf = cc.getBoolean("messages.notify-instability");
-		Info.NAME = Info.COLOR_A + cc.getString("lang.tag-name");
 		
 		if(cc.contains("placeholders"))
 		{

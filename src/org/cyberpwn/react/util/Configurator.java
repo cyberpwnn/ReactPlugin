@@ -223,7 +223,7 @@ public class Configurator implements Listener
 								
 								catch(Exception e)
 								{
-									p.sendMessage(Info.TAG + ChatColor.RED + "Invalid Data Type for DOUBLE. (eg. 6.31238)");
+									p.sendMessage(Info.TAG + Info.COLOR_ERR + "Invalid Data Type for DOUBLE. (eg. 6.31238)");
 									doConfiguration(file, cc.copy(), co);
 								}
 							}
@@ -263,7 +263,7 @@ public class Configurator implements Listener
 								
 								catch(Exception e)
 								{
-									p.sendMessage(Info.TAG + ChatColor.RED + "Invalid Data Type for INTEGER. (eg. 61)");
+									p.sendMessage(Info.TAG + Info.COLOR_ERR + "Invalid Data Type for INTEGER. (eg. 61)");
 									doConfiguration(file, cc.copy(), co);
 								}
 							}

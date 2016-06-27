@@ -13,6 +13,7 @@ public class Info
 	public static String COLOR_B = ChatColor.DARK_AQUA + "";
 	public static String COLOR_C = ChatColor.DARK_GRAY + "";
 	public static String COLOR_D = ChatColor.GREEN + "";
+	public static ChatColor COLOR_ERR = ChatColor.RED;
 	public static String NAME = COLOR_A + "React";
 	public static String VERSION = COLOR_B + Version.V;
 	public static String VERSION_BLANK = ChatColor.stripColor(VERSION);
@@ -55,7 +56,7 @@ public class Info
 		m(" |    |   \\  |        \\ /    |    \\ \\     \\____   |    |   ");
 		m(" |____|_  / /_______  / \\____|__  /  \\______  /   |____|   ");
 		m("        \\/          \\/          \\/          \\/             ");
-		m("React " + ChatColor.GREEN + "v" + VERSION_BLANK + "(" + Info.VERSION_CODE + ") " + ChatColor.LIGHT_PURPLE + ChatColor.LIGHT_PURPLE + React.instance().getControllers().size() + " Controllers, " + ChatColor.RED + React.instance().getSampleController().getSamples().size() + " Samplers, " + ChatColor.YELLOW + React.instance().getActionController().getActions().size() + " Actions");
+		m("React " + ChatColor.GREEN + "v" + VERSION_BLANK + "(" + Info.VERSION_CODE + ") " + ChatColor.LIGHT_PURPLE + ChatColor.LIGHT_PURPLE + React.instance().getControllers().size() + " Controllers, " + Info.COLOR_ERR + React.instance().getSampleController().getSamples().size() + " Samplers, " + ChatColor.YELLOW + React.instance().getActionController().getActions().size() + " Actions");
 	}
 	
 	public static void m(String s)

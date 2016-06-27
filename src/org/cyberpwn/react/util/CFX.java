@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.cyberpwn.react.lang.Info;
 
 public class CFX
 {
@@ -32,13 +33,13 @@ public class CFX
 				
 				if(!file.exists())
 				{
-					result.add(ChatColor.RED + "Not a file/directory");
+					result.add(Info.COLOR_ERR + "Not a file/directory");
 					return result;
 				}
 				
 				if(file.isDirectory())
 				{
-					result.add(ChatColor.RED + "Not a file");
+					result.add(Info.COLOR_ERR + "Not a file");
 					return result;
 				}
 				
@@ -56,13 +57,13 @@ public class CFX
 						
 						else
 						{
-							result.add(ChatColor.RED + "Failed parse desired data. Invalid/Unsupported data type.");
+							result.add(Info.COLOR_ERR + "Failed parse desired data. Invalid/Unsupported data type.");
 						}
 					}
 					
 					else
 					{
-						result.add(ChatColor.RED + "Failed to find yml node.");
+						result.add(Info.COLOR_ERR + "Failed to find yml node.");
 					}
 					
 					return result;
@@ -70,21 +71,21 @@ public class CFX
 				
 				catch(Exception e)
 				{
-					result.add(ChatColor.RED + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+					result.add(Info.COLOR_ERR + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
 					return result;
 				}
 			}
 			
 			catch(Exception e)
 			{
-				result.add(ChatColor.RED + "Failed to parse input.");
+				result.add(Info.COLOR_ERR + "Failed to parse input.");
 				return result;
 			}
 		}
 		
 		else
 		{
-			result.add(ChatColor.RED + "Not a YML Node File. (path/to/file//yaml.node.value)");
+			result.add(Info.COLOR_ERR + "Not a YML Node File. (path/to/file//yaml.node.value)");
 			return result;
 		}
 	}
@@ -102,13 +103,13 @@ public class CFX
 				
 				if(!file.exists())
 				{
-					result.add(ChatColor.RED + "Not a file/directory");
+					result.add(Info.COLOR_ERR + "Not a file/directory");
 					return result;
 				}
 				
 				if(file.isDirectory())
 				{
-					result.add(ChatColor.RED + "Not a file");
+					result.add(Info.COLOR_ERR + "Not a file");
 					return result;
 				}
 				
@@ -124,7 +125,7 @@ public class CFX
 					
 					else
 					{
-						result.add(ChatColor.RED + "Failed to find yml node.");
+						result.add(Info.COLOR_ERR + "Failed to find yml node.");
 					}
 					
 					return result;
@@ -132,14 +133,14 @@ public class CFX
 				
 				catch(Exception e)
 				{
-					result.add(ChatColor.RED + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+					result.add(Info.COLOR_ERR + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
 					return result;
 				}
 			}
 			
 			catch(Exception e)
 			{
-				result.add(ChatColor.RED + "Failed to parse input.");
+				result.add(Info.COLOR_ERR + "Failed to parse input.");
 				return result;
 			}
 		}
@@ -156,7 +157,7 @@ public class CFX
 		
 		if(!file.exists())
 		{
-			result.add(ChatColor.RED + "UNABLE TO READ: No such file/directory.");
+			result.add(Info.COLOR_ERR + "UNABLE TO READ: No such file/directory.");
 		}
 		
 		if(file.isDirectory())
@@ -198,7 +199,7 @@ public class CFX
 			
 			catch(Exception e)
 			{
-				result.add(ChatColor.RED + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+				result.add(Info.COLOR_ERR + "UNABLE TO READ FILE: " + e.getClass().getSimpleName() + ", " + e.getMessage());
 			}
 		}
 		
@@ -229,7 +230,7 @@ public class CFX
 		
 		else
 		{
-			return ChatColor.RED + "???";
+			return Info.COLOR_ERR + "???";
 		}
 	}
 	
@@ -295,7 +296,7 @@ public class CFX
 		
 		else
 		{
-			return ChatColor.RED + "UNSUPPORTED TYPE";
+			return Info.COLOR_ERR + "UNSUPPORTED TYPE";
 		}
 	}
 }

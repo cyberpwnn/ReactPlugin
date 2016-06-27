@@ -85,7 +85,7 @@ public class PluginWeightController extends Controller implements Configurable
 				{
 					if(j.hasPermission(Info.PERM_MONITOR))
 					{
-						j.sendMessage(Info.TAG + ChatColor.RED + "WARNING: " + ChatColor.GOLD + i + ChatColor.RED + " is using " + F.f(times.get(i), 4) + "ms");
+						j.sendMessage(Info.TAG + Info.COLOR_ERR + "WARNING: " + ChatColor.GOLD + i + Info.COLOR_ERR + " is using " + F.f(times.get(i), 4) + "ms");
 					}
 				}
 				
@@ -263,7 +263,7 @@ public class PluginWeightController extends Controller implements Configurable
 		
 		else
 		{
-			sender.sendMessage(Info.TAG + ChatColor.RED + "No timings data for " + plugin.getName());
+			sender.sendMessage(Info.TAG + Info.COLOR_ERR + "No timings data for " + plugin.getName());
 		}
 	}
 	

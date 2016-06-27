@@ -1,8 +1,8 @@
 package org.cyberpwn.react.util;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.cyberpwn.react.lang.Info;
 
 public class MaterialList
 {
@@ -38,7 +38,7 @@ public class MaterialList
 			
 			catch(Exception e)
 			{
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Invalid Item Data: " + i);
+				Bukkit.getConsoleSender().sendMessage(Info.COLOR_ERR + "Invalid Item Data: " + i);
 			}
 		}
 		

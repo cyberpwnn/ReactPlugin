@@ -303,7 +303,7 @@ public class MonitorController extends Controller implements Configurable
 			
 			if(getReact().getActionController().getActionInstabilityCause().issues())
 			{
-				tx.setAction(ChatColor.RED + org.apache.commons.lang.StringUtils.repeat(">", level) + " " + ChatColor.RESET + tx.getAction() + ChatColor.RED + " " + org.apache.commons.lang.StringUtils.repeat("<", level));
+				tx.setAction(Info.COLOR_ERR + org.apache.commons.lang.StringUtils.repeat(">", level) + " " + ChatColor.RESET + tx.getAction() + Info.COLOR_ERR + " " + org.apache.commons.lang.StringUtils.repeat("<", level));
 			}
 			
 			tx.send(i);
@@ -336,7 +336,7 @@ public class MonitorController extends Controller implements Configurable
 	{
 		if(!p.hasPermission(Info.PERM_MONITOR))
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_INSUFFICIENT_PERMISSION);
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
 			return;
 		}
 		
@@ -347,7 +347,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(!VersionBukkit.tc())
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + "WARNING: You are using 1.7, maps may be ``/glitchy.");
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + "WARNING: You are using 1.7, maps may be ``/glitchy.");
 		}
 		
 		ItemStack mapd = new ItemStack(Material.MAP);
@@ -415,7 +415,7 @@ public class MonitorController extends Controller implements Configurable
 		Verbose.x("monitor", p.getName() + ": Mapping disabled");
 		if(disp)
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_MAPPING_DISABLED);
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_MAPPING_DISABLED);
 		}
 		
 		cc.set("mappers", cc.getStringList("mappers").qdel(p.getUniqueId().toString()));
@@ -464,7 +464,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(!ms.getIgnoreDisp().contains(p))
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_VERBOSEOFF);
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_VERBOSEOFF);
 		}
 		
 		else
@@ -504,7 +504,7 @@ public class MonitorController extends Controller implements Configurable
 	public void stopMonitoring(Player p)
 	{
 		monitors.remove(p);
-		p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_MONITORING_DISABLED);
+		p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_MONITORING_DISABLED);
 		PacketUtil.sendActionBar(p, "  ");
 		PacketUtil.clearTitle(p);
 		pc.gpd(p).setMonitoring(false);
@@ -515,14 +515,14 @@ public class MonitorController extends Controller implements Configurable
 	{
 		if(!p.hasPermission(Info.PERM_MONITOR))
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_INSUFFICIENT_PERMISSION);
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
 			stopMonitoring(p);
 			return;
 		}
 		
 		if(!VersionBukkit.tc())
 		{
-			p.sendMessage(Info.TAG + ChatColor.RED + "1.7 is not 100% Compatible yet. Using Chat.");
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + "1.7 is not 100% Compatible yet. Using Chat.");
 			p.sendMessage(ms.getRoot());
 			return;
 		}
@@ -854,7 +854,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(overflow > 0)
 		{
-			s = s + ChatColor.RED + "  (" + ChatColor.GOLD + overflow + ChatColor.RED + ")";
+			s = s + Info.COLOR_ERR + "  (" + ChatColor.GOLD + overflow + Info.COLOR_ERR + ")";
 		}
 		
 		disp = s;
@@ -864,14 +864,14 @@ public class MonitorController extends Controller implements Configurable
 	@EventHandler
 	public void onGC(final PostGCEvent e)
 	{
-		Verbose.x("memory", ChatColor.RED + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
+		Verbose.x("memory", Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
 		
 		react.scheduleSyncTask(20, new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				disp(ChatColor.RED + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
+				disp(Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
 			}
 		});
 		
@@ -880,8 +880,8 @@ public class MonitorController extends Controller implements Configurable
 	@EventHandler
 	public void onSpike(SpikeEvent e)
 	{
-		Verbose.x("performence", ChatColor.RED + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
-		disp(ChatColor.RED + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
+		Verbose.x("performence", Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
+		disp(Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
 	}
 	
 	public GMap<Player, GBiset<Integer, Integer>> getMonitors()

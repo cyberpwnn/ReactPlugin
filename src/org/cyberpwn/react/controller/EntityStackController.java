@@ -4,6 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -230,11 +231,13 @@ public class EntityStackController extends Controller implements Configurable
 				if(stacks.get(e.getEntity().getEntityId()) > 1)
 				{
 					e.getEntity().setHealth(e.getEntity().getMaxHealth());
+					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 				}
 				
 				else if(stacks.get(e.getEntity().getEntityId()) > 0)
 				{
 					e.getEntity().setHealth(e.getEntity().getMaxHealth());
+					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 					stacks.remove(e.getEntity().getEntityId());
 				}
 				
@@ -242,6 +245,7 @@ public class EntityStackController extends Controller implements Configurable
 				{
 					stacks.remove(e.getEntity().getEntityId());
 					e.getEntity().remove();
+					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 				}
 				
 				update(e.getEntity());

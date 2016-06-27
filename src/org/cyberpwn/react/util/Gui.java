@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.Gui.Pane.Element.Trigger;
 
@@ -810,13 +811,13 @@ public class Gui implements Listener
 			public Element setFailedRequirement(String information)
 			{
 				resetDescription();
-				description.add(ChatColor.RED + "\u2718 " + information);
+				description.add(Info.COLOR_ERR + "\u2718 " + information);
 				return this;
 			}
 			
 			public Element addFailedRequirement(String information)
 			{
-				description.add(ChatColor.RED + "\u2718 " + information);
+				description.add(Info.COLOR_ERR + "\u2718 " + information);
 				return this;
 			}
 			

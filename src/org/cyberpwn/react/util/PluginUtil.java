@@ -25,6 +25,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.lang.Info;
 
 /*
  * #%L
@@ -133,7 +134,7 @@ public class PluginUtil
 	 */
 	public static String getFormattedName(Plugin plugin, boolean includeVersions)
 	{
-		ChatColor color = plugin.isEnabled() ? ChatColor.GREEN : ChatColor.RED;
+		ChatColor color = plugin.isEnabled() ? ChatColor.GREEN : Info.COLOR_ERR;
 		String pluginName = color + plugin.getName();
 		if(includeVersions)
 			pluginName += " (" + plugin.getDescription().getVersion() + ")";

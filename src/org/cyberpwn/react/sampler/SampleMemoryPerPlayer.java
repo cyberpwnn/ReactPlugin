@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.PlayerCache;
@@ -62,6 +63,6 @@ public class SampleMemoryPerPlayer extends Sample
 	
 	public ChatColor color()
 	{
-		return ChatColor.RED;
+		return Info.COLOR_ERR;
 	}
 }

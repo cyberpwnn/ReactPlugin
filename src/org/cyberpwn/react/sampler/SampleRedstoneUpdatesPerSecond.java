@@ -7,6 +7,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
@@ -69,7 +70,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	
 	public ChatColor color()
 	{
-		return ChatColor.RED;
+		return Info.COLOR_ERR;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)

@@ -2,11 +2,11 @@ package org.cyberpwn.react.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.Failure;
 import org.cyberpwn.react.util.GList;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class FailureController extends Controller
 {
@@ -21,7 +21,7 @@ public class FailureController extends Controller
 	
 	public void fail(Exception e, String msg)
 	{
-		Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "React failed to execute an operation. This issue has been logged, and will be saved to a log eventually.");
+		Bukkit.getConsoleSender().sendMessage(Info.COLOR_ERR + "React failed to execute an operation. This issue has been logged, and will be saved to a log eventually.");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + e.toString());
 		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + msg);
 		
@@ -36,7 +36,7 @@ public class FailureController extends Controller
 				cnm = ChatColor.BLUE + i.getClassName();
 			}
 			
-			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + StringUtils.repeat(" ", ind) + "\\> " + ChatColor.LIGHT_PURPLE + cnm + ChatColor.RED + "." + ChatColor.AQUA + i.getMethodName() + ChatColor.GREEN + "(" + i.getLineNumber() + ")");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + StringUtils.repeat(" ", ind) + "\\> " + ChatColor.LIGHT_PURPLE + cnm + Info.COLOR_ERR + "." + ChatColor.AQUA + i.getMethodName() + ChatColor.GREEN + "(" + i.getLineNumber() + ")");
 			ind++;
 		}
 		
