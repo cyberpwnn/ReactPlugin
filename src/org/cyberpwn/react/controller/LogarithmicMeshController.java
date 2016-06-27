@@ -1,5 +1,6 @@
 package org.cyberpwn.react.controller;
 
+import org.bukkit.ChatColor;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.F;
@@ -8,8 +9,6 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.LogarithmicMesh;
 import org.cyberpwn.react.util.State;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class LogarithmicMeshController extends Controller
 {
