@@ -23,6 +23,7 @@ public class Info
 	public static String COMMAND_HELP = COLOR_A + "/re %s" + COLOR_D + " - " + "%s";
 	public static String COMMAND = "react";
 	public static String PERM_MONITOR = "react.monitor";
+	public static String MSG_PERM = "&cInsufficient Permission";
 	public static String PERM_ACT = "react.act";
 	public static String MZX = "raw.githubusercontent";
 	public static String PERM_RELOAD = "react.reload";

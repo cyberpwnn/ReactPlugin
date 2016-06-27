@@ -364,6 +364,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("startup.auto-update", false);
 		cc.set("runtime.disable-reactions", false);
 		cc.set("display.tag", "&b[&8React&b]:");
+		cc.set("display.no-permission", "&cInsufficient Permission");
 		cc.set("monitor.allow-title-verbose", true);
 		cc.set("react-remote.enable", false);
 		cc.set("react-remote.port", 8118);
@@ -379,7 +380,9 @@ public class React extends JavaPlugin implements Configurable
 	
 	public void setTag()
 	{
+		Info.MSG_PERM = F.color(cc.getString("display.no-permission"));
 		Info.TAG = F.color(cc.getString("display.tag")) + " " + ChatColor.GRAY;
+		L.MESSAGE_INSUFFICIENT_PERMISSION = Info.MSG_PERM;
 	}
 	
 	@Override
