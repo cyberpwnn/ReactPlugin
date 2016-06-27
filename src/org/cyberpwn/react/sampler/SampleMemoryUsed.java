@@ -124,7 +124,15 @@ public class SampleMemoryUsed extends Sample
 			return ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE + F.mem(getValue().getLong()) + " (" + F.pc(getValue().getLong(), (getMemoryMax() / 1024 / 1024)) + ")" + ChatColor.RESET;
 		}
 		
-		return F.mem(getValue().getLong()) + " (" + F.pc(getValue().getLong(), (getMemoryMax() / 1024 / 1024)) + ")";
+		if(acc)
+		{
+			return F.memx((long) (getMemoryUsed() / 1024));
+		}
+		
+		else
+		{
+			return F.mem(getValue().getLong()) + " (" + F.pc(getValue().getLong(), (getMemoryMax() / 1024 / 1024)) + ")";
+		}
 	}
 	
 	public ChatColor color()

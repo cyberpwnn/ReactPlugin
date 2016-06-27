@@ -70,7 +70,15 @@ public class SampleStability extends Sample
 	
 	public String formatted(boolean acc)
 	{
-		return F.pc(getValue().getDouble(), 1) + ChatColor.DARK_GREEN + " STABLE";
+		if(acc)
+		{
+			return F.pc(getValue().getDouble(), 3);
+		}
+		
+		else
+		{
+			return F.pc(getValue().getDouble(), 1) + ChatColor.DARK_GREEN + " STABLE";
+		}
 	}
 	
 	public ChatColor color()

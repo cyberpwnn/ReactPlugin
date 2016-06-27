@@ -14,7 +14,7 @@ import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Timer;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 public class ActionCollectGarbage extends Action implements Listener
 {

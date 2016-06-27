@@ -99,7 +99,15 @@ public class SampleReactionTime extends Sample
 	
 	public String formatted(boolean acc)
 	{
-		return F.fd(getValue().getDouble() / 1000000.0, 2) + "ms";
+		if(acc)
+		{
+			return F.fd(getValue().getDouble() / 1000000.0, 4) + "ms";
+		}
+		
+		else
+		{
+			return F.fd(getValue().getDouble() / 1000000.0, 2) + "ms";
+		}
 	}
 	
 	public ChatColor color()

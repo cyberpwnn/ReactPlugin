@@ -17,7 +17,7 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.VersionBukkit;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 public class ActionPurgeEntities extends Action implements Listener
 {

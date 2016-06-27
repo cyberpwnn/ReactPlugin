@@ -14,7 +14,7 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.ManualActionEvent;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 public class ActionPurgeDrops extends Action implements Listener
 {

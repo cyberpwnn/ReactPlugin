@@ -84,6 +84,31 @@ public class F
 		}
 	}
 	
+	public static String memx(long kb)
+	{
+		if(kb < 1024)
+		{
+			return fd(kb, 2) + " KB";
+		}
+		
+		else
+		{
+			double mb = (double)kb/1024.0;
+			
+			if(mb < 1024)
+			{
+				return fd(mb, 2) + " MB";
+			}
+			
+			else
+			{
+				double gb = (double)mb/1024.0;
+				
+				return fd(gb, 2) + " GB";
+			}
+		}
+	}
+	
 	public static String f(long i)
 	{
 		instantiate();

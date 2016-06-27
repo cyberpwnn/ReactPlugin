@@ -29,12 +29,12 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 	
 	public void onMetricsPlot(Graph graph)
 	{
-		graph.addPlotter(new Metrics.Plotter((getMetricsValue() / 10) + "0 MAH/S")
+		graph.addPlotter(new Metrics.Plotter("MAH/S")
 		{
 			@Override
 			public int getValue()
 			{
-				return 1;
+				return value.getInteger();
 			}
 		});
 	}
@@ -84,7 +84,15 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 	
 	public String formatted(boolean acc)
 	{
-		return F.f(getValue().getLong()) + ChatColor.YELLOW + " MAH/S";
+		if(acc)
+		{
+			return F.f(getValue().getLong()) + ChatColor.YELLOW + " MAH/S";
+		}
+		
+		else
+		{
+			return F.f(getValue().getLong()) + ChatColor.YELLOW + " MAH/S";
+		}
 	}
 	
 	public ChatColor color()

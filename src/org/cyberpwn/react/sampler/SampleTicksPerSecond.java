@@ -130,7 +130,15 @@ public class SampleTicksPerSecond extends Sample
 			return ChatColor.UNDERLINE + "" + ChatColor.BOLD + F.f(getValue().getDouble(), 1) + ChatColor.RESET + ChatColor.GREEN + " TPS" + k;
 		}
 		
-		return F.f(getValue().getDouble(), 1) + " TPS" + k;
+		if(acc)
+		{
+			return F.fd(getValue().getDouble(), 3) + k;
+		}
+		
+		else
+		{
+			return F.fd(getValue().getDouble(), 0) + " TPS" + k;
+		}
 	}
 	
 	public ChatColor color()

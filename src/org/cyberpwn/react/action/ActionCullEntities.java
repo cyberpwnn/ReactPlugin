@@ -25,7 +25,7 @@ import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 
 public class ActionCullEntities extends Action implements Listener
 {
