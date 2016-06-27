@@ -51,13 +51,14 @@ public class Info
 	
 	public static void splash()
 	{
-		m("__________  ___________    _____    _________   ___________");
-		m("\\______   \\ \\_   _____/   /  _  \\   \\_   ___ \\  \\__    ___/");
-		m(" |       _/  |    __)_   /  /_\\  \\  /    \\  \\/    |    |   ");
-		m(" |    |   \\  |        \\ /    |    \\ \\     \\____   |    |   ");
-		m(" |____|_  / /_______  / \\____|__  /  \\______  /   |____|   ");
-		m("        \\/          \\/          \\/          \\/             ");
-		m("React " + ChatColor.GREEN + "v" + VERSION_BLANK + "(" + Info.VERSION_CODE + ") " + ChatColor.LIGHT_PURPLE + ChatColor.LIGHT_PURPLE + React.instance().getControllers().size() + " Controllers, " + Info.COLOR_ERR + React.instance().getSampleController().getSamples().size() + " Samplers, " + ChatColor.YELLOW + React.instance().getActionController().getActions().size() + " Actions");
+		m(" ____                            __      ");
+		m("/\\  _`\\                         /\\ \\__   ");
+		m("\\ \\ \\L\\ \\  " + ChatColor.LIGHT_PURPLE + "   __     " + ChatColor.AQUA + "__     " + ChatColor.LIGHT_PURPLE + " ___" + ChatColor.AQUA + "\\ \\ ,_\\  " + ChatColor.GREEN + "Version " + VERSION_BLANK + "(" + Info.VERSION_CODE + ") ");
+		m(" \\ \\ ,  /   " + ChatColor.LIGHT_PURPLE + "/'__`\\ " + ChatColor.AQUA + "/'__`\\  " + ChatColor.LIGHT_PURPLE + " /'___" + ChatColor.AQUA + "\\ \\ \\/   " + ChatColor.LIGHT_PURPLE + React.instance().getControllers().size() + " Controllers");
+		m("  \\ \\ \\\\ \\ " + ChatColor.LIGHT_PURPLE + "/\\  __/" + ChatColor.AQUA + "/\\ \\L\\.\\_" + ChatColor.LIGHT_PURPLE + "/\\ \\__/" + ChatColor.AQUA + "\\ \\ \\_   " + Info.COLOR_ERR + React.instance().getSampleController().getSamples().size() + " Samplers");
+		m("   \\ \\_\\ \\_" + ChatColor.LIGHT_PURPLE + "\\ \\____" + ChatColor.AQUA + "\\ \\__/.\\_" + ChatColor.LIGHT_PURPLE + "\\ \\____\\" + ChatColor.AQUA + "\\ \\__\\   " + ChatColor.YELLOW + React.instance().getActionController().getActions().size() + " Actions");
+		m(ChatColor.DARK_AQUA + "    \\/_/\\/ /" + ChatColor.DARK_PURPLE + "\\/____/" + ChatColor.DARK_AQUA + "\\/__/\\/_/" + ChatColor.DARK_PURPLE + "\\/____/ " + ChatColor.DARK_AQUA + "\\/__/");
+		//That was fucking hard.
 	}
 	
 	public static void m(String s)
