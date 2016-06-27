@@ -2,14 +2,13 @@ package org.cyberpwn.react.controller;
 
 import java.io.File;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.GMap;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class ConfigurationController extends Controller
 {
