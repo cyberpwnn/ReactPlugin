@@ -910,7 +910,7 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			public void run()
 			{
-				React.instance().getUpdateController().update();
+				React.instance().getUpdateController().update(getSender());
 			}
 		}, L.COMMAND_UPDATE, "update", "u", "up"));
 		
