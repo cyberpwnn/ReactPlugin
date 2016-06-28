@@ -1,6 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -38,6 +39,21 @@ public class WorldController extends Controller
 				}
 			}
 		};
+	}
+	
+	public boolean canStack(World w)
+	{
+		return !worlds.get(w).getConfiguration().getBoolean("entities.disable-stacking");
+	}
+	
+	public boolean canTouch(Entity e)
+	{
+		if(worlds.get(e.getWorld()).getConfiguration().getStringList("entities.assume-no-side-effects").contains(e.getType().toString()))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 	
 	public void tick()

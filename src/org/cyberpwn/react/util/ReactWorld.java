@@ -37,6 +37,8 @@ public class ReactWorld implements Configurable, Listener
 	@Override
 	public void onNewConfig()
 	{
+		GList<String> entx = new GList<String>().qadd("ARMOR_STAND").qadd("EXPERIENCE_ORB");
+		
 		cc.set("physics.fast-decay", false);
 		cc.set("physics.fast-fall", false);
 		cc.set("save.auto-save", false);
@@ -47,6 +49,8 @@ public class ReactWorld implements Configurable, Listener
 		cc.set("save.before-save.cull-entities", true);
 		cc.set("save.conditions.save-after-gc", true);
 		cc.set("save.conditions.save-while-lagging", true);
+		cc.set("entities.assume-no-side-effects", entx);
+		cc.set("entities.disable-stacking", false);
 	}
 	
 	public long sinceLastSave()

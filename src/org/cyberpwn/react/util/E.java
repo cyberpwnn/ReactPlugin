@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
+import org.cyberpwn.react.React;
 
 public class E
 {
@@ -103,6 +104,11 @@ public class E
 		}
 		
 		if(e.getType().toString().equals("ARMOR_STAND"))
+		{
+			return;
+		}
+		
+		if(!React.instance().getWorldController().canTouch(e))
 		{
 			return;
 		}

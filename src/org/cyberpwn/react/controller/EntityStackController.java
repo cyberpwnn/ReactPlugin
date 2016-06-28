@@ -53,6 +53,11 @@ public class EntityStackController extends Controller implements Configurable
 			return false;
 		}
 		
+		if(!getReact().getWorldController().canStack(e.getWorld()))
+		{
+			return false;
+		}
+		
 		if(cc.getBoolean("stacker.ignore.named-entities"))
 		{
 			if(e.getCustomName() != null)
@@ -102,6 +107,11 @@ public class EntityStackController extends Controller implements Configurable
 		}
 		
 		if(i.getType().toString().equals("ARMOR_STAND"))
+		{
+			return false;
+		}
+		
+		if(!React.instance().getWorldController().canTouch(e))
 		{
 			return false;
 		}
@@ -204,10 +214,9 @@ public class EntityStackController extends Controller implements Configurable
 			if(i instanceof LivingEntity)
 			{
 				LivingEntity x = (LivingEntity) i;
-				
-				if(isStacked(x) && canTouch(x))
+								
+				if(isStacked(x))
 				{
-					x.setCustomName(null);
 					stacks.remove(x.getEntityId());
 				}
 			}
@@ -231,13 +240,13 @@ public class EntityStackController extends Controller implements Configurable
 				if(stacks.get(e.getEntity().getEntityId()) > 1)
 				{
 					e.getEntity().setHealth(e.getEntity().getMaxHealth());
-					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 				}
 				
 				else if(stacks.get(e.getEntity().getEntityId()) > 0)
 				{
 					e.getEntity().setHealth(e.getEntity().getMaxHealth());
-					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 					stacks.remove(e.getEntity().getEntityId());
 				}
 				
@@ -245,7 +254,7 @@ public class EntityStackController extends Controller implements Configurable
 				{
 					stacks.remove(e.getEntity().getEntityId());
 					e.getEntity().remove();
-					((ExperienceOrb)e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 				}
 				
 				update(e.getEntity());

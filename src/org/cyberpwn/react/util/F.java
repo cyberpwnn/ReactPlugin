@@ -2,6 +2,7 @@ package org.cyberpwn.react.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 
 public class F
 {
@@ -12,7 +13,7 @@ public class F
 	{
 		if(NF == null)
 		{
-			NF = NumberFormat.getInstance();
+			NF = NumberFormat.getInstance(Locale.US);
 		}
 	}
 	
