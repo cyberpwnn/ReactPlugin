@@ -33,6 +33,7 @@ public class UpdateController extends Controller implements Configurable
 	private File tempFile;
 	private File tempFolder;
 	private FileConfiguration fc;
+	private boolean updated;
 	private static boolean needsRestart;
 	
 	public UpdateController(React react)
@@ -42,6 +43,7 @@ public class UpdateController extends Controller implements Configurable
 		needsRestart = false;
 		cc = new ClusterConfig();
 		failed = false;
+		updated = false;
 		updateFolder = new File(React.instance().getDataFolder().getParentFile(), "update");
 		updateJarFile = new File(updateFolder, PluginUtil.getPluginFileName("React"));
 		tempFolder = new File(React.instance().getDataFolder(), "temp");
@@ -79,6 +81,12 @@ public class UpdateController extends Controller implements Configurable
 								return;
 							}
 							
+							if(updated)
+							{
+								cancel();
+								return;
+							}
+							
 							try
 							{
 								getData(new FCCallback()
@@ -94,7 +102,7 @@ public class UpdateController extends Controller implements Configurable
 												s("Cleaning Files");
 												cleanup();
 												s("Downloading Update");
-												update();
+												update(null);
 											}
 										}
 									}
@@ -120,6 +128,7 @@ public class UpdateController extends Controller implements Configurable
 		cc.set("update-checking.interval-seconds", 30);
 		cc.set("updater.auto-update.enabled", false);
 		cc.set("updater.allow-update-command", true);
+		cc.set("updater.only-update-on-reboot", true);
 	}
 	
 	@Override
@@ -178,21 +187,39 @@ public class UpdateController extends Controller implements Configurable
 		tempFolder.delete();
 	}
 	
-	public void update()
+	public void update(final CommandSender sender)
 	{
-		cleanup();
+		if(sender != null)
+		{
+			sender.sendMessage(Info.TAG + ChatColor.GREEN + "Checking Metadata...");
+		}
 		
 		getUpdate(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				decode();
+				if(sender != null)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Reading...");
+					
+					if(cc.getBoolean("updater.only-update-on-reboot") && updated)
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "You already have the latest version downloaded. You need to reboot/reload to apply the update.");
+					}
+				}
+				
+				if(cc.getBoolean("updater.only-update-on-reboot") && updated)
+				{
+					return;
+				}
+				
+				decode(sender);
 			}
 		});
 	}
 	
-	public void decode()
+	public void decode(final CommandSender sender)
 	{
 		updateJarFile.delete();
 		
@@ -215,6 +242,11 @@ public class UpdateController extends Controller implements Configurable
 							
 							if(fc.getInt("package.version-code") <= Version.C)
 							{
+								if(sender != null)
+								{
+									sender.sendMessage(Info.TAG + ChatColor.RED + "You already have the latest version!");
+								}
+								
 								return;
 							}
 							
@@ -226,29 +258,39 @@ public class UpdateController extends Controller implements Configurable
 								broadcast(Info.TAG + ChatColor.GREEN + " > " + i);
 							}
 							
-							broadcast(Info.HR);
+							updated = true;
 							
-							new TaskLater(0)
+							if(cc.getBoolean("updater.only-update-on-reboot"))
 							{
-								public void run()
+								broadcast(Info.TAG + ChatColor.RED + "You need to reboot/reload to apply the update.");
+							}
+							
+							else
+							{
+								new TaskLater(0)
 								{
-									for(Controllable i : getReact().getControllers())
+									public void run()
 									{
-										try
+										for(Controllable i : getReact().getControllers())
 										{
-											i.stop();
+											try
+											{
+												i.stop();
+											}
+											
+											catch(Exception e)
+											{
+												
+											}
 										}
 										
-										catch(Exception e)
-										{
-											
-										}
+										getReact().getControllers().clear();
+										PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
 									}
-									
-									getReact().getControllers().clear();
-									PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
-								}
-							};
+								};
+								
+								broadcast(Info.HR);
+							}
 						}
 					});
 				}
@@ -322,6 +364,11 @@ public class UpdateController extends Controller implements Configurable
 				else
 				{
 					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Update Found (v" + v + ")");
+					
+					if(cc.getBoolean("updater.only-update-on-reboot") && updated)
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "You already have this version downloaded. You need to reboot/reload to apply the update.");
+					}
 					
 					for(String i : s)
 					{
