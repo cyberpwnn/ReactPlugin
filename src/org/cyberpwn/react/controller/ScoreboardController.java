@@ -110,6 +110,13 @@ public class ScoreboardController extends Controller
 		
 		else
 		{
+			if(!p.hasPermission(Info.PERM_MONITOR))
+			{
+				p.sendMessage(Info.TAG + ChatColor.RED + Info.MSG_PERM);
+				
+				return;
+			}
+			
 			monitors.put(p, new GBiset<Integer, Integer>(0, 0));
 			p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SCOREBOARD_ENABLED);
 		}
