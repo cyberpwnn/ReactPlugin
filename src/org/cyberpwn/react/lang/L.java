@@ -155,6 +155,7 @@ public class L
 	public static String MESSAGE_SCOREBOARD_ENABLED = "Scoreboard Monitoring Enabled";
 	
 	public static String COMMAND_CLIENT = "View information on connected react clients.";
+	public static String COMMAND_SCOREBOARD = "View monitoring information via scoreboard.";
 	public static String COMMAND_VERBOSE = "Turn on verbose information ingame/console";
 	public static String COMMAND_DUMP = "Dump information to a file for review";
 	public static String COMMAND_PING = "Shows highest ping, lowest, and yours.";

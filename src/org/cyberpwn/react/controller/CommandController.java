@@ -657,21 +657,21 @@ public class CommandController extends Controller implements CommandExecutor
 			}
 		}, L.COMMAND_CLIENT, "client", "net", "clients"));
 		
-		// commands.add(new ReactCommand(new CommandRunnable()
-		// {
-		// public void run()
-		// {
-		// if(isPlayer())
-		// {
-		// getReact().getScoreboardController().toggleMonitoring(getPlayer());
-		// }
-		//
-		// else
-		// {
-		// //TODO Not a player
-		// }
-		// }
-		// }, L.COMMAND_CLIENT, "sc"));
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
+				if(isPlayer())
+				{
+					getReact().getScoreboardController().toggleMonitoring(getPlayer());
+				}
+				
+				else
+				{
+					getSender().sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_PLAYER_ONLY);
+				}
+			}
+		}, L.COMMAND_SCOREBOARD, "scoreboard", "sc", "board", "sboard"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
