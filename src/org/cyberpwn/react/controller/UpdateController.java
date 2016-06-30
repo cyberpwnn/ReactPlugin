@@ -126,7 +126,7 @@ public class UpdateController extends Controller implements Configurable
 	{
 		cc.set("update-checking.enabled", true);
 		cc.set("update-checking.interval-seconds", 30);
-		cc.set("updater.auto-update.enabled", false);
+		cc.set("updater.auto-update.enabled", true);
 		cc.set("updater.allow-update-command", true);
 		cc.set("updater.only-update-on-reboot", true);
 	}

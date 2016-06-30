@@ -21,6 +21,7 @@ import org.cyberpwn.react.controller.PacketController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TimingsController;
 import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
@@ -33,6 +34,7 @@ import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
+import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.JavaPlugin;
@@ -42,7 +44,6 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
-import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 
@@ -92,6 +93,7 @@ public class React extends JavaPlugin implements Configurable
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 	private TimingsController timingsController;
+	private ScoreboardController scoreboardController;
 	private Dispatcher d;
 	private Metrics metrics;
 	private int saved;
@@ -167,6 +169,7 @@ public class React extends JavaPlugin implements Configurable
 		sampleController = new SampleController(this);
 		playerController = new PlayerController(this);
 		monitorController = new MonitorController(this);
+		scoreboardController = new ScoreboardController(this);
 		commandController = new CommandController(this);
 		actionController = new ActionController(this);
 		networkController = new NetworkController(this);
@@ -898,5 +901,35 @@ public class React extends JavaPlugin implements Configurable
 	public EntityStackController getEntityStackController()
 	{
 		return entityStackController;
+	}
+
+	public ScoreboardController getScoreboardController()
+	{
+		return scoreboardController;
+	}
+
+	public void setScoreboardController(ScoreboardController scoreboardController)
+	{
+		this.scoreboardController = scoreboardController;
+	}
+
+	public void setJustUpdated(boolean justUpdated)
+	{
+		this.justUpdated = justUpdated;
+	}
+
+	public void setUpdateController(UpdateController updateController)
+	{
+		this.updateController = updateController;
+	}
+
+	public void setEntityStackController(EntityStackController entityStackController)
+	{
+		this.entityStackController = entityStackController;
+	}
+
+	public void setPacketController(PacketController packetController)
+	{
+		this.packetController = packetController;
 	}
 }

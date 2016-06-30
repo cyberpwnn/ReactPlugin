@@ -39,8 +39,8 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
-import org.cyberpwn.react.util.MonitorScreen;
 import org.cyberpwn.react.util.PlayerData;
+import org.cyberpwn.react.util.ScreenMonitor;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
@@ -52,7 +52,7 @@ public class MonitorController extends Controller implements Configurable
 	private GMap<Player, Integer> locks;
 	private Integer delay;
 	private Integer currentDelay;
-	private MonitorScreen ms;
+	private ScreenMonitor ms;
 	private ClusterConfig cc;
 	private GMap<Player, MapGraph> mappers;
 	private Integer mTick;
@@ -79,7 +79,7 @@ public class MonitorController extends Controller implements Configurable
 		overflow = 0;
 		dispTicks = 100;
 		dTick = false;
-		ms = new MonitorScreen(react);
+		ms = new ScreenMonitor(react);
 		delay = 0;
 		mTick = 0;
 		mapPause = new GList<Player>();
@@ -107,6 +107,8 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void tick()
 	{
+		getReact().getScoreboardController().dispatch();
+		
 		dispTicks--;
 		
 		if(dispTicks <= 0)
@@ -924,12 +926,12 @@ public class MonitorController extends Controller implements Configurable
 		this.currentDelay = currentDelay;
 	}
 	
-	public MonitorScreen getMs()
+	public ScreenMonitor getMs()
 	{
 		return ms;
 	}
 	
-	public void setMs(MonitorScreen ms)
+	public void setMs(ScreenMonitor ms)
 	{
 		this.ms = ms;
 	}
@@ -1012,5 +1014,55 @@ public class MonitorController extends Controller implements Configurable
 	public void setPacketed(GMap<Player, Integer> packeted)
 	{
 		this.packeted = packeted;
+	}
+
+	public GMap<Player, Integer> getLocks()
+	{
+		return locks;
+	}
+
+	public void setLocks(GMap<Player, Integer> locks)
+	{
+		this.locks = locks;
+	}
+
+	public int getLevel()
+	{
+		return level;
+	}
+
+	public void setLevel(int level)
+	{
+		this.level = level;
+	}
+
+	public int getmLevel()
+	{
+		return mLevel;
+	}
+
+	public void setmLevel(int mLevel)
+	{
+		this.mLevel = mLevel;
+	}
+
+	public int getOverflow()
+	{
+		return overflow;
+	}
+
+	public void setOverflow(int overflow)
+	{
+		this.overflow = overflow;
+	}
+
+	public PlayerController getPc()
+	{
+		return pc;
+	}
+
+	public void setPc(PlayerController pc)
+	{
+		this.pc = pc;
 	}
 }

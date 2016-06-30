@@ -331,7 +331,7 @@ public class CommandController extends Controller implements CommandExecutor
 									{
 										if(j.equalsIgnoreCase(k))
 										{
-											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+											sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
 											break;
 										}
 									}
@@ -390,7 +390,7 @@ public class CommandController extends Controller implements CommandExecutor
 													sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
 												}
 											}
-											
+												
 											catch(Exception e)
 											{
 												sender.sendMessage(ChatColor.GREEN + "$ Failed. Unsupported Data For the specified data type.");
@@ -411,7 +411,7 @@ public class CommandController extends Controller implements CommandExecutor
 							sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
 						}
 					}
-					
+											
 					else
 					{
 						if(args[2].equalsIgnoreCase("-list") || args[2].equalsIgnoreCase("-get"))
@@ -422,7 +422,7 @@ public class CommandController extends Controller implements CommandExecutor
 								{
 									for(String j : getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().k())
 									{
-										sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA +  getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
+										sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + "/" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getKey() + ": " + ChatColor.YELLOW + "(" + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().get(j).getType().toString() + ") " + ChatColor.AQUA + getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getAbstract(j));
 									}
 									
 									break;
@@ -449,7 +449,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, "Directly manipulate config values without gui access.", "cfs"));
-		
+					
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -638,7 +638,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_QUERY, "query", "q"));
-				
+					
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -656,6 +656,22 @@ public class CommandController extends Controller implements CommandExecutor
 				sender.sendMessage(Info.HR);
 			}
 		}, L.COMMAND_CLIENT, "client", "net", "clients"));
+		
+		// commands.add(new ReactCommand(new CommandRunnable()
+		// {
+		// public void run()
+		// {
+		// if(isPlayer())
+		// {
+		// getReact().getScoreboardController().toggleMonitoring(getPlayer());
+		// }
+		//
+		// else
+		// {
+		// //TODO Not a player
+		// }
+		// }
+		// }, L.COMMAND_CLIENT, "sc"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -796,7 +812,7 @@ public class CommandController extends Controller implements CommandExecutor
 						p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_BOOK);
 					}
 				}
-				
+					
 				else
 				{
 					if(getArgs().length == 2)
@@ -825,7 +841,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_TIMINGS, "timings", "t", "tim"));
-				
+					
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -845,7 +861,7 @@ public class CommandController extends Controller implements CommandExecutor
 						sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Cannot find player.");
 					}
 				}
-				
+					
 				else
 				{
 					sender.sendMessage(String.format(Info.HRN, "Pong"));
@@ -905,7 +921,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_PING, "ping", "pong", "png"));
-				
+					
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()

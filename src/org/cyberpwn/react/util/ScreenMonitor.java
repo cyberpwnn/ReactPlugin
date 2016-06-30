@@ -6,15 +6,17 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.nms.Title;
 import org.cyberpwn.react.sampler.Samplable;
 
-public class MonitorScreen
+public class ScreenMonitor
 {
 	private GMap<Samplable, GBiset<GList<Samplable>, Integer>> elements;
 	private GList<Player> usingDisp;
 	private final React react;
+	private static ScreenMonitor ins;
 	
-	public MonitorScreen(React react)
+	public ScreenMonitor(React react)
 	{
 		this.react = react;
+		ins = this;
 		this.usingDisp = new GList<Player>();
 		elements = new GMap<Samplable, GBiset<GList<Samplable>, Integer>>();
 		
@@ -23,6 +25,11 @@ public class MonitorScreen
 		elements.put(this.react.getSampleController().getSampleChunksLoaded(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleChunkLoadPerSecond()).qadd(this.react.getSampleController().getSampleRedstoneUpdatesPerSecond()).qadd(this.react.getSampleController().getSampleMemoryPerPlayer()), 2));
 		elements.put(this.react.getSampleController().getSamplePHEntities(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleDrops()).qadd(this.react.getSampleController().getSampleEntities()), 3));
 		elements.put(this.react.getSampleController().getSamplePHTimings(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleTimings()), 4));
+	}
+	
+	public static GMap<Samplable, GBiset<GList<Samplable>, Integer>> elements()
+	{
+		return ins.elements;
 	}
 	
 	public void toggleDisp(Player p)
