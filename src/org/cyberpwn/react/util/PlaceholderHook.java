@@ -56,6 +56,11 @@ public class PlaceholderHook extends EZPlaceholderHook implements Configurable
 			{
 				return String.valueOf(F.f(i.get().getDouble(), 0));
 			}
+			
+			if(identifier.equals(c.getCodeName().replace('-', '_') + "_formatted"))
+			{
+				return String.valueOf(i.formatted(false));
+			}
 		}
 		
 		if(identifier.equals("current_issues"))
@@ -116,6 +121,7 @@ public class PlaceholderHook extends EZPlaceholderHook implements Configurable
 			Configurable c = (Configurable) i;
 			placeholders.add("react_" + c.getCodeName().replace('-', '_'));
 			placeholders.add("react_" + c.getCodeName().replace('-', '_') + "_rounded");
+			placeholders.add("react_" + c.getCodeName().replace('-', '_') + "_formatted");
 		}
 		
 		placeholders.add("react_current_issues");
