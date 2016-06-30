@@ -46,6 +46,8 @@ import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
+import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.ReactCommand;
 import org.cyberpwn.react.util.Verbose;
 
@@ -274,6 +276,99 @@ public class CommandController extends Controller implements CommandExecutor
 				new Configurator(getPlayer());
 			}
 		}, "Configure React ingame via inventory gui's", "configure", "config", "conf"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
+				if(isPlayer())
+				{
+					RawText a = new RawText();
+					RawText g = new RawText();
+					Player p = getPlayer();
+					GList<String> allowed = new GList<String>(InstabilityCause.ign());
+					GList<String> ignored = getReact().getPlayerController().gpd(getPlayer()).getIgnored();
+					allowed.remove(ignored);
+					
+					for(int i = 0; i < 14; i++)
+					{
+						p.sendMessage(" ");
+					}
+					
+					p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Hover & Click to interact.");
+					
+					if(getArgs().length == 2)
+					{
+						String tg = getArgs()[1];
+						
+						if(allowed.contains(tg))
+						{
+							PlayerData pd = getReact().getPlayerController().gpd(getPlayer());
+							pd.getIgnored().add(tg);
+							getReact().getPlayerController().spd(p, pd);
+							getReact().getPlayerController().save(p);
+							allowed = new GList<String>(InstabilityCause.ign());
+							ignored = getReact().getPlayerController().gpd(getPlayer()).getIgnored();
+							allowed.remove(ignored);
+						}
+						
+						else if(ignored.contains(tg))
+						{
+							PlayerData pd = getReact().getPlayerController().gpd(getPlayer());
+							pd.getIgnored().remove(tg);
+							getReact().getPlayerController().spd(p, pd);
+							getReact().getPlayerController().save(p);
+							allowed = new GList<String>(InstabilityCause.ign());
+							ignored = getReact().getPlayerController().gpd(getPlayer()).getIgnored();
+							allowed.remove(ignored);
+						}
+					}
+					
+					for(String i : allowed)
+					{
+						a.addTextWithHoverCommand(i, RawText.COLOR_GREEN, "/re ignore " + i, "Click to ignore " + InstabilityCause.valueOf(i).getName(), RawText.COLOR_RED);
+						a.addText("  ");
+					}
+					
+					for(String i : ignored)
+					{
+						g.addTextWithHoverCommand(i, RawText.COLOR_RED, "/re ignore " + i, "Click to allow " + InstabilityCause.valueOf(i).getName(), RawText.COLOR_GREEN);
+						g.addText("  ");
+					}
+					
+					p.sendMessage(String.format(Info.HRN, "Allowed"));
+					
+					if(allowed.isEmpty())
+					{
+						p.sendMessage(Info.TAG + ChatColor.GREEN + "No allowed instability messages.");
+					}
+					
+					else
+					{
+						a.tellRawTo(getReact(), p);
+					}
+					
+					p.sendMessage(String.format(Info.HRN, "Ignored"));
+					
+					if(ignored.isEmpty())
+					{
+						p.sendMessage(Info.TAG + ChatColor.RED + "No ignored instability messages.");
+					}
+					
+					else
+					{
+						g.tellRawTo(getReact(), p);
+					}
+					
+					p.sendMessage(Info.HR);
+				}
+				
+				else
+				{
+					getSender().sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_PLAYER_ONLY);
+				}
+			}
+		}, "Ignore instability messages", "ignore", "ign"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{

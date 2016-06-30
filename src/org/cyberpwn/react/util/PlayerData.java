@@ -13,6 +13,7 @@ public class PlayerData implements Configurable
 	private Boolean monitoring;
 	private Boolean lockedTab;
 	private Boolean mapping;
+	private GList<String> ignored;
 	
 	public PlayerData(UUID uuid)
 	{
@@ -22,6 +23,7 @@ public class PlayerData implements Configurable
 		this.monitoring = false;
 		this.lockedTab = false;
 		this.mapping = false;
+		this.ignored = new GList<String>();
 	}
 	
 	@Override
@@ -32,6 +34,7 @@ public class PlayerData implements Configurable
 		cc.set("monitor.options.monitoring.current", monitoringTab);
 		cc.set("monitor.options.monitoring.locked", lockedTab);
 		cc.set("monitor.options.mapping.enabled", mapping);
+		cc.set("monitor.ignore", ignored);
 	}
 	
 	@Override
@@ -42,6 +45,7 @@ public class PlayerData implements Configurable
 		monitoring = cc.getBoolean("monitor.options.monitoring.enabled");
 		lockedTab = cc.getBoolean("monitor.options.monitoring.locked");
 		mapping = cc.getBoolean("monitor.options.mapping.enabled");
+		ignored = cc.getStringList("monitor.ignore");
 	}
 	
 	@Override
@@ -129,5 +133,10 @@ public class PlayerData implements Configurable
 	public void setUuid(UUID uuid)
 	{
 		this.uuid = uuid;
+	}
+
+	public GList<String> getIgnored()
+	{
+		return ignored;
 	}
 }

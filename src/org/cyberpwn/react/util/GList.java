@@ -71,6 +71,14 @@ public class GList<T> extends ArrayList<T>
 		return v;
 	}
 	
+	public void remove(GList<T> tx)
+	{
+		for(T i : tx)
+		{
+			remove(i);
+		}
+	}
+	
 	@SuppressWarnings("unchecked")
 	public GList(String strings)
 	{

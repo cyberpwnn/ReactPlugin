@@ -1,5 +1,6 @@
 package org.cyberpwn.react;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
@@ -640,7 +641,9 @@ public class React extends JavaPlugin implements Configurable
 	
 	public GTime getUptime()
 	{
-		return new GTime(M.ms() - start);
+		File f = new File(getDataFolder().getParentFile().getParentFile(), "server.properties");
+		
+		return new GTime(M.ms() - f.lastModified());
 	}
 	
 	public static boolean isMef()

@@ -106,12 +106,17 @@ public class ActionInstabilityCause extends Action
 				{
 					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
 					{
+						if(getActionController().getReact().getPlayerController().exists(j) && getActionController().getReact().getPlayerController().gpd(j).getIgnored().contains(i.toString()))
+						{
+							continue;
+						}
+						
 						j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
 					}
 				}
 			}
 		}
-				
+		
 		final SampleController s = getActionController().getReact().getSampleController();
 		Long memoryMax = s.getSampleMemoryUsed().getMemoryMax();
 		Long memoryUsed = s.getSampleMemoryUsed().getValue().getLong();
@@ -244,6 +249,11 @@ public class ActionInstabilityCause extends Action
 									{
 										if(j.hasPermission(Info.PERM_MONITOR))
 										{
+											if(getActionController().getReact().getPlayerController().exists(j) && getActionController().getReact().getPlayerController().gpd(j).getIgnored().contains(InstabilityCause.REDSTONE))
+											{
+												continue;
+											}
+											
 											j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + Info.COLOR_ERR + " Applying Force.");
 										}
 									}
@@ -271,6 +281,11 @@ public class ActionInstabilityCause extends Action
 											{
 												if(j.hasPermission(Info.PERM_MONITOR))
 												{
+													if(getActionController().getReact().getPlayerController().exists(j) && getActionController().getReact().getPlayerController().gpd(j).getIgnored().contains(InstabilityCause.REDSTONE))
+													{
+														continue;
+													}
+													
 													j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + Info.COLOR_ERR + " Applying Force.");
 												}
 											}
@@ -370,6 +385,11 @@ public class ActionInstabilityCause extends Action
 				{
 					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
 					{
+						if(getActionController().getReact().getPlayerController().exists(j) && getActionController().getReact().getPlayerController().gpd(j).getIgnored().contains(i.toString()))
+						{
+							continue;
+						}
+						
 						if(i.equals(InstabilityCause.REDSTONE))
 						{
 							Chunk c = actionController.getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk();

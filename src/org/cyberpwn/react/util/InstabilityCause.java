@@ -44,4 +44,19 @@ public enum InstabilityCause
 	{
 		return talkative;
 	}
+	
+	public static String[] ign()
+	{
+		GList<String> k = new GList<String>();
+		
+		for(InstabilityCause i : InstabilityCause.values())
+		{
+			if(i.isTalkative())
+			{
+				k.add(i.toString());
+			}
+		}
+		
+		return k.toArray(new String[k.size()]);
+	}
 }
