@@ -1,6 +1,7 @@
 package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.util.Default;
@@ -28,7 +29,7 @@ public class NMS17 implements AbstractNMS
 			Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitversion + ".entity.CraftPlayer");
 			Object handle = craftPlayer.getMethod("getHandle").invoke(player);
 			Integer ping = (Integer) handle.getClass().getDeclaredField("ping").get(handle);
-
+			
 			return ping.intValue();
 		}
 		
@@ -107,6 +108,12 @@ public class NMS17 implements AbstractNMS
 	
 	@Override
 	public void clearTitle(Player player)
+	{
+		
+	}
+	
+	@Override
+	public void relight(Location location)
 	{
 		
 	}

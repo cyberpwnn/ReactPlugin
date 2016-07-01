@@ -1,5 +1,6 @@
 package org.cyberpwn.react.nms;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -14,6 +15,8 @@ public interface AbstractNMS
 	 * @return true if it is capable of executing packets.
 	 */
 	boolean isCapable(String version);
+	
+	void relight(Location location);
 	
 	/**
 	 * If the current version is capable of working with the current version

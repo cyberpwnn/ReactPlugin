@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.util.Vector;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ReactAPI;
@@ -51,6 +52,7 @@ public class ReactWorld implements Configurable, Listener
 		cc.set("save.conditions.save-while-lagging", true);
 		cc.set("entities.assume-no-side-effects", entx);
 		cc.set("entities.disable-stacking", false);
+		cc.set("chunks.prevent-new-chunks", false);
 	}
 	
 	public long sinceLastSave()
@@ -149,6 +151,15 @@ public class ReactWorld implements Configurable, Listener
 	public String getCodeName()
 	{
 		return world.getName() + "-settings";
+	}
+	
+	@EventHandler
+	public void onChunk(ChunkLoadEvent e)
+	{
+		if(e.isNewChunk() && cc.getBoolean("chunks.prevent-new-chunks"))
+		{
+			e.getChunk().unload(false, false);
+		}
 	}
 	
 	@EventHandler

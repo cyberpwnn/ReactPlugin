@@ -2,11 +2,14 @@ package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_9_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.util.Default;
 
+import net.minecraft.server.v1_9_R2.BlockPosition;
 import net.minecraft.server.v1_9_R2.IChatBaseComponent;
 import net.minecraft.server.v1_9_R2.Packet;
 import net.minecraft.server.v1_9_R2.PacketPlayOutChat;
@@ -36,7 +39,7 @@ public class NMS194 implements AbstractNMS
 			Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitversion + ".entity.CraftPlayer");
 			Object handle = craftPlayer.getMethod("getHandle").invoke(player);
 			Integer ping = (Integer) handle.getClass().getDeclaredField("ping").get(handle);
-
+			
 			return ping.intValue();
 		}
 		
@@ -134,5 +137,11 @@ public class NMS194 implements AbstractNMS
 	public void clearTitle(Player player)
 	{
 		packetTitle(player, " ", " ", 20, 10, 20);
+	}
+	
+	@Override
+	public void relight(Location location)
+	{
+		((CraftWorld) location.getWorld()).getHandle().w(new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
 	}
 }

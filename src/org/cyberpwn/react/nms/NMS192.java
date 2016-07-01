@@ -2,11 +2,14 @@ package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.util.Default;
 
+import net.minecraft.server.v1_9_R1.BlockPosition;
 import net.minecraft.server.v1_9_R1.IChatBaseComponent;
 import net.minecraft.server.v1_9_R1.Packet;
 import net.minecraft.server.v1_9_R1.PacketPlayOutChat;
@@ -134,5 +137,11 @@ public class NMS192 implements AbstractNMS
 	public void clearTitle(Player player)
 	{
 		packetTitle(player, " ", " ", 20, 10, 20);
+	}
+	
+	@Override
+	public void relight(Location location)
+	{
+		((CraftWorld) location.getWorld()).getHandle().w(new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
 	}
 }

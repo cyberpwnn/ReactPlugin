@@ -37,7 +37,15 @@ public class PlayerController extends Controller
 	
 	public boolean exists(Player p)
 	{
-		return new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml").exists();
+		try
+		{
+			return new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml").exists();
+		}
+		
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 	
 	public PlayerData gpd(Player p)

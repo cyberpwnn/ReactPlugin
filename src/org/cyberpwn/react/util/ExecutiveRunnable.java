@@ -7,6 +7,7 @@ public class ExecutiveRunnable<T> implements Runnable
 	public void run(T next)
 	{
 		this.next = next;
+		run();
 	}
 	
 	@Override

@@ -8,7 +8,12 @@ public class ExecutiveIterator<T>
 	
 	public ExecutiveIterator(final Long lim, GList<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
 	{
-		this.it = data.iterator();
+		this(lim, data.iterator(), runnable, finish);
+	}
+	
+	public ExecutiveIterator(final Long lim, Iterator<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
+	{
+		this.it = data;
 		
 		new Task(0)
 		{

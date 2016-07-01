@@ -1,6 +1,7 @@
 package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 
@@ -47,6 +48,11 @@ public class PacketUtil
 		{
 			React.fail(e, "Failed to send title packet to player:" + player.getName() + "stay: " + stay + " in:" + in + " out:" + out + " >> " + title + " <> " + subTitle);
 		}
+	}
+	
+	public static void relight(Location location)
+	{
+		NMS.instance().relight(location);
 	}
 	
 	public static void clearTitle(Player player)
