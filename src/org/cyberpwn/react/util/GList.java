@@ -216,6 +216,11 @@ public class GList<T> extends ArrayList<T>
 		}
 	}
 	
+	public void addFirst(T t)
+	{
+		add(0, t);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void add(T... array)
 	{

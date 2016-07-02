@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -22,5 +23,23 @@ public class W
 		}
 		
 		return null;
+	}
+	
+	public static GList<Chunk> crad(Chunk c, int rad)
+	{
+		GList<Chunk> cx = new GList<Chunk>();
+		
+		for(int i = c.getX() - rad; i < c.getX() + rad; i++)
+		{
+			for(int j = c.getZ() - rad; j < c.getZ() + rad; j++)
+			{
+				if(c.getWorld().isChunkLoaded(i, j))
+				{
+					cx.add(c.getWorld().getChunkAt(i, j));
+				}
+			}
+		}
+		
+		return cx.qadd(c);
 	}
 }

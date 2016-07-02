@@ -1,5 +1,6 @@
 package org.cyberpwn.react.sampler;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,17 @@ public class SampleChunksLoaded extends Sample implements Listener
 	
 	public void onTick()
 	{
-		
+		if(getValue().getInteger() < 0)
+		{
+			int k = 0;
+			
+			for(World i : Bukkit.getWorlds())
+			{
+				k += i.getLoadedChunks().length;
+			}
+			
+			getValue().setNumber(k);
+		}
 	}
 	
 	public void onStart()

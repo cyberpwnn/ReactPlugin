@@ -16,6 +16,7 @@ import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EntityStackController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
+import org.cyberpwn.react.controller.PhotonController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PacketController;
@@ -89,6 +90,7 @@ public class React extends JavaPlugin implements Configurable
 	private EntityStackController entityStackController;
 	private WorldController worldController;
 	private FailureController failureController;
+	private PhotonController photonController;
 	public static String nonce = "%%__NONCE__%%";
 	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
@@ -178,11 +180,13 @@ public class React extends JavaPlugin implements Configurable
 		timingsController = new TimingsController(this);
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
+		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
 		dataController.load(null, this);
 		dataController.load(null, entityStackController);
 		dataController.load(null, updateController);
+		dataController.load(null, photonController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -934,5 +938,10 @@ public class React extends JavaPlugin implements Configurable
 	public void setPacketController(PacketController packetController)
 	{
 		this.packetController = packetController;
+	}
+
+	public PhotonController getPhotonController()
+	{
+		return photonController;
 	}
 }
