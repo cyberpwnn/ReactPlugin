@@ -15,6 +15,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.nms.NMS;
+import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.Cuboid;
 import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
@@ -29,6 +30,7 @@ public class PhotonController extends Controller implements Configurable
 	private GList<Chunk> photons;
 	private GList<Chunk> prec;
 	private GList<Chunk> cache;
+	private Average accuracy;
 	private Integer k;
 	
 	public PhotonController(React react)
@@ -39,13 +41,14 @@ public class PhotonController extends Controller implements Configurable
 		this.cache = new GList<Chunk>();
 		this.prec = new GList<Chunk>();
 		this.photons = new GList<Chunk>();
+		this.accuracy = new Average(32);
 		this.k = 0;
 	}
 	
 	@Override
 	public void tick()
 	{
-		if(k > 100 && photons.size() < cc.getInt("photon.relight.limits.max-pool-size") && !cache.isEmpty() && !getReact().getActionController().getActionInstabilityCause().isLagging())
+		if(k > 4 && photons.size() < cc.getInt("photon.relight.limits.max-pool-size") && !cache.isEmpty() && !getReact().getActionController().getActionInstabilityCause().isLagging())
 		{
 			photons.add(cache.get(0));
 			relight(cache.get(0));
@@ -54,12 +57,17 @@ public class PhotonController extends Controller implements Configurable
 			
 			if(photons.size() < cc.getInt("photon.relight.limits.max-pool-size"))
 			{
-				k = 100;
+				k = 4;
 			}
 			
 			else
 			{
 				k = 0;
+				
+				if(photons.size() > 100)
+				{
+					k = 4;
+				}
 			}
 		}
 		
@@ -195,11 +203,42 @@ public class PhotonController extends Controller implements Configurable
 					public void run()
 					{
 						t.stop();
+						accuracy.put(((double) cy[0] / 65536.0));
 						s("Relit in " + F.nsMs(t.getTime(), 0) + "ms " + ChatColor.AQUA + cy[0] + " blocks lit over " + F.f(((double) t.getTime() / 1000000.0) / 50.0) + " ticks" + ChatColor.LIGHT_PURPLE + " visible: " + F.pc(((double) cy[0] / 65536.0), 3) + ChatColor.RED + " " + photons.size() + " in pool " + ChatColor.YELLOW + cache.size() + " cached" + ChatColor.BLUE + " " + s + " " + ChatColor.GOLD + "prec: " + prec.size());
 						photons.remove(chunk);
 					}
 				});
 			}
 		});
+	}
+
+	public ClusterConfig getCc()
+	{
+		return cc;
+	}
+
+	public GList<Chunk> getPhotons()
+	{
+		return photons;
+	}
+
+	public GList<Chunk> getPrec()
+	{
+		return prec;
+	}
+
+	public GList<Chunk> getCache()
+	{
+		return cache;
+	}
+
+	public Integer getK()
+	{
+		return k;
+	}
+	
+	public Double getAccuracy()
+	{
+		return accuracy.getAverage();
 	}
 }

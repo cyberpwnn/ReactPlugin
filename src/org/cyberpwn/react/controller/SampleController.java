@@ -24,7 +24,9 @@ import org.cyberpwn.react.sampler.SampleMemorySweepFrequency;
 import org.cyberpwn.react.sampler.SampleMemoryUsed;
 import org.cyberpwn.react.sampler.SampleMonitoredPlugins;
 import org.cyberpwn.react.sampler.SamplePHEntities;
+import org.cyberpwn.react.sampler.SamplePHPhoton;
 import org.cyberpwn.react.sampler.SamplePHTimings;
+import org.cyberpwn.react.sampler.SamplePhoton;
 import org.cyberpwn.react.sampler.SamplePlayers;
 import org.cyberpwn.react.sampler.SampleReactionTime;
 import org.cyberpwn.react.sampler.SampleRedstoneUpdatesPerSecond;
@@ -61,12 +63,14 @@ public class SampleController extends Controller
 	private final SampleMemoryPerPlayer sampleMemoryPerPlayer;
 	private final SampleEntities sampleEntities;
 	private final SampleDrops sampleDrops;
+	private final SamplePhoton samplePhoton;
 	private final SampleHitRate sampleHitRate;
 	private final SampleHistory sampleHistory;
 	private final SamplePlayers samplePlayers;
 	private final SampleTimings sampleTimings;
 	private final SamplePHTimings samplePHTimings;
 	private final SamplePHEntities samplePHEntities;
+	private final SamplePHPhoton samplePHPhoton;
 	
 	private final ExternalSampleWorldBorder externalSampleWorldBorder;
 	
@@ -96,12 +100,14 @@ public class SampleController extends Controller
 		sampleMemoryPerPlayer = new SampleMemoryPerPlayer(this);
 		sampleEntities = new SampleEntities(this);
 		sampleDrops = new SampleDrops(this);
+		samplePhoton = new SamplePhoton(this);
 		sampleHitRate = new SampleHitRate(this);
 		sampleHistory = new SampleHistory(this);
 		samplePlayers = new SamplePlayers(this);
 		sampleTimings = new SampleTimings(this);
 		samplePHTimings = new SamplePHTimings(this);
 		samplePHEntities = new SamplePHEntities(this);
+		samplePHPhoton = new SamplePHPhoton(this);
 		sampleGarbageDirection = new SampleGarbageDirection(this);
 		
 		externalSampleWorldBorder = new ExternalSampleWorldBorder(this);
@@ -428,5 +434,15 @@ public class SampleController extends Controller
 	public SampleGarbageDirection getSampleGarbageDirection()
 	{
 		return sampleGarbageDirection;
+	}
+
+	public SamplePhoton getSamplePhoton()
+	{
+		return samplePhoton;
+	}
+
+	public SamplePHPhoton getSamplePHPhoton()
+	{
+		return samplePHPhoton;
 	}
 }
