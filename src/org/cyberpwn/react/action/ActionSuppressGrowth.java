@@ -1,5 +1,6 @@
 package org.cyberpwn.react.action;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -12,8 +13,6 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.ManualActionEvent;
-
-import org.bukkit.ChatColor;
 
 public class ActionSuppressGrowth extends Action implements Listener
 {

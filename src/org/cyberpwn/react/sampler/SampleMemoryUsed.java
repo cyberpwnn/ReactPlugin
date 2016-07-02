@@ -8,8 +8,8 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.ValueType;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.ValueType;
 
 public class SampleMemoryUsed extends Sample
 {

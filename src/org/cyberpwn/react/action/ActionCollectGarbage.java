@@ -1,5 +1,6 @@
 package org.cyberpwn.react.action;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -13,8 +14,6 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Timer;
-
-import org.bukkit.ChatColor;
 
 public class ActionCollectGarbage extends Action implements Listener
 {

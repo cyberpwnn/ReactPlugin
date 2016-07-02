@@ -1,25 +1,25 @@
 package org.cyberpwn.react.controller;
 
+import java.util.HashSet;
 import java.util.Iterator;
 
-import org.bukkit.ChatColor;
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.Cuboid;
 import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
-import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.W;
@@ -31,7 +31,9 @@ public class PhotonController extends Controller implements Configurable
 	private GList<Chunk> prec;
 	private GList<Chunk> cache;
 	private Average accuracy;
+	private Average power;
 	private Integer k;
+	private Integer j;
 	
 	public PhotonController(React react)
 	{
@@ -42,12 +44,24 @@ public class PhotonController extends Controller implements Configurable
 		this.prec = new GList<Chunk>();
 		this.photons = new GList<Chunk>();
 		this.accuracy = new Average(32);
+		this.power = new Average(8);
 		this.k = 0;
+		this.j = 0;
 	}
 	
 	@Override
 	public void tick()
 	{
+		if(getReact().getSampleController().getSampleTicksPerSecond().get().getDouble() < 19.7)
+		{
+			return;
+		}
+		
+		if(k > 4 && photons.isEmpty() && cache.isEmpty() && photons.isEmpty())
+		{
+			
+		}
+		
 		if(k > 4 && photons.size() < cc.getInt("photon.relight.limits.max-pool-size") && !cache.isEmpty() && !getReact().getActionController().getActionInstabilityCause().isLagging())
 		{
 			photons.add(cache.get(0));
@@ -64,14 +78,46 @@ public class PhotonController extends Controller implements Configurable
 			{
 				k = 0;
 				
-				if(photons.size() > 100)
+				if(cache.size() > 100)
 				{
 					k = 4;
 				}
 			}
 		}
 		
+		if(j > 10)
+		{
+			j = 0;
+			
+			new ExecutiveIterator<Player>((long) 1, new GList<Player>(getReact().onlinePlayers()), new ExecutiveRunnable<Player>()
+			{
+				@SuppressWarnings("deprecation")
+				@Override
+				public void run()
+				{
+					for(Chunk i : W.crad(next().getTargetBlock((HashSet<Byte>) null, 256).getLocation().getChunk(), 3))
+					{
+						request(i);
+						j = 0;
+					}
+				}
+			}, new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					j = 0;
+				}
+			});
+		}
+		
 		k++;
+		j++;
+	}
+	
+	public void flush()
+	{
+		prec.clear();
 	}
 	
 	public long getLimit()
@@ -82,12 +128,11 @@ public class PhotonController extends Controller implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("photon.relight.enabled", true);
+		cc.set("photon.relight.enabled", false);
 		cc.set("photon.relight.limits.max-ms", 8);
-		cc.set("photon.relight.limits.max-pool-size", 4);
+		cc.set("photon.relight.limits.max-pool-size", 8);
 		cc.set("photon.relight.limits.max-cache-size", 1024);
-		cc.set("photon.relight.limits.halt-on-lag", true);
-		cc.set("photon.relight.constraints.chunk-radius", 3);
+		cc.set("photon.relight.constraints.chunk-radius", 2);
 	}
 	
 	@Override
@@ -138,29 +183,8 @@ public class PhotonController extends Controller implements Configurable
 		cache.remove(e.getChunk());
 	}
 	
-	@EventHandler
-	public void onMove(PlayerMoveEvent e)
-	{
-		if(!e.getFrom().getChunk().equals(e.getTo().getChunk()))
-		{
-			if(cc.getInt("photon.relight.constraints.chunk-radius") > 0)
-			{
-				for(Chunk i : W.crad(e.getTo().getChunk(), cc.getInt("photon.relight.constraints.chunk-radius")))
-				{
-					request(i);
-				}
-			}
-			
-			else
-			{
-				request(e.getTo().getChunk());
-			}
-		}
-	}
-	
 	public void relight(final Chunk chunk)
 	{
-		// pre
 		final Timer t = new Timer();
 		final GList<Block> intended = new GList<Block>();
 		final Iterator<Block> bks = new Cuboid(chunk.getBlock(0, 0, 0).getLocation(), chunk.getBlock(15, 255, 15).getLocation()).iterator();
@@ -168,7 +192,6 @@ public class PhotonController extends Controller implements Configurable
 		
 		t.start();
 		
-		final String s = "lim: " + getLimit();
 		new ExecutiveIterator<Block>(getLimit(), bks, new ExecutiveRunnable<Block>()
 		{
 			@SuppressWarnings("deprecation")
@@ -176,62 +199,56 @@ public class PhotonController extends Controller implements Configurable
 			{
 				if(!next().getType().equals(Material.AIR) && visible(next()))
 				{
-					intended.add(next());
+					if(next().getType().isTransparent() || next().getRelative(BlockFace.UP).getType().isTransparent())
+					{
+						
+					}
 					
-					Block b = next();
-					Material m = b.getType();
-					BlockState bs = b.getState();
-					b.setType(Material.STONE);
-					b.setType(m);
-					b.setData(bs.getRawData());
-					b.getState().update(false, true);
+					else
+					{
+						intended.add(next());
+						Block b = next();
+						Material m = b.getType();
+						BlockState bs = b.getState();
+						b.setType(Material.STONE);
+						b.setType(m);
+						b.setData(bs.getRawData());
+						cy[0]++;
+					}
 				}
 			}
 		}, new Runnable()
 		{
 			public void run()
 			{
-				new ExecutiveIterator<Block>(cc.getInt("photon.relight.limits.max-ms").longValue(), intended, new ExecutiveRunnable<Block>()
-				{
-					public void run()
-					{
-						NMS.instance().relight(next().getLocation());
-						cy[0]++;
-					}
-				}, new Runnable()
-				{
-					public void run()
-					{
-						t.stop();
-						accuracy.put(((double) cy[0] / 65536.0));
-						s("Relit in " + F.nsMs(t.getTime(), 0) + "ms " + ChatColor.AQUA + cy[0] + " blocks lit over " + F.f(((double) t.getTime() / 1000000.0) / 50.0) + " ticks" + ChatColor.LIGHT_PURPLE + " visible: " + F.pc(((double) cy[0] / 65536.0), 3) + ChatColor.RED + " " + photons.size() + " in pool " + ChatColor.YELLOW + cache.size() + " cached" + ChatColor.BLUE + " " + s + " " + ChatColor.GOLD + "prec: " + prec.size());
-						photons.remove(chunk);
-					}
-				});
+				t.stop();
+				accuracy.put(((double) cy[0] / 65536.0));
+				power.put((double) cy[0] / (t.getTime() / 50000000) * photons.size());
+				photons.remove(chunk);
 			}
 		});
 	}
-
+	
 	public ClusterConfig getCc()
 	{
 		return cc;
 	}
-
+	
 	public GList<Chunk> getPhotons()
 	{
 		return photons;
 	}
-
+	
 	public GList<Chunk> getPrec()
 	{
 		return prec;
 	}
-
+	
 	public GList<Chunk> getCache()
 	{
 		return cache;
 	}
-
+	
 	public Integer getK()
 	{
 		return k;
@@ -240,5 +257,28 @@ public class PhotonController extends Controller implements Configurable
 	public Double getAccuracy()
 	{
 		return accuracy.getAverage();
+	}
+	
+	public Double getPower()
+	{
+		return power.getAverage();
+	}
+	
+	public int relightAll()
+	{
+		int kx = 0;
+		
+		flush();
+		
+		for(World i : Bukkit.getWorlds())
+		{
+			for(Chunk j : i.getLoadedChunks())
+			{
+				request(j);
+				kx++;
+			}
+		}
+		
+		return kx;
 	}
 }

@@ -29,7 +29,7 @@ public class SamplePhoton extends Sample
 	public String formatted(boolean acc)
 	{
 		PhotonController p = React.instance().getPhotonController();
-		return ChatColor.AQUA + F.f(p.getCache().size()) + ChatColor.BLUE + " Cached " + ChatColor.AQUA + p.getPhotons().size() + ChatColor.BLUE + " Photons " + ChatColor.AQUA + F.pc(1.0 - p.getAccuracy()) + ChatColor.BLUE + " Accuracy";
+		return ChatColor.AQUA + F.f(p.getCache().size()) + ChatColor.BLUE + " Cached " + ChatColor.AQUA + p.getPhotons().size() + ChatColor.BLUE + " Photons " + ChatColor.AQUA + F.pc(1.0 - p.getAccuracy()) + ChatColor.BLUE + " Accuracy " + ChatColor.AQUA + F.f(p.getPower(), 0) + " " + ChatColor.BLUE + "Lum/t";
 	}
 	
 	public ChatColor color()

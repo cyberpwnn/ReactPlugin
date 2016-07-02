@@ -2,6 +2,7 @@ package org.cyberpwn.react.action;
 
 import java.util.Iterator;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,8 +25,6 @@ import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
-
-import org.bukkit.ChatColor;
 
 public class ActionCullEntities extends Action implements Listener
 {

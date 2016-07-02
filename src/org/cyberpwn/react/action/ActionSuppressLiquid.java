@@ -1,5 +1,6 @@
 package org.cyberpwn.react.action;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -11,8 +12,6 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.ManualActionEvent;
-
-import org.bukkit.ChatColor;
 
 public class ActionSuppressLiquid extends Action implements Listener
 {

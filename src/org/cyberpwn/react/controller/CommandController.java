@@ -273,6 +273,15 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			public void run()
 			{
+				CommandSender sender = getSender();
+				sender.sendMessage(Info.TAG + ChatColor.BLUE + "Requested to relight " + getReact().getPhotonController().relightAll() + " chunks.");
+			}
+		}, "Requests all chunks be relighted.", "relightall", "pb", "light"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
 				new Configurator(getPlayer());
 			}
 		}, "Configure React ingame via inventory gui's", "configure", "config", "conf"));

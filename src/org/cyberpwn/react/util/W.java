@@ -6,6 +6,24 @@ import org.bukkit.Material;
 
 public class W
 {
+	public static boolean skyn(Location l)
+	{
+		for(int i = 255; i > 0; i--)
+		{
+			Material m = l.getWorld().getBlockAt(new Location(l.getWorld(), l.getX(), i, l.getZ())).getType();
+			
+			if(m.isSolid())
+			{
+				if(i > l.getY())
+				{
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
 	public static Location fall(Location from)
 	{
 		int height = from.getBlockY();

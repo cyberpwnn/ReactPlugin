@@ -3,6 +3,7 @@ package org.cyberpwn.react.action;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -23,8 +24,6 @@ import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.MaterialList;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
-
-import org.bukkit.ChatColor;
 
 public class ActionCullDrops extends Action implements Listener
 {

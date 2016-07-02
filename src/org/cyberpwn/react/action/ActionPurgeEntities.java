@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -16,8 +17,6 @@ import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.VersionBukkit;
-
-import org.bukkit.ChatColor;
 
 public class ActionPurgeEntities extends Action implements Listener
 {
