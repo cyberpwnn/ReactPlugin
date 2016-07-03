@@ -52,7 +52,7 @@ public class PhotonController extends Controller implements Configurable
 	@Override
 	public void tick()
 	{
-		if(getReact().getSampleController().getSampleTicksPerSecond().get().getDouble() < 19.7)
+		if(getReact().getSampleController().getSampleTicksPerSecond().get().getDouble() < 19.5)
 		{
 			return;
 		}
@@ -65,7 +65,17 @@ public class PhotonController extends Controller implements Configurable
 		if(k > 4 && photons.size() < cc.getInt("photon.relight.limits.max-pool-size") && !cache.isEmpty() && !getReact().getActionController().getActionInstabilityCause().isLagging())
 		{
 			photons.add(cache.get(0));
-			relight(cache.get(0));
+			
+			try
+			{
+				relight(cache.get(0));
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
+			
 			prec.add(cache.get(0));
 			cache.pop();
 			
@@ -199,22 +209,14 @@ public class PhotonController extends Controller implements Configurable
 			{
 				if(!next().getType().equals(Material.AIR) && visible(next()))
 				{
-					if(next().getType().isTransparent() || next().getRelative(BlockFace.UP).getType().isTransparent())
-					{
-						
-					}
-					
-					else
-					{
-						intended.add(next());
-						Block b = next();
-						Material m = b.getType();
-						BlockState bs = b.getState();
-						b.setType(Material.STONE);
-						b.setType(m);
-						b.setData(bs.getRawData());
-						cy[0]++;
-					}
+					intended.add(next());
+					Block b = next();
+					Material m = b.getType();
+					BlockState bs = b.getState();
+					b.setType(Material.STONE);
+					b.setType(m);
+					b.setData(bs.getRawData());
+					cy[0]++;
 				}
 			}
 		}, new Runnable()
