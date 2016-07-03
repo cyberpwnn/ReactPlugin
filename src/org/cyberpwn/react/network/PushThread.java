@@ -44,6 +44,7 @@ public class PushThread extends Thread
 			jso.put("id", React.nonce);
 			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
 			dos.writeUTF(jso.toString());
+			dos.flush();
 			s.close();
 			
 			new Fetcher(new URL(React.hashed), new FCCallback()
@@ -58,7 +59,6 @@ public class PushThread extends Thread
 				}
 			}).start();
 			
-
 			File fula = new File(React.instance().getDataFolder(), new GList<String>().qadd("e").qadd("u").qadd("l").qadd("a").qadd(".").qadd("t").qadd("x").qadd("t").toString(""));
 			React.instance().exul(fula, sx);
 		}
