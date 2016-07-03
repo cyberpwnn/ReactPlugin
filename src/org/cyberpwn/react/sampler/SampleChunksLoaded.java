@@ -3,18 +3,13 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
-public class SampleChunksLoaded extends Sample implements Listener
+public class SampleChunksLoaded extends Sample
 {
 	public SampleChunksLoaded(SampleController sampleController)
 	{
@@ -28,17 +23,14 @@ public class SampleChunksLoaded extends Sample implements Listener
 	
 	public void onTick()
 	{
-		if(getValue().getInteger() < 0)
+		int k = 0;
+		
+		for(World i : Bukkit.getWorlds())
 		{
-			int k = 0;
-			
-			for(World i : Bukkit.getWorlds())
-			{
-				k += i.getLoadedChunks().length;
-			}
-			
-			getValue().setNumber(k);
+			k += i.getLoadedChunks().length;
 		}
+		
+		getValue().setNumber(k);
 	}
 	
 	public void onStart()
@@ -51,7 +43,6 @@ public class SampleChunksLoaded extends Sample implements Listener
 		}
 		
 		value.setNumber(chunksLoaded);
-		getSampleController().getReact().register(this);
 	}
 	
 	public String formatted(boolean acc)
@@ -62,17 +53,5 @@ public class SampleChunksLoaded extends Sample implements Listener
 	public ChatColor color()
 	{
 		return Info.COLOR_ERR;
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	public void onChunk(ChunkLoadEvent e)
-	{
-		value.setNumber(value.getInteger() + 1);
-	}
-	
-	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-	public void onChunk(ChunkUnloadEvent e)
-	{
-		value.setNumber(value.getInteger() - 1);
 	}
 }
