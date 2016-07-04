@@ -1,6 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -30,6 +31,7 @@ public class TimingsController extends Controller
 	private String hh;
 	private ClusterConfig cx;
 	private Double ms;
+	private Boolean on;
 	
 	private int s = 0;
 	
@@ -43,6 +45,7 @@ public class TimingsController extends Controller
 		ms = null;
 		ss = "Loading...";
 		sxs = null;
+		on = false;
 		pt = new PaperTimings(react);
 		cx = new ClusterConfig();
 	}
@@ -240,5 +243,20 @@ public class TimingsController extends Controller
 	public String sxs()
 	{
 		return sxs;
+	}
+
+	public void off(Player player)
+	{
+		on = false;
+	}
+	
+	public void on(Player player)
+	{
+		on = true;
+	}
+	
+	public boolean enabled()
+	{
+		return on;
 	}
 }
