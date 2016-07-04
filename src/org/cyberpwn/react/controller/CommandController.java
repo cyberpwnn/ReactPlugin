@@ -1,6 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Date;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,12 +37,15 @@ import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.nms.NMS;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
+import org.cyberpwn.react.util.Callback;
 import org.cyberpwn.react.util.CommandRunnable;
 import org.cyberpwn.react.util.Configurator;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.FSMap;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
@@ -273,6 +277,68 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			public void run()
 			{
+				final CommandSender sender = getSender();
+				File root = React.instance().getDataFolder().getParentFile();
+				
+				if(getArgs().length == 2)
+				{
+					root = new File(root, getArgs()[1]);
+					
+					if(!root.exists() || root.isFile())
+					{
+						sender.sendMessage(Info.TAG + ChatColor.RED + "Not a Folder. Use /re fs (for root)");
+						return;
+					}
+				}
+				
+				try
+				{
+					sender.sendMessage(Info.TAG + ChatColor.AQUA + "Listing " + ChatColor.GREEN + root.getPath() + "...");
+					
+					new FSMap(root, new Callback<GMap<File, Long>>()
+					{
+						public void run()
+						{
+							if(get().isEmpty())
+							{
+								sender.sendMessage(Info.TAG + ChatColor.RED + "No folders.");
+								return;
+							}
+							
+							GList<Long> order = get().v();
+							GList<File> fs = new GList<File>();
+							Collections.sort(order);
+							
+							for(Long i : order)
+							{
+								for(File j : get().k())
+								{
+									if(get().get(j) == i)
+									{
+										fs.add(j);
+									}
+								}
+							}
+							
+							for(File i : fs)
+							{
+								sender.sendMessage(Info.TAG + ChatColor.GREEN + "  " + i.getName() + ": " + ChatColor.YELLOW + F.memx(get().get(i) / 1000) + " " + ChatColor.AQUA + i.listFiles().length + " File(s)");
+							}
+						}
+					}).start();
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+			}
+		}, "Map the filesystem sizes.", "fs", "files", "filesystem", "file", "folder"));
+				
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
 				CommandSender sender = getSender();
 				sender.sendMessage(Info.TAG + ChatColor.BLUE + "Requested to relight " + getReact().getPhotonController().relightAll() + " chunks.");
 			}
@@ -351,7 +417,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						p.sendMessage(Info.TAG + ChatColor.GREEN + "No allowed instability messages.");
 					}
-					
+						
 					else
 					{
 						a.tellRawTo(getReact(), p);
@@ -371,14 +437,14 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					p.sendMessage(Info.HR);
 				}
-				
+					
 				else
 				{
 					getSender().sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_PLAYER_ONLY);
 				}
 			}
 		}, "Ignore instability messages", "ignore", "ign"));
-		
+				
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -553,7 +619,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, "Directly manipulate config values without gui access.", "cfs"));
-			
+					
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -776,7 +842,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_SCOREBOARD, "scoreboard", "sc", "board", "sboard"));
-		
+				
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
