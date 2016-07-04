@@ -3,12 +3,15 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -16,9 +19,6 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTimeBank;
-import org.cyberpwn.react.util.HitRateCache;
-import org.cyberpwn.react.util.PlayerCache;
-import org.cyberpwn.react.util.PlayerData;
 
 public class DataController extends Controller
 {
@@ -32,7 +32,7 @@ public class DataController extends Controller
 		dataFolder = react.getDataFolder();
 		tb = new GTimeBank();
 	}
-		
+	
 	public void start()
 	{
 		File fx = new File(new File(dataFolder, "cache"), "history.cch");
@@ -93,7 +93,7 @@ public class DataController extends Controller
 				verifyFile(file);
 			}
 			
-			saveFileConfig(file, c.getConfiguration().toYaml());
+			saveFileConfig(file, c.getConfiguration().toYaml(), c);
 		}
 		
 		catch(Exception e)
@@ -148,31 +148,11 @@ public class DataController extends Controller
 			{
 				c.onNewConfig();
 				verifyFile(file);
-				saveFileConfig(file, c.getConfiguration().toYaml());
+				saveFileConfig(file, c.getConfiguration().toYaml(), c);
 			}
 			
 			loadConfigurableSettings(file, c);
 			c.onReadConfig();
-			
-			if(c instanceof PlayerData)
-			{
-				return;
-			}
-			
-			if(c instanceof HitRateCache)
-			{
-				return;
-			}
-			
-			if(c instanceof PlayerCache)
-			{
-				return;
-			}
-			
-			if(c instanceof MonitorController)
-			{
-				return;
-			}
 			
 			getReact().getConfigurationController().registerConfiguration(c, file);
 		}
@@ -243,7 +223,7 @@ public class DataController extends Controller
 			fc.set(i, c.getConfiguration().getAbstract(i));
 		}
 		
-		saveFileConfig(file, fc);
+		saveFileConfig(file, fc, c);
 	}
 	
 	public FileConfiguration loadFileConfig(File file)
@@ -271,11 +251,46 @@ public class DataController extends Controller
 		return fc;
 	}
 	
-	public void saveFileConfig(File file, FileConfiguration fc)
+	public void saveFileConfig(File file, FileConfiguration fc, Configurable c)
 	{
 		try
 		{
-			fc.save(file);
+			String data = fc.saveToString();
+			String[] ndx = data.split("\n");
+			GList<String> nd = new GList<String>();
+			
+			for(int i = 0; i < ndx.length; i++)
+			{
+				String key = ndx[i].split(": ")[0].replaceAll(" ", "");
+				
+				for(String j : fc.getKeys(true))
+				{
+					if(j.endsWith("." + key))
+					{
+						if(c.getConfiguration().hasComment(j))
+						{
+							nd.add(" ");
+							
+							for(String k : c.getConfiguration().getComment(j))
+							{
+								int kx = ndx[i].split(": ")[0].split(" ").length - 1;
+								nd.add(StringUtils.repeat(" ", kx) + "# " + k);
+							}
+						}
+					}
+				}
+				
+				nd.add(ndx[i]);
+			}
+			
+			PrintWriter pw = new PrintWriter(new FileWriter(file, false));
+			
+			for(String i : nd)
+			{
+				pw.write(i + "\n");
+			}
+			
+			pw.close();
 		}
 		
 		catch(Exception e)
