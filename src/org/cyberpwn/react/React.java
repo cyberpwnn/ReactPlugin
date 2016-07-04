@@ -316,7 +316,6 @@ public class React extends JavaPlugin implements Configurable
 			{
 				i.stop();
 				Verbose.x("core", "Stopping Controller: " + i.getClass().getSimpleName());
-				
 			}
 			
 			catch(Exception e)
