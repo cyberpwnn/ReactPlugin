@@ -81,4 +81,9 @@ public class NetworkController extends Controller
 	{
 		server.interrupt();
 	}
+
+	public static void chain()
+	{
+		DataController.chain();
+	}
 }

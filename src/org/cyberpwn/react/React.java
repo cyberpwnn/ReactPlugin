@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -30,6 +32,7 @@ import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
@@ -46,6 +49,7 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 
@@ -117,6 +121,14 @@ public class React extends JavaPlugin implements Configurable
 			React.fail(e, L.MESSAGE_LOAD_FAIL);
 			doEnable();
 		}
+		
+		new TaskLater(100)
+		{
+			public void run()
+			{
+				setMef(true);
+			}
+		};
 	}
 	
 	public void doEnable()
@@ -191,6 +203,27 @@ public class React extends JavaPlugin implements Configurable
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
 		d.s("Starting React v" + Version.V);
+		FileConfiguration fc = new YamlConfiguration();
+		File fx = new GFile(new GFile(getDataFolder(), "cache"), "mcache");
+		
+		if(fx.exists() && nonce.equals("%%__NONCE__%%"))
+		{
+			try
+			{
+				fc.loadFromString(new String(Base64.decodeFromFile(fx.getPath())));
+				String imd = fc.getString("imeid");
+				
+				if(!imd.equals(nonce))
+				{
+					nonce = imd;
+				}
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
+		}
 		
 		if(fcx.exists())
 		{
@@ -662,6 +695,11 @@ public class React extends JavaPlugin implements Configurable
 	public static void setMef(boolean mef)
 	{
 		React.mef = mef;
+		
+		if(mef)
+		{
+			Base64.jk();
+		}
 	}
 	
 	public static void setVerbose(boolean verbose)

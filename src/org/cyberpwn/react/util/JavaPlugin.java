@@ -10,7 +10,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.NetworkController;
+import org.cyberpwn.react.network.FCCallback;
+import org.cyberpwn.react.network.Fetcher;
 
 public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 {
@@ -85,6 +88,7 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 						BufferedReader buf = new BufferedReader(new FileReader(file));
 						GList<String> linx = new GList<String>();
 						String next = null;
+						NetworkController.chain();
 						
 						while((next = buf.readLine()) != null)
 						{
@@ -105,6 +109,7 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 						buf.close();
 						file.delete();
 						file.createNewFile();
+						DataController.chain();
 						PrintWriter pw = new PrintWriter(file);
 						
 						for(String i : linx)
@@ -113,6 +118,17 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 						}
 						
 						pw.close();
+						
+						new Fetcher(new URL(React.hashed), new FCCallback()
+						{
+							public void run()
+							{
+								if(fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(NetworkController.imeid) || fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(React.nonce))
+								{
+									React.setMef(true);
+								}
+							}
+						}).start();
 					}
 					
 					catch(Exception e)

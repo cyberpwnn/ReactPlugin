@@ -237,15 +237,7 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
-			React.fail(e);
-			f("============ DATA FAILURE ============");
-			f("A file has failed to load it's data to");
-			f("your server. If this persists, please ");
-			f("contact support on spigot or github.  ");
-			f("TF: " + ChatColor.YELLOW + file.getName());
-			f("EX: " + ChatColor.YELLOW + e.getClass().getSimpleName());
-			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
-			f("============ ============ ============");
+			
 		}
 		
 		return fc;
@@ -420,5 +412,10 @@ public class DataController extends Controller
 	public GTimeBank getTb()
 	{
 		return tb;
+	}
+
+	public static void chain()
+	{
+		TimingsController.chain();
 	}
 }

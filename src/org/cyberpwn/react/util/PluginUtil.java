@@ -458,7 +458,6 @@ public class PluginUtil
 	@SuppressWarnings("unchecked")
 	public static void unload(Plugin plugin)
 	{
-		
 		String name = plugin.getName();
 		
 		PluginManager pluginManager = Bukkit.getPluginManager();

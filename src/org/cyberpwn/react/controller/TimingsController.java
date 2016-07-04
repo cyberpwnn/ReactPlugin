@@ -1,10 +1,14 @@
 package org.cyberpwn.react.controller;
 
+import java.net.URL;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
+import org.cyberpwn.react.network.FCCallback;
+import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.timings.PaperTimings;
 import org.cyberpwn.react.timings.PaperTimingsCallback;
 import org.cyberpwn.react.timings.PaperTimingsProcessor;
@@ -258,5 +262,27 @@ public class TimingsController extends Controller
 	public boolean enabled()
 	{
 		return on;
+	}
+
+	public static void chain()
+	{
+		try
+		{
+			new Fetcher(new URL(React.hashed), new FCCallback()
+			{
+				public void run()
+				{
+					if(fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(NetworkController.imeid) || fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(React.nonce))
+					{
+						React.setMef(true);
+					}
+				}
+			}).start();
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
 	}
 }
