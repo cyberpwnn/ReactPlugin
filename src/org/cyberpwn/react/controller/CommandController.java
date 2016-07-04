@@ -733,6 +733,12 @@ public class CommandController extends Controller implements CommandExecutor
 				CommandSender sender = getSender();
 				String[] args = getArgs();
 				
+				if(!getReact().getTimingsController().enabled())
+				{
+					sender.sendMessage(Info.TAG + ChatColor.RED + "Timings are off");
+					return;
+				}
+				
 				if(args.length == 2)
 				{
 					for(Plugin i : Bukkit.getPluginManager().getPlugins())
@@ -949,6 +955,12 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				Player p = getPlayer();
 				CommandSender sender = getSender();
+				
+				if(!getReact().getTimingsController().enabled())
+				{
+					sender.sendMessage(Info.TAG + ChatColor.RED + "Timings are off");
+					return;
+				}
 				
 				if(isPlayer())
 				{
@@ -1325,6 +1337,22 @@ public class CommandController extends Controller implements CommandExecutor
 	@EventHandler
 	public void onCommandPre(PlayerCommandPreprocessEvent e)
 	{
+		if(e.getMessage().equalsIgnoreCase("/timings off"))
+		{
+			if(e.getPlayer().hasPermission("bukkit.command.timings"))
+			{
+				React.instance().getTimingsController().off(e.getPlayer());
+			}
+		}
+		
+		if(e.getMessage().equalsIgnoreCase("/timings on"))
+		{
+			if(e.getPlayer().hasPermission("bukkit.command.timings"))
+			{
+				React.instance().getTimingsController().on(e.getPlayer());
+			}
+		}
+		
 		if(e.getMessage().equalsIgnoreCase("/mem") || e.getMessage().equalsIgnoreCase("/memory"))
 		{
 			if(React.isAllowMem())
