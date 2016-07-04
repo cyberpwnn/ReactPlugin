@@ -149,6 +149,11 @@ public class PluginWeightController extends Controller implements Configurable
 	
 	public void scan()
 	{
+		if(!getReact().getTimingsController().enabled())
+		{
+			return;
+		}
+		
 		if(!getReact().getTimingsController().supported())
 		{
 			scanPaper();

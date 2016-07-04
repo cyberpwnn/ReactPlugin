@@ -120,7 +120,7 @@ public class SampleTicksPerSecond extends Sample
 	{
 		String k = "";
 		
-		if(percentUsed() > 0)
+		if(percentUsed() > 0 && getSampleController().getReact().getTimingsController().enabled())
 		{
 			k = " (" + F.pc(percentUsed(), 0) + ")";
 		}
