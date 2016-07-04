@@ -63,7 +63,7 @@ public class UpdateController extends Controller implements Configurable
 	{
 		cleanup();
 		
-		if(cc.getBoolean("update-checking.enabled"))
+		if(cc.getBoolean("update-checking.enable"))
 		{
 			s("Starting Update Checker");
 			new TaskLater(200)
@@ -124,11 +124,11 @@ public class UpdateController extends Controller implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("update-checking.enabled", true);
-		cc.set("update-checking.interval-seconds", 30);
-		cc.set("updater.auto-update.enabled", true);
-		cc.set("updater.allow-update-command", true);
-		cc.set("updater.only-update-on-reboot", true);
+		cc.set("update-checking.enable", true, "Enable update checking?");
+		cc.set("update-checking.interval-seconds", 30, "How often (in seconds) should we check for an update?\nThis is async, so if we dont get a connection, no freezing.");
+		cc.set("updater.auto-update.enabled", true, "Should we automatically download the update if we find it?\nWe wont redownload each update check.");
+		cc.set("updater.allow-update-command", true, "Allow the update command to be used?");
+		cc.set("updater.only-update-on-reboot", true, "Only update (moving the downloaded plugin into the plugis folder)\nWARNING: Turning this off will inject the downloaded plugin and reload react.\nTHIS HAS CAUSED RARE CRASHES IN THE PAST! YOU HAVE BEEN WARNED!");
 	}
 	
 	@Override

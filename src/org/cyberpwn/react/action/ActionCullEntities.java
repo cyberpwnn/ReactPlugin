@@ -282,12 +282,12 @@ public class ActionCullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
-		cc.set(getCodeName() + ".max-entities-per-chunk", 28);
-		cc.set(getCodeName() + ".filter.ignore-named-entities", false);
-		cc.set(getCodeName() + ".filter.ignore-villagers", false);
-		cc.set(getCodeName() + ".cullable", allow);
-		cc.set(getCodeName() + ".enable-entity-spawn-radius", true);
-		cc.set(getCodeName() + ".max-entities-per-radius", 8);
-		cc.set(getCodeName() + ".max-entities-radius", 8);
+		cc.set(getCodeName() + ".max-entities-per-chunk", 28, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
+		cc.set(getCodeName() + ".filter.ignore-named-entities", false, "Ignore entities that have names from nametags/plugins");
+		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore all testificates.");
+		cc.set(getCodeName() + ".cullable", allow, "Entities allowed to be culled. \nIf you dont want something culled, remove it from here.");
+		cc.set(getCodeName() + ".enable-entity-spawn-radius", false, "Use radius culling for entities based on the radius config.");
+		cc.set(getCodeName() + ".max-entities-per-radius", 8, "The allowed number of entities per radius check defined below.");
+		cc.set(getCodeName() + ".max-entities-radius", 8, "The radius of a radius check in blocks.");
 	}
 }

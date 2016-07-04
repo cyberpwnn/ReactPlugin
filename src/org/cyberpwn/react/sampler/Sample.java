@@ -255,7 +255,7 @@ public class Sample implements Samplable, Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("component.interval", idealDelay);
+		cc.set("component.interval", idealDelay, "Its typically not a good idea to change this\nunless you know what you are doing.");
 	}
 	
 	@Override

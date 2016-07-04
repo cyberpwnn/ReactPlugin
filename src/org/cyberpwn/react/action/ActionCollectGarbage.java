@@ -82,9 +82,9 @@ public class ActionCollectGarbage extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".auto.enabled", true);
-		cc.set(getCodeName() + ".auto.conditions.chunkloads", 65536);
-		cc.set(getCodeName() + ".auto.conditions.minutes-per", 15);
+		cc.set(getCodeName() + ".auto.enabled", true, "Enable automatic garbage collection based on the limits.");
+		cc.set(getCodeName() + ".auto.conditions.chunkloads", 65536, "Will not run auto GC unless\nmore than the given amount of chunks are loaded/unloaded first.\nThis does not mean that there has to be that many chunks loaded\nJust that many chunks had to have been read from the disk before gc.");
+		cc.set(getCodeName() + ".auto.conditions.minutes-per", 15, "Will not run auto GC unless at least 15 minutes have passed.");
 	}
 	
 	@EventHandler

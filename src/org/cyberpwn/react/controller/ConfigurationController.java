@@ -39,7 +39,7 @@ public class ConfigurationController extends Controller
 		
 		for(File i : configurations.k())
 		{
-			getReact().getDataController().saveFileConfig(i, configurations.get(i).getConfiguration().toYaml());
+			getReact().getDataController().saveFileConfig(i, configurations.get(i).getConfiguration().toYaml(), configurations.get(i));
 		}
 		
 		p.sendMessage(Info.TAG + ChatColor.GOLD + "> Reloading React...");

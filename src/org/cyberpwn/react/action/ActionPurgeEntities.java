@@ -131,8 +131,8 @@ public class ActionPurgeEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
-		cc.set(getCodeName() + ".cullable", allow);
-		cc.set(getCodeName() + ".filter.ignore-named-entities", false);
-		cc.set(getCodeName() + ".filter.ignore-villagers", false);
+		cc.set(getCodeName() + ".cullable", allow, "Remove entities from here you dont want being purged.");
+		cc.set(getCodeName() + ".filter.ignore-named-entities", false, "Ignore entities with names.");
+		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore testificates.");
 	}
 }

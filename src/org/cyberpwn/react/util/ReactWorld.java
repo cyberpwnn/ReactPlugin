@@ -40,19 +40,19 @@ public class ReactWorld implements Configurable, Listener
 	{
 		GList<String> entx = new GList<String>().qadd("ARMOR_STAND").qadd("EXPERIENCE_ORB");
 		
-		cc.set("physics.fast-decay", false);
-		cc.set("physics.fast-fall", false);
-		cc.set("save.auto-save", false);
-		cc.set("save.timings.min-wait-minutes", 5);
-		cc.set("save.timings.max-wait-minutes", 30);
-		cc.set("save.before-save.purge-chunks", true);
-		cc.set("save.before-save.cull-drops", true);
-		cc.set("save.before-save.cull-entities", true);
-		cc.set("save.conditions.save-after-gc", true);
-		cc.set("save.conditions.save-while-lagging", true);
-		cc.set("entities.assume-no-side-effects", entx);
-		cc.set("entities.disable-stacking", false);
-		cc.set("chunks.prevent-new-chunks", false);
+		cc.set("physics.fast-decay", false, "Fast leaf decay?");
+		cc.set("physics.fast-fall", false, "Fast falling sand?");
+		cc.set("save.auto-save", false, "Custom auto save feature for this world?");
+		cc.set("save.timings.min-wait-minutes", 5, "How often to wait before saving ABSOLUTE MIN TIME WAIT");
+		cc.set("save.timings.max-wait-minutes", 30, "How often to wait before saving ABSOLUTE MAX TIME WAIT");
+		cc.set("save.before-save.purge-chunks", true, "Before saving, purge chunks to lessen the save job load.");
+		cc.set("save.before-save.cull-drops", true, "Before saving, cull excess drops to lessen the save job load.");
+		cc.set("save.before-save.cull-entities", true, "Before saving, cull excess entities to lessen the save job load.");
+		cc.set("save.conditions.save-after-gc", true, "Try to save right after java collects garbage to \nmerge lag spikes instead of multiple spikes.");
+		cc.set("save.conditions.save-while-lagging", true, "Save while lagging to get it out of the way instead of\ndisrupting smooth tps");
+		cc.set("entities.assume-no-side-effects", entx, "Assume no side effects for these entity types. Ensures react wont touch them by any feature.");
+		cc.set("entities.disable-stacking", false, "Disable mob stacking in just this world if mob stacking is turned on.");
+		cc.set("chunks.prevent-new-chunks", false, "Deny the server to create new chunks. \nTHIS ALLOWS PLAYERS TO FALL OFF EMPTY CHUNKS IF THEY CAN GET THERE!");
 	}
 	
 	public long sinceLastSave()

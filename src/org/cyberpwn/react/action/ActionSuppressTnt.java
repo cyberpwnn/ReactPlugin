@@ -112,9 +112,9 @@ public class ActionSuppressTnt extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".freeze-all-tnt-on-lag", true);
-		cc.set(getCodeName() + ".disable-if-factions-installed", true);
-		cc.set(getCodeName() + ".max-tnt-per-chunk", 16);
+		cc.set(getCodeName() + ".freeze-all-tnt-on-lag", true, "Freeze all tnt when the server is lagging because of it?");
+		cc.set(getCodeName() + ".disable-if-factions-installed", true, "Disable this feature if factions is installed?");
+		cc.set(getCodeName() + ".max-tnt-per-chunk", 16, "Max allowed PRIMED tnt per chunk?");
 	}
 	
 	@EventHandler

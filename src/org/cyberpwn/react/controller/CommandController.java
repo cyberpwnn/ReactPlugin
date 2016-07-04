@@ -408,7 +408,7 @@ public class CommandController extends Controller implements CommandExecutor
 						for(File i : getReact().getConfigurationController().getConfigurations().k())
 						{
 							getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
-							getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+							getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 							sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
 						}
 						
@@ -464,28 +464,28 @@ public class CommandController extends Controller implements CommandExecutor
 												if(c.getType().equals(ClusterDataType.BOOLEAN))
 												{
 													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterBoolean(j, Boolean.valueOf(value)));
-													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 													getReact().onReload(sender);
 												}
 												
 												else if(c.getType().equals(ClusterDataType.INTEGER))
 												{
 													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterInteger(j, Integer.valueOf(value)));
-													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 													getReact().onReload(sender);
 												}
 												
 												else if(c.getType().equals(ClusterDataType.STRING))
 												{
 													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterString(j, value));
-													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 													getReact().onReload(sender);
 												}
 												
 												else if(c.getType().equals(ClusterDataType.DOUBLE))
 												{
 													getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().put(j, new ClusterDouble(j, Double.valueOf(value)));
-													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+													getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 													getReact().onReload(sender);
 												}
 												
@@ -541,7 +541,7 @@ public class CommandController extends Controller implements CommandExecutor
 								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
 								{
 									getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
-									getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml());
+									getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 									sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
 									break;
 								}
@@ -553,7 +553,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, "Directly manipulate config values without gui access.", "cfs"));
-					
+			
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()

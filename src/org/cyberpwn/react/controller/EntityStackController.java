@@ -367,13 +367,13 @@ public class EntityStackController extends Controller implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("stacker.enabled", false);
-		cc.set("stacker.ignore.named-entities", true);
-		cc.set("stacker.ignore.non-cullable-mobs", true);
-		cc.set("stacker.settings.stack-range", 4.3);
-		cc.set("stacker.settings.max-size", 16);
-		cc.set("stacker.lang.change-names", true);
-		cc.set("stacker.lang.name-format", "&a<number> X &b<mob>");
+		cc.set("stacker.enabled", false, "Enable mob stacking?");
+		cc.set("stacker.ignore.named-entities", true, "Ignore stacking named entities?");
+		cc.set("stacker.ignore.non-cullable-mobs", true, "Dont stack mobs that cant be culled in the action-cull-entities.yml file.");
+		cc.set("stacker.settings.stack-range", 4.3, "The range for entities of the same type to stack?");
+		cc.set("stacker.settings.max-size", 16, "The max amount of entities stacked into one mob?");
+		cc.set("stacker.lang.change-names", true, "Modify the name of the mob to display how many stacked entities are in it.");
+		cc.set("stacker.lang.name-format", "&a<number> X &b<mob>", "The format for stacking entities where\n<number> = the number of stacked entities\n<name> = the type of mob\n(color codes enabled)");
 	}
 	
 	@Override

@@ -72,7 +72,7 @@ public class ActionSuppressGrowth extends Action implements Listener
 	public void onNewConfig()
 	{
 		super.onNewConfig();
-		cc.set(getCodeName() + ".max-per-chunk-per-interval", 5);
+		cc.set(getCodeName() + ".max-per-chunk-per-interval", 5, "Max growths per interval defined here.");
 	}
 	
 	public void onReadConfig()

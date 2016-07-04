@@ -138,11 +138,11 @@ public class PhotonController extends Controller implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("photon.relight.enabled", false);
-		cc.set("photon.relight.limits.max-ms", 8);
-		cc.set("photon.relight.limits.max-pool-size", 8);
-		cc.set("photon.relight.limits.max-cache-size", 1024);
-		cc.set("photon.relight.constraints.chunk-radius", 2);
+		cc.set("photon.relight.enabled", false, "PHOTON! It removes plenty of lighting glitches with a cost...\nMORE CPU, LESS LIGHTING GLITCHES\nSet this to true to enable it.");
+		cc.set("photon.relight.limits.max-ms", 8, "Max ms to use when correcting lighting glitches.");
+		cc.set("photon.relight.limits.max-pool-size", 8, "Max amount of simultanious chunk light jobs at once. \nThis splits your max ms to the entire pool");
+		cc.set("photon.relight.limits.max-cache-size", 1024, "Max size of the <to be lit> cache.");
+		cc.set("photon.relight.constraints.chunk-radius", 2, "Radius of chunks to cache per sample.");
 	}
 	
 	@Override

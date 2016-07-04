@@ -120,8 +120,8 @@ public class Action implements Actionable, Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("component.enable", true);
-		cc.set("component.interval", idealTick);
+		cc.set("component.enable", true, "ABOUT " + getName() + "\n" + getDescription() + "\n\nYou can disable " + getName() + " here.");
+		cc.set("component.interval", idealTick, "Its typically not a good idea to change this\nunless you know what you are doing.");
 	}
 	
 	@Override

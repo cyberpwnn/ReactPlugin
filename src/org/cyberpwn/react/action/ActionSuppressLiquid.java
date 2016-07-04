@@ -54,7 +54,7 @@ public class ActionSuppressLiquid extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".freeze-all-liquid-on-lag", true);
+		cc.set(getCodeName() + ".freeze-all-liquid-on-lag", true, "Freeze all liquid temporarily until the lag stops?");
 	}
 	
 	public void manual(final CommandSender p)

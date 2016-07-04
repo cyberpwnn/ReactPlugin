@@ -93,6 +93,6 @@ public class ActionHeavyChunk extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".entity-buffer", 16);
+		cc.set(getCodeName() + ".entity-buffer", 16, "If there are less than this many entities in ALL chunks, react wont find any chunks.");
 	}
 }

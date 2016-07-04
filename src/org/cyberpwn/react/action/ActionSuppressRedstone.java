@@ -95,40 +95,48 @@ public class ActionSuppressRedstone extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".freeze-all-redstone-on-lag", true);
-		cc.set(getCodeName() + ".freeze-radius", 64);
+		cc.set(getCodeName() + ".freeze-all-redstone-on-lag", true, "Hault redstone on lag?");
+		cc.set(getCodeName() + ".freeze-radius", 64, "The radius to freeze in a location specific redstone lag?");
 	}
 	
 	@EventHandler
 	public void onRedstone(BlockPhysicsEvent e)
 	{
-		if(freezeAll)
+		try
 		{
-			if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+			if(freezeAll)
 			{
-				e.setCancelled(true);
-			}
-			
-			return;
-		}
-		
-		if(frozen)
-		{
-			if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
-			{
-				try
+				if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
 				{
-					if(MathUtils.isWithin(e.getBlock().getChunk(), getActionController().getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk(), cc.getInt(getCodeName() + ".freeze-radius")))
-					{
-						e.setCancelled(true);
-					}
+					e.setCancelled(true);
 				}
 				
-				catch(Exception ex)
+				return;
+			}
+			
+			if(frozen)
+			{
+				if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
 				{
+					try
+					{
+						if(MathUtils.isWithin(e.getBlock().getChunk(), getActionController().getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk(), cc.getInt(getCodeName() + ".freeze-radius")))
+						{
+							e.setCancelled(true);
+						}
+					}
 					
+					catch(Exception ex)
+					{
+						
+					}
 				}
 			}
+		}
+		
+		catch(Exception ex)
+		{
+			
 		}
 	}
 }

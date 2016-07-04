@@ -275,10 +275,10 @@ public class PluginWeightController extends Controller implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("timings.processing.enabled", true);
-		cc.set("timings.notifier.flush-list-delay", 1200);
-		cc.set("timings.notifier.enable", true);
-		cc.set("timings.notifier.considered-high-ms", 9.5);
+		cc.set("timings.processing.enabled", true, "Enable processing timings data. If you have trouble with this, disable it.");
+		cc.set("timings.notifier.flush-list-delay", 1200, "How often in ticks to wait before warning about the same plugin.");
+		cc.set("timings.notifier.enable", true, "Enable notifications about plugins consuming lots of timings");
+		cc.set("timings.notifier.considered-high-ms", 9.5, "The limit a plugin must reach before considered high timings.");
 	}
 	
 	@Override

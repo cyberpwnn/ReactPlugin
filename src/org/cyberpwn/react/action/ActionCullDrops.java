@@ -184,20 +184,20 @@ public class ActionCullDrops extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set("drops-per-chunk", 40);
-		cc.set("ignore-all-worth-when-culling", false);
-		cc.set("worth.rubble", 0.1);
-		cc.set("worth.herbs", 0.2);
-		cc.set("worth.mob-drops", 0.3);
-		cc.set("worth.food", 0.4);
-		cc.set("worth.lumber", 0.5);
-		cc.set("worth.cheap-materials", 0.6);
-		cc.set("worth.cheap-tools-armor", 0.7);
-		cc.set("worth.rare-materials", 0.8);
-		cc.set("worth.ore", 0.9);
-		cc.set("worth.expensive-tools-armor", 1.0);
-		cc.set("worth.other", 1.1);
-		cc.set("worth.undefined", 1.2);
+		cc.set("drops-per-chunk", 40, "Max drops per chunk before react starts clipping drops.");
+		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");
+		cc.set("worth.rubble", 0.1, "The worth of rubble. Keep this lower than more expensive stuff\nunless you want to remove expensive stuff first :P");
+		cc.set("worth.herbs", 0.2, "The worth of plants, seeds and stuff.");
+		cc.set("worth.mob-drops", 0.3, "The worth of common drops from mobs.");
+		cc.set("worth.food", 0.4, "The worth of food, cooked and raw.");
+		cc.set("worth.lumber", 0.5, "The worth of wood logs sticks and more.");
+		cc.set("worth.cheap-materials", 0.6, "The worth of Cheap stuff that probobly wasnt that hard to get.");
+		cc.set("worth.cheap-tools-armor", 0.7, "The worth of Cheap tools and armor (wood/leather & stone)");
+		cc.set("worth.rare-materials", 0.8, "The worth of Rare stuff that you really wouldnt want to loose.");
+		cc.set("worth.ore", 0.9, "The worth of Ores and mined things that could be hard to find.");
+		cc.set("worth.expensive-tools-armor", 1.0, "The worth of expensive tools and armor");
+		cc.set("worth.other", 1.1, "The worth of Other things that cant be categorized.");
+		cc.set("worth.undefined", 1.2, "The worth of Undefined items in this config");
 		
 		cc.set("define.rubble", new MaterialList(Material.DIRT, Material.GRASS, Material.COBBLESTONE, Material.COBBLE_WALL, Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE, Material.BEDROCK, Material.SANDSTONE, Material.SAND, Material.CLAY, Material.STAINED_CLAY, Material.HARD_CLAY, Material.STONE).getStrings());
 		cc.set("define.herbs", new MaterialList(Material.SEEDS, Material.SUGAR, Material.SUGAR_CANE, Material.SUGAR_CANE_BLOCK, Material.MELON_SEEDS, Material.PUMPKIN_SEEDS, Material.CROPS, Material.SAPLING, Material.VINE, Material.BROWN_MUSHROOM, Material.YELLOW_FLOWER, Material.INK_SACK, Material.RED_MUSHROOM, Material.HUGE_MUSHROOM_1, Material.HUGE_MUSHROOM_2, Material.CACTUS, Material.DEAD_BUSH, Material.LONG_GRASS, Material.LEAVES, Material.LEAVES_2).getStrings());

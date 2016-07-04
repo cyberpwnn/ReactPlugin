@@ -29,12 +29,12 @@ public class PlayerData implements Configurable
 	@Override
 	public void onNewConfig()
 	{
-		cc.set("monitor.uuid", uuid.toString());
-		cc.set("monitor.options.monitoring.enabled", monitoring);
-		cc.set("monitor.options.monitoring.current", monitoringTab);
-		cc.set("monitor.options.monitoring.locked", lockedTab);
+		cc.set("monitor.uuid", uuid.toString(), "The player's uuid. Changing this does nothing.");
+		cc.set("monitor.options.monitoring.enabled", monitoring, "Feature Enabled?");
+		cc.set("monitor.options.monitoring.current", monitoringTab, "Current monitoring tab");
+		cc.set("monitor.options.monitoring.locked", lockedTab, "Monitor locked in position?");
 		cc.set("monitor.options.mapping.enabled", mapping);
-		cc.set("monitor.ignore", ignored);
+		cc.set("monitor.ignore", ignored, "Ignored messages about instabilities.");
 	}
 	
 	@Override

@@ -260,7 +260,15 @@ public class React extends JavaPlugin implements Configurable
 			{
 				for(Controllable i : controllers)
 				{
-					i.tick();
+					try
+					{
+						i.tick();
+					}
+					
+					catch(Exception e)
+					{
+						React.fail(e, "Controller failed to properly tick.");
+					}
 				}
 			}
 		});
@@ -364,26 +372,24 @@ public class React extends JavaPlugin implements Configurable
 	public void onNewConfig()
 	{
 		cc.set("debug-messages", true);
-		cc.set("startup.prevent-memory-leaks", true);
+		cc.set("startup.prevent-memory-leaks", true, "Run the garbage collector after startup to prevent memory issues from reloading and startup.");
 		cc.set("maps.display-static", false);
-		cc.set("startup.verbose", false);
-		cc.set("startup.anonymous-statistics", true);
-		cc.set("startup.skip-update-check", true);
-		cc.set("startup.auto-update", false);
-		cc.set("runtime.disable-reactions", false);
-		cc.set("display.tag", "&b[&8React&b]:");
-		cc.set("display.no-permission", "&cInsufficient Permission");
-		cc.set("monitor.allow-title-verbose", true);
-		cc.set("react-remote.enable", false);
-		cc.set("react-remote.port", 8118);
+		cc.set("startup.verbose", false, "Startup verbose for extra information.");
+		cc.set("startup.anonymous-statistics", true, "Should we track usage statistics?");
+		cc.set("runtime.disable-reactions", false, "Disable all reactions. Just sampling basically.");
+		cc.set("display.tag", "&b[&8React&b]:", "Here you can configure the tag for react. Uses color codes.");
+		cc.set("display.no-permission", "&cInsufficient Permission", "Permission denied message.");
+		cc.set("monitor.allow-title-verbose", true, "Allow title message verbose?\nPlayers still have to turn it on if it is enabled.");
+		cc.set("react-remote.enable", false, "This is for remote access to the react server");
+		cc.set("react-remote.port", 8118, "Make sure the port is open. You may get a failed to bind to port message if it isnt.\n DONT USE 25565!");
 		cc.set("react-remote.interval", 100);
-		cc.set("react-remote.users.cyberpwn.password", "react123");
-		cc.set("react-remote.users.cyberpwn.enabled", false);
+		cc.set("react-remote.users.cyberpwn.password", "react123", "Password for this user");
+		cc.set("react-remote.users.cyberpwn.enabled", false, "You can disable individual users here");
 		cc.set("heartbeat.save-before-crash", true);
-		cc.set("commands.override.memory", true);
-		cc.set("commands.override.tps", true);
-		cc.set("messages.notify-instability", true);
-		cc.set("lang", "en");
+		cc.set("commands.override.memory", true, "Override the /mem and /memory for more accurate information");
+		cc.set("commands.override.tps", true, "Override the /tps and /lag commands for more accurate information");
+		cc.set("messages.notify-instability", true, "Notifiy players with react.monitor permissions of instabilities?");
+		cc.set("lang", "en", "Language code.");
 	}
 	
 	public void setTag()
@@ -399,7 +405,6 @@ public class React extends JavaPlugin implements Configurable
 		debug = cc.getBoolean("debug-messages");
 		staticy = cc.getBoolean("maps.display-static");
 		stats = cc.getBoolean("startup.anonymous-statistics");
-		ignoreUpdates = cc.getBoolean("startup.skip-update-check");
 		disp = cc.getBoolean("monitor.allow-title-verbose");
 		tickm = cc.getInt("react-remote.interval");
 		allowMem = cc.getBoolean("commands.override.memory");

@@ -169,8 +169,8 @@ public class ActionPurgeChunks extends Action implements Listener
 	{
 		super.onNewConfig();
 		
-		cc.set("limit-ms", 26);
-		cc.set("culls.limit-interval-seconds", 60);
-		cc.set("culls.limit-per-player", 750);
+		cc.set("limit-ms", 26, "How many ms of a tick should we use to purge chunks? \nTypically most plugins allow unlimited speeds. The higher, the faster, however usually you cant notice it.");
+		cc.set("culls.limit-interval-seconds", 60, "How long to wait before even attempting to purge chunks?");
+		cc.set("culls.limit-per-player", 750, "How many chunks per player before trying to cull?");
 	}
 }

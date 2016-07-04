@@ -607,18 +607,18 @@ public class ActionInstabilityCause extends Action
 	{
 		super.onNewConfig();
 		
-		cc.set(getCodeName() + ".low.tps", 16.8);
-		cc.set(getCodeName() + ".high.spms", 1);
-		cc.set(getCodeName() + ".high.memory.percent", 0.8);
+		cc.set(getCodeName() + ".low.tps", 16.8, "What is considered a low tps? Lag?");
+		cc.set(getCodeName() + ".high.spms", 1, "Low SPMS");
+		cc.set(getCodeName() + ".high.memory.percent", 0.8, "A high percent?");
 		cc.set(getCodeName() + ".high.memory.chunk.percent", 0.9);
-		cc.set(getCodeName() + ".high.liquid", 4096);
-		cc.set(getCodeName() + ".high.redstone", 4096);
-		cc.set(getCodeName() + ".high.tnt", 256);
-		cc.set(getCodeName() + ".high.chunk.generation", 18);
-		cc.set(getCodeName() + ".high.entity.count", 8192);
+		cc.set(getCodeName() + ".high.liquid", 4096, "High liquids flow counts?");
+		cc.set(getCodeName() + ".high.redstone", 4096, "High redstone counts?");
+		cc.set(getCodeName() + ".high.tnt", 256, "High tnt/s counts?");
+		cc.set(getCodeName() + ".high.chunk.generation", 18, "High chunk gens/s counts?");
+		cc.set(getCodeName() + ".high.entity.count", 8192, "High counts?");
 		cc.set(getCodeName() + ".high.drop.count", 1024);
-		cc.set(getCodeName() + ".high.worldedit.bps", 10000);
-		cc.set(getCodeName() + ".slow-fast-flyers-temporarily", true);
+		cc.set(getCodeName() + ".high.worldedit.bps", 10000, "High world edit BPS?");
+		cc.set(getCodeName() + ".slow-fast-flyers-temporarily", true, "Slow down flyers who are flying at \nvery fast speeds until chunk lag has stopped");
 	}
 	
 	public GPage queryPlugin(String name)
