@@ -15,10 +15,12 @@ public class ClusterConfig
 	}
 	
 	private GMap<String, Cluster> data;
+	private GMap<String, String> comments;
 	
 	public ClusterConfig()
 	{
 		this.data = new GMap<String, Cluster>();
+		this.comments = new GMap<String, String>();
 	}
 	
 	public ClusterConfig copy()
@@ -111,6 +113,81 @@ public class ClusterConfig
 	public void set(String key, GList<String> value)
 	{
 		data.put(key, new ClusterStringList(key, value));
+	}
+	
+	public void setComment(String key, String comment)
+	{
+		comments.put(key, comment);
+	}
+	
+	public void set(String key, int value, String comment)
+	{
+		Cluster c = new ClusterInteger(key, value);
+		setComment(key, comment);
+		data.put(key, c);
+	}
+	
+	public void set(String key, double value, String comment)
+	{
+		Cluster c = new ClusterDouble(key, value);
+		setComment(key, comment);
+		data.put(key, c);
+		}
+	
+	public void set(String key, boolean value, String comment)
+	{
+		Cluster c = new ClusterBoolean(key, value);
+		setComment(key, comment);
+		data.put(key, c);
+	}
+	
+	public void set(String key, String value, String comment)
+	{
+		Cluster c = new ClusterString(key, value);
+		setComment(key, comment);
+		data.put(key, c);
+	}
+	
+	public void set(String key, GList<String> value, String comment)
+	{
+		Cluster c = new ClusterStringList(key, value);
+		setComment(key, comment);
+		data.put(key, c);
+	}
+	
+	public Boolean hasComment(String key)
+	{
+		return comments.containsKey(key);
+	}
+	
+	public GMap<String, String> getComments()
+	{
+		return comments;
+	}
+
+	public GList<String> getComment(String key)
+	{
+		if(hasComment(key))
+		{
+			GList<String> g = new GList<String>();
+			
+			if(comments.get(key).contains("\n"))
+			{
+				for(String i : comments.get(key).split("\n"))
+				{
+					g.add(i);
+				}
+			}
+			
+			else
+			{
+				g.add(comments.get(key));
+			}
+			
+			return g;
+		}
+		
+		return new GList<String>();
 	}
 	
 	public Boolean getBoolean(String key)
