@@ -113,6 +113,14 @@ public class E
 			return;
 		}
 		
-		e.remove();
+		try
+		{
+			e.remove();
+		}
+		
+		catch(Exception ex)
+		{
+			
+		}
 	}
 }
