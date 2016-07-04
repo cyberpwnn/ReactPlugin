@@ -23,6 +23,7 @@ import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -205,7 +206,7 @@ public class ActionCullEntities extends Action implements Listener
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
-	public void onEntitySpawn(EntitySpawnEvent e)
+	public void onEntitySpawn(final EntitySpawnEvent e)
 	{
 		if(e.getEntityType().toString().equals("PLAYER"))
 		{
@@ -247,16 +248,22 @@ public class ActionCullEntities extends Action implements Listener
 			return;
 		}
 		
-		if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius") && new Area(e.getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius")).getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
+		new TaskLater(1)
 		{
-			cullOne(e.getLocation().getChunk());
-			return;
-		}
-		
-		if(weight(e.getEntity().getLocation().getChunk()) >= cc.getInt(getCodeName() + ".max-entities-per-chunk"))
-		{
-			cullOne(e.getLocation().getChunk());
-		}
+			public void run()
+			{
+				if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius") && new Area(e.getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius")).getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
+				{
+					cullOne(e.getLocation().getChunk());
+					return;
+				}
+				
+				if(weight(e.getEntity().getLocation().getChunk()) >= cc.getInt(getCodeName() + ".max-entities-per-chunk"))
+				{
+					cullOne(e.getLocation().getChunk());
+				}
+			}
+		};
 	}
 	
 	public void onNewConfig()
