@@ -49,6 +49,8 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
+import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 
@@ -126,29 +128,6 @@ public class React extends JavaPlugin implements Configurable
 	{
 		d = new Dispatcher("React");
 		instance = this;
-		
-		scheduleSyncTask(30, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if(new GFile(getDataFolder(), "encrypt").exists())
-				{
-					GFile fx = new GFile(getDataFolder(), "encrypted");
-					fx.delete();
-					fx.mkdir();
-					FM.createAll(new GFile(getDataFolder(), "encrypt"), fx);
-				}
-				
-				if(new GFile(getDataFolder(), "decrypt").exists())
-				{
-					GFile fx = new GFile(getDataFolder(), "decrypted");
-					fx.delete();
-					fx.mkdir();
-					FM.parseAll(new GFile(getDataFolder(), "decrypt"), fx);
-				}
-			}
-		});
 		
 		setVerbose(false);
 		cc = new ClusterConfig();
@@ -238,6 +217,29 @@ public class React extends JavaPlugin implements Configurable
 			}
 		}
 		
+		new TaskLater(1)
+		{
+			@Override
+			public void run()
+			{
+				if(new GFile(getDataFolder(), "encrypt").exists())
+				{
+					GFile fx = new GFile(getDataFolder(), "encrypted");
+					fx.delete();
+					fx.mkdir();
+					FM.createAll(new GFile(getDataFolder(), "encrypt"), fx);
+				}
+				
+				if(new GFile(getDataFolder(), "decrypt").exists())
+				{
+					GFile fx = new GFile(getDataFolder(), "decrypted");
+					fx.delete();
+					fx.mkdir();
+					FM.parseAll(new GFile(getDataFolder(), "decrypt"), fx);
+				}
+			}
+		};
+		
 		if(stats)
 		{
 			try
@@ -277,7 +279,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		saved = 20 * 60;
 		
-		scheduleSyncRepeatingTask(1, 0, new Runnable()
+		new Task(0)
 		{
 			@Override
 			public void run()
@@ -295,11 +297,11 @@ public class React extends JavaPlugin implements Configurable
 					}
 				}
 			}
-		});
-		
+		};
+					
 		if(cc.getBoolean("startup.prevent-memory-leaks") && onlinePlayers().length == 0)
 		{
-			scheduleSyncTask(20, new Runnable()
+			new TaskLater(1)
 			{
 				@Override
 				public void run()
@@ -309,7 +311,7 @@ public class React extends JavaPlugin implements Configurable
 					System.gc();
 					d.s("Released " + F.mem((mem - sampleController.getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + " of memory.");
 				}
-			});
+			};
 		}
 		
 		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
@@ -942,37 +944,37 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return entityStackController;
 	}
-
+	
 	public ScoreboardController getScoreboardController()
 	{
 		return scoreboardController;
 	}
-
+	
 	public void setScoreboardController(ScoreboardController scoreboardController)
 	{
 		this.scoreboardController = scoreboardController;
 	}
-
+	
 	public void setJustUpdated(boolean justUpdated)
 	{
 		this.justUpdated = justUpdated;
 	}
-
+	
 	public void setUpdateController(UpdateController updateController)
 	{
 		this.updateController = updateController;
 	}
-
+	
 	public void setEntityStackController(EntityStackController entityStackController)
 	{
 		this.entityStackController = entityStackController;
 	}
-
+	
 	public void setPacketController(PacketController packetController)
 	{
 		this.packetController = packetController;
 	}
-
+	
 	public PhotonController getPhotonController()
 	{
 		return photonController;
