@@ -5,6 +5,8 @@ ehthumbs.db
 .project
 .classpath
 
+# Eclipse & Maven
+target/
 .metadata
 bin/
 tmp/
