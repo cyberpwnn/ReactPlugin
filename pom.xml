@@ -10,6 +10,7 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<react.libs>${project.basedir}/lib</react.libs>
+		<react.proguard>${project.basedir}/proguard</react.proguard>
 		<react.production.folder>X:\react\release</react.production.folder>
 		<react.development.folder>X:\servers\dynamic\plugins</react.development.folder>
 	</properties>
@@ -86,6 +87,7 @@
 						</executions>
 						<configuration>
 							<proguardVersion>4.10</proguardVersion>
+							<proguardInclude>${react.proguard}/proguard.cfg</proguardInclude>
 							<injar>${project.build.finalName}.jar</injar>
 							<outjar>${react.production.folder}/${project.name}-${project.version}</outjar>
 							<obfuscate>true</obfuscate>
