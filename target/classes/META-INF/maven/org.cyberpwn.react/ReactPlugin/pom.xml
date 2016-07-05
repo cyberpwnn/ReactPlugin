@@ -87,11 +87,21 @@
 							<proguardVersion>4.10</proguardVersion>
 							<options>
 								<option>-keep public class myapp.Main{public static void
-									main(java.lang.String[]);}</option>
+									main(java.lang.String[]);}
+								</option>
 							</options>
 							<libs>
 								<lib>${java.home}/lib/rt.jar</lib>
 								<lib>${java.home}/lib/jce.jar</lib>
+								<lib>${react.libs}/Craftbukkit-1.8.8.jar</lib>
+								<lib>${react.libs}/Craftbukkit-1.9.2.jar</lib>
+								<lib>${react.libs}/Craftbukkit-1.9.4.jar</lib>
+								<lib>${react.libs}/Craftbukkit-1.10.jar</lib>
+								<lib>${react.libs}/Spigot-1.8.8.jar</lib>
+								<lib>${react.libs}/Paper-1.8.8.jar</lib>
+								<lib>${react.libs}/WorldBorder.jar</lib>
+								<lib>${react.libs}/ProtocolLib.jar</lib>
+								<lib>${react.libs}/PlaceHolderAPI.jar</lib>
 							</libs>
 						</configuration>
 					</plugin>
