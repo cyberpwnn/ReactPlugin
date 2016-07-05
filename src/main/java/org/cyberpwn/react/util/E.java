@@ -1,74 +1,20 @@
 package org.cyberpwn.react.util;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.reflect.CitizensPluginConnector;
+import org.cyberpwn.react.reflect.MobArenaPluginConnector;
 
 public class E
 {
 	public static boolean isNPC(Entity e)
 	{
-		if(Bukkit.getPluginManager().getPlugin("Citizens") == null)
-		{
-			
-			return false;
-		}
-
-		Boolean b = false;
-		Plugin c = Bukkit.getPluginManager().getPlugin("Citizens");
-		
-		try
-		{
-			Object npcr = c.getClass().getMethod("getNPCRegistry").invoke(c);
-			b = (Boolean) npcr.getClass().getMethod("isNPC", Entity.class).invoke(npcr, e);
-		} 
-		
-		catch(Exception ex)
-		{
-			
-		}
-		
-		return b;
-	}
-	
-	public static boolean isInArena(Location l)
-	{
-		if(Bukkit.getPluginManager().getPlugin("MobArena") == null)
-		{
-			return false;
-		}
-
-		Plugin c = Bukkit.getPluginManager().getPlugin("MobArena");
-		
-		try
-		{
-			Object master = c.getClass().getMethod("getArenaMaster").invoke(c);
-			Object a = master.getClass().getMethod("getArenaAtLocation", Location.class).invoke(master, l);
-			
-			if(a == null)
-			{
-				return false;
-			}
-			
-			else
-			{
-				return true;
-			}
-		}
-		
-		catch(Exception ex)
-		{
-			
-		}
-		
-		return false;
+		return new CitizensPluginConnector().isNPC(e);
 	}
 	
 	public static void r(Entity e)
 	{
-		if(isInArena(e.getLocation()))
+		if(new MobArenaPluginConnector().inArena(e.getLocation()))
 		{
 			return;
 		}
