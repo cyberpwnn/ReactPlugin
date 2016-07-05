@@ -6,6 +6,11 @@
 	<version>2x</version>
 	<name>ReactPlugin</name>
 	<description>Smart Server Performance</description>
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<server.jars>${project.basedir}/lib</server.jars>
+	</properties>
 	<build>
 		<plugins>
 			<plugin>
@@ -72,9 +77,78 @@
 		</profile>
 	</profiles>
 	<repositories>
-		
+
 	</repositories>
 	<dependencies>
-		
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>spigot.org</groupId>
+			<artifactId>spigot-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Spigot-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>paper</groupId>
+			<artifactId>paper-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Paper-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>protocollib</groupId>
+			<artifactId>protocollib</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/ProtocolLib.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>placeholderapi</groupId>
+			<artifactId>placeholderapi</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/PlaceHolderAPI.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>worldborder</groupId>
+			<artifactId>worldborder</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/WorldBorder.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.9.2</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.9.2.jar</systemPath>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.9.4</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.9.4.jar</systemPath>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.10</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.10.jar</systemPath>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 </project>

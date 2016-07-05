@@ -9,6 +9,7 @@
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
+		<server.jars>${project.basedir}/lib</server.jars>
 	</properties>
 	<build>
 		<plugins>
@@ -76,52 +77,78 @@
 		</profile>
 	</profiles>
 	<repositories>
-		<repository>
-			<id>spigot-repo</id>
-			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
-		<repository>
-			<id>placeholderapi</id>
-			<url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-		</repository>
-		<repository>
-			<id>destroystokyo-repo</id>
-			<url>https://repo.destroystokyo.com/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>dmulloy2-repo</id>
-			<url>http://repo.dmulloy2.net/content/groups/public/</url>
-		</repository>
+
 	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>com.destroystokyo.paper</groupId>
-			<artifactId>paper-api</artifactId>
-			<version>1.9-R0.1-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>provided</scope>
+			<groupId>spigot.org</groupId>
+			<artifactId>spigot-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Spigot-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>me.clip</groupId>
+			<groupId>paper</groupId>
+			<artifactId>paper-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Paper-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>protocollib</groupId>
+			<artifactId>protocollib</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/ProtocolLib.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>placeholderapi</groupId>
 			<artifactId>placeholderapi</artifactId>
-			<version>2.0.8</version>
-			<scope>provided</scope>
+			<scope>system</scope>
+			<systemPath>${server.jars}/PlaceHolderAPI.jar</systemPath>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot-api</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
-			<scope>provided</scope>
+			<groupId>worldborder</groupId>
+			<artifactId>worldborder</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/WorldBorder.jar</systemPath>
+			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>com.comphenix.protocol</groupId>
-			<artifactId>ProtocolLib-API</artifactId>
-			<version>4.0</version>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.8.8</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.8.8.jar</systemPath>
+			<version>1.8.8</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.9.2</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.9.2.jar</systemPath>
+			<version>1.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.9.4</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.9.4.jar</systemPath>
+			<version>1.9.4</version>
+		</dependency>
+		<dependency>
+			<groupId>bukkit.org</groupId>
+			<artifactId>craftbukkit-1.10</artifactId>
+			<scope>system</scope>
+			<systemPath>${server.jars}/Craftbukkit-1.10.jar</systemPath>
+			<version>1.10</version>
 		</dependency>
 	</dependencies>
 </project>
