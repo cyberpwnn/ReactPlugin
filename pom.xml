@@ -104,13 +104,6 @@
 	</repositories>
 	<dependencies>
 		<dependency>
-			<groupId>bukkit.org</groupId>
-			<artifactId>craftbukkit-1.8.8</artifactId>
-			<scope>system</scope>
-			<systemPath>${server.jars}/Craftbukkit-1.8.8.jar</systemPath>
-			<version>1.8.8</version>
-		</dependency>
-		<dependency>
 			<groupId>spigot.org</groupId>
 			<artifactId>spigot-1.8.8</artifactId>
 			<scope>system</scope>
@@ -137,34 +130,6 @@
 			<scope>system</scope>
 			<systemPath>${react.libs}/PlaceHolderAPI.jar</systemPath>
 			<version>1.8.8</version>
-		</dependency>
-		<dependency>
-			<groupId>bukkit.org</groupId>
-			<artifactId>craftbukkit-1.8.8</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/Craftbukkit-1.8.8.jar</systemPath>
-			<version>1.8.8</version>
-		</dependency>
-		<dependency>
-			<groupId>bukkit.org</groupId>
-			<artifactId>craftbukkit-1.9.2</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/Craftbukkit-1.9.2.jar</systemPath>
-			<version>1.9.2</version>
-		</dependency>
-		<dependency>
-			<groupId>bukkit.org</groupId>
-			<artifactId>craftbukkit-1.9.4</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/Craftbukkit-1.9.4.jar</systemPath>
-			<version>1.9.4</version>
-		</dependency>
-		<dependency>
-			<groupId>bukkit.org</groupId>
-			<artifactId>craftbukkit-1.10</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/Craftbukkit-1.10.jar</systemPath>
-			<version>1.10</version>
 		</dependency>
 	</dependencies>
 </project>
