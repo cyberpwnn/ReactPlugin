@@ -2,15 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn.react</groupId>
-	<artifactId>ReactPlugin</artifactId>
-	<version>2x</version>
-	<name>ReactPlugin</name>
+	<artifactId>React</artifactId>
+	<version>2.7.6</version>
+	<name>React</name>
 	<description>Smart Server Performance</description>
 	<properties>
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<react.libs>${project.basedir}/lib</react.libs>
-		<development.server.path>X:\servers\dynamic\plugins</development.server.path>
+		<react.production.folder>X:\react\release</react.production.folder>
+		<react.development.folder>X:\servers\dynamic\plugins</react.development.folder>
 	</properties>
 	<build>
 		<plugins>
@@ -44,7 +45,7 @@
 						<artifactId>maven-jar-plugin</artifactId>
 						<version>2.3.1</version>
 						<configuration>
-							<outputDirectory>${development.server.path}</outputDirectory>
+							<outputDirectory>${react.development.folder}</outputDirectory>
 							<finalName>React</finalName>
 						</configuration>
 					</plugin>
@@ -85,10 +86,11 @@
 						</executions>
 						<configuration>
 							<proguardVersion>4.10</proguardVersion>
+							<injar>${project.build.finalName}.jar</injar>
+							<outjar>${react.production.folder}/${project.name}-${project.version}</outjar>
+							<obfuscate>true</obfuscate>
 							<options>
-								<option>-keep public class myapp.Main{public static void
-									main(java.lang.String[]);}
-								</option>
+								
 							</options>
 							<libs>
 								<lib>${java.home}/lib/rt.jar</lib>
