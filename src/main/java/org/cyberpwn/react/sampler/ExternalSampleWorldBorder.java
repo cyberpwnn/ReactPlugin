@@ -2,9 +2,8 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.reflect.WorldBorderPluginConnector;
 import org.cyberpwn.react.util.ValueType;
-
-import com.wimbli.WorldBorder.Config;
 
 public class ExternalSampleWorldBorder extends ExternalSample
 {
@@ -23,7 +22,7 @@ public class ExternalSampleWorldBorder extends ExternalSample
 	
 	public void onStart()
 	{
-		if(Config.fillTask != null && Config.fillTask.valid())
+		if(new WorldBorderPluginConnector().isActive())
 		{
 			filling = true;
 		}
@@ -46,7 +45,7 @@ public class ExternalSampleWorldBorder extends ExternalSample
 	
 	public void onTick()
 	{
-		if(Config.fillTask != null && Config.fillTask.valid())
+		if(new WorldBorderPluginConnector().isActive())
 		{
 			filling = true;
 		}

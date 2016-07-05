@@ -139,13 +139,6 @@
 			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>worldborder</groupId>
-			<artifactId>worldborder</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/WorldBorder.jar</systemPath>
-			<version>1.8.8</version>
-		</dependency>
-		<dependency>
 			<groupId>bukkit.org</groupId>
 			<artifactId>craftbukkit-1.8.8</artifactId>
 			<scope>system</scope>
