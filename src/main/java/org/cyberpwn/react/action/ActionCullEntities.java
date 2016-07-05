@@ -17,7 +17,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.nms.NMS;
+import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
@@ -144,7 +144,7 @@ public class ActionCullEntities extends Action implements Listener
 			
 			if(cc.getStringList(getCodeName() + ".cullable").contains(i.getType().toString()))
 			{
-				if(NMS.instance().getEntityName(i) != null)
+				if(NMSX.getEntityName(i) != null)
 				{
 					if(cc.getBoolean(getCodeName() + ".filter.ignore-named-entities"))
 					{

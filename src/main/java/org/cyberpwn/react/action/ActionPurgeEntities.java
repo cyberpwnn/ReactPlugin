@@ -12,7 +12,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.nms.NMS;
+import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
@@ -84,7 +84,7 @@ public class ActionPurgeEntities extends Action implements Listener
 						continue;
 					}
 					
-					if(NMS.instance().getEntityName(j) != null)
+					if(NMSX.getEntityName(j) != null)
 					{
 						if(cc.getBoolean(getCodeName() + ".filter.ignore-named-entities"))
 						{

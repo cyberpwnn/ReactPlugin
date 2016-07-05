@@ -1,7 +1,6 @@
 package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 
@@ -41,7 +40,7 @@ public class PacketUtil
 		
 		try
 		{
-			NMS.instance().packetTitle(player, title, subTitle, in, out, stay);
+			NMSX.sendTitle(player, in, stay, out, title, subTitle);
 		}
 		
 		catch(Exception e)
@@ -50,20 +49,16 @@ public class PacketUtil
 		}
 	}
 	
-	public static void relight(Location location)
-	{
-		NMS.instance().relight(location);
-	}
-	
 	public static void clearTitle(Player player)
 	{
 		if(getVersion().equals(V.R17))
 		{
 			return;
 		}
+		
 		try
 		{
-			NMS.instance().clearTitle(player);
+			NMSX.sendTitle(player, 20, 20, 10, " ", " ");
 		}
 		
 		catch(Exception e)
@@ -81,7 +76,7 @@ public class PacketUtil
 		
 		try
 		{
-			NMS.instance().packetActionTitle(player, message);
+			NMSX.sendActionBar(player, message);
 		}
 		
 		catch(Exception e)

@@ -34,7 +34,7 @@ import org.cyberpwn.react.json.RawText;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.ReactServer;
-import org.cyberpwn.react.nms.NMS;
+import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Callback;
@@ -1035,7 +1035,7 @@ public class CommandController extends Controller implements CommandExecutor
 					if(react.canFindPlayer(getArgs()[1]))
 					{
 						Player p = react.findPlayer(getArgs()[1]);
-						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Pong[" + p.getName() + "]: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping(p) + "ms");
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Pong[" + p.getName() + "]: " + ChatColor.LIGHT_PURPLE + NMSX.ping(p) + "ms");
 					}
 					
 					else
@@ -1057,7 +1057,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						try
 						{
-							int ping = NMS.instance().ping(i);
+							int ping = NMSX.ping(i);
 							
 							if(ping > highest)
 							{
@@ -1091,7 +1091,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					try
 					{
-						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMS.instance().ping((Player) sender) + "ms");
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMSX.ping((Player) sender) + "ms");
 					}
 						
 					catch(Exception e)
