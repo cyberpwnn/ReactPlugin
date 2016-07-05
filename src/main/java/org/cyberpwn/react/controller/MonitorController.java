@@ -1,7 +1,5 @@
 package org.cyberpwn.react.controller;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -693,40 +691,32 @@ public class MonitorController extends Controller implements Configurable
 				@Override
 				public void run()
 				{
-					try
+					new Fetcher("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml", new FCCallback()
 					{
-						new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), new FCCallback()
+						public void run()
 						{
-							public void run()
+							String desc = "";
+							List<String> description = fc().getStringList("pack.description");
+							
+							for(String i : description)
 							{
-								String desc = "";
-								List<String> description = fc().getStringList("pack.description");
-								
-								for(String i : description)
+								desc = desc + ChatColor.GREEN + i;
+							}
+							
+							String version = fc().getString("package.version");
+							int versionCode = fc().getInt("package.version-code");
+							
+							if(versionCode > Info.VERSION_CODE)
+							{
+								if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 								{
-									desc = desc + ChatColor.GREEN + i;
-								}
-								
-								String version = fc().getString("package.version");
-								int versionCode = fc().getInt("package.version-code");
-								
-								if(versionCode > Info.VERSION_CODE)
-								{
-									if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
-									{
-										e.getPlayer().sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_UPDATE_FOUND + ChatColor.GREEN + "v" + version);
-										e.getPlayer().sendMessage(Info.TAG + ChatColor.YELLOW + "Use /re version " + ChatColor.GREEN + " for more information.");
-										e.getPlayer().sendMessage(Info.TAG + ChatColor.YELLOW + "Use /re update " + ChatColor.GREEN + " to update to this version.");
-									}
+									e.getPlayer().sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_UPDATE_FOUND + ChatColor.GREEN + "v" + version);
+									e.getPlayer().sendMessage(Info.TAG + ChatColor.YELLOW + "Use /re version " + ChatColor.GREEN + " for more information.");
+									e.getPlayer().sendMessage(Info.TAG + ChatColor.YELLOW + "Use /re update " + ChatColor.GREEN + " to update to this version.");
 								}
 							}
-						}).start();
-					}
-					
-					catch(MalformedURLException e)
-					{
-						
-					}
+						}
+					}).start();
 				}
 			});
 		}

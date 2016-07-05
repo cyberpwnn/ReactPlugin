@@ -2,7 +2,6 @@ package org.cyberpwn.react.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.bukkit.Bukkit;
@@ -305,15 +304,7 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void getData(FCCallback fc)
 	{
-		try
-		{
-			new Fetcher(new URL("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml"), fc).start();
-		}
-		
-		catch(MalformedURLException e)
-		{
-			
-		}
+		new Fetcher("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml", fc).start();
 	}
 	
 	public void getUpdate(Runnable ru)

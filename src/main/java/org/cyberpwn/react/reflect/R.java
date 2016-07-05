@@ -1,4 +1,4 @@
-package org.cyberpwn.react;
+package org.cyberpwn.react.reflect;
 
 import org.cyberpwn.react.util.ReactWrapper;
 

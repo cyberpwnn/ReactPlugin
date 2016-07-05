@@ -3,8 +3,6 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -46,24 +44,16 @@ public class LanguageController extends Controller
 		{
 			React.instance().getD().s(String.format(Info.URL_LANGUAGE, code));
 			
-			try
+			new Fetcher(String.format(Info.URL_LANGUAGE, code), new FCCallback()
 			{
-				new Fetcher(new URL(String.format(Info.URL_LANGUAGE, code)), new FCCallback()
+				public void run()
 				{
-					public void run()
-					{
-						React.instance().getD().s("Found Language for Key: " + code);
-						ClusterConfig cc = new ClusterConfig();
-						cc.set(fc());
-						setLanguage(cc);
-					}
-				}).start();
-			} 
-			
-			catch(MalformedURLException e)
-			{
-				e.printStackTrace();
-			}
+					React.instance().getD().s("Found Language for Key: " + code);
+					ClusterConfig cc = new ClusterConfig();
+					cc.set(fc());
+					setLanguage(cc);
+				}
+			}).start();
 		}
 	}
 	

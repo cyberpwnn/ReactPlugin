@@ -1,21 +1,22 @@
 package org.cyberpwn.react.network;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.cyberpwn.react.util.GInputStreamReader;
+import org.cyberpwn.react.util.GThread;
+import org.cyberpwn.react.util.GURL;
 
-public class Fetcher extends Thread
+public class Fetcher extends GThread
 {
-	private URL url;
+	private String url;
 	private FCCallback callback;
 	
-	public Fetcher(URL url, FCCallback callback)
+	public Fetcher(String s, FCCallback callback)
 	{
-		this.url = url;
+		this.url = s;
 		this.callback = callback;
 	}
 	
@@ -25,7 +26,7 @@ public class Fetcher extends Thread
 		
 		try
 		{
-			fc.load(new InputStreamReader(url.openStream()));
+			fc.load(new GInputStreamReader(GURL.um(url).openStream()));
 			callback.run(fc);
 		}
 		

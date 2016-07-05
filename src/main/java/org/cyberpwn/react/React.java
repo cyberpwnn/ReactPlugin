@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -41,7 +40,6 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Metrics;
@@ -111,6 +109,7 @@ public class React extends JavaPlugin implements Configurable
 	{
 		start = M.ms();
 		justUpdated = false;
+		super.startup();
 		
 		try
 		{
@@ -351,21 +350,6 @@ public class React extends JavaPlugin implements Configurable
 		}
 	}
 	
-	public void onReload(CommandSender sender)
-	{
-		if(sender.hasPermission(Info.PERM_RELOAD))
-		{
-			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
-			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
-			sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_RELOADED);
-		}
-		
-		else
-		{
-			sender.sendMessage(Info.TAG + L.MESSAGE_INSUFFICIENT_PERMISSION);
-		}
-	}
-	
 	public static void dump()
 	{
 		Dump dump = new Dump(instance);
@@ -441,20 +425,6 @@ public class React extends JavaPlugin implements Configurable
 			cc.remove("placeholders");
 			getDataController().save(null, this);
 		}
-	}
-	
-	public void aitr(String s)
-	{
-		String x = "GList<String>()";
-		
-		for(char i : s.toCharArray())
-		{
-			x = x + ".qadd(\"" + i + "\")";
-		}
-		
-		x = x + ";";
-		
-		System.out.println(x);
 	}
 	
 	public static void imx()
@@ -671,13 +641,6 @@ public class React extends JavaPlugin implements Configurable
 	public PlayerController getPlayerController()
 	{
 		return playerController;
-	}
-	
-	public GTime getUptime()
-	{
-		File f = new File(getDataFolder().getParentFile().getParentFile(), "server.properties");
-		
-		return new GTime(M.ms() - f.lastModified());
 	}
 	
 	public static boolean isMef()

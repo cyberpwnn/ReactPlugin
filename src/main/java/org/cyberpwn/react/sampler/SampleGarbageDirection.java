@@ -14,6 +14,7 @@ public class SampleGarbageDirection extends Sample
 	private long lastSample;
 	private long direction;
 	private long overhead;
+	private int kmx;
 	
 	public SampleGarbageDirection(SampleController sampleController)
 	{
@@ -25,6 +26,7 @@ public class SampleGarbageDirection extends Sample
 		idealDelay = 1;
 		overhead = 1;
 		direction = 1;
+		kmx = 0;
 		target = "Lower is better. However this number will drasticaly vary from server to server.";
 		explaination = L.SAMPLER_MEMORY_GARBAGEDIRECTION;
 	}
@@ -48,26 +50,33 @@ public class SampleGarbageDirection extends Sample
 	
 	public void onTick()
 	{
-		long currentSample = (long) ReactAPI.getMemoryGarbage();
+		kmx++;
 		
-		if(lastSample != currentSample)
+		if(kmx > 10)
 		{
-			direction = currentSample - lastSample;
-		}
-		
-		else
-		{
-			direction = 0;
-		}
-		
-		lastSample = currentSample;
-		
-		if(direction != 0)
-		{
-			if(direction < 0)
+			long currentSample = (long) ReactAPI.getMemoryGarbage();
+			
+			if(lastSample != currentSample)
 			{
-				overhead = -direction;
+				direction = currentSample - lastSample;
 			}
+			
+			else
+			{
+				direction = 0;
+			}
+			
+			lastSample = currentSample;
+			
+			if(direction != 0)
+			{
+				if(direction < 0)
+				{
+					overhead = -direction;
+				}
+			}
+			
+			kmx = 0;
 		}
 	}
 	

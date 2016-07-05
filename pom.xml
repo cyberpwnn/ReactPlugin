@@ -86,6 +86,7 @@
 							<injar>${project.build.finalName}.jar</injar>
 							<outjar>${project.name}-${project.version}</outjar>
 							<obfuscate>true</obfuscate>
+							<maxMemory>4g</maxMemory>
 							<options>
 
 							</options>
@@ -99,9 +100,12 @@
 			</build>
 		</profile>
 	</profiles>
-	<repositories>
-
-	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>onejar-maven-plugin.googlecode.com</id>
+			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<dependencies>
 		<dependency>
 			<groupId>spigot.org</groupId>

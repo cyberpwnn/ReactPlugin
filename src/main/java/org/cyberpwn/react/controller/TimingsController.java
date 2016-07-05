@@ -1,7 +1,5 @@
 package org.cyberpwn.react.controller;
 
-import java.net.URL;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -139,7 +137,7 @@ public class TimingsController extends Controller
 		{
 			sup = true;
 			
-			new Task(1)
+			new Task(10)
 			{
 				public void run()
 				{
@@ -268,7 +266,7 @@ public class TimingsController extends Controller
 	{
 		try
 		{
-			new Fetcher(new URL(React.hashed), new FCCallback()
+			new Fetcher(React.hashed, new FCCallback()
 			{
 				public void run()
 				{

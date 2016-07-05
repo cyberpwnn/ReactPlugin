@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.Version;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.Cluster;
@@ -848,6 +849,20 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_SCOREBOARD, "scoreboard", "sc", "board", "sboard"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
+				CommandSender sender = getSender();
+				
+				sender.sendMessage(String.format(Info.HRN, "Environment"));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Version: " + ChatColor.AQUA + "v" + Version.V + " (" + Version.C + ")");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Obfuscated: " + ChatColor.AQUA + isObfuscated());
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Distro: " + ChatColor.AQUA + "Production");
+				sender.sendMessage(Info.HR);
+			}
+		}, "Check information about react and the server", "environment", "env", "ev"));
 				
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1423,6 +1438,19 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				E.r(e.getItemDrop());
 			}
+		}
+	}
+	
+	public String isObfuscated()
+	{
+		if(getClass().getSimpleName().equals("CommandController"))
+		{
+			return "Nope";
+		}
+		
+		else
+		{
+			return "Definitely";
 		}
 	}
 }

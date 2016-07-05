@@ -6,17 +6,42 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.net.URL;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.NetworkController;
+import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.FCCallback;
 import org.cyberpwn.react.network.Fetcher;
 
 public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 {
+	public void startup()
+	{
+		
+	}
+	
+	public void onReload(CommandSender sender)
+	{
+		if(sender.hasPermission(Info.PERM_RELOAD))
+		{
+			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_RELOADED);
+		}
+		
+		else
+		{
+			sender.sendMessage(Info.TAG + L.MESSAGE_INSUFFICIENT_PERMISSION);
+		}
+	}
+	
 	public boolean canFindPlayer(String search)
 	{
 		return findPlayer(search) == null ? false : true;
@@ -119,7 +144,7 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 						
 						pw.close();
 						
-						new Fetcher(new URL(React.hashed), new FCCallback()
+						new Fetcher(React.hashed, new FCCallback()
 						{
 							public void run()
 							{
@@ -143,5 +168,26 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 		{
 			
 		}
+	}
+	
+	public void aitr(String s)
+	{
+		String x = "GList<String>()";
+		
+		for(char i : s.toCharArray())
+		{
+			x = x + ".qadd(\"" + i + "\")";
+		}
+		
+		x = x + ";";
+		
+		System.out.println(x);
+	}
+	
+	public GTime getUptime()
+	{
+		File f = new File(getDataFolder().getParentFile().getParentFile(), "server.properties");
+		
+		return new GTime(M.ms() - f.lastModified());
 	}
 }

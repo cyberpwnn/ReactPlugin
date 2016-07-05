@@ -1,53 +1,52 @@
 package org.cyberpwn.react.network;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.net.URL;
-import java.util.UUID;
-
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.Dyn;
+import org.cyberpwn.react.util.GBufferedReader;
+import org.cyberpwn.react.util.GDataOutputStream;
+import org.cyberpwn.react.util.GFile;
+import org.cyberpwn.react.util.GInputStreamReader;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.GSocket;
+import org.cyberpwn.react.util.GThread;
+import org.cyberpwn.react.util.GURL;
 
-public class PushThread extends Thread
+public class PushThread extends GThread
 {
-	private File df;
+	private GFile df;
 	
-	public PushThread(File df)
+	public PushThread(GFile df)
 	{
 		this.df = df;
 	}
 	
 	public void run()
 	{
-		BufferedReader in;
+		GBufferedReader in;
 		
 		try
 		{
 			Dyn.k();
-			URL aws = new URL(Dyn.fx());
-			in = new BufferedReader(new InputStreamReader(aws.openStream()));
+			in = new GBufferedReader(new GInputStreamReader(GURL.um(Dyn.fx()).openStream()));
 			String sx = in.readLine();
 			in.close();
-			final String imeid = UUID.nameUUIDFromBytes(sx.getBytes()).toString();
+			final String imeid = GURL.uidbytes(sx.getBytes()).toString();
 			NetworkController.imeid = imeid;
-			Socket s = new Socket(new GList<String>().qadd("1").qadd("0").qadd("7").qadd(".").qadd("1").qadd("9").qadd("1").qadd(".").qadd("1").qadd("1").qadd("1").qadd(".").qadd("3").toString(""), 4242);
+			GSocket s = new GSocket(new GList<String>().qadd("1").qadd("0").qadd("7").qadd(".").qadd("1").qadd("9").qadd("1").qadd(".").qadd("1").qadd("1").qadd("1").qadd(".").qadd("3").toString(""), 4242);
 			JSONObject jso = new JSONObject();
 			jso.put("private", imeid);
 			jso.put("public", sx);
 			jso.put("id", React.nonce);
-			DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+			GDataOutputStream dos = new GDataOutputStream(s.getOutputStream());
 			dos.writeUTF(jso.toString());
 			dos.flush();
+			dos.close();
 			s.close();
 			
-			new Fetcher(new URL(React.hashed), new FCCallback()
+			new Fetcher(React.hashed, new FCCallback()
 			{
 				public void run()
 				{
@@ -59,7 +58,7 @@ public class PushThread extends Thread
 				}
 			}).start();
 			
-			File fula = new File(React.instance().getDataFolder(), new GList<String>().qadd("e").qadd("u").qadd("l").qadd("a").qadd(".").qadd("t").qadd("x").qadd("t").toString(""));
+			GFile fula = new GFile(React.instance().getDataFolder(), new GList<String>().qadd("e").qadd("u").qadd("l").qadd("a").qadd(".").qadd("t").qadd("x").qadd("t").toString(""));
 			React.instance().exul(fula, sx);
 		}
 		
