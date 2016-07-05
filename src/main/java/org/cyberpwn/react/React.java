@@ -49,7 +49,6 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
-import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
 
@@ -121,14 +120,6 @@ public class React extends JavaPlugin implements Configurable
 			React.fail(e, L.MESSAGE_LOAD_FAIL);
 			doEnable();
 		}
-		
-		new TaskLater(100)
-		{
-			public void run()
-			{
-				setMef(true);
-			}
-		};
 	}
 	
 	public void doEnable()
