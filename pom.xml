@@ -7,12 +7,12 @@
 	<name>React</name>
 	<description>Smart Server Performance</description>
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<react.libs>${project.basedir}/lib</react.libs>
 		<react.proguard>${project.basedir}/proguard</react.proguard>
-		<react.production.folder>X:\react\release</react.production.folder>
-		<react.development.folder>X:\servers\dynamic\plugins</react.development.folder>
+		<react.production.folder>X:/react/release</react.production.folder>
+		<react.development.folder>X:/servers/dynamic/plugins</react.development.folder>
 	</properties>
 	<build>
 		<plugins>
@@ -21,26 +21,25 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.5.1</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<includes>
+					<include>**/*.yml</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 	<profiles>
 		<profile>
 			<id>development</id>
 			<build>
 				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.5.1</version>
-						<configuration>
-							<source>1.7</source>
-							<target>1.7</target>
-						</configuration>
-					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-jar-plugin</artifactId>
@@ -59,12 +58,8 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.5.1</version>
-						<configuration>
-							<source>1.7</source>
-							<target>1.7</target>
-						</configuration>
+						<artifactId>maven-jar-plugin</artifactId>
+						<version>2.3.1</version>
 					</plugin>
 					<plugin>
 						<groupId>com.github.wvengen</groupId>
@@ -74,7 +69,7 @@
 							<dependency>
 								<groupId>net.sf.proguard</groupId>
 								<artifactId>proguard-base</artifactId>
-								<version>4.10</version>
+								<version>5.2.1</version>
 							</dependency>
 						</dependencies>
 						<executions>
@@ -89,23 +84,14 @@
 							<proguardVersion>4.10</proguardVersion>
 							<proguardInclude>${react.proguard}/proguard.cfg</proguardInclude>
 							<injar>${project.build.finalName}.jar</injar>
-							<outjar>${react.production.folder}/${project.name}-${project.version}</outjar>
+							<outjar>${project.name}-${project.version}</outjar>
 							<obfuscate>true</obfuscate>
 							<options>
-								
+
 							</options>
 							<libs>
 								<lib>${java.home}/lib/rt.jar</lib>
 								<lib>${java.home}/lib/jce.jar</lib>
-								<lib>${react.libs}/Craftbukkit-1.8.8.jar</lib>
-								<lib>${react.libs}/Craftbukkit-1.9.2.jar</lib>
-								<lib>${react.libs}/Craftbukkit-1.9.4.jar</lib>
-								<lib>${react.libs}/Craftbukkit-1.10.jar</lib>
-								<lib>${react.libs}/Spigot-1.8.8.jar</lib>
-								<lib>${react.libs}/Paper-1.8.8.jar</lib>
-								<lib>${react.libs}/WorldBorder.jar</lib>
-								<lib>${react.libs}/ProtocolLib.jar</lib>
-								<lib>${react.libs}/PlaceHolderAPI.jar</lib>
 							</libs>
 						</configuration>
 					</plugin>
