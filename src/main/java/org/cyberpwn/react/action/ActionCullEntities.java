@@ -9,21 +9,16 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
-import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Task;
-import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -191,79 +186,6 @@ public class ActionCullEntities extends Action implements Listener
 		}
 		
 		return w;
-	}
-	
-	public void cullOne(Chunk c)
-	{
-		for(Entity i : c.getEntities())
-		{
-			if(cc.getStringList(getCodeName() + ".cullable").contains(i.getType().toString()))
-			{
-				E.r(i);
-				return;
-			}
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.LOW)
-	public void onEntitySpawn(final EntitySpawnEvent e)
-	{
-		if(e.getEntityType().toString().equals("PLAYER"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("COMPLEX_PART"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("PAINTING"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("PAINTING"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("ITEM_FRAME"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("WITHER_SKULL"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().toString().equals("ARMOR_STAND"))
-		{
-			return;
-		}
-		
-		if(e.getEntityType().equals(EntityType.PLAYER) || !cc.getStringList(getCodeName() + ".cullable").contains(e.getEntityType().toString()))
-		{
-			return;
-		}
-		
-		new TaskLater(1)
-		{
-			public void run()
-			{
-				if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius") && new Area(e.getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius")).getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
-				{
-					cullOne(e.getLocation().getChunk());
-					return;
-				}
-				
-				if(weight(e.getEntity().getLocation().getChunk()) >= cc.getInt(getCodeName() + ".max-entities-per-chunk"))
-				{
-					cullOne(e.getLocation().getChunk());
-				}
-			}
-		};
 	}
 	
 	public void onNewConfig()
