@@ -21,11 +21,22 @@ public class ClusterConfig
 	{
 		this.data = new GMap<String, Cluster>();
 		this.comments = new GMap<String, String>();
+		set("config.version", 1, "This is used for React to manage itself between updates\nIt keeps your configs clean and tidy.\nChanging this will confuse react a bit :P");
 	}
 	
 	public ClusterConfig copy()
 	{
 		return new ClusterConfig().qset(this.data);
+	}
+	
+	public void setConfigVersion(int v)
+	{
+		set("config.version", v, "This is used for React to manage itself between updates\nIt keeps your configs clean and tidy.\nChanging this will confuse react a bit :P");
+	}
+	
+	public int getConfigVersion()
+	{
+		return getInt("config.version");
 	}
 	
 	public ClusterConfig qset(GMap<String, Cluster> data)
