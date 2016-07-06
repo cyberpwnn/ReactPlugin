@@ -25,7 +25,7 @@ public class F
 		{
 			if(msg.charAt(i) == '&')
 			{
-				coloredMsg += '§';
+				coloredMsg += '\u00A7';
 			}
 			
 			else
