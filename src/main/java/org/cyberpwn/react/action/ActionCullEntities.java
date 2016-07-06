@@ -1,5 +1,7 @@
 package org.cyberpwn.react.action;
 
+import java.util.Iterator;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -8,7 +10,9 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -20,7 +24,6 @@ import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
 import org.cyberpwn.react.util.Task;
-import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
@@ -32,43 +35,35 @@ public class ActionCullEntities extends Action implements Listener
 	
 	public void act()
 	{
-		for(World i : Bukkit.getWorlds())
+		new ExecutiveIterator<World>(1l, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
-			cull(i);
-			
-			if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius"))
+			public void run()
 			{
-				int[] k = new int[]{0};
-				int lim = 12;
-				
-				new Task(0)
-				{
-					public void run()
-					{
-						k[0]++;
-						
-						new ExecutiveIterator<Chunk>(1l, new GList<Chunk>(i.getLoadedChunks()), new ExecutiveRunnable<Chunk>()
-						{
-							public void run()
-							{
-								cull(next());
-							}
-						}, new Runnable()
-						{
-							public void run()
-							{
-								
-							}
-						});
-						
-						if(k[0] > lim)
-						{
-							cancel();
-						}
-					}
-				};
+				cull(next());
 			}
-		}
+		}, new Runnable()
+		{
+			public void run()
+			{
+				
+			}
+		});
+	}
+	
+	@EventHandler
+	public void onSpawn(EntitySpawnEvent e)
+	{
+		cull(e.getEntity().getLocation().getChunk(), e.getEntity());
+	}
+	
+	public void start()
+	{
+		React.instance().register(this);
+	}
+	
+	public void stop()
+	{
+		React.instance().unRegister(this);
 	}
 	
 	public void manual(CommandSender p)
@@ -87,49 +82,37 @@ public class ActionCullEntities extends Action implements Listener
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
 	}
 	
-	public void cull(Chunk c)
+	public void cull(Chunk c, Entity j)
 	{
-		final GList<Entity> targeted = new GList<Entity>();
-		
-		new ExecutiveIterator<Entity>(1l, new GList<Entity>(c.getEntities()), new ExecutiveRunnable<Entity>()
+		Area a = new Area(j.getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius"));
+		if(a.getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
 		{
-			public void run()
+			Iterator<Entity> it = new GList<Entity>(a.getNearbyEntities()).iterator();
+			
+			new Task(0)
 			{
-				Area a = new Area(next().getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius"));
-				if(a.getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
+				public void run()
 				{
-					for(Entity i : a.getNearbyEntities())
+					if(it.hasNext())
 					{
-						if(a.getNearbyEntities().length > (cc.getInt(getCodeName() + ".max-entities-per-radius") + 1) / 2)
+						Entity i = it.next();
+						
+						if(a.getNearbyEntities().length > cc.getInt(getCodeName() + ".max-entities-per-radius"))
 						{
-							targeted.add(i);
-							break;
+							if(isCullable(i))
+							{
+								E.r(i);
+							}
 						}
+					}
+					
+					else
+					{
+						cancel();
 					}
 				}
-			}
-		}, new Runnable()
-		{
-			public void run()
-			{
-				new ExecutiveIterator<Entity>(1l, targeted, new ExecutiveRunnable<Entity>()
-				{
-					public void run()
-					{
-						if(isCullable(next()))
-						{
-							E.r(next(), cc.getBoolean(getCodeName() + ".animate-entity-culls"));
-						}
-					}
-				}, new Runnable()
-				{
-					public void run()
-					{
-						
-					}
-				});
-			}
-		});
+			};
+		}
 	}
 	
 	public void cull(World w)
@@ -138,42 +121,25 @@ public class ActionCullEntities extends Action implements Listener
 		{
 			int[] l = new int[] { 0 };
 			
-			new ExecutiveIterator<Entity>(1l, new GList<Entity>(w.getEntities()), new ExecutiveRunnable<Entity>()
+			for(Entity i : w.getEntities())
 			{
-				public void run()
+				if(isCullable(i))
 				{
-					if(isCullable(next()))
+					l[0]++;
+				}
+			}
+			
+			if(l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
+			{
+				for(Entity i : w.getEntities())
+				{
+					if(isCullable(i) && l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
 					{
-						l[0]++;
+						l[0]--;
+						E.r(i, cc.getBoolean(getCodeName() + ".animate-entity-culls"));
 					}
 				}
-			}, new Runnable()
-			{
-				public void run()
-				{
-					if(l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
-					{
-						new ExecutiveIterator<Entity>(1l, new GList<Entity>(w.getEntities()), new ExecutiveRunnable<Entity>()
-						{
-							public void run()
-							{
-								if(isCullable(next()) && l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
-								{
-									l[0]--;
-									Verbose.x("Culler", "Culled " + next().getType().toString());
-									E.r(next(), cc.getBoolean(getCodeName() + ".animate-entity-culls"));
-								}
-							}
-						}, new Runnable()
-						{
-							public void run()
-							{
-								
-							}
-						});
-					}
-				}
-			});
+			}
 		}
 	}
 	
