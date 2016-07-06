@@ -1259,6 +1259,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		if(cmd.getName().equalsIgnoreCase(Info.COMMAND))
 		{
+			React.instance().setTag();
 			if(React.isMef())
 			{
 				sender.sendMessage(Info.COLOR_ERR + "I'm sorry. I cant help you if you won't do the same.");

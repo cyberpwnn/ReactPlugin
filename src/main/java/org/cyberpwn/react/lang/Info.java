@@ -87,5 +87,6 @@ public class Info
 		CH_TIMINGS = String.format(Info.COMMAND_HELP, "timings,t [searchkey]", L.COMMAND_TIMINGS).trim();
 		CH_LANG = String.format(Info.COMMAND_HELP, "lang,l [lang]", L.COMMAND_LANG).trim();
 		CH_ALL = String.format(HRN, "React") + "\n" + CH_HELP + "\n" + CH_PLUGINS + "\n" + CH_UPDATE + "\n" + CH_ACT + "\n" + CH_TIMINGS + "\n" + CH_RELOAD + "\n" + CH_MONITOR + "\n" + CH_MAP + "\n" + CH_BOOK + "\n" + CH_QUERY + "\n" + CH_CPU + "\n" + CH_LIST + "\n" + CH_GUESS + "\n" + CH_GUESSM + "\n" + CH_VERSION + "\n" + HR;
+		React.instance().setTag();
 	}
 }
