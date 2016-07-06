@@ -19,6 +19,7 @@ import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.ManualActionEvent;
+import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.Verbose;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -37,19 +38,35 @@ public class ActionCullEntities extends Action implements Listener
 			
 			if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius"))
 			{
-				new ExecutiveIterator<Chunk>(1l, new GList<Chunk>(i.getLoadedChunks()), new ExecutiveRunnable<Chunk>()
+				int[] k = new int[]{0};
+				int lim = 12;
+				
+				new Task(0)
 				{
 					public void run()
 					{
-						cull(next());
-					}
-				}, new Runnable()
-				{
-					public void run()
-					{
+						k[0]++;
 						
+						new ExecutiveIterator<Chunk>(1l, new GList<Chunk>(i.getLoadedChunks()), new ExecutiveRunnable<Chunk>()
+						{
+							public void run()
+							{
+								cull(next());
+							}
+						}, new Runnable()
+						{
+							public void run()
+							{
+								
+							}
+						});
+						
+						if(k[0] > lim)
+						{
+							cancel();
+						}
 					}
-				});
+				};
 			}
 		}
 	}
@@ -101,7 +118,7 @@ public class ActionCullEntities extends Action implements Listener
 					{
 						if(isCullable(next()))
 						{
-							E.r(next(), cc.getBoolean(getCodeName() + ".drop-entity-drops-on-cull"));
+							E.r(next(), cc.getBoolean(getCodeName() + ".animate-entity-culls"));
 						}
 					}
 				}, new Runnable()
@@ -144,7 +161,7 @@ public class ActionCullEntities extends Action implements Listener
 								{
 									l[0]--;
 									Verbose.x("Culler", "Culled " + next().getType().toString());
-									E.r(next(), cc.getBoolean(getCodeName() + ".drop-entity-drops-on-cull"));
+									E.r(next(), cc.getBoolean(getCodeName() + ".animate-entity-culls"));
 								}
 							}
 						}, new Runnable()
@@ -203,13 +220,13 @@ public class ActionCullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
-		cc.set(getCodeName() + ".max-entities-per-chunk", 28, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
+		cc.set(getCodeName() + ".max-entities-per-chunk", 16, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
 		cc.set(getCodeName() + ".filter.ignore-named-entities", false, "Ignore entities that have names from nametags/plugins");
 		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore all testificates.");
 		cc.set(getCodeName() + ".cullable", allow, "Entities allowed to be culled. \nIf you dont want something culled, remove it from here.");
-		cc.set(getCodeName() + ".drop-entity-drops-on-cull", false, "Kill entities as if the entity died.\nThis will animate deaths instead of blinking them away");
+		cc.set(getCodeName() + ".animate-entity-culls", false, "Kill entities as if the entity died.\nThis will animate deaths instead of blinking them away");
 		cc.set(getCodeName() + ".enable-entity-spawn-radius", true, "Use radius culling for entities based on the radius config.");
-		cc.set(getCodeName() + ".max-entities-per-radius", 8, "The allowed number of entities per radius check defined below.");
-		cc.set(getCodeName() + ".max-entities-radius", 8, "The radius of a radius check in blocks.");
+		cc.set(getCodeName() + ".max-entities-per-radius", 16, "The allowed number of entities per radius check defined below.");
+		cc.set(getCodeName() + ".max-entities-radius", 32, "The radius of a radius check in blocks.");
 	}
 }
