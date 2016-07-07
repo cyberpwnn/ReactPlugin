@@ -27,7 +27,7 @@ public class PlayerData implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("monitor.uuid", uuid.toString(), "The player's uuid. Changing this does nothing.");
 		cc.set("monitor.options.monitoring.enabled", monitoring, "Feature Enabled?");

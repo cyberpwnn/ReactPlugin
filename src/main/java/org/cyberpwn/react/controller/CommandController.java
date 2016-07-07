@@ -474,7 +474,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						for(File i : getReact().getConfigurationController().getConfigurations().k())
 						{
-							getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
+							getReact().getConfigurationController().getConfigurations().get(i).onNewConfig(getReact().getConfigurationController().getConfigurations().get(i).getConfiguration());
 							getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 							sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
 						}
@@ -589,7 +589,7 @@ public class CommandController extends Controller implements CommandExecutor
 						{
 							for(File i : getReact().getConfigurationController().getConfigurations().k())
 							{
-								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
+								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(args[1]))
 								{
 									for(String j : getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().getData().k())
 									{
@@ -607,7 +607,7 @@ public class CommandController extends Controller implements CommandExecutor
 							{
 								if(getReact().getConfigurationController().getConfigurations().get(i).getCodeName().equalsIgnoreCase(r))
 								{
-									getReact().getConfigurationController().getConfigurations().get(i).onNewConfig();
+									getReact().getConfigurationController().getConfigurations().get(i).onNewConfig(getReact().getConfigurationController().getConfigurations().get(i).getConfiguration());
 									getReact().getDataController().saveFileConfig(i, getReact().getConfigurationController().getConfigurations().get(i).getConfiguration().toYaml(), getReact().getConfigurationController().getConfigurations().get(i));
 									sender.sendMessage(ChatColor.GREEN + "$: " + getReact().getConfigurationController().getConfigurations().get(i).getCodeName() + " RESET");
 									break;
@@ -849,7 +849,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_SCOREBOARD, "scoreboard", "sc", "board", "sboard"));
-		
+				
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
@@ -863,7 +863,7 @@ public class CommandController extends Controller implements CommandExecutor
 				sender.sendMessage(Info.HR);
 			}
 		}, "Check information about react and the server", "environment", "env", "ev"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()

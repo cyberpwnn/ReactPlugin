@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.L;
 
@@ -70,8 +71,8 @@ public class ActionTeleportDrops extends Action implements Listener
 		e.getBlock().setType(Material.AIR);
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 	}
 }

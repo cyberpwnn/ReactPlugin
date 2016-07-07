@@ -52,7 +52,7 @@ public class HitRateCache implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("since", String.valueOf(System.currentTimeMillis()));
 		

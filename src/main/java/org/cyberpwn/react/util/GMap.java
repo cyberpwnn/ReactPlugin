@@ -18,6 +18,19 @@ public class GMap<K, V> extends ConcurrentHashMap<K, V>
 		return m;
 	}
 	
+	public K findKey(V v)
+	{
+		for(K k : k())
+		{
+			if(get(k).equals(v))
+			{
+				return k;
+			}
+		}
+		
+		return null;
+	}
+	
 	public GMap<K, V> qput(K k, V v)
 	{
 		put(k, v);

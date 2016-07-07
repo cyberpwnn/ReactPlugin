@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -78,9 +79,9 @@ public class ActionCollectGarbage extends Action implements Listener
 		System.gc();
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set(getCodeName() + ".auto.enabled", true, "Enable automatic garbage collection based on the limits.");
 		cc.set(getCodeName() + ".auto.conditions.chunkloads", 65536, "Will not run auto GC unless\nmore than the given amount of chunks are loaded/unloaded first.\nThis does not mean that there has to be that many chunks loaded\nJust that many chunks had to have been read from the disk before gc.");

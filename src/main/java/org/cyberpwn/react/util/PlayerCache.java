@@ -153,7 +153,7 @@ public class PlayerCache implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("cache.ai.max", 0);
 		cc.set("cache.c0.v", 0);

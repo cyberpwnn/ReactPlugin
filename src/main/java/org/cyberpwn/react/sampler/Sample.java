@@ -253,7 +253,7 @@ public class Sample implements Samplable, Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("component.interval", idealDelay, "Its typically not a good idea to change this\nunless you know what you are doing.");
 	}

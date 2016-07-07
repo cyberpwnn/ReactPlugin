@@ -99,26 +99,43 @@ public class PhotonController extends Controller implements Configurable
 		{
 			j = 0;
 			
-			new ExecutiveIterator<Player>((long) 1, new GList<Player>(getReact().onlinePlayers()), new ExecutiveRunnable<Player>()
+			try
 			{
-				@SuppressWarnings("deprecation")
-				@Override
-				public void run()
+				new ExecutiveIterator<Player>((long) 1, new GList<Player>(getReact().onlinePlayers()), new ExecutiveRunnable<Player>()
 				{
-					for(Chunk i : W.crad(next().getTargetBlock((HashSet<Byte>) null, 256).getLocation().getChunk(), 3))
+					@SuppressWarnings("deprecation")
+					@Override
+					public void run()
 					{
-						request(i);
+						try
+						{
+							for(Chunk i : W.crad(next().getTargetBlock((HashSet<Byte>) null, 256).getLocation().getChunk(), 3))
+							{
+								request(i);
+								j = 0;
+							}
+							
+						}
+						
+						catch(Exception e)
+						{
+							
+						}
+					}
+				}, new Runnable()
+				{
+					@Override
+					public void run()
+					{
 						j = 0;
 					}
-				}
-			}, new Runnable()
+				});
+			}
+			
+			catch(Exception e)
 			{
-				@Override
-				public void run()
-				{
-					j = 0;
-				}
-			});
+				
+			}
 		}
 		
 		k++;
@@ -136,7 +153,7 @@ public class PhotonController extends Controller implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("photon.relight.enabled", false, "PHOTON! It removes plenty of lighting glitches with a cost...\nMORE CPU, LESS LIGHTING GLITCHES\nSet this to true to enable it.");
 		cc.set("photon.relight.limits.max-ms", 8, "Max ms to use when correcting lighting glitches.");

@@ -9,11 +9,14 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Task;
 
-public class ConfigurationController extends Controller
+public class ConfigurationController extends Controller implements Configurable
 {
 	private GMap<File, Configurable> configurations;
 	private GMap<File, ClusterConfig> cache;
+	private GMap<Configurable, Long> mods;
+	private ClusterConfig cc;
 	
 	public ConfigurationController(React react)
 	{
@@ -21,7 +24,33 @@ public class ConfigurationController extends Controller
 		
 		configurations = new GMap<File, Configurable>();
 		cache = new GMap<File, ClusterConfig>();
-		
+		mods = new GMap<Configurable, Long>();
+		cc = new ClusterConfig();
+	}
+	
+	public void start()
+	{
+		new Task(20)
+		{
+			public void run()
+			{
+				for(File i : configurations.k())
+				{
+					if(modified(configurations.get(i)))
+					{
+						Configurable c = configurations.get(i);
+						mods.put(configurations.get(i), i.lastModified());
+						int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
+						s("Injected " + changes + " change(s) from " + i.getName());
+					}
+				}
+			}
+		};
+	}
+	
+	public boolean modified(Configurable c)
+	{
+		return mods.get(c) != configurations.findKey(c).lastModified();
 	}
 	
 	public void flush(Player p)
@@ -51,6 +80,20 @@ public class ConfigurationController extends Controller
 	public void registerConfiguration(Configurable c, File file)
 	{
 		configurations.put(file, c);
+		mods.put(c, file.lastModified());
+	}
+	
+	public Object getDefaultValue(Configurable c, String key)
+	{
+		ClusterConfig cc = new ClusterConfig();
+		c.onNewConfig(cc);
+		
+		if(!cc.contains(key))
+		{
+			return "??";
+		}
+		
+		return cc.getAbstract(key);
 	}
 
 	public GMap<File, Configurable> getConfigurations()
@@ -71,5 +114,30 @@ public class ConfigurationController extends Controller
 	public void setCache(GMap<File, ClusterConfig> cache)
 	{
 		this.cache = cache;
+	}
+
+	@Override
+	public void onNewConfig(ClusterConfig cc)
+	{
+		cc.set("configuration.enhancements.add-comments", true, "If you can see this, this setting is enabled :P");
+		cc.set("configuration.enhancements.add-default-comments", true, "This shows the Default value as a comment. If its on, below is an example :P");
+	}
+
+	@Override
+	public void onReadConfig()
+	{
+		
+	}
+
+	@Override
+	public ClusterConfig getConfiguration()
+	{
+		return cc;
+	}
+
+	@Override
+	public String getCodeName()
+	{
+		return "configuration-settings";
 	}
 }

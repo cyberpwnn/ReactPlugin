@@ -121,7 +121,7 @@ public class UpdateController extends Controller implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("update-checking.enable", true, "Enable update checking?");
 		cc.set("update-checking.interval-seconds", 30, "How often (in seconds) should we check for an update?\nThis is async, so if we dont get a connection, no freezing.");

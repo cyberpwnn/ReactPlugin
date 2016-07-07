@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -89,9 +90,9 @@ public class ActionHeavyChunk extends Action implements Listener
 		return 255;
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set(getCodeName() + ".entity-buffer", 16, "If there are less than this many entities in ALL chunks, react wont find any chunks.");
 	}

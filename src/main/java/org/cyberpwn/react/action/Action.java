@@ -118,7 +118,7 @@ public class Action implements Actionable, Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("component.enable", true, "ABOUT " + getName() + "\n" + getDescription() + "\n\nYou can disable " + getName() + " here.");
 		cc.set("component.interval", idealTick, "Its typically not a good idea to change this\nunless you know what you are doing.");

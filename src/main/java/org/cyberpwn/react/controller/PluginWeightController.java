@@ -278,7 +278,7 @@ public class PluginWeightController extends Controller implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("timings.processing.enabled", true, "Enable processing timings data. If you have trouble with this, disable it.");
 		cc.set("timings.notifier.flush-list-delay", 1200, "How often in ticks to wait before warning about the same plugin.");

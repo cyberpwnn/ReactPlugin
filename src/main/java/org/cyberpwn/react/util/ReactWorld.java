@@ -36,7 +36,7 @@ public class ReactWorld implements Configurable, Listener
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		GList<String> entx = new GList<String>().qadd("ARMOR_STAND").qadd("EXPERIENCE_ORB");
 		

@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -69,9 +70,9 @@ public class ActionSuppressGrowth extends Action implements Listener
 		}
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		cc.set(getCodeName() + ".max-per-chunk-per-interval", 5, "Max growths per interval defined here.");
 	}
 	

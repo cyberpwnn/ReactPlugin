@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -180,9 +181,9 @@ public class ActionCullDrops extends Action implements Listener
 		Collections.sort(worthsx);
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set("drops-per-chunk", 40, "Max drops per chunk before react starts clipping drops.");
 		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");

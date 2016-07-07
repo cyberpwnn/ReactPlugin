@@ -164,6 +164,7 @@ public class React extends JavaPlugin implements Configurable
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
+		dataController.load(null, configurationController);
 		dataController.load(null, this);
 		dataController.load(null, entityStackController);
 		dataController.load(null, updateController);
@@ -353,7 +354,7 @@ public class React extends JavaPlugin implements Configurable
 	public static void dump()
 	{
 		Dump dump = new Dump(instance);
-		dump.onNewConfig();
+		dump.onNewConfig(dump.getConfiguration());
 		
 		try
 		{
@@ -378,7 +379,7 @@ public class React extends JavaPlugin implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, "Run the garbage collector after startup to prevent memory issues from reloading and startup.");

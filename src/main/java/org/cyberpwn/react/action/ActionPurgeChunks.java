@@ -12,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ChunkPurgeEvent;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -165,9 +166,9 @@ public class ActionPurgeChunks extends Action implements Listener
 		limit = cc.getInt("culls.limit-interval-seconds");
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set("limit-ms", 26, "How many ms of a tick should we use to purge chunks? \nTypically most plugins allow unlimited speeds. The higher, the faster, however usually you cant notice it.");
 		cc.set("culls.limit-interval-seconds", 60, "How long to wait before even attempting to purge chunks?");

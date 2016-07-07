@@ -84,7 +84,7 @@ public class PlayerController extends Controller
 		
 		try
 		{
-			cache.get(p).onNewConfig();
+			cache.get(p).onNewConfig(cache.get(p).getConfiguration());
 			cache.get(p).getConfiguration().toYaml().save(new File(new File(getReact().getDataFolder(), "playerdata"), cache.get(p).getCodeName() + ".yml"));
 		}
 		

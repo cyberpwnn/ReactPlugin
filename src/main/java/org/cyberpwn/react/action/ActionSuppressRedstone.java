@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -91,9 +92,9 @@ public class ActionSuppressRedstone extends Action implements Listener
 		getActionController().getReact().unRegister(this);
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set(getCodeName() + ".freeze-all-redstone-on-lag", true, "Hault redstone on lag?");
 		cc.set(getCodeName() + ".freeze-radius", 64, "The radius to freeze in a location specific redstone lag?");

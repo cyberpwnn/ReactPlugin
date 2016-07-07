@@ -291,6 +291,21 @@ public class ClusterConfig
 		return null;
 	}
 	
+	public boolean equals(Object o)
+	{
+		if(o != null && (o instanceof ClusterConfig))
+		{
+			ClusterConfig cc = (ClusterConfig) o;
+			
+			if(cc.getData().equals(getData()))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public Cluster get(String key)
 	{
 		return data.get(key);

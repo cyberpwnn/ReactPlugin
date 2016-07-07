@@ -405,7 +405,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		catch(Exception e)
 		{
-			onNewConfig();
+			onNewConfig(cc);
 		}
 	}
 	
@@ -559,7 +559,7 @@ public class MonitorController extends Controller implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("map.interval", 5);
 		cc.set("monitors", new GList<String>());
@@ -655,7 +655,7 @@ public class MonitorController extends Controller implements Configurable
 				
 				catch(Exception e)
 				{
-					onNewConfig();
+					onNewConfig(cc);
 					return;
 				}
 				

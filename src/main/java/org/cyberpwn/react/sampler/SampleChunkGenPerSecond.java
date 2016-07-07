@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -66,9 +67,9 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " CGEN/S";
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set("component.limit", 42);
 	}

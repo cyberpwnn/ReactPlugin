@@ -16,6 +16,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTimeBank;
@@ -89,7 +90,7 @@ public class DataController extends Controller
 			
 			if(!file.exists())
 			{
-				c.onNewConfig();
+				c.onNewConfig(c.getConfiguration());
 				verifyFile(file);
 			}
 			
@@ -146,7 +147,7 @@ public class DataController extends Controller
 			
 			if(!file.exists())
 			{
-				c.onNewConfig();
+				c.onNewConfig(c.getConfiguration());
 				verifyFile(file);
 				saveFileConfig(file, c.getConfiguration().toYaml(), c);
 			}
@@ -187,7 +188,7 @@ public class DataController extends Controller
 	
 	public void loadConfigurableSettings(File file, Configurable c)
 	{
-		c.onNewConfig();
+		c.onNewConfig(c.getConfiguration());
 		FileConfiguration fc = loadFileConfig(file);
 		
 		for(String i : fc.getKeys(true))
@@ -226,6 +227,107 @@ public class DataController extends Controller
 		saveFileConfig(file, fc, c);
 	}
 	
+	public int updateConfigurableSettings(File file, ClusterConfig cc)
+	{
+		FileConfiguration fc = loadFileConfig(file);
+		int changes = 0;
+		
+		for(String i : fc.getKeys(true))
+		{
+			if(fc.isBoolean(i))
+			{
+				try
+				{
+					if(cc.contains(i) && !cc.getBoolean(i).equals(fc.getBoolean(i)))
+					{
+						changes++;
+					}
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+				
+				cc.set(i, fc.getBoolean(i));
+			}
+			
+			if(fc.isDouble(i))
+			{
+				try
+				{
+					if(cc.contains(i) && !cc.getDouble(i).equals(fc.getDouble(i)))
+					{
+						changes++;
+					}
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+				
+				cc.set(i, fc.getDouble(i));
+			}
+			
+			if(fc.isInt(i))
+			{
+				try
+				{
+					if(cc.contains(i) && !cc.getInt(i).equals(fc.getInt(i)))
+					{
+						changes++;
+					}
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+				
+				cc.set(i, fc.getInt(i));
+			}
+			
+			if(fc.isString(i))
+			{
+				try
+				{
+					if(cc.contains(i) && !cc.getString(i).equals(fc.getString(i)))
+					{
+						changes++;
+					}
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+				
+				cc.set(i, fc.getString(i));
+			}
+			
+			if(fc.isList(i))
+			{
+				try
+				{
+					if(cc.contains(i) && !cc.getStringList(i).equals(fc.getStringList(i)))
+					{
+						changes++;
+					}
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
+				
+				cc.set(i, new GList<String>(fc.getStringList(i)));
+			}
+		}
+		
+		return changes;
+	}
+	
 	public FileConfiguration loadFileConfig(File file)
 	{
 		FileConfiguration fc = new YamlConfiguration();
@@ -259,15 +361,27 @@ public class DataController extends Controller
 				{
 					if(j.endsWith("." + key))
 					{
-						if(c.getConfiguration().hasComment(j))
+						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments") || getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-default-comments"))
 						{
 							nd.add(" ");
-							
-							for(String k : c.getConfiguration().getComment(j))
+						}
+						
+						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments"))
+						{
+							if(c.getConfiguration().hasComment(j))
 							{
-								int kx = ndx[i].split(": ")[0].split(" ").length - 1;
-								nd.add(StringUtils.repeat(" ", kx) + "# " + k);
+								for(String k : c.getConfiguration().getComment(j))
+								{
+									int kx = ndx[i].split(": ")[0].split(" ").length - 1;
+									nd.add(StringUtils.repeat(" ", kx) + "# " + k);
+								}
 							}
+						}
+						
+						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-default-comments"))
+						{
+							int kx = ndx[i].split(": ")[0].split(" ").length - 1;
+							nd.add(StringUtils.repeat(" ", kx) + "# Default Value: " + getReact().getConfigurationController().getDefaultValue(c, j).toString());
 						}
 					}
 				}

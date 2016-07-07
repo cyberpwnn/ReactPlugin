@@ -10,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -108,9 +109,9 @@ public class ActionSuppressTnt extends Action implements Listener
 		}
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set(getCodeName() + ".freeze-all-tnt-on-lag", true, "Freeze all tnt when the server is lagging because of it?");
 		cc.set(getCodeName() + ".disable-if-factions-installed", true, "Disable this feature if factions is installed?");

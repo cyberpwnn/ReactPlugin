@@ -25,7 +25,7 @@ public class Dump implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("react.ai.version-name", Version.V);
 		cc.set("react.ai.version-code", Version.C);

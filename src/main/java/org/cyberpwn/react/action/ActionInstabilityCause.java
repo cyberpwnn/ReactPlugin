@@ -15,6 +15,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitTask;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.json.RawText;
@@ -603,9 +604,9 @@ public class ActionInstabilityCause extends Action
 		return 255;
 	}
 	
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
-		super.onNewConfig();
+		super.onNewConfig(cc);
 		
 		cc.set(getCodeName() + ".low.tps", 16.8, "What is considered a low tps? Lag?");
 		cc.set(getCodeName() + ".high.spms", 1, "Low SPMS");

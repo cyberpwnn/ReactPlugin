@@ -365,7 +365,7 @@ public class EntityStackController extends Controller implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("stacker.enabled", false, "Enable mob stacking?");
 		cc.set("stacker.ignore.named-entities", true, "Ignore stacking named entities?");

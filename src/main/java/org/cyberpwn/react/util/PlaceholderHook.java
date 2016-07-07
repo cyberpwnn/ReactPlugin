@@ -112,7 +112,7 @@ public class PlaceholderHook extends EZPlaceholderHook implements Configurable
 	}
 	
 	@Override
-	public void onNewConfig()
+	public void onNewConfig(ClusterConfig cc)
 	{
 		GList<String> placeholders = new GList<String>();
 		
