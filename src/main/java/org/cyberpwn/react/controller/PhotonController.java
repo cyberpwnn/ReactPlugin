@@ -52,7 +52,7 @@ public class PhotonController extends Controller implements Configurable
 	@Override
 	public void tick()
 	{
-		if(getReact().getSampleController().getSampleTicksPerSecond().get().getDouble() < 19.5)
+		if(getReact().getSampleController().getSampleTicksPerSecond().get().getDouble() < cc.getDouble("photon.relight.constraints.clamp-below-tps"))
 		{
 			return;
 		}
@@ -157,9 +157,11 @@ public class PhotonController extends Controller implements Configurable
 	{
 		cc.set("photon.relight.enabled", false, "PHOTON! It removes plenty of lighting glitches with a cost...\nMORE CPU, LESS LIGHTING GLITCHES\nSet this to true to enable it.");
 		cc.set("photon.relight.limits.max-ms", 8, "Max ms to use when correcting lighting glitches.");
-		cc.set("photon.relight.limits.max-pool-size", 8, "Max amount of simultanious chunk light jobs at once. \nThis splits your max ms to the entire pool");
+		cc.set("photon.relight.limits.max-pool-size", 24, "Max amount of simultanious chunk light jobs at once. \nThis splits your max ms to the entire pool");
 		cc.set("photon.relight.limits.max-cache-size", 1024, "Max size of the <to be lit> cache.");
 		cc.set("photon.relight.constraints.chunk-radius", 2, "Radius of chunks to cache per sample.");
+		cc.set("photon.relight.constraints.effectiveness-percent", 0.4, "The percent of effectiveness from 0 to 1.\nThe higher, the better, but more bandwidth and cpu is consumed.");
+		cc.set("photon.relight.constraints.clamp-below-tps", 19.7, "Photon will stop lighting chunks after the tps has dropped below this value.\nUsually if you have a great cpu, default is fine.");
 	}
 	
 	@Override
@@ -210,6 +212,78 @@ public class PhotonController extends Controller implements Configurable
 		cache.remove(e.getChunk());
 	}
 	
+	@SuppressWarnings("deprecation")
+	public boolean light(Block b)
+	{
+		if(!b.getType().equals(Material.AIR) && visible(b) && safe(b))
+		{
+			Material m = b.getType();
+			BlockState bs = b.getState();
+			b.setType(Material.REDSTONE_BLOCK);
+			b.setType(m);
+			b.setData(bs.getRawData());
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean safe(Block b)
+	{
+		double k = cc.getDouble("photon.relight.constraints.effectiveness-percent");
+		
+		if(k > 1.0)
+		{
+			k = 1.0;
+		}
+		
+		if(k < 0.01)
+		{
+			k = 0.01;
+		}
+		
+		if(Math.random() < k)
+		{
+			return false;
+		}
+		
+		if(b.getType().isTransparent())
+		{
+			return false;
+		}
+		
+		if(b.getType().equals(Material.STATIONARY_WATER))
+		{
+			return false;
+		}
+		
+		if(!b.getRelative(BlockFace.UP).getType().equals(Material.AIR) && b.getRelative(BlockFace.UP).getType().isTransparent())
+		{
+			return false;
+		}
+		
+		for(Block i : W.getFaces(b))
+		{
+			if(i.getType().equals(Material.IRON_DOOR_BLOCK))
+			{
+				return false;
+			}
+			
+			if(i.getType().equals(Material.WOODEN_DOOR))
+			{
+				return false;
+			}
+			
+			if(i.getType().isSolid() && i.getType().isTransparent())
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public void relight(final Chunk chunk)
 	{
 		final Timer t = new Timer();
@@ -221,19 +295,12 @@ public class PhotonController extends Controller implements Configurable
 		
 		new ExecutiveIterator<Block>(getLimit(), bks, new ExecutiveRunnable<Block>()
 		{
-			@SuppressWarnings("deprecation")
 			public void run()
 			{
-				if(!next().getType().equals(Material.AIR) && visible(next()))
+				if(light(next()))
 				{
-					intended.add(next());
-					Block b = next();
-					Material m = b.getType();
-					BlockState bs = b.getState();
-					b.setType(Material.STONE);
-					b.setType(m);
-					b.setData(bs.getRawData());
 					cy[0]++;
+					intended.add(next());
 				}
 			}
 		}, new Runnable()
