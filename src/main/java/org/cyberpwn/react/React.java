@@ -19,7 +19,6 @@ import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
-import org.cyberpwn.react.controller.PacketController;
 import org.cyberpwn.react.controller.PhotonController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
@@ -95,7 +94,6 @@ public class React extends JavaPlugin implements Configurable
 	private FailureController failureController;
 	private PhotonController photonController;
 	public static String nonce = "%%__NONCE__%%";
-	private PacketController packetController;
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 	private TimingsController timingsController;
@@ -148,7 +146,6 @@ public class React extends JavaPlugin implements Configurable
 		
 		configurationController = new ConfigurationController(this);
 		failureController = new FailureController(this);
-		packetController = new PacketController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
 		playerController = new PlayerController(this);
@@ -559,11 +556,6 @@ public class React extends JavaPlugin implements Configurable
 		return tskx;
 	}
 	
-	public PacketController getPacketController()
-	{
-		return packetController;
-	}
-	
 	public static boolean isDebug()
 	{
 		return debug;
@@ -932,11 +924,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setEntityStackController(EntityStackController entityStackController)
 	{
 		this.entityStackController = entityStackController;
-	}
-	
-	public void setPacketController(PacketController packetController)
-	{
-		this.packetController = packetController;
 	}
 	
 	public PhotonController getPhotonController()

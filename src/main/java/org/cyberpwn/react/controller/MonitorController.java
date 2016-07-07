@@ -58,7 +58,6 @@ public class MonitorController extends Controller implements Configurable
 	private Mapper mapper;
 	private int level;
 	private int mLevel;
-	private GMap<Player, Integer> packeted;
 	private String disp;
 	private int dispTicks;
 	private int overflow;
@@ -68,7 +67,6 @@ public class MonitorController extends Controller implements Configurable
 	{
 		super(react);
 		
-		packeted = new GMap<Player, Integer>();
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		currentDelay = 0;
 		disp = "";
@@ -267,28 +265,6 @@ public class MonitorController extends Controller implements Configurable
 				monitors.get(i).setA(his);
 			}
 			
-			if(packeted.containsKey(i))
-			{
-				packeted.put(i, packeted.get(i) - 1);
-				
-				if(packeted.get(i) < 40)
-				{
-					PacketUtil.sendActionBar(i, ChatColor.LIGHT_PURPLE + "Monitoring will Resume " + ChatColor.AQUA + "shortly");
-				}
-				
-				else
-				{
-					PacketUtil.sendActionBar(i, ChatColor.LIGHT_PURPLE + "Monitoring will Resume in " + ChatColor.AQUA + F.f((double) packeted.get(i) / 20.0, 0) + " seconds");
-				}
-				
-				if(packeted.get(i) <= 0)
-				{
-					packeted.remove(i);
-				}
-				
-				return;
-			}
-			
 			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking());
 			
 			if(!ms.getIgnoreDisp().contains(i))
@@ -307,7 +283,6 @@ public class MonitorController extends Controller implements Configurable
 			}
 			
 			tx.send(i);
-			packeted.remove(i);
 		}
 	}
 	
@@ -976,11 +951,6 @@ public class MonitorController extends Controller implements Configurable
 		this.mapper = mapper;
 	}
 	
-	public GMap<Player, Integer> getPacketed()
-	{
-		return packeted;
-	}
-	
 	public String getDisp()
 	{
 		return disp;
@@ -999,11 +969,6 @@ public class MonitorController extends Controller implements Configurable
 	public void setDispTicks(int dispTicks)
 	{
 		this.dispTicks = dispTicks;
-	}
-	
-	public void setPacketed(GMap<Player, Integer> packeted)
-	{
-		this.packeted = packeted;
 	}
 
 	public GMap<Player, Integer> getLocks()
