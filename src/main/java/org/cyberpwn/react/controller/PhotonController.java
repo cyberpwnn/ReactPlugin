@@ -101,7 +101,7 @@ public class PhotonController extends Controller implements Configurable
 			
 			try
 			{
-				new ExecutiveIterator<Player>((long) 1, new GList<Player>(getReact().onlinePlayers()), new ExecutiveRunnable<Player>()
+				new ExecutiveIterator<Player>(1.0, new GList<Player>(getReact().onlinePlayers()), new ExecutiveRunnable<Player>()
 				{
 					@SuppressWarnings("deprecation")
 					@Override
@@ -293,7 +293,7 @@ public class PhotonController extends Controller implements Configurable
 		
 		t.start();
 		
-		new ExecutiveIterator<Block>(getLimit(), bks, new ExecutiveRunnable<Block>()
+		new ExecutiveIterator<Block>((double)getLimit(), bks, new ExecutiveRunnable<Block>()
 		{
 			public void run()
 			{
