@@ -61,13 +61,16 @@ public class ActionCullEntities extends Action implements Listener
 			return;
 		}
 		
-		new TaskLater(20)
+		if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius"))
 		{
-			public void run()
+			new TaskLater(20)
 			{
-				cull(e.getEntity().getLocation().getChunk(), e.getEntity());
-			}
-		};
+				public void run()
+				{
+					cull(e.getEntity().getLocation().getChunk(), e.getEntity());
+				}
+			};
+		}
 	}
 	
 	public void start()
@@ -216,7 +219,7 @@ public class ActionCullEntities extends Action implements Listener
 		cc.set(getCodeName() + ".filter.ignore-horses", true, "Ignore all horses.");
 		cc.set(getCodeName() + ".cullable", allow, "Entities allowed to be culled. \nIf you dont want something culled, remove it from here.");
 		cc.set(getCodeName() + ".animate-entity-culls", false, "Kill entities as if the entity died.\nThis will animate deaths instead of blinking them away");
-		cc.set(getCodeName() + ".enable-entity-spawn-radius", true, "Use radius culling for entities based on the radius config.");
+		cc.set(getCodeName() + ".enable-entity-spawn-radius", false, "Use radius culling for entities based on the radius config.");
 		cc.set(getCodeName() + ".max-entities-per-radius", 32, "The allowed number of entities per radius check defined below.");
 		cc.set(getCodeName() + ".max-entities-radius", 16, "The radius of a radius check in blocks.");
 	}
