@@ -186,6 +186,44 @@ public class DataController extends Controller
 		}
 	}
 	
+	public void load(File file, Configurable c)
+	{
+		try
+		{
+			if(!file.exists() && file.isDirectory())
+			{
+				file.delete();
+			}
+			
+			if(!file.exists())
+			{
+				c.onNewConfig(c.getConfiguration());
+				verifyFile(file);
+				saveFileConfig(file, c.getConfiguration().toYaml(), c);
+			}
+			
+			loadConfigurableSettings(file, c);
+			c.onReadConfig();
+			
+			getReact().getConfigurationController().registerConfiguration(c, file);
+		}
+		
+		catch(Exception e)
+		{
+			React.fail(e, "Failed to load file:" + file.getAbsolutePath());
+			f("============ DATA FAILURE ============");
+			f("A file has failed to load it's data to");
+			f("your server. If this persists, please ");
+			f("contact support on spigot or github.  ");
+			f("TF: " + ChatColor.YELLOW + file.getPath());
+			f("CC: " + ChatColor.YELLOW + c.getCodeName());
+			f("EX: " + ChatColor.YELLOW + e.getClass().getSimpleName());
+			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
+			f("TC: " + ChatColor.YELLOW + e.getStackTrace()[0].getClassName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
+			f("============ ============ ============");
+		}
+	}
+	
 	public void loadConfigurableSettings(File file, Configurable c)
 	{
 		c.onNewConfig(c.getConfiguration());
