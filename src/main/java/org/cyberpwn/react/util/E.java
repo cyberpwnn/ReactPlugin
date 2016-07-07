@@ -68,6 +68,11 @@ public class E
 			return;
 		}
 		
+		if(e.getType().toString().equals("HORSE"))
+		{
+			return;
+		}
+		
 		if(!React.instance().getWorldController().canTouch(e))
 		{
 			return;
