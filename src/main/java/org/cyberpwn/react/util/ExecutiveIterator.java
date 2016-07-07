@@ -24,6 +24,11 @@ public class ExecutiveIterator<T>
 				while(it.hasNext() && System.currentTimeMillis() - ms < lim)
 				{
 					runnable.run(it.next());
+					
+					if(runnable.isCancelled())
+					{
+						cancel();
+					}
 				}
 				
 				if(!it.hasNext())
