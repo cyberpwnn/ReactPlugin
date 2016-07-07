@@ -39,7 +39,7 @@ public class PluginWeightController extends Controller implements Configurable
 	
 	public void start()
 	{
-		react.getDataController().load(null, this);
+		react.getDataController().load((String)null, this);
 		
 		if(!React.hashed.contains("raw.githubusercontent.com/cyberpwnn/React"))
 		{

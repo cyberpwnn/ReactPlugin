@@ -164,11 +164,11 @@ public class React extends JavaPlugin implements Configurable
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
-		dataController.load(null, configurationController);
-		dataController.load(null, this);
-		dataController.load(null, entityStackController);
-		dataController.load(null, updateController);
-		dataController.load(null, photonController);
+		dataController.load((String)null, configurationController);
+		dataController.load((String)null, this);
+		dataController.load((String)null, entityStackController);
+		dataController.load((String)null, updateController);
+		dataController.load((String)null, photonController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -321,7 +321,7 @@ public class React extends JavaPlugin implements Configurable
 			{
 				d.v(L.MESSAGE_HOOK_SUCCESS);
 				PlaceholderHook h = new PlaceholderHook(this);
-				dataController.load(null, h);
+				dataController.load((String)null, h);
 				h.hook();
 			}
 		}
