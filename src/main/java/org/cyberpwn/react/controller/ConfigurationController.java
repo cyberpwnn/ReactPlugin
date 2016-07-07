@@ -2,6 +2,7 @@ package org.cyberpwn.react.controller;
 
 import java.io.File;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
@@ -30,22 +31,50 @@ public class ConfigurationController extends Controller implements Configurable
 	
 	public void start()
 	{
-		new Task(20)
+		if(cc.getBoolean("configuration.mechanics.auto-inject"))
 		{
-			public void run()
+			new Task(cc.getInt("configuration.mechanics.inject-delay-seconds") * 20)
 			{
-				for(File i : configurations.k())
+				public void run()
 				{
-					if(modified(configurations.get(i)))
+					for(File i : configurations.k())
 					{
-						Configurable c = configurations.get(i);
-						mods.put(configurations.get(i), i.lastModified());
-						int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
-						s("Injected " + changes + " change(s) from " + i.getName());
+						if(!i.exists())
+						{
+							s("File Deleted: " + i.getName() + ", Regenerating.");
+							getReact().getDataController().load(i, configurations.get(i));
+						}
+						
+						if(modified(configurations.get(i)))
+						{
+							Configurable c = configurations.get(i);
+							mods.put(configurations.get(i), i.lastModified());
+							int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
+							notif("Injected " + changes + " change(s) from " + i.getName());
+						}
 					}
 				}
+			};
+		}
+	}
+	
+	public void notif(String s)
+	{
+		if(cc.getBoolean("configuration.mechanics.notify.console"))
+		{
+			Bukkit.getConsoleSender().sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + s);
+		}
+		
+		if(cc.getBoolean("configuration.mechanics.notify.react-players"))
+		{
+			for(Player i : getReact().onlinePlayers())
+			{
+				if(i.hasPermission(Info.PERM_MONITOR))
+				{
+					i.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + s);
+				}
 			}
-		};
+		}
 	}
 	
 	public boolean modified(Configurable c)
@@ -119,6 +148,10 @@ public class ConfigurationController extends Controller implements Configurable
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
+		cc.set("configuration.mechanics.auto-inject", true, "Automatically inject changes from config files into react.");
+		cc.set("configuration.mechanics.inject-delay-seconds", 5, "How often (in seconds) should react check the filesystem for any changes?");
+		cc.set("configuration.mechanics.notify.console", true, "Notify the console when files are changed and injected?");
+		cc.set("configuration.mechanics.notify.react-players", false, "Notifiy players who have the permission react.monitor?");
 		cc.set("configuration.enhancements.add-comments", true, "If you can see this, this setting is enabled :P");
 		cc.set("configuration.enhancements.add-default-comments", true, "This shows the Default value as a comment. If its on, below is an example :P");
 	}
