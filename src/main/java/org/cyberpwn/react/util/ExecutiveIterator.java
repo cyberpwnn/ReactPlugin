@@ -6,12 +6,12 @@ public class ExecutiveIterator<T>
 {
 	private Iterator<T> it;
 	
-	public ExecutiveIterator(final Long lim, GList<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
+	public ExecutiveIterator(final Double lim, GList<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
 	{
 		this(lim, data.iterator(), runnable, finish);
 	}
 	
-	public ExecutiveIterator(final Long lim, Iterator<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
+	public ExecutiveIterator(final Double lim, Iterator<T> data, final ExecutiveRunnable<T> runnable, final Runnable finish)
 	{
 		this.it = data;
 		
@@ -19,9 +19,9 @@ public class ExecutiveIterator<T>
 		{
 			public void run()
 			{
-				Long ms = M.ms();
+				Long ns = M.ns();
 				
-				while(it.hasNext() && System.currentTimeMillis() - ms < lim)
+				while(it.hasNext() && System.nanoTime() - ns < (lim * 1000000.0))
 				{
 					runnable.run(it.next());
 					
