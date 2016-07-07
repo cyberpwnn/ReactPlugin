@@ -3,9 +3,25 @@ package org.cyberpwn.react.util;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 public class W
 {
+	public static GList<Block> getFaces(Block b)
+	{
+		GList<Block> blocks = new GList<Block>();
+
+		blocks.add(b.getRelative(BlockFace.UP));
+		blocks.add(b.getRelative(BlockFace.DOWN));
+		blocks.add(b.getRelative(BlockFace.NORTH));
+		blocks.add(b.getRelative(BlockFace.SOUTH));
+		blocks.add(b.getRelative(BlockFace.EAST));
+		blocks.add(b.getRelative(BlockFace.WEST));
+		
+		return blocks;
+	}
+	
 	public static boolean skyn(Location l)
 	{
 		for(int i = 255; i > 0; i--)
