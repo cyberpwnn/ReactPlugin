@@ -128,13 +128,6 @@
 			<version>1.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>protocollib</groupId>
-			<artifactId>protocollib</artifactId>
-			<scope>system</scope>
-			<systemPath>${react.libs}/ProtocolLib.jar</systemPath>
-			<version>1.8.8</version>
-		</dependency>
-		<dependency>
 			<groupId>placeholderapi</groupId>
 			<artifactId>placeholderapi</artifactId>
 			<scope>system</scope>
