@@ -6,11 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
@@ -70,18 +66,6 @@ public class SampleEntities extends Sample implements Listener
 		}
 	}
 	
-	@EventHandler
-	public void entitySpawn(EntitySpawnEvent e)
-	{
-		get().setNumber(get().getDouble() + 1);
-	}
-	
-	@EventHandler
-	public void entitySpawn(EntityDeathEvent e)
-	{
-		get().setNumber(get().getDouble() - 1);
-	}
-	
 	public void onStart()
 	{
 		int ents = 0;
@@ -92,12 +76,6 @@ public class SampleEntities extends Sample implements Listener
 		}
 		
 		value.setNumber(ents);
-		React.instance().register(this);
-	}
-	
-	public void onStop()
-	{
-		React.instance().unRegister(this);
 	}
 	
 	public String formatted(boolean acc)
