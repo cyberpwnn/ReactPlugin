@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+import java.util.HashSet;
 import java.util.Random;
 
 import org.bukkit.Location;
@@ -95,27 +96,26 @@ public class Area
 	 */
 	public Entity[] getNearbyEntities()
 	{
-		double radiusSquared = radius * radius;
+		int chunkRadius = (int) (radius < 16 ? 1 : (radius - (radius % 16)) / 16);
+		HashSet<Entity> radiusEntities = new HashSet<Entity>();
 		
-		GList<Entity> entities = new GList<Entity>();
-		
-		for(Entity i : location.getWorld().getEntities())
+		for(int chX = 0 - chunkRadius; chX <= chunkRadius; chX++)
 		{
-			try
+			for(int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++)
 			{
-				if(i.getLocation().distanceSquared(location) <= radiusSquared)
-				{
-					entities.add(i);
-				}
-			}
-			
-			catch(Exception e)
-			{
+				int x = (int) location.getX(), y = (int) location.getY(), z = (int) location.getZ();
 				
+				for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
+				{
+					if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+					{
+						radiusEntities.add(e);
+					}
+				}
 			}
 		}
 		
-		return entities.toArray(new Entity[entities.size()]);
+		return radiusEntities.toArray(new Entity[radiusEntities.size()]);
 	}
 	
 	/**
