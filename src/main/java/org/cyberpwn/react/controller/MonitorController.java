@@ -224,8 +224,14 @@ public class MonitorController extends Controller implements Configurable
 			int his = i.getInventory().getHeldItemSlot();
 			int ois = monitors.get(i).getA();
 			int cg = monitors.get(i).getB();
+			boolean tryMove = false;
 			
-			if(i.isSneaking() && !locks.containsKey(i))
+			if(his != ois && i.isSneaking() && locks.containsKey(i))
+			{
+				tryMove = true;
+			}
+			
+			else if(i.isSneaking() && !locks.containsKey(i))
 			{
 				if(his != ois)
 				{
@@ -275,6 +281,11 @@ public class MonitorController extends Controller implements Configurable
 				{
 					tx.setSubTitle(" ");
 				}
+			}
+			
+			if(tryMove)
+			{
+				tx.setAction(ChatColor.RED + "[LOCK] " + tx.getAction() + " " + ChatColor.RED + "[LOCK]");
 			}
 			
 			if(getReact().getActionController().getActionInstabilityCause().issues())
