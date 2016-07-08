@@ -75,7 +75,7 @@ public class ScreenMonitor
 		return s;
 	}
 	
-	public Title update(Integer cursor, boolean acc)
+	public Title update(Integer cursor, boolean acc, boolean light)
 	{
 		Title t = new Title();
 		String disp = react.getMonitorController().getDisp();
@@ -102,12 +102,12 @@ public class ScreenMonitor
 			{
 				if(cursor == -1)
 				{
-					t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
+					t.setAction(t.getAction() + " " + colorNight(light, i) + i.formatted(acc));
 				}
 				
 				else if(samplables.get(cursor).equals(i))
 				{
-					t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
+					t.setAction(t.getAction() + " " + colorNight(light, i) + i.formatted(acc));
 				}
 				
 				else
@@ -118,7 +118,7 @@ public class ScreenMonitor
 			
 			else
 			{
-				t.setAction(t.getAction() + " " + i.color() + i.formatted(acc));
+				t.setAction(t.getAction() + " " + colorNight(light, i) + i.formatted(acc));
 			}
 		}
 		
@@ -129,7 +129,7 @@ public class ScreenMonitor
 			
 			for(Samplable i : elements.get(samplables.get(cursor)).getA())
 			{
-				t.setSubTitle(t.getSubTitle() + " " + ChatColor.DARK_GRAY + " " + i.color() + i.formatted(acc));
+				t.setSubTitle(t.getSubTitle() + " " + ChatColor.DARK_GRAY + " " + colorNight(light, i) + i.formatted(acc));
 				t.setTitle(disp);
 			}
 		}
@@ -141,6 +141,16 @@ public class ScreenMonitor
 		}
 		
 		return t;
+	}
+	
+	public String colorNight(boolean c, Samplable i)
+	{
+		if(!c)
+		{
+			return i.color() + "" + ChatColor.BOLD;
+		}
+		
+		return i.color() + "";
 	}
 	
 	public int dec(int i)
