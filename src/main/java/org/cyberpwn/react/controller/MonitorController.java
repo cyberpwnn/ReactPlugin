@@ -271,7 +271,14 @@ public class MonitorController extends Controller implements Configurable
 				monitors.get(i).setA(his);
 			}
 			
-			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking());
+			boolean light = false;
+			
+			if(i.getLocation().getBlock().getLightLevel() < 10)
+			{
+				light = true;
+			}
+			
+			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking(), light);
 			
 			if(!ms.getIgnoreDisp().contains(i))
 			{
