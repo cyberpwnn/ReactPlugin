@@ -241,6 +241,12 @@ public class Sample implements Samplable, Configurable
 	}
 	
 	@Override
+	public ChatColor darkColor()
+	{
+		return ChatColor.BLACK;
+	}
+	
+	@Override
 	public Long getReactionTime()
 	{
 		return reactionTime;

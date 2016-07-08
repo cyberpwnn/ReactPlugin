@@ -100,4 +100,9 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	{
 		return chunk;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_RED;
+	}
 }

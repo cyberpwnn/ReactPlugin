@@ -49,6 +49,8 @@ public interface Samplable
 	
 	ChatColor color();
 	
+	ChatColor darkColor();
+	
 	Long getReactionTime();
 	
 	void setReactionTime(long ns);

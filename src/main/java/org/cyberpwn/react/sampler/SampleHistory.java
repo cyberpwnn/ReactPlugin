@@ -49,4 +49,9 @@ public class SampleHistory extends Sample
 	{
 		return Info.COLOR_ERR;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_RED;
+	}
 }

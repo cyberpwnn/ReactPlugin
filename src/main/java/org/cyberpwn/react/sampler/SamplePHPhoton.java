@@ -35,4 +35,9 @@ public class SamplePHPhoton extends Sample
 	{
 		return ChatColor.BLUE;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_BLUE;
+	}
 }

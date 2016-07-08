@@ -129,4 +129,9 @@ public class SampleGarbageDirection extends Sample
 	{
 		return overhead;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.GOLD;
+	}
 }

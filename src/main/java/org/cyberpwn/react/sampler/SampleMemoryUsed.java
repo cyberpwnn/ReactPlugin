@@ -139,4 +139,9 @@ public class SampleMemoryUsed extends Sample
 	{
 		return ChatColor.GOLD;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.GOLD;
+	}
 }

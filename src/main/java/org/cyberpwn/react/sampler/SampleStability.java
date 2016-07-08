@@ -85,4 +85,9 @@ public class SampleStability extends Sample
 	{
 		return ChatColor.GREEN;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_GREEN;
+	}
 }

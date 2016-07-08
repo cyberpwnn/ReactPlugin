@@ -86,4 +86,9 @@ public class SampleMemorySweepFrequency extends Sample
 	{
 		return ChatColor.GOLD;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.GOLD;
+	}
 }

@@ -57,6 +57,11 @@ public class SampleTimings extends Sample
 	
 	public ChatColor color()
 	{
+		return ChatColor.LIGHT_PURPLE;
+	}
+	
+	public ChatColor darkColor()
+	{
 		return ChatColor.DARK_PURPLE;
 	}
 }

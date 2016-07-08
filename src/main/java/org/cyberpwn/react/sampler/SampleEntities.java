@@ -87,4 +87,9 @@ public class SampleEntities extends Sample implements Listener
 	{
 		return ChatColor.BLUE;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_BLUE;
+	}
 }

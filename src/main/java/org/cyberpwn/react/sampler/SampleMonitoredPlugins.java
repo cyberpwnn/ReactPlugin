@@ -39,4 +39,9 @@ public class SampleMonitoredPlugins extends Sample
 	{
 		return ChatColor.AQUA;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.BLUE;
+	}
 }

@@ -139,4 +139,9 @@ public class SampleHitRate extends Sample
 	{
 		return ChatColor.GREEN;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_GREEN;
+	}
 }

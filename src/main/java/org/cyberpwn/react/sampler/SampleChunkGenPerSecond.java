@@ -79,6 +79,11 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		return Info.COLOR_ERR;
 	}
 	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_RED;
+	}
+	
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent e)
 	{

@@ -60,4 +60,9 @@ public class SampleLiquidFlowPerSecond extends Sample implements Listener
 			loadedTick++;
 		}
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_RED;
+	}
 }

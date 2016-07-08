@@ -86,4 +86,9 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 	{
 		return average;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.DARK_RED;
+	}
 }

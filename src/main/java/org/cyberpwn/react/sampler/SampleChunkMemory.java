@@ -75,4 +75,9 @@ public class SampleChunkMemory extends Sample
 	{
 		return ChatColor.GOLD;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.GOLD;
+	}
 }

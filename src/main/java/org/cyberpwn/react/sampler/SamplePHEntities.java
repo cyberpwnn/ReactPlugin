@@ -35,4 +35,9 @@ public class SamplePHEntities extends Sample
 	{
 		return ChatColor.AQUA;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.BLUE;
+	}
 }

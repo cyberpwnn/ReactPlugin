@@ -99,4 +99,9 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 	{
 		return ChatColor.GOLD;
 	}
+	
+	public ChatColor darkColor()
+	{
+		return ChatColor.GOLD;
+	}
 }
