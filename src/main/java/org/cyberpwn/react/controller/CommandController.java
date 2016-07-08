@@ -335,7 +335,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, "Map the filesystem sizes.", "fs", "files", "filesystem", "file", "folder"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
 			public void run()
