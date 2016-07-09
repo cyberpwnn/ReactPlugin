@@ -96,26 +96,34 @@ public class Area
 	 */
 	public Entity[] getNearbyEntities()
 	{
-		int chunkRadius = (int) (radius < 16 ? 1 : (radius - (radius % 16)) / 16);
-		HashSet<Entity> radiusEntities = new HashSet<Entity>();
-		
-		for(int chX = 0 - chunkRadius; chX <= chunkRadius; chX++)
+		try
 		{
-			for(int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++)
+			int chunkRadius = (int) (radius < 16 ? 1 : (radius - (radius % 16)) / 16);
+			HashSet<Entity> radiusEntities = new HashSet<Entity>();
+			
+			for(int chX = 0 - chunkRadius; chX <= chunkRadius; chX++)
 			{
-				int x = (int) location.getX(), y = (int) location.getY(), z = (int) location.getZ();
-				
-				for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
+				for(int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++)
 				{
-					if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+					int x = (int) location.getX(), y = (int) location.getY(), z = (int) location.getZ();
+					
+					for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
 					{
-						radiusEntities.add(e);
+						if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+						{
+							radiusEntities.add(e);
+						}
 					}
 				}
 			}
+			
+			return radiusEntities.toArray(new Entity[radiusEntities.size()]);
 		}
 		
-		return radiusEntities.toArray(new Entity[radiusEntities.size()]);
+		catch(Exception e)
+		{
+			return new GList<Entity>().toArray(new Entity[0]);
+		}
 	}
 	
 	/**
