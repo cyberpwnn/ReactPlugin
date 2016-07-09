@@ -387,6 +387,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("display.tag", "&b[&8React&b]:", "Here you can configure the tag for react. Uses color codes.");
 		cc.set("display.no-permission", "&cInsufficient Permission", "Permission denied message.");
 		cc.set("monitor.allow-title-verbose", true, "Allow title message verbose?\nPlayers still have to turn it on if it is enabled.");
+		cc.set("monitor.title-bolding", false, "Bolden the text on the monitor when in bright daylight.\nThis is intended to make the text clearer when looking at bright colors on the screen.");
 		cc.set("react-remote.enable", false, "This is for remote access to the react server");
 		cc.set("react-remote.port", 8118, "Make sure the port is open. You may get a failed to bind to port message if it isnt.\n DONT USE 25565!");
 		cc.set("react-remote.interval", 100);
