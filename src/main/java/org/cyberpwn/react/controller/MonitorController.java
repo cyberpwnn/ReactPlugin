@@ -114,36 +114,25 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(currentDelay <= 0)
 		{
-			currentDelay = delay;
-			mLevel++;
-			
-			if(mLevel > 2)
+			if(delay > 5)
 			{
-				mLevel = 0;
-				
-				level++;
-				
-				if(level > 6)
-				{
-					level = 0;
-				}
+				delay = 5;
 			}
+			
+			if(delay < 1)
+			{
+				delay = 1;
+			}
+			
+			
+			currentDelay = delay;
 			
 			Timer t = new Timer();
 			t.start();
 			dispatch();
 			t.stop();
+			
 			delay = (int) (2.0 * ((double)t.getTime() / 1000000.0));
-			
-			if(delay > 2)
-			{
-				delay = 2;
-			}
-			
-			if(delay < 1)
-			{
-				delay = 0;
-			}
 		}
 		
 		if(dTick)
@@ -273,7 +262,15 @@ public class MonitorController extends Controller implements Configurable
 			
 			boolean light = false;
 			
-			if(i.getLocation().getBlock().getLightLevel() < 10)
+			if(getReact().getConfiguration().getBoolean("monitor.title-bolding"))
+			{
+				if(i.getLocation().getBlock().getLightLevel() < 10)
+				{
+					light = true;
+				}
+			}
+			
+			else
 			{
 				light = true;
 			}
