@@ -85,6 +85,11 @@ public class ScreenMonitor
 		t.setStayTime(40);
 		GList<Samplable> samplables = new GList<Samplable>();
 		
+		if(!React.instance().getConfiguration().getBoolean("monitor.shift-accuracy"))
+		{
+			acc = false;
+		}
+		
 		for(int max = 0; max < elements.size(); max++)
 		{
 			for(Samplable i : elements.keySet())

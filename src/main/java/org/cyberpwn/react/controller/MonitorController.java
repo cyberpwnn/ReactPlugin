@@ -127,12 +127,25 @@ public class MonitorController extends Controller implements Configurable
 			
 			currentDelay = delay;
 			
+			if(!getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
+			{
+				currentDelay = getReact().getConfiguration().getInt("monitor.ticking.base");
+			}
+			
 			Timer t = new Timer();
 			t.start();
 			dispatch();
 			t.stop();
 			
-			delay = (int) (2.0 * ((double)t.getTime() / 1000000.0));
+			if(getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
+			{
+				delay = (int) (2.0 * ((double)t.getTime() / 1000000.0));
+			}
+			
+			else
+			{
+				delay = getReact().getConfiguration().getInt("monitor.ticking.base");
+			}
 		}
 		
 		if(dTick)

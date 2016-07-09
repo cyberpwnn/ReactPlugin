@@ -27,7 +27,6 @@ import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TimingsController;
 import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
-import org.cyberpwn.react.controller.ZiplineController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
@@ -95,7 +94,7 @@ public class React extends JavaPlugin implements Configurable
 	private FailureController failureController;
 	private PhotonController photonController;
 	private TimingsController timingsController;
-	private ZiplineController ziplineController;
+	//private ZiplineController ziplineController;
 	private ScoreboardController scoreboardController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -163,13 +162,13 @@ public class React extends JavaPlugin implements Configurable
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
-		ziplineController = new ZiplineController(this);
+		//ziplineController = new ZiplineController(this);
 		dataController.load((String)null, configurationController);
 		dataController.load((String)null, this);
 		dataController.load((String)null, entityStackController);
 		dataController.load((String)null, updateController);
 		dataController.load((String)null, photonController);
-		dataController.load((String)null, ziplineController);
+		//dataController.load((String)null, ziplineController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -392,6 +391,9 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("display.no-permission", "&cInsufficient Permission", "Permission denied message.");
 		cc.set("monitor.allow-title-verbose", true, "Allow title message verbose?\nPlayers still have to turn it on if it is enabled.");
 		cc.set("monitor.title-bolding", false, "Bolden the text on the monitor when in bright daylight.\nThis is intended to make the text clearer when looking at bright colors on the screen.");
+		cc.set("monitor.shift-accuracy", true, "When enabled, holding shift while monitoring will show more accurate numbers.");
+		cc.set("monitor.ticking.dynamic", true, "Slows down monitoring tickrates depending on how demanding it is to the server.");
+		cc.set("monitor.ticking.base", 1, "The default tickrate for the monitor. Lower = faster.\nThis will only take effect if dynamic ticking is off.");
 		cc.set("react-remote.enable", false, "This is for remote access to the react server");
 		cc.set("react-remote.port", 8118, "Make sure the port is open. You may get a failed to bind to port message if it isnt.\n DONT USE 25565!");
 		cc.set("react-remote.interval", 100);
@@ -936,8 +938,8 @@ public class React extends JavaPlugin implements Configurable
 		return photonController;
 	}
 
-	public ZiplineController getZiplineController()
-	{
-		return ziplineController;
-	}
+//	public ZiplineController getZiplineController()
+//	{
+//		return ziplineController;
+//	}
 }
