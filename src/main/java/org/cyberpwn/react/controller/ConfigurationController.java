@@ -149,7 +149,7 @@ public class ConfigurationController extends Controller implements Configurable
 	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("configuration.mechanics.auto-inject", true, "Automatically inject changes from config files into react.");
-		cc.set("configuration.mechanics.inject-delay-seconds", 5, "How often (in seconds) should react check the filesystem for any changes?");
+		cc.set("configuration.mechanics.inject-delay-seconds", 30, "How often (in seconds) should react check the filesystem for any changes?");
 		cc.set("configuration.mechanics.notify.console", true, "Notify the console when files are changed and injected?");
 		cc.set("configuration.mechanics.notify.react-players", false, "Notifiy players who have the permission react.monitor?");
 		cc.set("configuration.enhancements.add-comments", true, "If you can see this, this setting is enabled :P");
