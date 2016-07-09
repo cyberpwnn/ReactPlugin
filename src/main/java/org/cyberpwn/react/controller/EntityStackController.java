@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
@@ -19,26 +20,24 @@ import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.TaskLater;
 
 public class EntityStackController extends Controller implements Configurable
 {
 	private ClusterConfig cc;
 	private GMap<Integer, Integer> stacks;
-	
-	private Boolean enabled;
-	
+		
 	public EntityStackController(React react)
 	{
 		super(react);
 		
-		enabled = false;
 		stacks = new GMap<Integer, Integer>();
 		cc = new ClusterConfig();
 	}
 	
 	public boolean isStacked(LivingEntity e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return false;
 		}
@@ -48,7 +47,7 @@ public class EntityStackController extends Controller implements Configurable
 	
 	public boolean canTouch(LivingEntity e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return false;
 		}
@@ -121,7 +120,7 @@ public class EntityStackController extends Controller implements Configurable
 	
 	public void stop()
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -143,7 +142,7 @@ public class EntityStackController extends Controller implements Configurable
 	@SuppressWarnings("deprecation")
 	public void update(LivingEntity e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -165,7 +164,7 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntityDamageEvent e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -182,7 +181,7 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler
 	public void on(ChunkLoadEvent e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -204,7 +203,7 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler
 	public void on(ChunkUnloadEvent e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -226,7 +225,7 @@ public class EntityStackController extends Controller implements Configurable
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntityDeathEvent e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -235,51 +234,73 @@ public class EntityStackController extends Controller implements Configurable
 		{
 			if(isStacked(e.getEntity()))
 			{
-				stacks.put(e.getEntity().getEntityId(), stacks.get(e.getEntity().getEntityId()) - 1);
-				
-				if(stacks.get(e.getEntity().getEntityId()) > 1)
+				new TaskLater(1)
 				{
-					e.getEntity().setHealth(e.getEntity().getMaxHealth());
-					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
-				}
-				
-				else if(stacks.get(e.getEntity().getEntityId()) > 0)
-				{
-					e.getEntity().setHealth(e.getEntity().getMaxHealth());
-					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
-					stacks.remove(e.getEntity().getEntityId());
-				}
-				
-				else
-				{
-					stacks.remove(e.getEntity().getEntityId());
-					e.getEntity().remove();
-					((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
-				}
-				
-				update(e.getEntity());
+					public void run()
+					{
+						stacks.put(e.getEntity().getEntityId(), stacks.get(e.getEntity().getEntityId()) - 1);
+						
+						if(stacks.get(e.getEntity().getEntityId()) > 1)
+						{
+							e.getEntity().setHealth(e.getEntity().getMaxHealth());
+							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+						}
+						
+						else if(stacks.get(e.getEntity().getEntityId()) > 0)
+						{
+							e.getEntity().setHealth(e.getEntity().getMaxHealth());
+							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+							stacks.remove(e.getEntity().getEntityId());
+						}
+						
+						else
+						{
+							stacks.remove(e.getEntity().getEntityId());
+							e.getEntity().remove();
+							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+						}
+						
+						update(e.getEntity());
+					}
+				};
 			}
+		}
+	}
+	
+	public void entitySpawned(boolean spawner, Entity e)
+	{
+		if(!cc.getBoolean("stacker.enabled"))
+		{
+			return;
+		}
+		
+		if(cc.getBoolean("stacker.ignore.non-spawner-spawns") && !spawner)
+		{
+			return;
+		}
+		
+		if(e instanceof LivingEntity)
+		{
+			stack((LivingEntity) e);
+			update((LivingEntity) e);
 		}
 	}
 	
 	@EventHandler(priority = EventPriority.LOW)
 	public void on(EntitySpawnEvent e)
 	{
-		if(!enabled)
-		{
-			return;
-		}
-		
-		if(e.getEntity() instanceof LivingEntity)
-		{
-			stack((LivingEntity) e.getEntity());
-			update((LivingEntity) e.getEntity());
-		}
+		entitySpawned(false, e.getEntity());
+	}
+	
+	@EventHandler
+	public void on(SpawnerSpawnEvent e)
+	{
+		entitySpawned(true, e.getEntity());
 	}
 	
 	public void stack(LivingEntity e)
 	{
-		if(!enabled)
+		if(!cc.getBoolean("stacker.enabled"))
 		{
 			return;
 		}
@@ -370,6 +391,7 @@ public class EntityStackController extends Controller implements Configurable
 		cc.set("stacker.enabled", false, "Enable mob stacking?");
 		cc.set("stacker.ignore.named-entities", true, "Ignore stacking named entities?");
 		cc.set("stacker.ignore.non-cullable-mobs", true, "Dont stack mobs that cant be culled in the action-cull-entities.yml file.");
+		cc.set("stacker.ignore.non-spawner-spawns", true, "Don't stack mobs that did not come from mob spawners.");
 		cc.set("stacker.settings.stack-range", 4.3, "The range for entities of the same type to stack?");
 		cc.set("stacker.settings.max-size", 16, "The max amount of entities stacked into one mob?");
 		cc.set("stacker.lang.change-names", true, "Modify the name of the mob to display how many stacked entities are in it.");
@@ -379,7 +401,7 @@ public class EntityStackController extends Controller implements Configurable
 	@Override
 	public void onReadConfig()
 	{
-		enabled = cc.getBoolean("stacker.enabled");
+		//Dynamic
 	}
 	
 	@Override
