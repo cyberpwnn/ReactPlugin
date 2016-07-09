@@ -258,6 +258,26 @@ public class PhotonController extends Controller implements Configurable
 			return false;
 		}
 		
+		if(b.getType().equals(Material.CHEST))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("HOPPER"))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("ANVIL"))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("TRAPPED_CHEST"))
+		{
+			return false;
+		}
+		
 		if(!b.getRelative(BlockFace.UP).getType().equals(Material.AIR) && b.getRelative(BlockFace.UP).getType().isTransparent())
 		{
 			return false;
