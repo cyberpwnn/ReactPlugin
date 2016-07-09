@@ -5,13 +5,51 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 public class W
 {
+	public static int firstItem(Inventory inv)
+	{
+		if(inventoryEmpty(inv))
+		{
+			return -1;
+		}
+		
+		for(int i = 0; i < inv.getSize(); i++)
+		{
+			if(inv.getItem(i) != null)
+			{
+				return i;
+			}
+		}
+		
+		return -1;
+	}
+	
+	public static boolean inventoryFull(Inventory i)
+	{
+		return i.firstEmpty() == -1;
+	}
+	
+	public static boolean inventoryEmpty(Inventory i)
+	{
+		for(ItemStack item : i.getContents())
+		{
+			if(item != null)
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	public static GList<Block> getFaces(Block b)
 	{
 		GList<Block> blocks = new GList<Block>();
-
+		
 		blocks.add(b.getRelative(BlockFace.UP));
 		blocks.add(b.getRelative(BlockFace.DOWN));
 		blocks.add(b.getRelative(BlockFace.NORTH));
