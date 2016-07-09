@@ -27,6 +27,7 @@ import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TimingsController;
 import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
+import org.cyberpwn.react.controller.ZiplineController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
@@ -93,11 +94,12 @@ public class React extends JavaPlugin implements Configurable
 	private WorldController worldController;
 	private FailureController failureController;
 	private PhotonController photonController;
+	private TimingsController timingsController;
+	private ZiplineController ziplineController;
+	private ScoreboardController scoreboardController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
-	private TimingsController timingsController;
-	private ScoreboardController scoreboardController;
 	private Dispatcher d;
 	private Metrics metrics;
 	private int saved;
@@ -161,11 +163,13 @@ public class React extends JavaPlugin implements Configurable
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
+		ziplineController = new ZiplineController(this);
 		dataController.load((String)null, configurationController);
 		dataController.load((String)null, this);
 		dataController.load((String)null, entityStackController);
 		dataController.load((String)null, updateController);
 		dataController.load((String)null, photonController);
+		dataController.load((String)null, ziplineController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -930,5 +934,10 @@ public class React extends JavaPlugin implements Configurable
 	public PhotonController getPhotonController()
 	{
 		return photonController;
+	}
+
+	public ZiplineController getZiplineController()
+	{
+		return ziplineController;
 	}
 }
