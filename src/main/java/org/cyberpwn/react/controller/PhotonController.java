@@ -13,6 +13,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
@@ -253,6 +254,11 @@ public class PhotonController extends Controller implements Configurable
 			return false;
 		}
 		
+		if(b.getState() instanceof InventoryHolder)
+		{
+			return false;
+		}
+		
 		if(b.getType().equals(Material.STATIONARY_WATER))
 		{
 			return false;
@@ -274,6 +280,21 @@ public class PhotonController extends Controller implements Configurable
 		}
 		
 		if(b.getType().toString().equals("TRAPPED_CHEST"))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("SIGN"))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("WALL_SIGN"))
+		{
+			return false;
+		}
+		
+		if(b.getType().toString().equals("SIGN_POST"))
 		{
 			return false;
 		}
