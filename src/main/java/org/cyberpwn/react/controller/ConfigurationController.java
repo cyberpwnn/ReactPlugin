@@ -50,7 +50,11 @@ public class ConfigurationController extends Controller implements Configurable
 							Configurable c = configurations.get(i);
 							mods.put(configurations.get(i), i.lastModified());
 							int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
-							notif("Injected " + changes + " change(s) from " + i.getName());
+							
+							if(changes > 0)
+							{
+								notif("Injected " + changes + " change(s) from " + i.getName());
+							}
 						}
 					}
 				}
