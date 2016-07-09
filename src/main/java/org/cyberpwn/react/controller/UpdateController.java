@@ -150,15 +150,18 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void broadcast(String msg)
 	{
-		for(Player i : getReact().onlinePlayers())
+		if(cc.getBoolean("update-checking.enable"))
 		{
-			if(i.hasPermission(Info.PERM_RELOAD))
+			for(Player i : getReact().onlinePlayers())
 			{
-				i.sendMessage(msg);
+				if(i.hasPermission(Info.PERM_RELOAD))
+				{
+					i.sendMessage(msg);
+				}
 			}
+			
+			Bukkit.getConsoleSender().sendMessage(msg);
 		}
-		
-		Bukkit.getConsoleSender().sendMessage(msg);
 	}
 	
 	public void cleanup()
