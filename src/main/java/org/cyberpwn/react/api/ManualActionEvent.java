@@ -1,8 +1,9 @@
-package org.cyberpwn.react.util;
+package org.cyberpwn.react.api;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.Cancellable;
 import org.cyberpwn.react.action.Actionable;
+import org.cyberpwn.react.util.ReactEvent;
 
 public class ManualActionEvent extends ReactEvent implements Cancellable
 {

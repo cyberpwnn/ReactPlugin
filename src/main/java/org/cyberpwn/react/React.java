@@ -94,7 +94,6 @@ public class React extends JavaPlugin implements Configurable
 	private FailureController failureController;
 	private PhotonController photonController;
 	private TimingsController timingsController;
-	//private ZiplineController ziplineController;
 	private ScoreboardController scoreboardController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -162,13 +161,11 @@ public class React extends JavaPlugin implements Configurable
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
-		//ziplineController = new ZiplineController(this);
 		dataController.load((String)null, configurationController);
 		dataController.load((String)null, this);
 		dataController.load((String)null, entityStackController);
 		dataController.load((String)null, updateController);
 		dataController.load((String)null, photonController);
-		//dataController.load((String)null, ziplineController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -937,9 +934,4 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return photonController;
 	}
-
-//	public ZiplineController getZiplineController()
-//	{
-//		return ziplineController;
-//	}
 }

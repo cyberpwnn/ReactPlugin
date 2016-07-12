@@ -29,6 +29,14 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 	
 	public void onReload(CommandSender sender)
 	{
+		if(sender == null)
+		{
+			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			
+			return;
+		}
+		
 		if(sender.hasPermission(Info.PERM_RELOAD))
 		{
 			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
@@ -155,7 +163,7 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 							}
 						}).start();
 					}
-					
+							
 					catch(Exception e)
 					{
 						

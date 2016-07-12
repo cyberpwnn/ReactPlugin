@@ -1,6 +1,6 @@
 name: React
 main: org.cyberpwn.react.reflect.R
-version: 2.8.5p
+version: 2.8.6p
 description: React is a smart performance plugin designed to automatically fix lag from the source. This is different from lag clearers.
 author: cyberpwn
 authors: [cyberpwn, Puretie]
