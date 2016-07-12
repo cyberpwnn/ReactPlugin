@@ -18,6 +18,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.server.ServerCommandEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.Plugin;
@@ -1347,6 +1348,20 @@ public class CommandController extends Controller implements CommandExecutor
 					});
 				}
 			}
+		}
+	}
+	
+	@EventHandler
+	public void omCommandPre(ServerCommandEvent e)
+	{
+		if(e.getCommand().equalsIgnoreCase("timings off"))
+		{
+			React.instance().getTimingsController().off(null);
+		}
+		
+		if(e.getCommand().equalsIgnoreCase("timings on"))
+		{
+			React.instance().getTimingsController().on(null);
 		}
 	}
 	
