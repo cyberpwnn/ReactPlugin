@@ -1,85 +1,131 @@
 package org.cyberpwn.react.api;
 
+import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
-import org.cyberpwn.react.action.Actionable;
-import org.cyberpwn.react.sampler.Samplable;
-import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.controller.ActionController;
+import org.cyberpwn.react.controller.SampleController;
 
 public class ReactAPI
 {
-	public static String[] getActions()
+	/**
+	 * Get the instance of react
+	 * 
+	 * @return React instance
+	 */
+	public static React getReact()
 	{
-		GList<String> kx = new GList<String>();
-		
-		for(Actionable i : React.instance().getActionController().getActions().k())
-		{
-			if(i.isManual())
-			{
-				kx.add(i.getKey());
-			}
-		}
-		
-		return kx.toArray(new String[kx.size()]);
+		return React.instance();
 	}
 	
-	public static String[] getSamplers()
+	/**
+	 * Get a list of players using the react title monitor
+	 * 
+	 * @return a list of players
+	 */
+	public static Player[] getMonitoringPlayers()
 	{
-		GList<String> kx = new GList<String>();
-		
-		for(Samplable i : React.instance().getSampleController().getSamples().k())
-		{
-			kx.add(i.getName());
-		}
-		
-		return kx.toArray(new String[kx.size()]);
+		return getReact().getMonitorController().getMonitors().k().toArray(new Player[getReact().getMonitorController().getMonitors().k().size()]);
 	}
 	
-	public static void act(String action)
+	/**
+	 * Get a list of players using the react map
+	 * 
+	 * @return a list of players
+	 */
+	public static Player[] getMappingPlayers()
 	{
-		for(Actionable i : React.instance().getActionController().getActions().k())
-		{
-			if(i.isManual() && i.getKey().equals(action))
-			{
-				i.act();
-				return;
-			}
-		}
+		return getReact().getMonitorController().getMappers().k().toArray(new Player[getReact().getMonitorController().getMappers().k().size()]);
 	}
 	
-	public static Double sample(String sample)
+	/**
+	 * Reloads React
+	 */
+	public static void reloadReact()
 	{
-		for(Samplable i : React.instance().getSampleController().getSamples().k())
-		{
-			if(i.getName().equals(sample))
-			{
-				return i.get().getDouble();
-			}
-		}
-		
-		return null;
+		getReact().onReload(null);
 	}
 	
+	/**
+	 * Gets the sampleController. With this you can grab any data from samplers.
+	 * For example, <strong>int chunks =
+	 * ReactAPI.getSampleController().getSampleChunksLoaded().get().getInteger()
+	 * </strong>
+	 * 
+	 * @return the SampleController instance
+	 */
+	public static SampleController getSampleController()
+	{
+		return getReact().getSampleController();
+	}
+	
+	/**
+	 * Gets the actionController. With this you can manually run actions within
+	 * react, although some of them aren't recommended.
+	 * 
+	 * @return the ActionController instance
+	 */
+	public static ActionController getActionController()
+	{
+		return getReact().getActionController();
+	}
+	
+	/**
+	 * Gets the ticks per second in a very accurate double.
+	 * 
+	 * @return
+	 */
+	public static double getTicksPerSecond()
+	{
+		return getSampleController().getSampleTicksPerSecond().get().getDouble();
+	}
+	
+	/**
+	 * Check if react has (based on config) determined if the server is lagging
+	 * 
+	 * @return true if the server is considered lagging
+	 */
 	public static boolean isLagging()
 	{
 		return React.instance().getActionController().getActionInstabilityCause().isLagging();
 	}
 	
+	/**
+	 * Get the ACTUAL amount of memory used. this is different then the runtime
+	 * operation. This EXCLUDES GARBAGE in the memory.
+	 * 
+	 * @return the memory used on the server. IN MEGABYTES
+	 */
 	public static double getMemoryUsed()
 	{
 		return React.instance().getSampleController().getSampleMemoryUsed().getValue().getDouble();
 	}
 	
+	/**
+	 * Returns the amount of memory allocated to this JVM environment
+	 * 
+	 * @return the max memory in BYTES
+	 */
 	public static double getMemoryMax()
 	{
 		return React.instance().getSampleController().getSampleMemoryUsed().getMemoryMax();
 	}
 	
+	/**
+	 * Returns the usual amount of memory excluding garbage.
+	 * 
+	 * @return the free memory in BYTES
+	 */
 	public static double getMemoryFree()
 	{
 		return React.instance().getSampleController().getSampleMemoryUsed().getMemoryFree();
 	}
 	
+	/**
+	 * Returns the amount of GARBAGE in the memory
+	 * 
+	 * @return the memory used from garbage in MEGABYTES
+	 */
 	public static double getMemoryGarbage()
 	{
 		double k = React.instance().getSampleController().getSampleMemoryUsed().getMemoryUsed() / 1024 / 1024 - getMemoryUsed();
@@ -92,11 +138,21 @@ public class ReactAPI
 		return k;
 	}
 	
+	/**
+	 * Returns the version of react
+	 * 
+	 * @return the version of react
+	 */
 	public static String getVersion()
 	{
 		return Version.V;
 	}
 	
+	/**
+	 * Returns the version code of react
+	 * 
+	 * @return the version code of react
+	 */
 	public static int getVersionCode()
 	{
 		return Version.C;
