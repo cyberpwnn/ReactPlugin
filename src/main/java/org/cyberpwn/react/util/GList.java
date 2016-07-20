@@ -129,7 +129,7 @@ public class GList<T> extends ArrayList<T>
 	
 	public boolean hasIndex(int i)
 	{
-		return i > size() - 1;
+		return i < size();
 	}
 	
 	public T pickRandom()

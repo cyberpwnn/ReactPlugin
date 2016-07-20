@@ -358,6 +358,14 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			public void run()
 			{
+				getReact().getChannelListenController().scan(getPlayer());
+			}
+		}, "Sniff the bungeecord message channel", "sniff"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			public void run()
+			{
 				if(isPlayer())
 				{
 					RawText a = new RawText();

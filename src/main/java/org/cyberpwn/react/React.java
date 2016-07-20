@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
+import org.cyberpwn.react.controller.ChannelListenController;
 import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
@@ -17,6 +18,7 @@ import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EntityStackController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
+import org.cyberpwn.react.controller.LimitingController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PhotonController;
@@ -93,8 +95,10 @@ public class React extends JavaPlugin implements Configurable
 	private WorldController worldController;
 	private FailureController failureController;
 	private PhotonController photonController;
+	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
+	private LimitingController limitingController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -156,16 +160,19 @@ public class React extends JavaPlugin implements Configurable
 		networkController = new NetworkController(this);
 		pluginWeightController = new PluginWeightController(this);
 		timingsController = new TimingsController(this);
+		channelListenController = new ChannelListenController(this);
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
 		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
+		limitingController = new LimitingController(this);
 		dataController.load((String)null, configurationController);
 		dataController.load((String)null, this);
 		dataController.load((String)null, entityStackController);
 		dataController.load((String)null, updateController);
 		dataController.load((String)null, photonController);
+		dataController.load((String)null, limitingController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -933,5 +940,35 @@ public class React extends JavaPlugin implements Configurable
 	public PhotonController getPhotonController()
 	{
 		return photonController;
+	}
+
+	public ChannelListenController getChannelListenController()
+	{
+		return channelListenController;
+	}
+
+	public void setChannelListenController(ChannelListenController channelListenController)
+	{
+		this.channelListenController = channelListenController;
+	}
+
+	public void setPhotonController(PhotonController photonController)
+	{
+		this.photonController = photonController;
+	}
+
+	public LimitingController getLimitingController()
+	{
+		return limitingController;
+	}
+
+	public void setLimitingController(LimitingController limitingController)
+	{
+		this.limitingController = limitingController;
+	}
+
+	public static void setNonce(String nonce)
+	{
+		React.nonce = nonce;
 	}
 }
