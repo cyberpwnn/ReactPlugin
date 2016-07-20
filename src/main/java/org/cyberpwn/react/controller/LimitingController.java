@@ -137,10 +137,7 @@ public class LimitingController extends Controller implements Configurable
 	@EventHandler(ignoreCancelled = true)
 	public void on(PlayerChatEvent e)
 	{
-		if(cc.getBoolean("active.chat"))
-		{
-			act(e.getPlayer());
-		}
+		act(e.getPlayer());
 	}
 	
 	@EventHandler
