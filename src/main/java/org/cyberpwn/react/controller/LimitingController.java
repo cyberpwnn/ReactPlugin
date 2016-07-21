@@ -162,8 +162,16 @@ public class LimitingController extends Controller implements Configurable
 	@EventHandler
 	public void on(PlayerDeathEvent e)
 	{
-		act(e.getEntity());
-		act(e.getEntity().getKiller());
+		try
+		{
+			act(e.getEntity());
+			act(e.getEntity().getKiller());
+		}
+		
+		catch(Exception xe)
+		{
+			
+		}
 	}
 	
 	@EventHandler(ignoreCancelled = true)
