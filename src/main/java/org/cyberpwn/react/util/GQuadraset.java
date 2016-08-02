@@ -1,7 +1,10 @@
 package org.cyberpwn.react.util;
 
-public class GQuadraset<A, B, C, D>
+import java.io.Serializable;
+
+public class GQuadraset<A, B, C, D> implements Serializable
 {
+	private static final long serialVersionUID = 8169777940237957745L;
 	private A a;
 	private B b;
 	private C c;

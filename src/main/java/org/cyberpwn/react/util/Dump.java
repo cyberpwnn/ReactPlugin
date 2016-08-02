@@ -74,6 +74,13 @@ public class Dump implements Configurable
 			cc.set("server.plugins." + i.getName() + ".main", i.getDescription().getMain());
 			cc.set("server.plugins." + i.getName() + ".depend", new GList<String>(i.getDescription().getDepend()));
 			cc.set("server.plugins." + i.getName() + ".soft-depend", new GList<String>(i.getDescription().getSoftDepend()));
+			
+			GList<String> ev = pl.getEventListenerController().getEvents().get(i);
+			
+			if(ev != null)
+			{
+				cc.set("server.plugins." + i.getName() + ".events-registered", ev);
+			}
 		}
 		
 		for(World i : Bukkit.getServer().getWorlds())

@@ -1,6 +1,13 @@
 package org.cyberpwn.react.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -26,21 +33,65 @@ public class WorldCacheController extends Controller
 		cache = new GMap<GQuadraset<String, Integer, Integer, Integer>, String>();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void start()
 	{
-		File r = new File(new File(getReact().getDataFolder(), "cache"), "world");
-		
-		if(r.exists())
+		if(!new File(new File(getReact().getDataFolder(), "cache"), "wcache.rxs").exists())
 		{
-			for(World i : Bukkit.getWorlds())
+			try
 			{
-				File f = new File(r, i.getName());
+				new File(new File(getReact().getDataFolder(), "cache"), "wcache.rxs").createNewFile();
+			} 
+			
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		else
+		{
+			try
+			{
+				FileInputStream fin = new FileInputStream(new File(new File(getReact().getDataFolder(), "cache"), "wcache.rxs"));
+				GZIPInputStream gzi = new GZIPInputStream(fin);
+				ObjectInputStream ois = new ObjectInputStream(gzi);
+				Object obj = ois.readObject();
+				ois.close();
 				
-				if(f.exists())
+				if(obj != null && (obj instanceof GMap))
 				{
-					
+					cache = (GMap<GQuadraset<String, Integer, Integer, Integer>, String>) obj;
 				}
 			}
+			
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		s("Preparing World...");
+		
+		for(GQuadraset<String, Integer, Integer, Integer> i : cache.k())
+		{
+			try
+			{
+				Location l = new Location(Bukkit.getWorld(i.getA()), i.getB(), i.getC(), i.getD());
+				l.getBlock().setType(Material.valueOf(cache.get(i)));
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
+		}
+		
+		cache.clear();
+		
+		for(World i : Bukkit.getWorlds())
+		{
+			i.save();
 		}
 	}
 	
@@ -51,7 +102,20 @@ public class WorldCacheController extends Controller
 	
 	public void stop()
 	{
+		try
+		{
+			FileOutputStream fos = new FileOutputStream(new File(new File(getReact().getDataFolder(), "cache"), "wcache.rxs"));
+			GZIPOutputStream gzo = new GZIPOutputStream(fos);
+			ObjectOutputStream oos = new ObjectOutputStream(gzo);
+			oos.writeObject(cache.copy());
+			oos.close();
+			s("Saved World Cache with " + cache.size() + " entries");
+		}
 		
+		catch(Exception e)
+		{
+			
+		}
 	}
 	
 	public GQuadraset<String, Integer, Integer, Integer> quad(Location l)
@@ -61,6 +125,7 @@ public class WorldCacheController extends Controller
 	
 	public void mod(Location l, Material material)
 	{
+		s("Cache Size: " + cache.size());
 		cache.put(quad(l), material.toString());
 	}
 	

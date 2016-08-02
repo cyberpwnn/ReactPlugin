@@ -136,6 +136,7 @@ public class Quadrant
 	{
 		canvas.drawText(5, 50, mf, F.f(React.instance().getSampleController().getSampleTicksPerSecond().get().getDouble(), 1) + " TPS");
 		canvas.drawText(70, 5, mf, F.f(React.instance().getSampleController().getSampleMemoryUsed().get().getDouble(), 0) + " MB");
+		
 	}
 	
 	@SuppressWarnings("deprecation")

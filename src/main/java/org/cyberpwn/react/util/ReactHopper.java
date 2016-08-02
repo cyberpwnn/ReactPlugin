@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -51,6 +52,72 @@ public class ReactHopper
 		{
 			return null;
 		}
+	}
+	
+	public boolean hitsTop(int maxIterations)
+	{
+		ReactHopper current = this;
+		
+		for(int i = 0; i < maxIterations; i++)
+		{
+			if(current.canTransfer() && !W.inventoryFull(current.getInventory()))
+			{
+				if(current.getTargetInventory().getHolder() instanceof Hopper)
+				{
+					current = new ReactHopper((Hopper) current.getTargetInventory().getHolder());
+				}
+				
+				else if(current.getTargetInventory().getHolder() instanceof Chest && (((Chest) current.getTargetInventory().getHolder()).getBlock().getRelative(BlockFace.DOWN).getState() instanceof Hopper))
+				{
+					current = new ReactHopper((Hopper) ((BlockState) current.getTargetInventory().getHolder()).getBlock().getRelative(BlockFace.DOWN).getState());
+				}
+				
+				else if(current.isHopperBelow())
+				{
+					current = new ReactHopper((Hopper) current.getBelowHopper());
+				}
+				
+				else
+				{
+					if(current.isHopperBelow())
+					{
+						return true;
+					}
+					
+					else if(current.getTargetInventory() == null)
+					{
+						if(current.getFace().equals(BlockFace.DOWN))
+						{
+							return true;
+						}
+					}
+					
+					return current.getFace().equals(BlockFace.DOWN);
+				}
+			}
+			
+			else
+			{
+				if(current.isHopperBelow())
+				{
+					return true;
+				}
+				
+				else if(current.getTargetInventory() == null)
+				{
+					return false;
+				}
+				
+				return false;
+			}
+		}
+		
+		if(current.getTargetInventory() == null)
+		{
+			return false;
+		}
+		
+		return current.getFace().equals(BlockFace.DOWN);
 	}
 	
 	public Inventory furthestRoute(int maxIterations)
@@ -155,7 +222,7 @@ public class ReactHopper
 			return false;
 		}
 		
-		transfer(target);
+		transfer(target, maxIterations);
 		
 		return true;
 	}
@@ -185,23 +252,62 @@ public class ReactHopper
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void transfer(Inventory i)
+	public void transfer(Inventory i, int maxIterations)
 	{
 		while(canTransfer(getInventory(), i))
 		{
 			try
 			{
-				ItemStack item = getInventory().getItem(W.firstItem(getInventory())).clone();
-				getInventory().setItem(W.firstItem(getInventory()), new ItemStack(Material.AIR));
-				i.addItem(item);
-				update(i);
-				update(getInventory());
+				ItemStack itemx = getInventory().getItem(W.firstItem(getInventory())).clone();
+				
+				if(i.getHolder() instanceof BlockState)
+				{
+					BlockState bs = ((BlockState) i.getHolder());
+					
+					if(bs instanceof Furnace)
+					{
+						Furnace f = (Furnace) bs;
+						
+						if(hitsTop(maxIterations))
+						{
+							if(f.getInventory().getItem(0) == null ||f.getInventory().getItem(0).getType().equals(Material.AIR))
+							{
+								ItemStack item = getInventory().getItem(W.firstItem(getInventory())).clone();
+								getInventory().setItem(W.firstItem(getInventory()), new ItemStack(Material.AIR));
+								f.getInventory().setItem(0, item);
+								update(i);
+								update(getInventory());
+							}
+						}
+						
+						else
+						{
+							if(f.getInventory().getItem(1) == null ||f.getInventory().getItem(1).getType().equals(Material.AIR))
+							{
+								ItemStack item = getInventory().getItem(W.firstItem(getInventory())).clone();
+								getInventory().setItem(W.firstItem(getInventory()), new ItemStack(Material.AIR));
+								f.getInventory().setItem(1, item);
+								update(i);
+								update(getInventory());
+							}
+						}
+					}
+					
+					else
+					{
+						ItemStack item = getInventory().getItem(W.firstItem(getInventory())).clone();
+						getInventory().setItem(W.firstItem(getInventory()), new ItemStack(Material.AIR));
+						i.addItem(item);
+						update(i);
+						update(getInventory());
+					}
+				}
 				
 				if(getTargetInventory().getHolder() instanceof BlockState)
 				{
 					for(int j = 0; j < 8; j++)
 					{
-						((BlockState) i.getHolder()).getBlock().getLocation().getWorld().playEffect(((BlockState) i.getHolder()).getBlock().getLocation().clone().add(0.5, 1, 0.5), Effect.TILE_BREAK, item.getTypeId());
+						((BlockState) i.getHolder()).getBlock().getLocation().getWorld().playEffect(((BlockState) i.getHolder()).getBlock().getLocation().clone().add(0.5, 1, 0.5), Effect.TILE_BREAK, itemx.getTypeId());
 					}
 				}
 			}

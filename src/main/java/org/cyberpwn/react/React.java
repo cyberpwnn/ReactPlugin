@@ -16,6 +16,7 @@ import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EntityStackController;
+import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
@@ -99,6 +100,7 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
 	private LimitingController limitingController;
+	private EventListenerController eventListenerController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -167,6 +169,7 @@ public class React extends JavaPlugin implements Configurable
 		updateController = new UpdateController(this);
 		entityStackController = new EntityStackController(this);
 		limitingController = new LimitingController(this);
+		eventListenerController = new EventListenerController(this);
 		dataController.load((String)null, configurationController);
 		dataController.load((String)null, this);
 		dataController.load((String)null, entityStackController);
@@ -970,5 +973,10 @@ public class React extends JavaPlugin implements Configurable
 	public static void setNonce(String nonce)
 	{
 		React.nonce = nonce;
+	}
+
+	public EventListenerController getEventListenerController()
+	{
+		return eventListenerController;
 	}
 }
