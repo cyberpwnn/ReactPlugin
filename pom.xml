@@ -11,8 +11,8 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<react.libs>${project.basedir}/lib</react.libs>
 		<react.proguard>${project.basedir}/proguard</react.proguard>
-		<react.production.folder>X:/release/react</react.production.folder>
-		<react.development.folder>X:/servers/dynamic/plugins</react.development.folder>
+		<react.production.folder>C:\Users\cyberpwn\Documents\development\release\react</react.production.folder>
+		<react.development.folder>C:\Users\cyberpwn\Documents\development\servers\dynamic\plugins</react.development.folder>
 	</properties>
 	<build>
 		<plugins>
