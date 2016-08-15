@@ -2,8 +2,11 @@ package org.cyberpwn.react.controller;
 
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
@@ -26,7 +29,7 @@ public class EntityStackController extends Controller implements Configurable
 {
 	private ClusterConfig cc;
 	private GMap<Integer, Integer> stacks;
-		
+	
 	public EntityStackController(React react)
 	{
 		super(react);
@@ -139,6 +142,57 @@ public class EntityStackController extends Controller implements Configurable
 		stacks.clear();
 	}
 	
+	public boolean hasStackedName(LivingEntity e)
+	{
+		if(e.getCustomName() == null)
+		{
+			return false;
+		}
+		
+		for(int i = 0; i < cc.getInt("stacker.settings.max-size"); i++)
+		{
+			@SuppressWarnings("deprecation")
+			String f = F.color(cc.getString("stacker.lang.name-format").replaceAll("<number>", i + "").replaceAll("<mob>", StringUtils.capitalise(e.getType().toString().toLowerCase().replaceAll("_", " "))));
+			
+			if(e.getCustomName().equals(f))
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void check(LivingEntity e)
+	{
+		if(isStacked(e))
+		{
+			return;
+		}
+		
+		if(hasStackedName(e))
+		{
+			new TaskLater(5)
+			{
+				public void run()
+				{
+					e.setCustomName(null);
+				}
+			};
+		}
+	}
+	
+	public void check(Chunk c)
+	{
+		for(Entity i : c.getEntities())
+		{
+			if(i instanceof LivingEntity)
+			{
+				check((LivingEntity) i);
+			}
+		}
+	}
+	
 	@SuppressWarnings("deprecation")
 	public void update(LivingEntity e)
 	{
@@ -186,17 +240,25 @@ public class EntityStackController extends Controller implements Configurable
 			return;
 		}
 		
+		check(e.getChunk());
+		
 		for(Entity i : e.getChunk().getEntities())
 		{
-			if(i instanceof LivingEntity)
+			new TaskLater(5)
 			{
-				LivingEntity x = (LivingEntity) i;
-				
-				if(canTouch(x))
+				public void run()
 				{
-					stack(x);
+					if(i instanceof LivingEntity)
+					{
+						LivingEntity x = (LivingEntity) i;
+						
+						if(canTouch(x))
+						{
+							stack(x);
+						}
+					}
 				}
-			}
+			};
 		}
 	}
 	
@@ -213,7 +275,7 @@ public class EntityStackController extends Controller implements Configurable
 			if(i instanceof LivingEntity)
 			{
 				LivingEntity x = (LivingEntity) i;
-								
+				
 				if(isStacked(x))
 				{
 					stacks.remove(x.getEntityId());
@@ -242,15 +304,53 @@ public class EntityStackController extends Controller implements Configurable
 						
 						if(stacks.get(e.getEntity().getEntityId()) > 1)
 						{
-							e.getEntity().setHealth(e.getEntity().getMaxHealth());
+							EntityType t = e.getEntity().getType();
+							Location l = e.getEntity().getLocation();
+							Integer s = stacks.get(e.getEntity().getEntityId());
+							
+							stacks.remove(e.getEntity().getEntityId());
+							e.getEntity().remove();
+							
+							new TaskLater(1)
+							{
+								public void run()
+								{
+									LivingEntity et = (LivingEntity) l.getWorld().spawnEntity(l.clone().add(0, 0.5, 0), t);
+									
+									if(et != null)
+									{
+										stacks.put(e.getEntity().getEntityId(), s);
+										update(et);
+									}
+								}
+							};
+							
 							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 						}
 						
 						else if(stacks.get(e.getEntity().getEntityId()) > 0)
 						{
-							e.getEntity().setHealth(e.getEntity().getMaxHealth());
-							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
+							EntityType t = e.getEntity().getType();
+							Location l = e.getEntity().getLocation();
+							e.getEntity().remove();
+							
 							stacks.remove(e.getEntity().getEntityId());
+							e.getEntity().remove();
+							
+							new TaskLater(1)
+							{
+								public void run()
+								{
+									LivingEntity et = (LivingEntity) l.getWorld().spawnEntity(l, t);
+									
+									if(et != null)
+									{
+										update(et);
+									}
+								}
+							};
+							
+							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 						}
 						
 						else
@@ -260,7 +360,6 @@ public class EntityStackController extends Controller implements Configurable
 							((ExperienceOrb) e.getEntity().getLocation().getWorld().spawn(e.getEntity().getLocation(), ExperienceOrb.class)).setExperience(e.getDroppedExp());
 						}
 						
-						update(e.getEntity());
 					}
 				};
 			}
@@ -395,13 +494,13 @@ public class EntityStackController extends Controller implements Configurable
 		cc.set("stacker.settings.stack-range", 4.3, "The range for entities of the same type to stack?");
 		cc.set("stacker.settings.max-size", 16, "The max amount of entities stacked into one mob?");
 		cc.set("stacker.lang.change-names", true, "Modify the name of the mob to display how many stacked entities are in it.");
-		cc.set("stacker.lang.name-format", "&a<number> X &b<mob>", "The format for stacking entities where\n<number> = the number of stacked entities\n<name> = the type of mob\n(color codes enabled)");
+		cc.set("stacker.lang.name-format", "&a<number>x &b<mob>", "The format for stacking entities where\n<number> = the number of stacked entities\n<name> = the type of mob\n(color codes enabled)");
 	}
 	
 	@Override
 	public void onReadConfig()
 	{
-		//Dynamic
+		// Dynamic
 	}
 	
 	@Override

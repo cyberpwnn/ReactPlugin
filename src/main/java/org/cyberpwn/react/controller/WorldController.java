@@ -43,7 +43,15 @@ public class WorldController extends Controller
 	
 	public boolean canStack(World w)
 	{
-		return !worlds.get(w).getConfiguration().getBoolean("entities.disable-stacking");
+		try
+		{
+			return !worlds.get(w).getConfiguration().getBoolean("entities.disable-stacking");
+		}
+		
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 	
 	public boolean canTouch(Entity e)
