@@ -1,7 +1,6 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collection;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -36,29 +35,37 @@ public class Action implements Actionable, Configurable
 		this.material = material;
 		this.key = key;
 		this.name = name;
-		this.enabled = true;
+		enabled = true;
 		this.description = description;
-		this.cc = new ClusterConfig();
+		cc = new ClusterConfig();
 		this.cname = cname;
-		this.reactionTime = 0l;
+		reactionTime = 0l;
 		this.manual = manual;
 		
 		actionController.registerAction(this);
 	}
 	
+	@Override
 	public void preAct()
 	{
+		if(React.dreact)
+		{
+			return;
+		}
+		
 		if(enabled && !React.isMef())
 		{
 			act();
 		}
 	}
 	
+	@Override
 	public void act()
 	{
 		
 	}
 	
+	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -72,21 +79,25 @@ public class Action implements Actionable, Configurable
 		p.sendMessage(Info.TAG + ChatColor.YELLOW + L.MESSAGE_MANUAL + getName() + L.MESSAGE_MANUAL_STARTED);
 	}
 	
+	@Override
 	public void start()
 	{
 		
 	}
 	
+	@Override
 	public void stop()
 	{
 		
 	}
 	
+	@Override
 	public String getName()
 	{
 		return name;
 	}
 	
+	@Override
 	public String getDescription()
 	{
 		return description;
@@ -97,6 +108,7 @@ public class Action implements Actionable, Configurable
 		return actionController;
 	}
 	
+	@Override
 	public int getIdealTick()
 	{
 		if(idealTick == null)
@@ -112,6 +124,7 @@ public class Action implements Actionable, Configurable
 		return actionController.getReact().getServer().getOnlinePlayers();
 	}
 	
+	@Override
 	public boolean isEnabled()
 	{
 		return enabled;
@@ -152,7 +165,7 @@ public class Action implements Actionable, Configurable
 	@Override
 	public void setReactionTime(long ns)
 	{
-		this.reactionTime = ns;
+		reactionTime = ns;
 	}
 	
 	@Override
@@ -171,11 +184,13 @@ public class Action implements Actionable, Configurable
 		return cc;
 	}
 	
+	@Override
 	public Material getMaterial()
 	{
 		return material;
 	}
 	
+	@Override
 	public String getKey()
 	{
 		return key;

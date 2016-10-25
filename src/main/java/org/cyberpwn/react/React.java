@@ -2,7 +2,6 @@ package org.cyberpwn.react;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -76,7 +75,7 @@ public class React extends JavaPlugin implements Configurable
 	private static boolean nf;
 	private static MonitorPacket packet;
 	private static React instance;
-	private final int[] tskx = { 0 };
+	private final int[] tskx = {0};
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
 	private static String muix;
@@ -105,10 +104,12 @@ public class React extends JavaPlugin implements Configurable
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 	private Dispatcher d;
+	public static boolean dreact = false;
 	private Metrics metrics;
 	private int saved;
 	private long start;
 	
+	@Override
 	public void onEnable()
 	{
 		start = M.ms();
@@ -170,12 +171,12 @@ public class React extends JavaPlugin implements Configurable
 		entityStackController = new EntityStackController(this);
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
-		dataController.load((String)null, configurationController);
-		dataController.load((String)null, this);
-		dataController.load((String)null, entityStackController);
-		dataController.load((String)null, updateController);
-		dataController.load((String)null, photonController);
-		dataController.load((String)null, limitingController);
+		dataController.load((String) null, configurationController);
+		dataController.load((String) null, this);
+		dataController.load((String) null, entityStackController);
+		dataController.load((String) null, updateController);
+		dataController.load((String) null, photonController);
+		dataController.load((String) null, limitingController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -305,7 +306,7 @@ public class React extends JavaPlugin implements Configurable
 				}
 			}
 		};
-					
+		
 		if(cc.getBoolean("startup.prevent-memory-leaks") && onlinePlayers().length == 0)
 		{
 			new TaskLater(1)
@@ -328,7 +329,7 @@ public class React extends JavaPlugin implements Configurable
 			{
 				d.v(L.MESSAGE_HOOK_SUCCESS);
 				PlaceholderHook h = new PlaceholderHook(this);
-				dataController.load((String)null, h);
+				dataController.load((String) null, h);
 				h.hook();
 			}
 		}
@@ -341,6 +342,7 @@ public class React extends JavaPlugin implements Configurable
 		Info.splash();
 	}
 	
+	@Override
 	public void onDisable()
 	{
 		for(Controllable i : controllers)
@@ -431,6 +433,7 @@ public class React extends JavaPlugin implements Configurable
 		allowMem = cc.getBoolean("commands.override.memory");
 		allowTps = cc.getBoolean("commands.override.tps");
 		nf = cc.getBoolean("messages.notify-instability");
+		dreact = cc.getBoolean("runtime.disable-reactions");
 		
 		if(cc.contains("placeholders"))
 		{
@@ -944,37 +947,37 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return photonController;
 	}
-
+	
 	public ChannelListenController getChannelListenController()
 	{
 		return channelListenController;
 	}
-
+	
 	public void setChannelListenController(ChannelListenController channelListenController)
 	{
 		this.channelListenController = channelListenController;
 	}
-
+	
 	public void setPhotonController(PhotonController photonController)
 	{
 		this.photonController = photonController;
 	}
-
+	
 	public LimitingController getLimitingController()
 	{
 		return limitingController;
 	}
-
+	
 	public void setLimitingController(LimitingController limitingController)
 	{
 		this.limitingController = limitingController;
 	}
-
+	
 	public static void setNonce(String nonce)
 	{
 		React.nonce = nonce;
 	}
-
+	
 	public EventListenerController getEventListenerController()
 	{
 		return eventListenerController;
