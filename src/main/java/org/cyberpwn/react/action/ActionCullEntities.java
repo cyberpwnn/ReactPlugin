@@ -1,7 +1,6 @@
 package org.cyberpwn.react.action;
 
 import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -35,16 +34,19 @@ public class ActionCullEntities extends Action implements Listener
 		super(actionController, Material.SHEARS, "cull-mobs", "ActionCullEntities", 100, "Mob Culler", L.ACTION_CULLENTITIES, true);
 	}
 	
+	@Override
 	public void act()
 	{
 		new ExecutiveIterator<World>(1.0, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
+			@Override
 			public void run()
 			{
 				cull(next());
 			}
 		}, new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				
@@ -65,6 +67,7 @@ public class ActionCullEntities extends Action implements Listener
 		{
 			new TaskLater(20)
 			{
+				@Override
 				public void run()
 				{
 					cull(e.getEntity().getLocation().getChunk(), e.getEntity());
@@ -73,16 +76,19 @@ public class ActionCullEntities extends Action implements Listener
 		}
 	}
 	
+	@Override
 	public void start()
 	{
 		React.instance().register(this);
 	}
 	
+	@Override
 	public void stop()
 	{
 		React.instance().unRegister(this);
 	}
 	
+	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -110,6 +116,7 @@ public class ActionCullEntities extends Action implements Listener
 			
 			new Task(1)
 			{
+				@Override
 				public void run()
 				{
 					if(weight(j.getLocation().getChunk()) < cc.getInt(getCodeName() + ".max-entities-per-chunk-hard") / 2)
@@ -145,7 +152,7 @@ public class ActionCullEntities extends Action implements Listener
 	{
 		if(w.getEntities().size() > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
 		{
-			int[] l = new int[] { 0 };
+			int[] l = new int[] {0};
 			
 			for(Entity i : w.getEntities())
 			{
@@ -189,6 +196,7 @@ public class ActionCullEntities extends Action implements Listener
 		return w;
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
@@ -213,7 +221,7 @@ public class ActionCullEntities extends Action implements Listener
 		}
 		
 		cc.set(getCodeName() + ".max-entities-per-chunk", 16, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
-		cc.set(getCodeName() + ".max-entities-per-chunk-hard", 64, "The absolute maximum a chunk can have. The normal limit is used by \nmultiplying the limit over chunks loaded so you could have more\nthan the limit. This hard limit prevents more entities.");
+		cc.set(getCodeName() + ".max-entities-per-chunk-hard", 48, "The absolute maximum a chunk can have. The normal limit is used by \nmultiplying the limit over chunks loaded so you could have more\nthan the limit. This hard limit prevents more entities.");
 		cc.set(getCodeName() + ".filter.ignore-named-entities", true, "Ignore entities that have names from nametags/plugins");
 		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore all testificates.");
 		cc.set(getCodeName() + ".filter.ignore-horses", true, "Ignore all horses.");
