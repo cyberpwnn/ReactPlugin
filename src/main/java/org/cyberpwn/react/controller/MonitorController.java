@@ -1,8 +1,6 @@
 package org.cyberpwn.react.controller;
 
 import java.util.List;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -18,8 +16,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.map.MapRenderer;
-import org.bukkit.map.MapView;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.api.SpikeEvent;
@@ -85,6 +81,7 @@ public class MonitorController extends Controller implements Configurable
 		locks = new GMap<Player, Integer>();
 	}
 	
+	@Override
 	public void start()
 	{
 		pc = getReact().getPlayerController();
@@ -96,11 +93,13 @@ public class MonitorController extends Controller implements Configurable
 		}
 	}
 	
+	@Override
 	public void stop()
 	{
 		react.getDataController().save("cache", this);
 	}
 	
+	@Override
 	public void tick()
 	{
 		getReact().getScoreboardController().dispatch();
@@ -124,7 +123,6 @@ public class MonitorController extends Controller implements Configurable
 				delay = 1;
 			}
 			
-			
 			currentDelay = delay;
 			
 			if(!getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
@@ -139,7 +137,7 @@ public class MonitorController extends Controller implements Configurable
 			
 			if(getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
 			{
-				delay = (int) (2.0 * ((double)t.getTime() / 1000000.0));
+				delay = (int) (2.0 * ((double) t.getTime() / 1000000.0));
 			}
 			
 			else
@@ -186,26 +184,26 @@ public class MonitorController extends Controller implements Configurable
 			mTick = 0;
 			mapper.sample(react.getSampleController());
 			
-			for(Player p : mappers.keySet())
-			{
-				ItemStack mp = p.getItemInHand();
-				if(mp.getType() == Material.MAP)
-				{
-					if(mp.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-					{
-						short d = mp.getDurability();
-						@SuppressWarnings("deprecation")
-						MapView map = Bukkit.getServer().getMap(d);
-						
-						for(MapRenderer r : map.getRenderers())
-						{
-							map.removeRenderer(r);
-						}
-						
-						map.addRenderer(mappers.get(p));
-					}
-				}
-			}
+			// for(Player p : mappers.keySet())
+			// {
+			// ItemStack mp = p.getItemInHand();
+			// if(mp.getType() == Material.MAP)
+			// {
+			// if(mp.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+			// {
+			// short d = mp.getDurability();
+			// @SuppressWarnings("deprecation")
+			// MapView map = Bukkit.getServer().getMap(d);
+			//
+			// for(MapRenderer r : map.getRenderers())
+			// {
+			// map.removeRenderer(r);
+			// }
+			//
+			// map.addRenderer(mappers.get(p));
+			// }
+			// }
+			// }
 		}
 		
 		if(react.getSampleController().getSampleTicksPerSecond().getValue().getInteger() < 11)
@@ -353,63 +351,64 @@ public class MonitorController extends Controller implements Configurable
 			p.sendMessage(Info.TAG + Info.COLOR_ERR + "WARNING: You are using 1.7, maps may be ``/glitchy.");
 		}
 		
-		ItemStack mapd = new ItemStack(Material.MAP);
-		mapd.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		
-		if(p.getInventory().contains(mapd))
-		{
-			p.getInventory().remove(mapd);
-		}
-		
-		for(ItemStack i : p.getInventory().getContents())
-		{
-			if(i == null)
-			{
-				continue;
-			}
-			
-			if(i.getType().equals(Material.MAP))
-			{
-				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-				{
-					p.getInventory().remove(i);
-				}
-			}
-		}
-		
-		ItemStack map = new ItemStack(Material.MAP);
-		map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		p.getInventory().addItem(map);
-		
-		for(ItemStack i : p.getInventory().getContents())
-		{
-			if(i == null)
-			{
-				continue;
-			}
-			
-			if(i.getType().equals(Material.MAP))
-			{
-				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-				{
-					i.setAmount(1);
-				}
-			}
-		}
-		
-		pc.gpd(p).setMapping(true);
-		mappers.put(p, new MapGraph());
-		Verbose.x("monitor", p.getName() + ": Mapping enabled");
-		
-		try
-		{
-			cc.set("mappers", cc.getStringList("mappers").qadd(p.getUniqueId().toString()).removeDuplicates());
-		}
-		
-		catch(Exception e)
-		{
-			onNewConfig(cc);
-		}
+		// ItemStack mapd = new ItemStack(Material.MAP);
+		// mapd.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+		//
+		// if(p.getInventory().contains(mapd))
+		// {
+		// p.getInventory().remove(mapd);
+		// }
+		//
+		// for(ItemStack i : p.getInventory().getContents())
+		// {
+		// if(i == null)
+		// {
+		// continue;
+		// }
+		//
+		// if(i.getType().equals(Material.MAP))
+		// {
+		// if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+		// {
+		// p.getInventory().remove(i);
+		// }
+		// }
+		// }
+		//
+		// ItemStack map = new ItemStack(Material.MAP);
+		// map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+		// p.getInventory().addItem(map);
+		//
+		// for(ItemStack i : p.getInventory().getContents())
+		// {
+		// if(i == null)
+		// {
+		// continue;
+		// }
+		//
+		// if(i.getType().equals(Material.MAP))
+		// {
+		// if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+		// {
+		// i.setAmount(1);
+		// }
+		// }
+		// }
+		//
+		// pc.gpd(p).setMapping(true);
+		// mappers.put(p, new MapGraph());
+		// Verbose.x("monitor", p.getName() + ": Mapping enabled");
+		//
+		// try
+		// {
+		// cc.set("mappers",
+		// cc.getStringList("mappers").qadd(p.getUniqueId().toString()).removeDuplicates());
+		// }
+		//
+		// catch(Exception e)
+		// {
+		// onNewConfig(cc);
+		// }
 	}
 	
 	public void stopMapping(Player p, boolean disp)
@@ -686,7 +685,7 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 		});
-				
+		
 		if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 		{
 			react.scheduleSyncTask(5, new Runnable()
@@ -696,6 +695,7 @@ public class MonitorController extends Controller implements Configurable
 				{
 					new Fetcher("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml", new FCCallback()
 					{
+						@Override
 						public void run()
 						{
 							String desc = "";
@@ -998,52 +998,52 @@ public class MonitorController extends Controller implements Configurable
 	{
 		this.dispTicks = dispTicks;
 	}
-
+	
 	public GMap<Player, Integer> getLocks()
 	{
 		return locks;
 	}
-
+	
 	public void setLocks(GMap<Player, Integer> locks)
 	{
 		this.locks = locks;
 	}
-
+	
 	public int getLevel()
 	{
 		return level;
 	}
-
+	
 	public void setLevel(int level)
 	{
 		this.level = level;
 	}
-
+	
 	public int getmLevel()
 	{
 		return mLevel;
 	}
-
+	
 	public void setmLevel(int mLevel)
 	{
 		this.mLevel = mLevel;
 	}
-
+	
 	public int getOverflow()
 	{
 		return overflow;
 	}
-
+	
 	public void setOverflow(int overflow)
 	{
 		this.overflow = overflow;
 	}
-
+	
 	public PlayerController getPc()
 	{
 		return pc;
 	}
-
+	
 	public void setPc(PlayerController pc)
 	{
 		this.pc = pc;
