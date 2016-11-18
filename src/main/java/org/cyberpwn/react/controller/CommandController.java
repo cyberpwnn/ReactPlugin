@@ -3,7 +3,6 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.util.Collections;
 import java.util.Date;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -74,6 +73,7 @@ public class CommandController extends Controller implements CommandExecutor
 		tabulations = new GList<GList<ReactCommand>>();
 	}
 	
+	@Override
 	public void start()
 	{
 		react.getCommand(Info.COMMAND).setExecutor(this);
@@ -115,6 +115,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				final CommandSender sender = getSender();
@@ -176,6 +177,7 @@ public class CommandController extends Controller implements CommandExecutor
 									@Override
 									public void run()
 									{
+										s("Clicked");
 										ui.close();
 										i.manual(sender);
 									}
@@ -203,9 +205,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_ACT, "act", "action", "a"));
-					
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -258,16 +261,17 @@ public class CommandController extends Controller implements CommandExecutor
 						}
 					}
 				}
-						
+				
 				else
 				{
 					sender.sendMessage(L.MESSAGE_PLAYER_ONLY);
 				}
 			}
 		}, L.COMMAND_HELP, "help", "h"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -277,6 +281,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				final CommandSender sender = getSender();
@@ -299,6 +304,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					new FSMap(root, new Callback<GMap<File, Long>>()
 					{
+						@Override
 						public void run()
 						{
 							if(get().isEmpty())
@@ -339,6 +345,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -348,6 +355,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				new Configurator(getPlayer());
@@ -356,6 +364,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				getReact().getChannelListenController().scan(getPlayer());
@@ -364,6 +373,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				if(isPlayer())
@@ -427,7 +437,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						p.sendMessage(Info.TAG + ChatColor.GREEN + "No allowed instability messages.");
 					}
-						
+					
 					else
 					{
 						a.tellRawTo(getReact(), p);
@@ -447,16 +457,17 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					p.sendMessage(Info.HR);
 				}
-					
+				
 				else
 				{
 					getSender().sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_PLAYER_ONLY);
 				}
 			}
 		}, "Ignore instability messages", "ignore", "ign"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -570,7 +581,7 @@ public class CommandController extends Controller implements CommandExecutor
 													sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
 												}
 											}
-												
+											
 											catch(Exception e)
 											{
 												sender.sendMessage(ChatColor.GREEN + "$ Failed. Unsupported Data For the specified data type.");
@@ -591,7 +602,7 @@ public class CommandController extends Controller implements CommandExecutor
 							sender.sendMessage(ChatColor.GREEN + "$ Unsupported");
 						}
 					}
-											
+					
 					else
 					{
 						if(args[2].equalsIgnoreCase("-list") || args[2].equalsIgnoreCase("-get"))
@@ -629,9 +640,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, "Directly manipulate config values without gui access.", "cfs"));
-					
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -662,7 +674,7 @@ public class CommandController extends Controller implements CommandExecutor
 								sender.sendMessage(Info.COLOR_ERR + L.MESSAGE_ERROR_NONUMBER + args[3]);
 							}
 						}
-							
+						
 						else
 						{
 							sender.sendMessage(Info.COLOR_ERR + L.MESSAGE_HELP_GUESS);
@@ -676,16 +688,17 @@ public class CommandController extends Controller implements CommandExecutor
 					p.getInventory().addItem(react.getActionController().getActionInstabilityCause().queryGuess().toBook());
 					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_BOOK);
 				}
-						
+				
 				else
 				{
 					sender.sendMessage(react.getActionController().getActionInstabilityCause().query().toString());
 				}
 			}
 		}, L.COMMAND_GUESS, "guess", "g"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -715,9 +728,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_BOOK, "status", "book", "report"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -735,9 +749,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_MAP, "map", "graph"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -769,9 +784,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_PLUGINS, "plugins", "pl", "p"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -802,7 +818,7 @@ public class CommandController extends Controller implements CommandExecutor
 						}
 					}
 				}
-						
+				
 				else
 				{
 					GBook book = new GBook(ChatColor.AQUA + L.MESSAGE_QUERYRESULT);
@@ -824,9 +840,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_QUERY, "query", "q"));
-					
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -845,6 +862,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				if(isPlayer())
@@ -858,9 +876,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_SCOREBOARD, "scoreboard", "sc", "board", "sboard"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -875,6 +894,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -884,6 +904,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -903,7 +924,7 @@ public class CommandController extends Controller implements CommandExecutor
 						p.sendMessage(ChatColor.GREEN + L.MESSAGE_VERBOSEON);
 					}
 				}
-					
+				
 				else
 				{
 					React.setVerbose(!React.isVerbose());
@@ -911,9 +932,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_VERBOSE, "verbose", "vb", "debug"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -952,16 +974,17 @@ public class CommandController extends Controller implements CommandExecutor
 				{
 					react.getMonitorController().toggleMonitoring(p);
 				}
-						
+				
 				else
 				{
 					sender.sendMessage(react.getMonitorController().getMs().getRoot());
 				}
 			}
 		}, L.COMMAND_MONITOR, "monitor", "mon", "m"));
-				
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -975,6 +998,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				Player p = getPlayer();
@@ -1018,7 +1042,7 @@ public class CommandController extends Controller implements CommandExecutor
 						p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_BOOK);
 					}
 				}
-					
+				
 				else
 				{
 					if(getArgs().length == 2)
@@ -1047,9 +1071,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_TIMINGS, "timings", "t", "tim"));
-					
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -1067,7 +1092,7 @@ public class CommandController extends Controller implements CommandExecutor
 						sender.sendMessage(Info.TAG + Info.COLOR_ERR + "Cannot find player.");
 					}
 				}
-					
+				
 				else
 				{
 					sender.sendMessage(String.format(Info.HRN, "Pong"));
@@ -1117,7 +1142,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMSX.ping((Player) sender) + "ms");
 					}
-						
+					
 					catch(Exception e)
 					{
 						
@@ -1127,9 +1152,10 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_PING, "ping", "pong", "png"));
-					
+		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				React.instance().getUpdateController().update(getSender());
@@ -1138,6 +1164,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@Override
 			public void run()
 			{
 				CommandSender sender = getSender();
@@ -1165,6 +1192,7 @@ public class CommandController extends Controller implements CommandExecutor
 		}
 	}
 	
+	@Override
 	public void stop()
 	{
 		
@@ -1261,6 +1289,7 @@ public class CommandController extends Controller implements CommandExecutor
 		}
 	}
 	
+	@Override
 	public boolean onCommand(final CommandSender sender, Command cmd, String name, String[] args)
 	{
 		int len = args.length;

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -35,30 +34,31 @@ import org.cyberpwn.react.util.Gui.Pane.Element.Trigger;
  * ask is that you <STRONG>KEEP THIS HERE</STRONG>
  * <p>
  * <p>
- * 
  * To create a new gui, simply instatiate it with a player, and your plugin
  * instance Then simply add gui panes, and elements within. Please view the
  * tutorials at the project home page:
  * <a href="http://ulticraft.com/develop/">Ulticraft.com/develop</a>
  * 
  * @author cyberpwn
- * 
  */
 public class Gui implements Listener
 {
 	public enum TriggerType
 	{
-		LEFT_CLICK, RIGHT_CLICK
+		LEFT_CLICK,
+		RIGHT_CLICK
 	}
 	
 	public enum LinkType
 	{
-		HOME, NORMAL
+		HOME,
+		NORMAL
 	}
 	
 	public enum PaneState
 	{
-		OPEN, CLOSED
+		OPEN,
+		CLOSED
 	}
 	
 	private GList<Pane> panes;
@@ -185,6 +185,7 @@ public class Gui implements Listener
 		return resolvePane(defaultPane);
 	}
 	
+	@Override
 	public String toString()
 	{
 		String s = "\nGUI: " + getUuid();
@@ -308,7 +309,9 @@ public class Gui implements Listener
 						
 						if(j.getQuickRunnable() != null)
 						{
-							if(e.getAction().equals(InventoryAction.PICKUP_ALL))
+							System.out.println("Act: " + e.getAction());
+							
+							if(e.getAction().equals(InventoryAction.PICKUP_ALL) || e.getAction().equals(InventoryAction.SWAP_WITH_CURSOR))
 							{
 								j.getQuickRunnable().run();
 							}
@@ -633,6 +636,7 @@ public class Gui implements Listener
 			return uuid;
 		}
 		
+		@Override
 		public String toString()
 		{
 			String s = "PANE: " + getUuid().toString() + "TITLE: " + getTitle() + " SIZE: " + getSize();
@@ -749,7 +753,7 @@ public class Gui implements Listener
 			
 			public void setRLink(Link link)
 			{
-				this.rlink = link;
+				rlink = link;
 			}
 			
 			public Element setRLink(Pane pane)
@@ -927,6 +931,7 @@ public class Gui implements Listener
 				return uuid;
 			}
 			
+			@Override
 			public String toString()
 			{
 				String s = "ELEMENT: " + getUuid().toString() + " MATERIAL: " + getMaterial().toString().toLowerCase() + " TITLE: " + getTitle() + "\n      " + getCoordinate().toString();
@@ -969,7 +974,7 @@ public class Gui implements Listener
 					
 					this.x = x;
 					this.y = y;
-					this.s = getPosition(x, y);
+					s = getPosition(x, y);
 				}
 				
 				public Coordinate(Integer s)
@@ -980,8 +985,8 @@ public class Gui implements Listener
 					}
 					
 					this.s = s;
-					this.y = (int) ((s / 9) + 1);
-					this.x = (s - ((y - 1) * 9)) - 4;
+					y = (int) ((s / 9) + 1);
+					x = (s - ((y - 1) * 9)) - 4;
 				}
 				
 				public Integer getSlot()
@@ -1012,8 +1017,8 @@ public class Gui implements Listener
 					}
 					
 					this.s = s;
-					this.y = (int) ((s / 9) + 1);
-					this.x = (s - ((y - 1) * 9)) - 4;
+					y = (int) ((s / 9) + 1);
+					x = (s - ((y - 1) * 9)) - 4;
 				}
 				
 				public void setX(Integer x)
@@ -1050,6 +1055,7 @@ public class Gui implements Listener
 					s = getPosition(x, y);
 				}
 				
+				@Override
 				public String toString()
 				{
 					return "COORDINATE: " + getX() + "," + getY() + " (" + getSize() + ")";
@@ -1189,6 +1195,7 @@ public class Gui implements Listener
 					this.pitch = pitch;
 				}
 				
+				@Override
 				public String toString()
 				{
 					return "TRIGGER: " + type.toString().toLowerCase() + " SOUND: " + sound + " PITCH: " + getPitch() + " VOLUME: " + getVolume();
@@ -1209,6 +1216,7 @@ public class Gui implements Listener
 				//
 				// do it... i know.... its bad.
 				
+				@Override
 				public void run()
 				{
 					if(sound != null)

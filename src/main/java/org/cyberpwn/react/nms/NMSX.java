@@ -3,7 +3,6 @@ package org.cyberpwn.react.nms;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -25,7 +24,7 @@ public class NMSX
 			Object handle = player.getClass().getMethod("getHandle", new Class[0]).invoke((Object) player, new Object[0]);
 			Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
 			playerConnection.getClass().getMethod("sendPacket", NMSX.getNMSClass("Packet")).invoke(playerConnection, packet);
-		} 
+		}
 		
 		catch(Exception e)
 		{
@@ -40,7 +39,7 @@ public class NMSX
 		try
 		{
 			return Class.forName("net.minecraft.server." + version + "." + name);
-		} 
+		}
 		
 		catch(ClassNotFoundException e)
 		{
@@ -87,7 +86,7 @@ public class NMSX
 				subtitlePacket = subtitleConstructor.newInstance(e, chatSubtitle, fadeIn, stay, fadeOut);
 				NMSX.sendPacket(player, subtitlePacket);
 			}
-		} 
+		}
 		
 		catch(Exception var11)
 		{
@@ -128,7 +127,7 @@ public class NMSX
 			field.setAccessible(true);
 			field.set(packet, tabFooter);
 			NMSX.sendPacket(player, packet);
-		} 
+		}
 		
 		catch(Exception ex)
 		{
@@ -171,7 +170,7 @@ public class NMSX
 			Object pc = f1.get(h);
 			Method m5 = pc.getClass().getDeclaredMethod("sendPacket", c5);
 			m5.invoke(pc, ppoc);
-		} 
+		}
 		
 		catch(Exception ex)
 		{
@@ -186,6 +185,7 @@ public class NMSX
 		{
 			new BukkitRunnable()
 			{
+				@Override
 				public void run()
 				{
 					NMSX.sendActionBar(player, "");
@@ -199,6 +199,7 @@ public class NMSX
 			new BukkitRunnable()
 			{
 				
+				@Override
 				public void run()
 				{
 					NMSX.sendActionBar(player, message);
@@ -238,7 +239,7 @@ public class NMSX
 			Class<?> craftPlayer = Class.forName("org.bukkit.craftbukkit." + bukkitversion + ".entity.CraftPlayer");
 			Object handle = craftPlayer.getMethod("getHandle").invoke(player);
 			Integer ping = (Integer) handle.getClass().getDeclaredField("ping").get(handle);
-
+			
 			return ping.intValue();
 		}
 		

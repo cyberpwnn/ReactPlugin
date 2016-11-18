@@ -8,11 +8,20 @@ public class PacketUtil
 {
 	public enum V
 	{
-		R17, R18, R19, R110;
+		R17,
+		R18,
+		R19,
+		R111,
+		R110;
 	}
 	
 	public static V getVersion()
 	{
+		if(Bukkit.getBukkitVersion().startsWith("1.11"))
+		{
+			return V.R111;
+		}
+		
 		if(Bukkit.getBukkitVersion().startsWith("1.10"))
 		{
 			return V.R110;

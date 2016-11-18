@@ -13,9 +13,9 @@ public class Title
 	
 	public Title()
 	{
-		this.fadeIn = 0;
-		this.fadeOut = 0;
-		this.stayTime = 5;
+		fadeIn = 0;
+		fadeOut = 0;
+		stayTime = 5;
 	}
 	
 	public Title(String title, String subTitle, String action, Integer fadeIn, Integer fadeOut, Integer stayTime)
@@ -55,7 +55,7 @@ public class Title
 		
 		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 	}
 	

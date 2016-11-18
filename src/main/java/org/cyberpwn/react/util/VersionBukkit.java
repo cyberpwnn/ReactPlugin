@@ -4,11 +4,16 @@ import org.bukkit.Bukkit;
 
 public enum VersionBukkit
 {
-	VU, V7, V8, V9, V11;
+	VU,
+	V7,
+	V8,
+	V9,
+	V11,
+	V111;
 	
 	public static boolean tc()
 	{
-		if(get().equals(VU) || get().equals(V7))
+		if(get().equals(V7))
 		{
 			return false;
 		}
@@ -36,6 +41,11 @@ public enum VersionBukkit
 		if(Bukkit.getBukkitVersion().startsWith("1.10"))
 		{
 			return V11;
+		}
+		
+		if(Bukkit.getBukkitVersion().startsWith("1.11"))
+		{
+			return V111;
 		}
 		
 		return VU;
