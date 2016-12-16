@@ -101,6 +101,7 @@ public class ReactServer extends Thread
 			
 			catch(IOException e)
 			{
+			// For some reason gets called on port scans.
 				interrupt();
 			}
 		}
