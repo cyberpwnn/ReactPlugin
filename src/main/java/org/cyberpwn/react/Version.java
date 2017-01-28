@@ -2,6 +2,6 @@ package org.cyberpwn.react;
 
 public class Version
 {
-	public static final int C = 3200;
-	public static final String V = "3.2p";
+	public static final int C = 4000;
+	public static final String V = "4p";
 }
