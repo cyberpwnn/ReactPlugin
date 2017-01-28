@@ -26,7 +26,6 @@ import org.cyberpwn.react.sampler.SampleMonitoredPlugins;
 import org.cyberpwn.react.sampler.SamplePHEntities;
 import org.cyberpwn.react.sampler.SamplePHPhoton;
 import org.cyberpwn.react.sampler.SamplePHTimings;
-import org.cyberpwn.react.sampler.SamplePhoton;
 import org.cyberpwn.react.sampler.SamplePlayers;
 import org.cyberpwn.react.sampler.SampleReactionTime;
 import org.cyberpwn.react.sampler.SampleRedstoneUpdatesPerSecond;
@@ -63,7 +62,6 @@ public class SampleController extends Controller
 	private final SampleMemoryPerPlayer sampleMemoryPerPlayer;
 	private final SampleEntities sampleEntities;
 	private final SampleDrops sampleDrops;
-	private final SamplePhoton samplePhoton;
 	private final SampleHitRate sampleHitRate;
 	private final SampleHistory sampleHistory;
 	private final SamplePlayers samplePlayers;
@@ -78,10 +76,10 @@ public class SampleController extends Controller
 	{
 		super(react);
 		
-		this.samples = new GMap<Samplable, Integer>();
-		this.externalSamples = new GMap<ExternallySamplable, Integer>();
-		this.tick = 0l;
-		this.reactionTime = 0l;
+		samples = new GMap<Samplable, Integer>();
+		externalSamples = new GMap<ExternallySamplable, Integer>();
+		tick = 0l;
+		reactionTime = 0l;
 		
 		sampleStability = new SampleStability(this);
 		sampleReactionTime = new SampleReactionTime(this);
@@ -100,7 +98,6 @@ public class SampleController extends Controller
 		sampleMemoryPerPlayer = new SampleMemoryPerPlayer(this);
 		sampleEntities = new SampleEntities(this);
 		sampleDrops = new SampleDrops(this);
-		samplePhoton = new SamplePhoton(this);
 		sampleHitRate = new SampleHitRate(this);
 		sampleHistory = new SampleHistory(this);
 		samplePlayers = new SamplePlayers(this);
@@ -140,6 +137,7 @@ public class SampleController extends Controller
 		s("Loaded " + ChatColor.LIGHT_PURPLE + samples.size() + " Samplers!");
 	}
 	
+	@Override
 	public void start()
 	{
 		load();
@@ -178,6 +176,7 @@ public class SampleController extends Controller
 		}
 	}
 	
+	@Override
 	public void stop()
 	{
 		for(Samplable i : samples.keySet())
@@ -191,6 +190,7 @@ public class SampleController extends Controller
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
 		tick++;
@@ -435,12 +435,7 @@ public class SampleController extends Controller
 	{
 		return sampleGarbageDirection;
 	}
-
-	public SamplePhoton getSamplePhoton()
-	{
-		return samplePhoton;
-	}
-
+	
 	public SamplePHPhoton getSamplePHPhoton()
 	{
 		return samplePHPhoton;

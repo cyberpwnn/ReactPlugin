@@ -14,14 +14,12 @@ import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
-import org.cyberpwn.react.controller.EntityStackController;
 import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
-import org.cyberpwn.react.controller.PhotonController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.SampleController;
@@ -91,10 +89,8 @@ public class React extends JavaPlugin implements Configurable
 	private LanguageController languageController;
 	private NetworkController networkController;
 	private UpdateController updateController;
-	private EntityStackController entityStackController;
 	private WorldController worldController;
 	private FailureController failureController;
-	private PhotonController photonController;
 	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
@@ -166,16 +162,12 @@ public class React extends JavaPlugin implements Configurable
 		channelListenController = new ChannelListenController(this);
 		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
-		photonController = new PhotonController(this);
 		updateController = new UpdateController(this);
-		entityStackController = new EntityStackController(this);
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
-		dataController.load((String) null, entityStackController);
 		dataController.load((String) null, updateController);
-		dataController.load((String) null, photonController);
 		dataController.load((String) null, limitingController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
@@ -913,11 +905,6 @@ public class React extends JavaPlugin implements Configurable
 		return updateController;
 	}
 	
-	public EntityStackController getEntityStackController()
-	{
-		return entityStackController;
-	}
-	
 	public ScoreboardController getScoreboardController()
 	{
 		return scoreboardController;
@@ -938,16 +925,6 @@ public class React extends JavaPlugin implements Configurable
 		this.updateController = updateController;
 	}
 	
-	public void setEntityStackController(EntityStackController entityStackController)
-	{
-		this.entityStackController = entityStackController;
-	}
-	
-	public PhotonController getPhotonController()
-	{
-		return photonController;
-	}
-	
 	public ChannelListenController getChannelListenController()
 	{
 		return channelListenController;
@@ -956,11 +933,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setChannelListenController(ChannelListenController channelListenController)
 	{
 		this.channelListenController = channelListenController;
-	}
-	
-	public void setPhotonController(PhotonController photonController)
-	{
-		this.photonController = photonController;
 	}
 	
 	public LimitingController getLimitingController()
