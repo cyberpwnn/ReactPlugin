@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -34,6 +33,7 @@ public class DataController extends Controller
 		tb = new GTimeBank();
 	}
 	
+	@Override
 	public void start()
 	{
 		File fx = new File(new File(dataFolder, "cache"), "history.cch");
@@ -60,6 +60,7 @@ public class DataController extends Controller
 		}
 	}
 	
+	@Override
 	public void stop()
 	{
 		File fx = new File(new File(dataFolder, "cache"), "history.cch");
@@ -255,6 +256,11 @@ public class DataController extends Controller
 			{
 				c.getConfiguration().set(i, new GList<String>(fc.getStringList(i)));
 			}
+			
+			if(!c.getConfiguration().contains(i))
+			{
+				// fc.set(i, null);
+			}
 		}
 		
 		for(String i : c.getConfiguration().getData().k())
@@ -391,9 +397,9 @@ public class DataController extends Controller
 			String[] ndx = data.split("\n");
 			GList<String> nd = new GList<String>();
 			
-			for(int i = 0; i < ndx.length; i++)
+			for(String element : ndx)
 			{
-				String key = ndx[i].split(": ")[0].replaceAll(" ", "");
+				String key = element.split(": ")[0].replaceAll(" ", "");
 				
 				for(String j : fc.getKeys(true))
 				{
@@ -410,7 +416,7 @@ public class DataController extends Controller
 							{
 								for(String k : c.getConfiguration().getComment(j))
 								{
-									int kx = ndx[i].split(": ")[0].split(" ").length - 1;
+									int kx = element.split(": ")[0].split(" ").length - 1;
 									nd.add(StringUtils.repeat(" ", kx) + "# " + k);
 								}
 							}
@@ -418,13 +424,13 @@ public class DataController extends Controller
 						
 						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-default-comments"))
 						{
-							int kx = ndx[i].split(": ")[0].split(" ").length - 1;
+							int kx = element.split(": ")[0].split(" ").length - 1;
 							nd.add(StringUtils.repeat(" ", kx) + "# Default Value: " + getReact().getConfigurationController().getDefaultValue(c, j).toString());
 						}
 					}
 				}
 				
-				nd.add(ndx[i]);
+				nd.add(element);
 			}
 			
 			PrintWriter pw = new PrintWriter(new FileWriter(file, false));
@@ -565,7 +571,7 @@ public class DataController extends Controller
 	{
 		return tb;
 	}
-
+	
 	public static void chain()
 	{
 		TimingsController.chain();
