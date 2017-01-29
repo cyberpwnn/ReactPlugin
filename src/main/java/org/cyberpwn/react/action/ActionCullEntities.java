@@ -1,6 +1,5 @@
 package org.cyberpwn.react.action;
 
-import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -18,13 +17,9 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.util.Area;
-import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.Task;
-import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
@@ -57,22 +52,13 @@ public class ActionCullEntities extends Action implements Listener
 	@EventHandler
 	public void onSpawn(EntitySpawnEvent e)
 	{
-		if(weight(e.getEntity().getLocation().getChunk()) > cc.getInt(getCodeName() + ".max-entities-per-chunk-hard"))
+		if(weight(e.getEntity().getLocation().getChunk()) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 		{
-			e.setCancelled(true);
-			return;
-		}
-		
-		if(cc.getBoolean(getCodeName() + ".enable-entity-spawn-radius"))
-		{
-			new TaskLater(20)
+			if(isCullable(e.getEntity()))
 			{
-				@Override
-				public void run()
-				{
-					cull(e.getEntity().getLocation().getChunk(), e.getEntity());
-				}
-			};
+				e.setCancelled(true);
+				return;
+			}
 		}
 	}
 	
@@ -105,73 +91,34 @@ public class ActionCullEntities extends Action implements Listener
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
 	}
 	
-	public void cull(Chunk c, Entity j)
+	public void cull(Chunk c)
 	{
-		Area a = new Area(j.getLocation(), (double) cc.getInt(getCodeName() + ".max-entities-radius"));
-		GList<Entity> e = new GList<Entity>(a.getNearbyEntities());
-		
-		if(e.size() > cc.getInt(getCodeName() + ".max-entities-per-radius"))
+		if(c.getEntities().length > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 		{
-			Iterator<Entity> it = e.copy().iterator();
+			int tc = c.getEntities().length - cc.getInt(getCodeName() + ".max-entities-per-chunk");
 			
-			new Task(1)
+			for(int i = 0; i < tc; i++)
 			{
-				@Override
-				public void run()
-				{
-					if(weight(j.getLocation().getChunk()) < cc.getInt(getCodeName() + ".max-entities-per-chunk-hard") / 2)
-					{
-						cancel();
-						return;
-					}
-					
-					if(it.hasNext())
-					{
-						Entity i = it.next();
-						
-						if(e.size() > cc.getInt(getCodeName() + ".max-entities-per-radius"))
-						{
-							if(!j.equals(i) && isCullable(i))
-							{
-								E.r(i);
-								e.remove(i);
-							}
-						}
-					}
-					
-					else
-					{
-						cancel();
-					}
-				}
-			};
+				cull(c.getEntities()[i]);
+			}
+		}
+	}
+	
+	public void cull(Entity e)
+	{
+		if(isCullable(e))
+		{
+			e.remove();
 		}
 	}
 	
 	public void cull(World w)
 	{
-		if(w.getEntities().size() > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
+		for(Chunk i : w.getLoadedChunks())
 		{
-			int[] l = new int[] {0};
-			
-			for(Entity i : w.getEntities())
+			if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 			{
-				if(isCullable(i))
-				{
-					l[0]++;
-				}
-			}
-			
-			if(l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
-			{
-				for(Entity i : w.getEntities())
-				{
-					if(isCullable(i) && l[0] > cc.getInt(getCodeName() + ".max-entities-per-chunk") * w.getLoadedChunks().length)
-					{
-						l[0]--;
-						E.r(i, cc.getBoolean(getCodeName() + ".animate-entity-culls"));
-					}
-				}
+				cull(i);
 			}
 		}
 	}
@@ -221,14 +168,6 @@ public class ActionCullEntities extends Action implements Listener
 		}
 		
 		cc.set(getCodeName() + ".max-entities-per-chunk", 16, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
-		cc.set(getCodeName() + ".max-entities-per-chunk-hard", 48, "The absolute maximum a chunk can have. The normal limit is used by \nmultiplying the limit over chunks loaded so you could have more\nthan the limit. This hard limit prevents more entities.");
-		cc.set(getCodeName() + ".filter.ignore-named-entities", true, "Ignore entities that have names from nametags/plugins");
-		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore all testificates.");
-		cc.set(getCodeName() + ".filter.ignore-horses", true, "Ignore all horses.");
 		cc.set(getCodeName() + ".cullable", allow, "Entities allowed to be culled. \nIf you dont want something culled, remove it from here.");
-		cc.set(getCodeName() + ".animate-entity-culls", false, "Kill entities as if the entity died.\nThis will animate deaths instead of blinking them away");
-		cc.set(getCodeName() + ".enable-entity-spawn-radius", false, "Use radius culling for entities based on the radius config.");
-		cc.set(getCodeName() + ".max-entities-per-radius", 32, "The allowed number of entities per radius check defined below.");
-		cc.set(getCodeName() + ".max-entities-radius", 16, "The radius of a radius check in blocks.");
 	}
 }
