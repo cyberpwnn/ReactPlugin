@@ -1,5 +1,6 @@
 package org.cyberpwn.react.action;
 
+import java.util.Collections;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -8,9 +9,9 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.event.EventHandler;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntitySpawnEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -20,6 +21,7 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
@@ -47,19 +49,6 @@ public class ActionCullEntities extends Action implements Listener
 				
 			}
 		});
-	}
-	
-	@EventHandler
-	public void onSpawn(EntitySpawnEvent e)
-	{
-		if(weight(e.getEntity().getLocation().getChunk()) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
-		{
-			if(isCullable(e.getEntity()))
-			{
-				e.setCancelled(true);
-				return;
-			}
-		}
 	}
 	
 	@Override
@@ -97,10 +86,95 @@ public class ActionCullEntities extends Action implements Listener
 		{
 			int tc = c.getEntities().length - cc.getInt(getCodeName() + ".max-entities-per-chunk");
 			
-			for(int i = 0; i < tc; i++)
+			GList<Entity> e = new GList<Entity>();
+			GList<Entity> p = new GList<Entity>();
+			GList<Entity> b = new GList<Entity>();
+			
+			for(Entity i : c.getEntities())
 			{
-				cull(c.getEntities()[i]);
+				if(isCullable(i))
+				{
+					e.add(i);
+				}
 			}
+			
+			if(cc.getBoolean(getCodeName() + ".selective-bias.contrasted-bias"))
+			{
+				for(int i = 0; i < 15; i++)
+				{
+					for(Entity j : e)
+					{
+						if(j.getLocation().getBlock().getLightFromBlocks() == i)
+						{
+							p.add(j);
+						}
+					}
+				}
+				
+				e.clear();
+				e.addAll(p);
+				p.clear();
+			}
+			
+			if(cc.getBoolean(getCodeName() + ".selective-bias.passive-bias"))
+			{
+				for(Entity i : e.copy())
+				{
+					if(i instanceof LivingEntity)
+					{
+						if(i instanceof Monster)
+						{
+							p.add(i);
+							e.remove(i);
+						}
+					}
+				}
+				
+				for(Entity i : e.copy())
+				{
+					p.add(i);
+				}
+				
+				e.clear();
+				e.addAll(p);
+				p.clear();
+			}
+			
+			if(tc >= e.size())
+			{
+				b.addAll(e);
+			}
+			
+			if(tc < e.size())
+			{
+				for(int i = 0; i < tc; i++)
+				{
+					b.add(e.pop());
+				}
+			}
+			
+			e.clear();
+			cull(b);
+		}
+	}
+	
+	public void cull(GList<Entity> ent)
+	{
+		Collections.shuffle(ent);
+		int k = 0;
+		
+		for(Entity i : ent)
+		{
+			k += 1;
+			
+			new TaskLater(k)
+			{
+				@Override
+				public void run()
+				{
+					cull(i);
+				}
+			};
 		}
 	}
 	
@@ -167,6 +241,8 @@ public class ActionCullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
+		cc.set(getCodeName() + ".selective-bias.passive-bias", true, "Cull Hostile mobs before passives");
+		cc.set(getCodeName() + ".selective-bias.contrasted-bias", true, "Cull mobs in dark lighting first");
 		cc.set(getCodeName() + ".max-entities-per-chunk", 16, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");
 		cc.set(getCodeName() + ".cullable", allow, "Entities allowed to be culled. \nIf you dont want something culled, remove it from here.");
 	}
