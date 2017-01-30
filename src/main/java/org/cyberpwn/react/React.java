@@ -95,6 +95,7 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
 	private LimitingController limitingController;
+	// private DropController dropController;
 	private EventListenerController eventListenerController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -164,11 +165,13 @@ public class React extends JavaPlugin implements Configurable
 		worldController = new WorldController(this);
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
+		// dropController = new DropController(this);
 		eventListenerController = new EventListenerController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
+		// TODO dataController.load((String) null, dropController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
