@@ -60,21 +60,20 @@ public class M
 		}
 	}
 	
-	public static GList<Chunk> getChunks(Chunk center, int rad)
+	public static GList<Chunk> getChunks(Chunk c, int rad)
 	{
-		GList<Chunk> ck = new GList<Chunk>();
+		GList<Chunk> cx = new GList<Chunk>();
 		
-		int nx = center.getX() - rad;
-		int nz = center.getZ() - rad;
-		
-		for(int i = nx; i < nx + (rad * 2); i++)
+		for(int i = c.getX() - rad + 1; i < c.getX() + rad; i++)
 		{
-			for(int j = nz; j < nz + (rad * 2); j++)
+			for(int j = c.getZ() - rad + 1; j < c.getZ() + rad; j++)
 			{
-				ck.add(center.getWorld().getChunkAt(i, j));
+				cx.add(c.getWorld().getChunkAt(i, j));
 			}
 		}
 		
-		return ck;
+		cx.add(c);
+		
+		return cx;
 	}
 }

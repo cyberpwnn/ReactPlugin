@@ -2,7 +2,6 @@ package org.cyberpwn.react.util;
 
 import java.util.HashSet;
 import java.util.Random;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -126,6 +125,44 @@ public class Area
 		}
 	}
 	
+	public Entity[] getNearbyEntitiesFlat()
+	{
+		Location l = location.clone();
+		
+		try
+		{
+			int chunkRadius = (int) (radius < 16 ? 1 : (radius - (radius % 16)) / 16);
+			HashSet<Entity> radiusEntities = new HashSet<Entity>();
+			
+			for(int chX = 0 - chunkRadius; chX <= chunkRadius; chX++)
+			{
+				for(int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++)
+				{
+					int x = (int) location.getX(), y = (int) location.getY(), z = (int) location.getZ();
+					
+					for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
+					{
+						location.setY(e.getLocation().getY());
+						
+						if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+						{
+							radiusEntities.add(e);
+						}
+						
+						location = l;
+					}
+				}
+			}
+			
+			return radiusEntities.toArray(new Entity[radiusEntities.size()]);
+		}
+		
+		catch(Exception e)
+		{
+			return new GList<Entity>().toArray(new Entity[0]);
+		}
+	}
+	
 	/**
 	 * Get all players within the area.
 	 * 
@@ -136,6 +173,21 @@ public class Area
 		GList<Player> px = new GList<Player>();
 		
 		for(Entity i : getNearbyEntities())
+		{
+			if(i.getType().equals(EntityType.PLAYER))
+			{
+				px.add((Player) i);
+			}
+		}
+		
+		return px.toArray(new Player[px.size()]);
+	}
+	
+	public Player[] getNearbyPlayersFlat()
+	{
+		GList<Player> px = new GList<Player>();
+		
+		for(Entity i : getNearbyEntitiesFlat())
 		{
 			if(i.getType().equals(EntityType.PLAYER))
 			{
@@ -192,7 +244,6 @@ public class Area
 	 * Pick a random location in this radius
 	 * 
 	 * @return
-	 * 
 	 */
 	public Location random()
 	{

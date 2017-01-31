@@ -108,7 +108,7 @@ public class ScreenMonitor
 					t.setAction(t.getAction() + " " + colorNight(light, i) + i.formatted(acc));
 				}
 				
-				else if(samplables.get(cursor).equals(i))
+				else if(samplables.hasIndex(cursor) && samplables.get(cursor).equals(i))
 				{
 					t.setAction(t.getAction() + " " + colorNight(light, i) + i.formatted(acc));
 				}
