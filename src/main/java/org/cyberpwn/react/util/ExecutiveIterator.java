@@ -17,6 +17,7 @@ public class ExecutiveIterator<T>
 		
 		new Task(0)
 		{
+			@Override
 			public void run()
 			{
 				Long ns = M.ns();
@@ -25,9 +26,17 @@ public class ExecutiveIterator<T>
 				{
 					runnable.run(it.next());
 					
-					if(runnable.isCancelled())
+					try
 					{
-						cancel();
+						if(runnable.isCancelled())
+						{
+							cancel();
+						}
+					}
+					
+					catch(Exception ee)
+					{
+						
 					}
 				}
 				

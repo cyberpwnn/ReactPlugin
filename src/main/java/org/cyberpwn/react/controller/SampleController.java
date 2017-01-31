@@ -293,7 +293,7 @@ public class SampleController extends Controller
 	
 	public Long getReactionTime()
 	{
-		return reactionTime;
+		return reactionTime + (React.instance().getDropController().getNs() / 1000000);
 	}
 	
 	public void setReactionTime(Long reactionTime)

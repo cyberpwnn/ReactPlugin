@@ -1,6 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import java.util.List;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -16,6 +17,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.map.MapRenderer;
+import org.bukkit.map.MapView;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.api.SpikeEvent;
@@ -184,26 +187,26 @@ public class MonitorController extends Controller implements Configurable
 			mTick = 0;
 			mapper.sample(react.getSampleController());
 			
-			// for(Player p : mappers.keySet())
-			// {
-			// ItemStack mp = p.getItemInHand();
-			// if(mp.getType() == Material.MAP)
-			// {
-			// if(mp.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-			// {
-			// short d = mp.getDurability();
-			// @SuppressWarnings("deprecation")
-			// MapView map = Bukkit.getServer().getMap(d);
-			//
-			// for(MapRenderer r : map.getRenderers())
-			// {
-			// map.removeRenderer(r);
-			// }
-			//
-			// map.addRenderer(mappers.get(p));
-			// }
-			// }
-			// }
+			for(Player p : mappers.keySet())
+			{
+				ItemStack mp = p.getItemInHand();
+				if(mp.getType() == Material.MAP)
+				{
+					if(mp.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+					{
+						short d = mp.getDurability();
+						@SuppressWarnings("deprecation")
+						MapView map = Bukkit.getServer().getMap(d);
+						
+						for(MapRenderer r : map.getRenderers())
+						{
+							map.removeRenderer(r);
+						}
+						
+						map.addRenderer(mappers.get(p));
+					}
+				}
+			}
 		}
 		
 		if(react.getSampleController().getSampleTicksPerSecond().getValue().getInteger() < 11)
@@ -351,64 +354,63 @@ public class MonitorController extends Controller implements Configurable
 			p.sendMessage(Info.TAG + Info.COLOR_ERR + "WARNING: You are using 1.7, maps may be ``/glitchy.");
 		}
 		
-		// ItemStack mapd = new ItemStack(Material.MAP);
-		// mapd.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		//
-		// if(p.getInventory().contains(mapd))
-		// {
-		// p.getInventory().remove(mapd);
-		// }
-		//
-		// for(ItemStack i : p.getInventory().getContents())
-		// {
-		// if(i == null)
-		// {
-		// continue;
-		// }
-		//
-		// if(i.getType().equals(Material.MAP))
-		// {
-		// if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-		// {
-		// p.getInventory().remove(i);
-		// }
-		// }
-		// }
-		//
-		// ItemStack map = new ItemStack(Material.MAP);
-		// map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		// p.getInventory().addItem(map);
-		//
-		// for(ItemStack i : p.getInventory().getContents())
-		// {
-		// if(i == null)
-		// {
-		// continue;
-		// }
-		//
-		// if(i.getType().equals(Material.MAP))
-		// {
-		// if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
-		// {
-		// i.setAmount(1);
-		// }
-		// }
-		// }
-		//
-		// pc.gpd(p).setMapping(true);
-		// mappers.put(p, new MapGraph());
-		// Verbose.x("monitor", p.getName() + ": Mapping enabled");
-		//
-		// try
-		// {
-		// cc.set("mappers",
-		// cc.getStringList("mappers").qadd(p.getUniqueId().toString()).removeDuplicates());
-		// }
-		//
-		// catch(Exception e)
-		// {
-		// onNewConfig(cc);
-		// }
+		ItemStack mapd = new ItemStack(Material.MAP);
+		mapd.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+		
+		if(p.getInventory().contains(mapd))
+		{
+			p.getInventory().remove(mapd);
+		}
+		
+		for(ItemStack i : p.getInventory().getContents())
+		{
+			if(i == null)
+			{
+				continue;
+			}
+			
+			if(i.getType().equals(Material.MAP))
+			{
+				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+				{
+					p.getInventory().remove(i);
+				}
+			}
+		}
+		
+		ItemStack map = new ItemStack(Material.MAP);
+		map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
+		p.getInventory().addItem(map);
+		
+		for(ItemStack i : p.getInventory().getContents())
+		{
+			if(i == null)
+			{
+				continue;
+			}
+			
+			if(i.getType().equals(Material.MAP))
+			{
+				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+				{
+					i.setAmount(1);
+				}
+			}
+		}
+		
+		pc.gpd(p).setMapping(true);
+		mappers.put(p, new MapGraph());
+		Verbose.x("monitor", p.getName() + ": Mapping enabled");
+		
+		try
+		{
+			cc.set("mappers", cc.getStringList("mappers").qadd(p.getUniqueId().toString()).removeDuplicates());
+		}
+		
+		catch(Exception e)
+		{
+			onNewConfig(cc);
+		}
 	}
 	
 	public void stopMapping(Player p, boolean disp)
