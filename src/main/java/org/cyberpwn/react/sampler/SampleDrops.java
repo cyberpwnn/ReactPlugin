@@ -1,12 +1,12 @@
 package org.cyberpwn.react.sampler;
 
 import java.util.Iterator;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
@@ -29,11 +29,12 @@ public class SampleDrops extends Sample
 		explaination = L.SAMPLER_WORLD_DROPS;
 	}
 	
+	@Override
 	public void onTick()
 	{
 		getValue().setNumber(drops);
 		drops = 0;
-		final int[] cpt = new int[] { 0 };
+		final int[] cpt = new int[] {0};
 		
 		for(World i : sampleController.getReact().getServer().getWorlds())
 		{
@@ -48,9 +49,10 @@ public class SampleDrops extends Sample
 			
 			new Task(0)
 			{
+				@Override
 				public void run()
 				{
-					int[] itx = new int[] { 0 };
+					int[] itx = new int[] {0};
 					while(it.hasNext() && itx[0] <= cpt[0])
 					{
 						for(Entity i : it.next().getEntities())
@@ -73,21 +75,25 @@ public class SampleDrops extends Sample
 		}
 	}
 	
+	@Override
 	public void onStart()
 	{
 		value.setNumber(0);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
-		return F.f(getValue().getInteger()) + ChatColor.AQUA + " DROPS";
+		return F.f(getValue().getInteger()) + " :: " + F.f(React.instance().getDropController().getDrops().size()) + ChatColor.AQUA + " DROPS";
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.BLUE;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_BLUE;

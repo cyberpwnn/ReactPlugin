@@ -14,6 +14,7 @@ import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
+import org.cyberpwn.react.controller.DropController;
 import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
@@ -95,7 +96,7 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
 	private LimitingController limitingController;
-	// private DropController dropController;
+	private DropController dropController;
 	private EventListenerController eventListenerController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -165,13 +166,13 @@ public class React extends JavaPlugin implements Configurable
 		worldController = new WorldController(this);
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
-		// dropController = new DropController(this);
+		dropController = new DropController(this);
 		eventListenerController = new EventListenerController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
-		// TODO dataController.load((String) null, dropController);
+		dataController.load((String) null, dropController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -322,10 +323,18 @@ public class React extends JavaPlugin implements Configurable
 			d.v(L.MESSAGE_HOOK_ATTEMPT);
 			if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI"))
 			{
-				d.v(L.MESSAGE_HOOK_SUCCESS);
-				PlaceholderHook h = new PlaceholderHook(this);
-				dataController.load((String) null, h);
-				h.hook();
+				try
+				{
+					PlaceholderHook h = new PlaceholderHook(this);
+					dataController.load((String) null, h);
+					h.hook();
+					d.v(L.MESSAGE_HOOK_SUCCESS);
+				}
+				
+				catch(Exception e)
+				{
+					
+				}
 			}
 		}
 		
@@ -956,5 +965,15 @@ public class React extends JavaPlugin implements Configurable
 	public EventListenerController getEventListenerController()
 	{
 		return eventListenerController;
+	}
+	
+	public DropController getDropController()
+	{
+		return dropController;
+	}
+	
+	public static boolean isDreact()
+	{
+		return dreact;
 	}
 }
