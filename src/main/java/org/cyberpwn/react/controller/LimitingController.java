@@ -1,7 +1,6 @@
 package org.cyberpwn.react.controller;
 
 import java.util.Collections;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -36,11 +35,12 @@ public class LimitingController extends Controller implements Configurable
 	{
 		super(react);
 		
-		this.cc = new ClusterConfig();
-		this.playerActions = new GMap<Player, Long>();
-		this.playerLimit = Bukkit.getServer().getMaxPlayers();
+		cc = new ClusterConfig();
+		playerActions = new GMap<Player, Long>();
+		playerLimit = Bukkit.getServer().getMaxPlayers();
 	}
 	
+	@Override
 	public void start()
 	{
 		for(Player i : getReact().onlinePlayers())
@@ -49,6 +49,7 @@ public class LimitingController extends Controller implements Configurable
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
 		if(cc.getBoolean("limiting.enable") && getReact().getActionController().getActionInstabilityCause().isLagging())
@@ -69,7 +70,7 @@ public class LimitingController extends Controller implements Configurable
 							GList<Long> order = playerActions.v();
 							Collections.sort(order);
 							Collections.reverse(order);
-														
+							
 							for(int i = 0; i < kicks; i++)
 							{
 								if(order.hasIndex(i))
@@ -86,9 +87,10 @@ public class LimitingController extends Controller implements Configurable
 								kickme.add(getReact().onlinePlayers()[i]);
 							}
 						}
-												
+						
 						new ExecutiveIterator<Player>(0.4, kickme.copy(), new ExecutiveRunnable<Player>()
 						{
+							@Override
 							public void run()
 							{
 								kickPlayer(next());
@@ -116,6 +118,7 @@ public class LimitingController extends Controller implements Configurable
 	{
 		new TaskLater(1)
 		{
+			@Override
 			public void run()
 			{
 				p.kickPlayer(F.color(cc.getString("limiting.players.kick-message")));
@@ -127,6 +130,7 @@ public class LimitingController extends Controller implements Configurable
 	{
 		new TaskLater(1)
 		{
+			@Override
 			public void run()
 			{
 				p.kickPlayer(F.color(cc.getString("limiting.players.server-full-message")));
@@ -201,9 +205,17 @@ public class LimitingController extends Controller implements Configurable
 	@EventHandler
 	public void on(ServerListPingEvent e)
 	{
-		if(cc.getBoolean("limiting.players.show-changed-limit"))
+		try
 		{
-			e.setMaxPlayers(playerLimit);
+			if(cc.getBoolean("limiting.players.show-changed-limit"))
+			{
+				e.setMaxPlayers(playerLimit);
+			}
+		}
+		
+		catch(Exception ex)
+		{
+			
 		}
 	}
 	
