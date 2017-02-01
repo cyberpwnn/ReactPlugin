@@ -134,16 +134,27 @@ import org.cyberpwn.react.util.GMap;
 public class EventListenerController extends Controller
 {
 	private GMap<Plugin, GList<String>> events;
+	private GList<Class<?>> mapped;
 	
 	public EventListenerController(React react)
 	{
 		super(react);
 		
+		mapped = new GList<Class<?>>();
 		events = new GMap<Plugin, GList<String>>();
 	}
 	
 	public void addTraces(Event e)
 	{
+		Class<?> ev = e.getClass();
+		
+		if(mapped.contains(ev))
+		{
+			return;
+		}
+		
+		mapped.add(ev);
+		
 		for(RegisteredListener i : e.getHandlers().getRegisteredListeners())
 		{
 			if(i.getPlugin().equals(getReact()))
@@ -888,7 +899,7 @@ public class EventListenerController extends Controller
 	{
 		addTraces(e);
 	}
-
+	
 	public GMap<Plugin, GList<String>> getEvents()
 	{
 		return events;

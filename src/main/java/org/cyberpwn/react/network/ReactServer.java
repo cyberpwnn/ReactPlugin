@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-
 import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
@@ -47,6 +46,7 @@ public class ReactServer extends Thread
 		running = true;
 	}
 	
+	@Override
 	public void run()
 	{
 		while(running)
@@ -101,8 +101,7 @@ public class ReactServer extends Thread
 			
 			catch(IOException e)
 			{
-			// For some reason gets called on port scans.
-				interrupt();
+				
 			}
 		}
 	}
@@ -143,6 +142,7 @@ public class ReactServer extends Thread
 				{
 					runnables.add(new ReactRunnable()
 					{
+						@Override
 						public void run()
 						{
 							for(Actionable j : getReact().getActionController().getActions().k())

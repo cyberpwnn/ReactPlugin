@@ -6,7 +6,6 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
@@ -17,13 +16,11 @@ import org.cyberpwn.react.util.ValueType;
 public class SampleDrops extends Sample
 {
 	private int drops;
-	private int prev;
 	
 	public SampleDrops(SampleController sampleController)
 	{
 		super(sampleController, "SampleDrops", ValueType.DOUBLE, "DROPS", "Sample Item Drops");
 		minDelay = 100;
-		prev = 0;
 		maxDelay = 100;
 		idealDelay = 100;
 		drops = 0;
@@ -86,24 +83,7 @@ public class SampleDrops extends Sample
 	@Override
 	public String formatted(boolean acc)
 	{
-		int c = getValue().getInteger();
-		
-		if(c > prev)
-		{
-			prev = c;
-			return F.f(getValue().getInteger()) + ChatColor.RED + " <- " + ChatColor.BLUE + F.f(React.instance().getDropController().getDrops().size()) + ChatColor.AQUA + " DROPS";
-		}
-		
-		else if(c < prev)
-		{
-			prev = c;
-			return F.f(getValue().getInteger()) + ChatColor.GREEN + " -> " + ChatColor.BLUE + F.f(React.instance().getDropController().getDrops().size()) + ChatColor.AQUA + " DROPS";
-		}
-		
-		else
-		{
-			return F.f(getValue().getInteger()) + ChatColor.YELLOW + "    " + ChatColor.BLUE + F.f(React.instance().getDropController().getDrops().size()) + ChatColor.AQUA + " DROPS";
-		}
+		return F.f(getValue().getInteger()) + ChatColor.AQUA + " DROPS";
 	}
 	
 	@Override

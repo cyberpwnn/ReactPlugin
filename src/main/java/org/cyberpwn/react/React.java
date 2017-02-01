@@ -14,7 +14,6 @@ import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
-import org.cyberpwn.react.controller.DropController;
 import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LanguageController;
@@ -80,7 +79,6 @@ public class React extends JavaPlugin implements Configurable
 	private static String muix;
 	private ConfigurationController configurationController;
 	private DataController dataController;
-	private DropController dropController;
 	private PlayerController playerController;
 	private SampleController sampleController;
 	private boolean justUpdated;
@@ -167,11 +165,9 @@ public class React extends JavaPlugin implements Configurable
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
-		dropController = new DropController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
-		dataController.load((String) null, dropController);
 		dataController.load((String) null, limitingController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
@@ -970,10 +966,5 @@ public class React extends JavaPlugin implements Configurable
 	public static boolean isDreact()
 	{
 		return dreact;
-	}
-	
-	public DropController getDropController()
-	{
-		return dropController;
 	}
 }

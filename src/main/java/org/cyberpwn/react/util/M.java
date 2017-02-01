@@ -1,6 +1,8 @@
 package org.cyberpwn.react.util;
 
 import org.bukkit.Chunk;
+import org.bukkit.Location;
+import org.bukkit.World;
 
 public class M
 {
@@ -8,6 +10,96 @@ public class M
 	{
 		String s = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 		return s;
+	}
+	
+	public static double maxSafeRadius(Location l)
+	{
+		return maxSafeRadius(l, 256, 112);
+	}
+	
+	public static double maxSafeRadius(Location l, double max, double interval)
+	{
+		double s = 1;
+		
+		if(max < 1)
+		{
+			max = 1;
+		}
+		
+		while(s < max)
+		{
+			s += interval;
+			
+			if(!isLoaded(l, s))
+			{
+				return s - interval;
+			}
+		}
+		
+		return s;
+	}
+	
+	public static boolean isLoaded(Location c, double r)
+	{
+		for(GBiset<Integer, Integer> i : cradShift(c, r))
+		{
+			if(!isLoaded(c.getWorld(), i.getA(), i.getB()))
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static GList<GBiset<Integer, Integer>> cradShift(Location c, double r)
+	{
+		GList<GBiset<Integer, Integer>> map = new GList<GBiset<Integer, Integer>>();
+		int ax = (int) (c.getX() + r) >> 4;
+		int az = (int) (c.getZ() + r) >> 4;
+		int bx = (int) (c.getX() - r) >> 4;
+		int bz = (int) (c.getZ() - r) >> 4;
+		
+		for(int i = bx; i < ax; i++)
+		{
+			for(int j = bz; j < az; j++)
+			{
+				map.add(new GBiset<Integer, Integer>(i, j));
+			}
+		}
+		
+		return map;
+	}
+	
+	public static int chunkShift(int c)
+	{
+		return c >> 4;
+	}
+	
+	public static boolean isLoaded(World world, int x, int z)
+	{
+		for(Chunk i : world.getLoadedChunks())
+		{
+			if(i.getX() == x && i.getZ() == z)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static boolean isLoaded(Location location)
+	{
+		for(Chunk i : location.getWorld().getLoadedChunks())
+		{
+			if(i.getX() == chunkShift(location.getBlockX()) && i.getZ() == chunkShift(location.getBlockZ()))
+			{
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	public static double dof(double base, double range)
