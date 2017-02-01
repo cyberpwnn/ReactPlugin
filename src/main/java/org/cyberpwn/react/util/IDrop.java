@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
 import org.bukkit.util.Vector;
@@ -10,6 +11,7 @@ public class IDrop
 	private Location location;
 	private Vector velocity;
 	private int alive;
+	private long tcc;
 	
 	public IDrop(Item item)
 	{
@@ -17,6 +19,12 @@ public class IDrop
 		location = item.getLocation();
 		velocity = item.getVelocity();
 		alive = item.getTicksLived();
+		tcc = System.currentTimeMillis();
+		
+		if(alive < 1)
+		{
+			alive = 1;
+		}
 	}
 	
 	public void create()
@@ -66,6 +74,23 @@ public class IDrop
 		result = prime * result + ((stack == null) ? 0 : stack.hashCode());
 		result = prime * result + ((velocity == null) ? 0 : velocity.hashCode());
 		return result;
+	}
+	
+	public void update()
+	{
+		long ms = M.ms();
+		long diff = ms - tcc;
+		int ticks = (int) (diff / 50);
+		
+		alive += ticks;
+		tcc = ms;
+	}
+	
+	public boolean shouldDie()
+	{
+		int f = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		
+		return alive >= f;
 	}
 	
 	@Override

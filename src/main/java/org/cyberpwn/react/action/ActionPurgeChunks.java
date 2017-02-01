@@ -1,7 +1,6 @@
 package org.cyberpwn.react.action;
 
 import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -10,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ChunkPurgeEvent;
 import org.cyberpwn.react.api.ManualActionEvent;
@@ -34,6 +34,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		limit = 60;
 	}
 	
+	@Override
 	public void act()
 	{
 		limit--;
@@ -50,6 +51,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		}
 	}
 	
+	@Override
 	public void manual(final CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -95,7 +97,7 @@ public class ActionPurgeChunks extends Action implements Listener
 	public void purge(final World world, final long limit, final CommandSender p, final GList<Chunk> ignore)
 	{
 		final Iterator<Chunk> it = new GList<Chunk>(world.getLoadedChunks()).iterator();
-		final int[] mx = new int[] { 0 };
+		final int[] mx = new int[] {0};
 		
 		if(p != null)
 		{
@@ -104,6 +106,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		
 		new Task(0)
 		{
+			@Override
 			public void run()
 			{
 				long ms = M.ms();
@@ -130,9 +133,15 @@ public class ActionPurgeChunks extends Action implements Listener
 					
 					if(safe)
 					{
-						if(c.unload(true, true))
+						ChunkUnloadEvent e = new ChunkUnloadEvent(c);
+						Bukkit.getServer().getPluginManager().callEvent(e);
+						
+						if(!e.isCancelled())
 						{
-							m++;
+							if(c.unload(true, true))
+							{
+								m++;
+							}
 						}
 					}
 					
@@ -159,6 +168,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		};
 	}
 	
+	@Override
 	public void onReadConfig()
 	{
 		super.onReadConfig();
@@ -166,6 +176,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		limit = cc.getInt("culls.limit-interval-seconds");
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);

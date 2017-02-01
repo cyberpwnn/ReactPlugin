@@ -80,6 +80,7 @@ public class React extends JavaPlugin implements Configurable
 	private static String muix;
 	private ConfigurationController configurationController;
 	private DataController dataController;
+	private DropController dropController;
 	private PlayerController playerController;
 	private SampleController sampleController;
 	private boolean justUpdated;
@@ -96,7 +97,6 @@ public class React extends JavaPlugin implements Configurable
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
 	private LimitingController limitingController;
-	private DropController dropController;
 	private EventListenerController eventListenerController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -166,13 +166,13 @@ public class React extends JavaPlugin implements Configurable
 		worldController = new WorldController(this);
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
-		dropController = new DropController(this);
 		eventListenerController = new EventListenerController(this);
+		dropController = new DropController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
-		dataController.load((String) null, limitingController);
 		dataController.load((String) null, dropController);
+		dataController.load((String) null, limitingController);
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -967,13 +967,13 @@ public class React extends JavaPlugin implements Configurable
 		return eventListenerController;
 	}
 	
-	public DropController getDropController()
-	{
-		return dropController;
-	}
-	
 	public static boolean isDreact()
 	{
 		return dreact;
+	}
+	
+	public DropController getDropController()
+	{
+		return dropController;
 	}
 }
