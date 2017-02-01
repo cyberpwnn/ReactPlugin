@@ -58,7 +58,6 @@ public class Info
 		m("  \\ \\ \\\\ \\ " + ChatColor.LIGHT_PURPLE + "/\\  __/" + ChatColor.AQUA + "/\\ \\L\\.\\_" + ChatColor.LIGHT_PURPLE + "/\\ \\__/" + ChatColor.AQUA + "\\ \\ \\_   " + Info.COLOR_ERR + React.instance().getSampleController().getSamples().size() + " Samplers");
 		m("   \\ \\_\\ \\_" + ChatColor.LIGHT_PURPLE + "\\ \\____" + ChatColor.AQUA + "\\ \\__/.\\_" + ChatColor.LIGHT_PURPLE + "\\ \\____\\" + ChatColor.AQUA + "\\ \\__\\   " + ChatColor.YELLOW + React.instance().getActionController().getActions().size() + " Actions");
 		m(ChatColor.DARK_AQUA + "    \\/_/\\/ /" + ChatColor.DARK_PURPLE + "\\/____/" + ChatColor.DARK_AQUA + "\\/__/\\/_/" + ChatColor.DARK_PURPLE + "\\/____/ " + ChatColor.DARK_AQUA + "\\/__/");
-		// That was fucking hard.
 	}
 	
 	public static void m(String s)

@@ -1,7 +1,6 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collections;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -57,6 +56,7 @@ public class ActionInstabilityCause extends Action
 		maxRedstone = -1;
 	}
 	
+	@Override
 	public void act()
 	{
 		if(actionController.getReact().getConfig().getBoolean("runtime.disable-reactions") || React.isMef())
@@ -129,7 +129,6 @@ public class ActionInstabilityCause extends Action
 		Long tnt = s.getSampleTNTPerSecond().getValue().getLong();
 		Long chunksMb = (long) (((double) chunks) * 6.4);
 		Long entities = s.getSampleEntities().getValue().getLong();
-		Long drops = s.getSampleDrops().getValue().getLong();
 		final Double tps = s.getSampleTicksPerSecond().getValue().getDouble();
 		Double memoryPercent = (double) memoryUsed / (double) memoryMax;
 		Double memoryChunkPercent = (double) chunksMb / (double) memoryUsed;
@@ -211,17 +210,6 @@ public class ActionInstabilityCause extends Action
 				maxRedstone = redstone;
 				Verbose.x("limit", "Max Redstone Reached since Load: " + maxRedstone);
 			}
-		}
-		
-		if(drops > cc.getInt(getCodeName() + ".high.drop.count"))
-		{
-			actionController.getActionTeleportDrops().turnOn();
-			Verbose.x("instability", "- HIGH DROP: " + drops);
-		}
-		
-		else
-		{
-			actionController.getActionTeleportDrops().turnOff();
 		}
 		
 		if(problems.containsKey(InstabilityCause.REDSTONE))
@@ -344,7 +332,7 @@ public class ActionInstabilityCause extends Action
 			Verbose.x("instability", "-- RED: " + pcredstone);
 			Verbose.x("instability", "-- TNT: " + pctnt);
 			
-			double[] ch = new double[] { pcliquid, pcredstone, pctnt };
+			double[] ch = new double[] {pcliquid, pcredstone, pctnt};
 			double hpc = 33.0;
 			int index = -1;
 			
@@ -571,16 +559,19 @@ public class ActionInstabilityCause extends Action
 		return book;
 	}
 	
+	@Override
 	public void manual(CommandSender p)
 	{
 		p.sendMessage(getName() + L.MESSAGE_ACTION_FULLY_AUTOMATIC);
 	}
 	
+	@Override
 	public void start()
 	{
 		
 	}
 	
+	@Override
 	public void stop()
 	{
 		
@@ -604,6 +595,7 @@ public class ActionInstabilityCause extends Action
 		return 255;
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);

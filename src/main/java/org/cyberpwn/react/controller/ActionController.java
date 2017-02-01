@@ -13,7 +13,6 @@ import org.cyberpwn.react.action.ActionSuppressGrowth;
 import org.cyberpwn.react.action.ActionSuppressLiquid;
 import org.cyberpwn.react.action.ActionSuppressRedstone;
 import org.cyberpwn.react.action.ActionSuppressTnt;
-import org.cyberpwn.react.action.ActionTeleportDrops;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.GList;
@@ -30,7 +29,6 @@ public class ActionController extends Controller
 	private final ActionSuppressLiquid actionSuppressLiquid;
 	private final ActionSuppressTnt actionSuppressTnt;
 	private final ActionCollectGarbage actionCollectGarbage;
-	private final ActionTeleportDrops actionTeleportDrops;
 	private final ActionPurgeChunks actionPurgeChunks;
 	private final ActionCullDrops actionCullDrops;
 	private final ActionSuppressGrowth actionSuppressGrowth;
@@ -50,7 +48,6 @@ public class ActionController extends Controller
 		actionSuppressLiquid = new ActionSuppressLiquid(this);
 		actionSuppressTnt = new ActionSuppressTnt(this);
 		actionCollectGarbage = new ActionCollectGarbage(this);
-		actionTeleportDrops = new ActionTeleportDrops(this);
 		actionPurgeChunks = new ActionPurgeChunks(this);
 		actionCullDrops = new ActionCullDrops(this);
 		actionSuppressGrowth = new ActionSuppressGrowth(this);
@@ -72,6 +69,7 @@ public class ActionController extends Controller
 		}
 	}
 	
+	@Override
 	public void start()
 	{
 		load();
@@ -85,6 +83,7 @@ public class ActionController extends Controller
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
 		for(Actionable i : new GList<Actionable>(actions.keySet()))
@@ -105,6 +104,7 @@ public class ActionController extends Controller
 		}
 	}
 	
+	@Override
 	public void stop()
 	{
 		for(Actionable i : new GList<Actionable>(actions.keySet()))
@@ -159,11 +159,6 @@ public class ActionController extends Controller
 	public ActionCollectGarbage getActionCollectGarbage()
 	{
 		return actionCollectGarbage;
-	}
-	
-	public ActionTeleportDrops getActionTeleportDrops()
-	{
-		return actionTeleportDrops;
 	}
 	
 	public ActionPurgeChunks getActionPurgeChunks()
