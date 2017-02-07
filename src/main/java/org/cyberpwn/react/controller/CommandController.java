@@ -1210,7 +1210,7 @@ public class CommandController extends Controller implements CommandExecutor
 	{
 		if(tab <= tabulations.size() && tab > 0)
 		{
-			sender.sendMessage(String.format(Info.HRN, "Commands " + ChatColor.LIGHT_PURPLE + "[" + tab + "/" + tabulations.size() + "]"));
+			sender.sendMessage(String.format(Info.HRN, "Commands " + ChatColor.YELLOW + "[" + tab + "/" + tabulations.size() + "]"));
 			sender.sendMessage(ChatColor.DARK_GRAY + "Hover over any element for more information.");
 			
 			int dist = 0;
@@ -1228,7 +1228,7 @@ public class CommandController extends Controller implements CommandExecutor
 				RawText rt = new RawText();
 				rt.addTextWithHover("/react", RawText.COLOR_AQUA, "Use /re for short", RawText.COLOR_AQUA, true, false, false, false, false);
 				rt.addText(" ");
-				rt.addTextWithHover(i.getTriggers().get(0), RawText.COLOR_LIGHT_PURPLE, "All aliases include: " + i.getTriggers().toString(", "), RawText.COLOR_LIGHT_PURPLE, false, true, false, false, false);
+				rt.addTextWithHover(i.getTriggers().get(0), RawText.COLOR_YELLOW, "All aliases include: " + i.getTriggers().toString(", "), RawText.COLOR_YELLOW, false, true, false, false, false);
 				rt.addText(" ");
 				rt.addText(StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()));
 				rt.addText(" = ", RawText.COLOR_DARK_AQUA, false, false, false, true, false);
@@ -1258,7 +1258,7 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			else
 			{
-				rt.addTextWithHoverCommand("<=<", RawText.COLOR_LIGHT_PURPLE, "/re " + (tab - 1), "Previous Page", RawText.COLOR_LIGHT_PURPLE, true, false, false, true, false);
+				rt.addTextWithHoverCommand("<=<", RawText.COLOR_YELLOW, "/re " + (tab - 1), "Previous Page", RawText.COLOR_YELLOW, true, false, false, true, false);
 			}
 			
 			rt.addText(StringUtils.repeat(" ", 70), RawText.COLOR_DARK_GRAY, false, false, false, true, false);
@@ -1270,10 +1270,10 @@ public class CommandController extends Controller implements CommandExecutor
 			
 			else
 			{
-				rt.addTextWithHoverCommand(">=>", RawText.COLOR_LIGHT_PURPLE, "/re " + (tab + 1), "Next Page", RawText.COLOR_LIGHT_PURPLE, true, false, false, true, false);
+				rt.addTextWithHoverCommand(">=>", RawText.COLOR_YELLOW, "/re " + (tab + 1), "Next Page", RawText.COLOR_YELLOW, true, false, false, true, false);
 			}
 			
-			sender.sendMessage(ChatColor.DARK_GRAY + "Click the " + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "<=>" + ChatColor.RESET + ChatColor.DARK_GRAY + " buttons to navigate.");
+			sender.sendMessage(ChatColor.DARK_GRAY + "Click the " + ChatColor.YELLOW + ChatColor.BOLD + ChatColor.STRIKETHROUGH + "<=>" + ChatColor.RESET + ChatColor.DARK_GRAY + " buttons to navigate.");
 			
 			rt.tellRawTo(getReact(), (Player) sender);
 		}

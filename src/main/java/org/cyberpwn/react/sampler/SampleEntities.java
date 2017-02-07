@@ -1,7 +1,6 @@
 package org.cyberpwn.react.sampler;
 
 import java.util.Iterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -29,11 +28,12 @@ public class SampleEntities extends Sample implements Listener
 		explaination = L.SAMPLER_WORLD_ENTITIES;
 	}
 	
+	@Override
 	public void onTick()
 	{
 		getValue().setNumber(entities);
 		entities = 0;
-		final int[] cpt = new int[] { 0 };
+		final int[] cpt = new int[] {0};
 		
 		for(World i : sampleController.getReact().getServer().getWorlds())
 		{
@@ -48,13 +48,15 @@ public class SampleEntities extends Sample implements Listener
 			
 			new Task(0)
 			{
+				@Override
 				public void run()
 				{
-					int[] itx = new int[] { 0 };
-					while(it.hasNext() && itx[0] <= cpt[0])
+					int itx = 0;
+					
+					while(it.hasNext() && itx <= cpt[0])
 					{
 						entities += it.next().getEntities().length;
-						itx[0]++;
+						itx++;
 					}
 					
 					if(!it.hasNext())
@@ -66,6 +68,7 @@ public class SampleEntities extends Sample implements Listener
 		}
 	}
 	
+	@Override
 	public void onStart()
 	{
 		int ents = 0;
@@ -78,16 +81,19 @@ public class SampleEntities extends Sample implements Listener
 		value.setNumber(ents);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
-		return F.f(getValue().getInteger()) + ChatColor.AQUA + " ENTS";
+		return F.f(getValue().getInteger()) + ChatColor.AQUA + " Entities";
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.BLUE;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_BLUE;

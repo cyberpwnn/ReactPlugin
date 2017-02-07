@@ -24,10 +24,10 @@ public class ExecutiveIterator<T>
 				
 				while(it.hasNext() && System.nanoTime() - ns < (lim * 1000000.0))
 				{
-					runnable.run(it.next());
-					
 					try
 					{
+						runnable.run(it.next());
+						
 						if(runnable.isCancelled())
 						{
 							cancel();

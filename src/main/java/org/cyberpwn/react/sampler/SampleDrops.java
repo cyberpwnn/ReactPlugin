@@ -83,7 +83,7 @@ public class SampleDrops extends Sample
 	@Override
 	public String formatted(boolean acc)
 	{
-		return F.f(getValue().getInteger()) + ChatColor.AQUA + " DROPS";
+		return F.f(getValue().getInteger()) + ChatColor.AQUA + " Drops";
 	}
 	
 	@Override

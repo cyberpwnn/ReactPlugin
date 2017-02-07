@@ -3,7 +3,6 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -49,6 +48,7 @@ public class UpdateController extends Controller implements Configurable
 		tempFile = new File(tempFolder, "react.kex.tmp");
 	}
 	
+	@Override
 	public void tick()
 	{
 		if(needsRestart)
@@ -58,6 +58,7 @@ public class UpdateController extends Controller implements Configurable
 		}
 	}
 	
+	@Override
 	public void start()
 	{
 		cleanup();
@@ -67,10 +68,12 @@ public class UpdateController extends Controller implements Configurable
 			s("Starting Update Checker");
 			new TaskLater(200)
 			{
+				@Override
 				public void run()
 				{
 					new Task(20 * cc.getInt("update-checking.interval-seconds"))
 					{
+						@Override
 						public void run()
 						{
 							if(failed)
@@ -90,6 +93,7 @@ public class UpdateController extends Controller implements Configurable
 							{
 								getData(new FCCallback()
 								{
+									@Override
 									public void run()
 									{
 										if(fc().getInt("package.version-code") > Version.C)
@@ -238,6 +242,7 @@ public class UpdateController extends Controller implements Configurable
 					
 					getData(new FCCallback()
 					{
+						@Override
 						public void run()
 						{
 							fc = fc();
@@ -271,6 +276,7 @@ public class UpdateController extends Controller implements Configurable
 							{
 								new TaskLater(0)
 								{
+									@Override
 									public void run()
 									{
 										for(Controllable i : getReact().getControllers())
@@ -340,10 +346,16 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void checkVersion(final CommandSender sender)
 	{
+		if(!cc.getBoolean("update-checking.enable"))
+		{
+			return;
+		}
+		
 		sender.sendMessage(Info.TAG + ChatColor.AQUA + "React " + ChatColor.LIGHT_PURPLE + "v" + Version.V);
 		
 		getData(new FCCallback()
 		{
+			@Override
 			public void run()
 			{
 				int vc = fc().getInt("package.version-code");
@@ -371,6 +383,6 @@ public class UpdateController extends Controller implements Configurable
 				}
 			}
 		});
-				
+		
 	}
 }

@@ -2,6 +2,7 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
 public class SamplePHEntities extends Sample
@@ -16,26 +17,31 @@ public class SamplePHEntities extends Sample
 		explaination = "View this on the lower right quadrant on the map.";
 	}
 	
+	@Override
 	public void onTick()
 	{
 		
 	}
 	
+	@Override
 	public void onStart()
 	{
 		value.setNumber(1);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
-		return "E";
+		return ChatColor.AQUA + F.f(sampleController.getSampleEntities().getValue().getInteger()) + ChatColor.BLUE + " E " + ChatColor.AQUA + F.f(sampleController.getSampleDrops().getValue().getInteger()) + ChatColor.BLUE + " D";
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.AQUA;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.BLUE;
