@@ -3,7 +3,8 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.lang.Info;
@@ -19,6 +20,7 @@ public class LanguageController extends Controller
 		super(react);
 	}
 	
+	@Override
 	public void start()
 	{
 		File f = new File(new File(React.getInstance().getDataFolder(), "lang"), "en.yml");
@@ -26,7 +28,7 @@ public class LanguageController extends Controller
 		try
 		{
 			getDefaultLanguage().toYaml().save(f);
-		} 
+		}
 		
 		catch(IOException e)
 		{
@@ -44,8 +46,34 @@ public class LanguageController extends Controller
 		{
 			React.instance().getD().s(String.format(Info.URL_LANGUAGE, code));
 			
+			File f = new File(React.instance().getDataFolder(), "lang");
+			
+			for(File i : f.listFiles())
+			{
+				if(i.getName().equals(code + ".yml"))
+				{
+					ClusterConfig cc = new ClusterConfig();
+					FileConfiguration fc = new YamlConfiguration();
+					
+					try
+					{
+						fc.load(i);
+						cc.set(fc);
+						React.instance().getD().s("Found local language. Setting");
+						setLanguage(cc);
+						return;
+					}
+					
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+			
 			new Fetcher(String.format(Info.URL_LANGUAGE, code), new FCCallback()
 			{
+				@Override
 				public void run()
 				{
 					React.instance().getD().s("Found Language for Key: " + code);

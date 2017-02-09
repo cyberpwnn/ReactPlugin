@@ -65,12 +65,16 @@ public class UpdateController extends Controller implements Configurable
 		
 		if(cc.getBoolean("update-checking.enable"))
 		{
-			s("Starting Update Checker");
 			new TaskLater(200)
 			{
 				@Override
 				public void run()
 				{
+					if(!cc.getBoolean("update-checking.enable"))
+					{
+						return;
+					}
+					
 					new Task(20 * cc.getInt("update-checking.interval-seconds"))
 					{
 						@Override
@@ -195,6 +199,11 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void update(final CommandSender sender)
 	{
+		if(!cc.getBoolean("update-checking.enable"))
+		{
+			return;
+		}
+		
 		if(sender != null)
 		{
 			sender.sendMessage(Info.TAG + ChatColor.GREEN + "Checking Metadata...");
@@ -227,6 +236,11 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void decode(final CommandSender sender)
 	{
+		if(!cc.getBoolean("update-checking.enable"))
+		{
+			return;
+		}
+		
 		updateJarFile.delete();
 		
 		try
@@ -313,11 +327,21 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void getData(FCCallback fc)
 	{
+		if(!cc.getBoolean("update-checking.enable"))
+		{
+			return;
+		}
+		
 		new Fetcher("https://raw.githubusercontent.com/cyberpwnn/React/master/serve/package.yml", fc).start();
 	}
 	
 	public void getUpdate(Runnable ru)
 	{
+		if(!cc.getBoolean("update-checking.enable"))
+		{
+			return;
+		}
+		
 		try
 		{
 			if(!tempFolder.exists())
