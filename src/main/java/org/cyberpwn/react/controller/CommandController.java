@@ -177,7 +177,6 @@ public class CommandController extends Controller implements CommandExecutor
 									@Override
 									public void run()
 									{
-										s("Clicked");
 										ui.close();
 										i.manual(sender);
 									}
@@ -360,6 +359,48 @@ public class CommandController extends Controller implements CommandExecutor
 				getReact().getChannelListenController().scan(getPlayer());
 			}
 		}, "Sniff the bungeecord message channel", "sniff"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run()
+			{
+				GMap<InstabilityCause, Double> load = React.instance().getLagMapController().report();
+				GList<Double> sort = new GList<Double>();
+				GList<InstabilityCause> order = new GList<InstabilityCause>();
+				
+				for(InstabilityCause i : load.k())
+				{
+					sort.add(load.get(i));
+				}
+				
+				Collections.sort(sort);
+				Collections.reverse(sort);
+				
+				for(Double i : sort)
+				{
+					for(InstabilityCause j : load.k())
+					{
+						if(load.get(j) == i)
+						{
+							order.add(j);
+						}
+					}
+				}
+				
+				getSender().sendMessage(String.format(Info.HRN, "Status"));
+				
+				for(InstabilityCause i : order)
+				{
+					if(load.get(i) > 0)
+					{
+						getSender().sendMessage(ChatColor.GRAY + StringUtils.capitalise(i.name().toLowerCase()) + ": " + ChatColor.AQUA + ChatColor.BOLD + F.pc(load.get(i), 3));
+					}
+				}
+				getSender().sendMessage(Info.HR);
+			}
+		}, "View overall status load", "status"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -717,7 +758,7 @@ public class CommandController extends Controller implements CommandExecutor
 					sender.sendMessage(react.getActionController().getActionInstabilityCause().query().toString());
 				}
 			}
-		}, L.COMMAND_BOOK, "status", "book", "report"));
+		}, L.COMMAND_BOOK, "book", "report"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{

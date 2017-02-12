@@ -1,5 +1,7 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.ChatColor;
+
 public class StringCap
 {
 	private String string;
@@ -33,7 +35,8 @@ public class StringCap
 		
 		for(int i = 0; i < max; i++)
 		{
-			mod += base.charAt((i + shift) % base.length());
+			String color = ChatColor.getLastColors(base.substring(0, (i + shift + 1) % base.length()));
+			mod += color + base.charAt((i + shift) % base.length());
 		}
 		
 		return mod;

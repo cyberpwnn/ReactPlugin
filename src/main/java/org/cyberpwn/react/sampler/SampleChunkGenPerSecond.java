@@ -10,6 +10,8 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleChunkGenPerSecond extends Sample implements Listener
@@ -29,6 +31,7 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		average = new GList<Integer>();
 	}
 	
+	@Override
 	public void onTick()
 	{
 		int chunksLoad = 0;
@@ -51,22 +54,26 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		value.setNumber(chunksLoad);
 	}
 	
+	@Override
 	public void onStart()
 	{
 		sampleController.getReact().register(this);
 		value.setNumber(1);
 	}
 	
+	@Override
 	public void onStop()
 	{
 		sampleController.getReact().unRegister(this);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " CGEN/S";
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
@@ -74,11 +81,13 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 		cc.set("component.limit", 42);
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return Info.COLOR_ERR;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_RED;
@@ -89,6 +98,7 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 	{
 		if(e.isNewChunk())
 		{
+			Lag.report(e.getChunk().getBlock(8, 128, 8).getLocation(), InstabilityCause.CHUNKS, 1000);
 			loadedTick++;
 		}
 	}
@@ -97,12 +107,12 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 	{
 		return loadedTick;
 	}
-
+	
 	public GList<Integer> getAverage()
 	{
 		return average;
 	}
-
+	
 	@Override
 	public boolean isProblematic()
 	{

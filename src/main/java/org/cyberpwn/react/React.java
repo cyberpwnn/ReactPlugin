@@ -16,6 +16,7 @@ import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.FailureController;
+import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
 import org.cyberpwn.react.controller.MonitorController;
@@ -96,6 +97,7 @@ public class React extends JavaPlugin implements Configurable
 	private ScoreboardController scoreboardController;
 	private LimitingController limitingController;
 	private EventListenerController eventListenerController;
+	private LagMapController lagMapController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -165,6 +167,7 @@ public class React extends JavaPlugin implements Configurable
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
+		lagMapController = new LagMapController(this);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
@@ -966,5 +969,25 @@ public class React extends JavaPlugin implements Configurable
 	public static boolean isDreact()
 	{
 		return dreact;
+	}
+	
+	public LagMapController getLagMapController()
+	{
+		return lagMapController;
+	}
+	
+	public void setLagMapController(LagMapController lagMapController)
+	{
+		this.lagMapController = lagMapController;
+	}
+	
+	public void setEventListenerController(EventListenerController eventListenerController)
+	{
+		this.eventListenerController = eventListenerController;
+	}
+	
+	public static void setDreact(boolean dreact)
+	{
+		React.dreact = dreact;
 	}
 }

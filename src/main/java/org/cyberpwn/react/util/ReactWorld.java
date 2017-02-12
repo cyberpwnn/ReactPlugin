@@ -1,16 +1,18 @@
 package org.cyberpwn.react.util;
 
 import java.util.Iterator;
-
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.util.Vector;
 import org.cyberpwn.react.React;
@@ -29,10 +31,56 @@ public class ReactWorld implements Configurable, Listener
 	{
 		cc = new ClusterConfig();
 		this.world = world;
-		this.lastSave = System.currentTimeMillis();
-		this.saveTime = 0l;
+		lastSave = System.currentTimeMillis();
+		saveTime = 0l;
 		React.instance().getDataController().load("worlds", this);
 		React.instance().register(this);
+	}
+	
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void on(EntityExplodeEvent e)
+	{
+		if(Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") == null)
+		{
+			return;
+		}
+		
+		if(e.isCancelled() || e.blockList().isEmpty() || !cc.getBoolean("physics.async-tnt"))
+		{
+			return;
+		}
+		
+		GList<Block> blocks = new GList<Block>();
+		
+		for(Block i : new GList<Block>(e.blockList()))
+		{
+			if(!i.getType().equals(Material.TNT) && !i.getType().hasGravity())
+			{
+				blocks.add(i);
+				e.blockList().remove(i);
+			}
+		}
+		
+		World w = e.getLocation().getWorld();
+		GMap<Location, Material> matte = new GMap<Location, Material>();
+		
+		for(Block i : blocks)
+		{
+			Block b = w.getBlockAt(i.getX(), i.getY(), i.getZ());
+			
+			if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
+			{
+				b.breakNaturally();
+			}
+			
+			else
+			{
+				FAU.q().set(b.getLocation(), Material.AIR);
+				matte.put(b.getLocation(), b.getType());
+			}
+		}
+		
+		FAU.q().flush();
 	}
 	
 	@Override
@@ -42,6 +90,7 @@ public class ReactWorld implements Configurable, Listener
 		
 		cc.set("physics.fast-decay", false, "Fast leaf decay?");
 		cc.set("physics.fast-fall", false, "Fast falling sand?");
+		cc.set("physics.async-tnt", false, "REQUIRES FAST ASYNC WORLD EDIT\nIncreases the performance of tnt explosions by using fawe to handle blocks.");
 		cc.set("save.auto-save", false, "Custom auto save feature for this world?");
 		cc.set("save.timings.min-wait-minutes", 5, "How often to wait before saving ABSOLUTE MIN TIME WAIT");
 		cc.set("save.timings.max-wait-minutes", 30, "How often to wait before saving ABSOLUTE MAX TIME WAIT");
@@ -57,7 +106,7 @@ public class ReactWorld implements Configurable, Listener
 	
 	public long sinceLastSave()
 	{
-		return (long)(((double)M.ms())/1000.0/60.0) - (long)(((double)lastSave)/1000.0/60.0); 
+		return (long) (((double) M.ms()) / 1000.0 / 60.0) - (long) (((double) lastSave) / 1000.0 / 60.0);
 	}
 	
 	public boolean canSave()
@@ -184,6 +233,7 @@ public class ReactWorld implements Configurable, Listener
 					
 					new TaskLater(0)
 					{
+						@Override
 						public void run()
 						{
 							e.getBlock().setType(Material.AIR);
@@ -205,6 +255,7 @@ public class ReactWorld implements Configurable, Listener
 			
 			new Task(0)
 			{
+				@Override
 				public void run()
 				{
 					long ms = M.ms();

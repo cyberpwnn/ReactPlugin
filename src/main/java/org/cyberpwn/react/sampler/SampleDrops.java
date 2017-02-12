@@ -10,6 +10,8 @@ import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.ValueType;
 
@@ -56,12 +58,21 @@ public class SampleDrops extends Sample
 					{
 						for(Entity i : it.next().getEntities())
 						{
-							if(i.getType().equals(EntityType.DROPPED_ITEM))
+							try
 							{
-								drops++;
+								if(i.getType().equals(EntityType.DROPPED_ITEM))
+								{
+									Lag.report(i.getLocation(), InstabilityCause.DROPS, 3);
+									drops++;
+								}
+								
+								itx[0]++;
 							}
 							
-							itx[0]++;
+							catch(Exception e)
+							{
+								
+							}
 						}
 					}
 					

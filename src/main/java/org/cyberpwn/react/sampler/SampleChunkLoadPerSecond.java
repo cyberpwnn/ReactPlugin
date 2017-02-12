@@ -9,6 +9,8 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleChunkLoadPerSecond extends Sample implements Listener
@@ -28,6 +30,7 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 		average = new GList<Double>();
 	}
 	
+	@Override
 	public void onTick()
 	{
 		double chunksLoad = 0;
@@ -50,22 +53,26 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 		value.setNumber(chunksLoad);
 	}
 	
+	@Override
 	public void onStart()
 	{
 		sampleController.getReact().register(this);
 		value.setNumber(1);
 	}
 	
+	@Override
 	public void onStop()
 	{
 		sampleController.getReact().unRegister(this);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " CHK/S";
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return Info.COLOR_ERR;
@@ -75,6 +82,7 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 	public void onChunkLoad(ChunkLoadEvent e)
 	{
 		loadedTick++;
+		Lag.report(e.getChunk().getBlock(8, 128, 8).getLocation(), InstabilityCause.CHUNKS, 500);
 	}
 	
 	public int getLoadedTick()
@@ -87,6 +95,7 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 		return average;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_RED;

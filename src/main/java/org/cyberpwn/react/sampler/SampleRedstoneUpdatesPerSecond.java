@@ -11,6 +11,8 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
@@ -31,6 +33,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 		chunk = null;
 	}
 	
+	@Override
 	public void onTick()
 	{
 		value.setNumber(loadedTick);
@@ -52,22 +55,26 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 		chunkMap.clear();
 	}
 	
+	@Override
 	public void onStart()
 	{
 		sampleController.getReact().register(this);
 		value.setNumber(1);
 	}
 	
+	@Override
 	public void onStop()
 	{
 		sampleController.getReact().unRegister(this);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " RED/S";
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return Info.COLOR_ERR;
@@ -77,6 +84,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	public void onBlockFromTo(BlockRedstoneEvent e)
 	{
 		loadedTick++;
+		Lag.report(e.getBlock().getLocation(), InstabilityCause.REDSTONE, 200);
 		
 		if(!chunkMap.containsKey(e.getBlock().getChunk()))
 		{
@@ -101,6 +109,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 		return chunk;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_RED;
