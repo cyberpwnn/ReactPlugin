@@ -150,6 +150,7 @@ public class React extends JavaPlugin implements Configurable
 		packet = new MonitorPacket();
 		
 		configurationController = new ConfigurationController(this);
+		languageController = new LanguageController(this);
 		failureController = new FailureController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
@@ -162,7 +163,6 @@ public class React extends JavaPlugin implements Configurable
 		pluginWeightController = new PluginWeightController(this);
 		timingsController = new TimingsController(this);
 		channelListenController = new ChannelListenController(this);
-		languageController = new LanguageController(this);
 		worldController = new WorldController(this);
 		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
@@ -211,7 +211,7 @@ public class React extends JavaPlugin implements Configurable
 				t.start();
 				i.start();
 				t.stop();
-				d.w("Started " + i.getClass().getSimpleName() + " in " + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + "ms");
+				d.w(L.DEBUG_START + i.getClass().getSimpleName() + L.DEBUG_IN + ChatColor.GREEN + F.nsMs(t.getTime(), 6) + L.DEBUG_MS);
 			}
 			
 			catch(Exception e)
@@ -247,7 +247,7 @@ public class React extends JavaPlugin implements Configurable
 		{
 			try
 			{
-				d.v("Starting Metrics...");
+				d.v(L.DEBUG_METRICS_START);
 				metrics = new Metrics(React.this);
 				Graph gversion = metrics.createGraph("R1-React Version");
 				gversion.addPlotter(new Plotter(ChatColor.stripColor(Info.VERSION))
@@ -312,7 +312,7 @@ public class React extends JavaPlugin implements Configurable
 					d.s(ChatColor.BLUE + L.MESSAGE_CPUSCORE + F.f(CPUTest.singleThreaded(50)));
 					long mem = sampleController.getSampleMemoryUsed().getMemoryUsed();
 					System.gc();
-					d.s("Released " + F.mem((mem - sampleController.getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + " of memory.");
+					d.s(L.DEBUG_RELEASED + F.mem((mem - sampleController.getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + L.DEBUG_OFMEMORY);
 				}
 			};
 		}
@@ -341,7 +341,7 @@ public class React extends JavaPlugin implements Configurable
 		languageController.handleLanguage();
 		setTag();
 		
-		d.v("All good to go!");
+		d.v(L.DEBUG_FINISHED);
 		Info.splash();
 	}
 	
@@ -353,7 +353,7 @@ public class React extends JavaPlugin implements Configurable
 			try
 			{
 				i.stop();
-				Verbose.x("core", "Stopping Controller: " + i.getClass().getSimpleName());
+				Verbose.x("core", L.DEBUG_CONTROLLER_STOPPING + i.getClass().getSimpleName());
 			}
 			
 			catch(Exception e)
@@ -394,27 +394,27 @@ public class React extends JavaPlugin implements Configurable
 	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("debug-messages", true);
-		cc.set("startup.prevent-memory-leaks", true, "Run the garbage collector after startup to prevent memory issues from reloading and startup.");
+		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
 		cc.set("maps.display-static", false);
-		cc.set("startup.verbose", false, "Startup verbose for extra information.");
-		cc.set("startup.anonymous-statistics", true, "Should we track usage statistics?");
-		cc.set("runtime.disable-reactions", false, "Disable all reactions. Just sampling basically.");
-		cc.set("display.tag", "&b[&8React&b]:", "Here you can configure the tag for react. Uses color codes.");
-		cc.set("display.no-permission", "&cInsufficient Permission", "Permission denied message.");
-		cc.set("monitor.allow-title-verbose", true, "Allow title message verbose?\nPlayers still have to turn it on if it is enabled.");
-		cc.set("monitor.title-bolding", false, "Bolden the text on the monitor when in bright daylight.\nThis is intended to make the text clearer when looking at bright colors on the screen.");
-		cc.set("monitor.shift-accuracy", true, "When enabled, holding shift while monitoring will show more accurate numbers.");
-		cc.set("monitor.ticking.dynamic", true, "Slows down monitoring tickrates depending on how demanding it is to the server.");
-		cc.set("monitor.ticking.base", 1, "The default tickrate for the monitor. Lower = faster.\nThis will only take effect if dynamic ticking is off.");
-		cc.set("react-remote.enable", false, "This is for remote access to the react server");
-		cc.set("react-remote.port", 8118, "Make sure the port is open. You may get a failed to bind to port message if it isnt.\n DONT USE 25565!");
+		cc.set("startup.verbose", false, L.CONFIG_REACT_VERBOSE);
+		cc.set("startup.anonymous-statistics", true, L.CONFIG_REACT_STATS);
+		cc.set("runtime.disable-reactions", false, L.CONFIG_REACT_DISABLEREACTIONS);
+		cc.set("display.tag", "&b[&8React&b]:", L.CONFIG_REACT_TAG);
+		cc.set("display.no-permission", "&cInsufficient Permission", L.CONFIG_REACT_PERMDENYMSG);
+		cc.set("monitor.allow-title-verbose", true, L.CONFIG_REACT_ALLOWTITLEVERBOSE);
+		cc.set("monitor.title-bolding", false, L.CONFIG_REACT_TITLEBOLDING);
+		cc.set("monitor.shift-accuracy", true, L.CONFIG_REACT_ALLOWSHIFTACCURACY);
+		cc.set("monitor.ticking.dynamic", true, L.CONFIG_REACT_TITLETICK_DYNAMIC);
+		cc.set("monitor.ticking.base", 1, L.CONFIG_REACT_TITLETICK_BASE);
+		cc.set("react-remote.enable", false, L.CONFIG_REACT_REMOTE_ENABLE);
+		cc.set("react-remote.port", 8118, L.CONFIG_REACT_REMOTE_PORT);
 		cc.set("react-remote.interval", 100);
 		cc.set("react-remote.users.cyberpwn.password", "react123", "Password for this user");
 		cc.set("react-remote.users.cyberpwn.enabled", false, "You can disable individual users here");
 		cc.set("heartbeat.save-before-crash", true);
-		cc.set("commands.override.memory", true, "Override the /mem and /memory for more accurate information");
-		cc.set("commands.override.tps", true, "Override the /tps and /lag commands for more accurate information");
-		cc.set("messages.notify-instability", true, "Notifiy players with react.monitor permissions of instabilities?");
+		cc.set("commands.override.memory", true, L.CONFIG_REACT_OVERRIDES_MEMORY);
+		cc.set("commands.override.tps", true, L.CONFIG_REACT_OVERRIDES_TPS);
+		cc.set("messages.notify-instability", true, L.ACTION_INSTABILITYCAUSE);
 		cc.set("lang", "en", "Language code.");
 	}
 	

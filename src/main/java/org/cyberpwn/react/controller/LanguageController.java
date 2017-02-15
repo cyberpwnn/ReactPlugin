@@ -104,6 +104,10 @@ public class LanguageController extends Controller
 				
 			}
 		}
+		
+		s("Language updated.");
+		w("Rebuilding Configuration Mesh");
+		React.instance().getConfigurationController().rebuildConfigurations();
 	}
 	
 	public ClusterConfig getDefaultLanguage()

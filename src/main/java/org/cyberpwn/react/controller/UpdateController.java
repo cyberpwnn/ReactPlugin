@@ -370,12 +370,7 @@ public class UpdateController extends Controller implements Configurable
 	
 	public void checkVersion(final CommandSender sender)
 	{
-		if(!cc.getBoolean("update-checking.enable"))
-		{
-			return;
-		}
-		
-		sender.sendMessage(Info.TAG + ChatColor.AQUA + "React " + ChatColor.LIGHT_PURPLE + "v" + Version.V);
+		sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "React " + ChatColor.AQUA + "v" + Version.V);
 		
 		getData(new FCCallback()
 		{
@@ -388,12 +383,12 @@ public class UpdateController extends Controller implements Configurable
 				
 				if(vc <= Version.C)
 				{
-					sender.sendMessage(Info.TAG + ChatColor.GREEN + "You have the latest version (" + Version.V + ")");
+					sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "You have the latest version (" + Version.V + ")");
 				}
 				
 				else
 				{
-					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Update Found (v" + v + ")");
+					sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "Update Found (v" + v + ")");
 					
 					if(cc.getBoolean("updater.only-update-on-reboot") && updated)
 					{
@@ -402,7 +397,7 @@ public class UpdateController extends Controller implements Configurable
 					
 					for(String i : s)
 					{
-						sender.sendMessage(Info.TAG + ChatColor.GREEN + " > " + i);
+						sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + " > " + i);
 					}
 				}
 			}

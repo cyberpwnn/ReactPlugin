@@ -2,6 +2,32 @@ package org.cyberpwn.react.lang;
 
 public class L
 {
+	public static String DEBUG_START = "Started ";
+	public static String DEBUG_IN = " in ";
+	public static String DEBUG_MS = "ms";
+	public static String DEBUG_METRICS_START = "Metrics Started";
+	public static String DEBUG_RELEASED = "Released ";
+	public static String DEBUG_OFMEMORY = " of memory.";
+	public static String DEBUG_FINISHED = "All good to go!";
+	public static String DEBUG_CONTROLLER_STOPPING = "Stopping Controller: ";
+	
+	public static String CONFIG_REACT_DEBUGMESSAGES = "Run the garbage collector after startup to prevent memory issues from reloading and startup.";
+	public static String CONFIG_REACT_VERBOSE = "Startup verbose for extra information.";
+	public static String CONFIG_REACT_STATS = "Should we track usage statistics?";
+	public static String CONFIG_REACT_DISABLEREACTIONS = "Disable all reactions. Just sampling basically.";
+	public static String CONFIG_REACT_TAG = "Here you can configure the tag for react. Uses color codes.";
+	public static String CONFIG_REACT_PERMDENYMSG = "Permission denied message.";
+	public static String CONFIG_REACT_ALLOWTITLEVERBOSE = "Allow title message verbose? Players still have to turn it on if it is enabled.";
+	public static String CONFIG_REACT_TITLEBOLDING = "Bolden the text on the monitor when in bright daylight. This is intended to make the text clearer when looking at bright colors on the screen.";
+	public static String CONFIG_REACT_ALLOWSHIFTACCURACY = "When enabled, holding shift while monitoring will show more accurate numbers.";
+	public static String CONFIG_REACT_TITLETICK_DYNAMIC = "Slows down monitoring tickrates depending on how demanding it is to the server.";
+	public static String CONFIG_REACT_TITLETICK_BASE = "The default tickrate for the monitor. Lower = faster.\nThis will only take effect if dynamic ticking is off.";
+	public static String CONFIG_REACT_REMOTE_ENABLE = "This is for remote access to the react server";
+	public static String CONFIG_REACT_REMOTE_PORT = "Make sure the port is open. You may get a failed to bind to port message if it isnt. DONT USE 25565!";
+	public static String CONFIG_REACT_OVERRIDES_MEMORY = "Override the /mem and /memory for more accurate information";
+	public static String CONFIG_REACT_OVERRIDES_TPS = "Override the /tps and /lag commands for more accurate information";
+	public static String CONFIG_REACT_INSTABILITYNOTIFY = "Notifiy players with react.monitor permissions of instabilities?";
+	
 	public static String LANGUAGE_CODE = "en";
 	public static String LANGUAGE_NAME = "English";
 	public static String REACT_NAME = "React";

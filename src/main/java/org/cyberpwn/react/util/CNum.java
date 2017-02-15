@@ -39,6 +39,6 @@ public class CNum
 	
 	public void circ()
 	{
-		number = number % (max + 1);
+		number = number % (max);
 	}
 }

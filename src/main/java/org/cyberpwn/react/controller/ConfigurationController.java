@@ -1,7 +1,6 @@
 package org.cyberpwn.react.controller;
 
 import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,6 +8,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Task;
 
@@ -29,12 +29,29 @@ public class ConfigurationController extends Controller implements Configurable
 		cc = new ClusterConfig();
 	}
 	
+	public void rebuildConfigurations()
+	{
+		s("Rebuilding Configuration Map");
+		
+		int s = configurations.size();
+		int c = 0;
+		
+		for(File i : configurations.k())
+		{
+			React.instance().getDataController().load(i, configurations.get(i));
+			c++;
+			o("Rebuilding (" + F.pc((double) c / (double) s) + ") -> " + ChatColor.RED + i.getName());
+		}
+	}
+	
+	@Override
 	public void start()
 	{
 		if(cc.getBoolean("configuration.mechanics.auto-inject"))
 		{
 			new Task(cc.getInt("configuration.mechanics.inject-delay-seconds") * 20)
 			{
+				@Override
 				public void run()
 				{
 					for(File i : configurations.k())
@@ -128,27 +145,27 @@ public class ConfigurationController extends Controller implements Configurable
 		
 		return cc.getAbstract(key);
 	}
-
+	
 	public GMap<File, Configurable> getConfigurations()
 	{
 		return configurations;
 	}
-
+	
 	public void setConfigurations(GMap<File, Configurable> configurations)
 	{
 		this.configurations = configurations;
 	}
-
+	
 	public GMap<File, ClusterConfig> getCache()
 	{
 		return cache;
 	}
-
+	
 	public void setCache(GMap<File, ClusterConfig> cache)
 	{
 		this.cache = cache;
 	}
-
+	
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
@@ -159,19 +176,19 @@ public class ConfigurationController extends Controller implements Configurable
 		cc.set("configuration.enhancements.add-comments", true, "If you can see this, this setting is enabled :P");
 		cc.set("configuration.enhancements.add-default-comments", true, "This shows the Default value as a comment. If its on, below is an example :P");
 	}
-
+	
 	@Override
 	public void onReadConfig()
 	{
 		
 	}
-
+	
 	@Override
 	public ClusterConfig getConfiguration()
 	{
 		return cc;
 	}
-
+	
 	@Override
 	public String getCodeName()
 	{

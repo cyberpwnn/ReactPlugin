@@ -421,7 +421,7 @@ public class CommandController extends Controller implements CommandExecutor
 						p.sendMessage(" ");
 					}
 					
-					p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Hover & Click to interact.");
+					p.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "Hover & Click to interact.");
 					
 					if(getArgs().length == 2)
 					{
@@ -1115,7 +1115,7 @@ public class CommandController extends Controller implements CommandExecutor
 					if(react.canFindPlayer(getArgs()[1]))
 					{
 						Player p = react.findPlayer(getArgs()[1]);
-						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Pong[" + p.getName() + "]: " + ChatColor.LIGHT_PURPLE + NMSX.ping(p) + "ms");
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Pong[" + p.getName() + "]: " + ChatColor.DARK_GRAY + NMSX.ping(p) + "ms");
 					}
 					
 					else
@@ -1171,7 +1171,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					try
 					{
-						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.LIGHT_PURPLE + NMSX.ping((Player) sender) + "ms");
+						sender.sendMessage(Info.TAG + ChatColor.AQUA + "Yours: " + ChatColor.DARK_GRAY + NMSX.ping((Player) sender) + "ms");
 					}
 					
 					catch(Exception e)
@@ -1357,7 +1357,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					for(ReactCommand i : commands)
 					{
-						sender.sendMessage(ChatColor.AQUA + "/react " + ChatColor.LIGHT_PURPLE + i.getTriggers().get(0) + ChatColor.DARK_GRAY + StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()) + " - " + i.getDescription());
+						sender.sendMessage(ChatColor.AQUA + "/react " + ChatColor.DARK_GRAY + i.getTriggers().get(0) + ChatColor.DARK_GRAY + StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()) + " - " + i.getDescription());
 					}
 				}
 			}
