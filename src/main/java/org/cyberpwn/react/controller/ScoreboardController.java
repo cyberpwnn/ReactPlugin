@@ -17,6 +17,7 @@ public class ScoreboardController extends Controller
 	private BoardController bc;
 	private ScreenBoard ms;
 	private Integer inx;
+	private Integer delay = 0;
 	
 	public ScoreboardController(React react)
 	{
@@ -25,9 +26,10 @@ public class ScoreboardController extends Controller
 		inx = 0;
 		bc = new BoardController(ChatColor.AQUA + "React Monitor", getReact());
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
-		ms = new ScreenBoard();	
+		ms = new ScreenBoard();
 	}
 	
+	@Override
 	public void stop()
 	{
 		for(Player i : monitors.k())
@@ -39,6 +41,18 @@ public class ScoreboardController extends Controller
 	
 	public void dispatch()
 	{
+		delay--;
+		
+		if(delay <= 0)
+		{
+			delay = React.instance().getCc().getInt("monitor.scoreboard-interval") / 2;
+		}
+		
+		else
+		{
+			return;
+		}
+		
 		for(Player i : new GList<Player>(monitors.keySet()))
 		{
 			int his = i.getInventory().getHeldItemSlot();
@@ -121,7 +135,7 @@ public class ScoreboardController extends Controller
 			p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SCOREBOARD_ENABLED);
 		}
 	}
-
+	
 	public void display(Player p, BoardController bc, int cg)
 	{
 		GList<String> k = new GList<String>();

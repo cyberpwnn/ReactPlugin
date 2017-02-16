@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collections;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
@@ -18,8 +20,10 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.ExecutiveIterator;
 import org.cyberpwn.react.util.ExecutiveRunnable;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.VersionBukkit;
@@ -80,6 +84,7 @@ public class ActionCullEntities extends Action implements Listener
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void cull(Chunk c)
 	{
 		if(c.getEntities().length > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
@@ -155,6 +160,36 @@ public class ActionCullEntities extends Action implements Listener
 			
 			e.clear();
 			cull(b);
+			
+			if(b.size() == 1)
+			{
+				notify(c, 1, StringUtils.capitalise(b.get(0).getType().getName()));
+			}
+			
+			else
+			{
+				boolean same = true;
+				EntityType et = b.get(0).getType();
+				
+				for(Entity i : b)
+				{
+					if(!i.getType().equals(et))
+					{
+						same = false;
+						break;
+					}
+				}
+				
+				if(same)
+				{
+					notify(c, b.size(), StringUtils.capitalise(b.get(0).getType().getName()));
+				}
+				
+				else
+				{
+					notify(c, b.size(), "Mob");
+				}
+			}
 		}
 	}
 	
@@ -217,6 +252,27 @@ public class ActionCullEntities extends Action implements Listener
 		return w;
 	}
 	
+	public void notify(Chunk c, int amt, String type)
+	{
+		if(cc.getBoolean(getCodeName() + ".notify.enable"))
+		{
+			String msg = cc.getString(getCodeName() + ".notify.message");
+			
+			for(Entity i : c.getEntities())
+			{
+				if(i instanceof Player)
+				{
+					Player p = (Player) i;
+					
+					if(p.hasPermission(Info.PERM_MONITOR) || cc.getBoolean(getCodeName() + ".notify.enable-non-react-admins"))
+					{
+						NMSX.sendActionBar(p, F.color(msg.replaceAll("%amount%", String.valueOf(amt)).replaceAll("%type%", type + (amt > 1 ? "s" : ""))));
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
@@ -241,6 +297,9 @@ public class ActionCullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
+		cc.set(getCodeName() + ".notify.message", "&cRemoved %amount%x %type%", "Message to notify culls.");
+		cc.set(getCodeName() + ".notify.enable", true);
+		cc.set(getCodeName() + ".notify.enable-non-react-admins", false);
 		cc.set(getCodeName() + ".selective-bias.passive-bias", true, "Cull Hostile mobs before passives");
 		cc.set(getCodeName() + ".selective-bias.contrasted-bias", true, "Cull mobs in dark lighting first");
 		cc.set(getCodeName() + ".max-entities-per-chunk", 16, "The maximum allowed entities per chunk. \nMore entities will spawn, but other entities may be removed.");

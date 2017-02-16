@@ -2,15 +2,28 @@ package org.cyberpwn.react.util;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import org.bukkit.ChatColor;
+import org.cyberpwn.react.cluster.ClusterConfig;
 
 public class HijackedConsole extends Thread
 {
 	public static boolean hijacked = false;
 	public static GList<String> out = new GList<String>();
+	private ClusterConfig cc;
+	
+	public HijackedConsole(ClusterConfig cc)
+	{
+		this.cc = cc;
+	}
 	
 	@Override
 	public void run()
 	{
+		if(!cc.getBoolean("hijack-console"))
+		{
+			return;
+		}
+		
 		while(hijacked)
 		{
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -18,9 +31,21 @@ public class HijackedConsole extends Thread
 			PrintStream old = System.out;
 			System.setOut(ps);
 			
+			Integer ms = cc.getInt("console-hacks.update-interval");
+			
+			if(ms < 50)
+			{
+				ms = 50;
+			}
+			
+			if(ms > 4000)
+			{
+				ms = 4000;
+			}
+			
 			try
 			{
-				Thread.sleep(50);
+				Thread.sleep(ms);
 			}
 			
 			catch(InterruptedException e)
@@ -35,9 +60,19 @@ public class HijackedConsole extends Thread
 			{
 				for(String i : baos.toString().split("\n"))
 				{
-					System.out.println(i);
+					String v = i;
 					
-					String f = i.trim();
+					if(!cc.getBoolean("console-hacks.color"))
+					{
+						System.out.println(ChatColor.stripColor(v.replace("[0;36;1m", "").replace("[0;30;22m", "").replace("[0;34;22m", "").replace("[0;32;22m", "").replace("[0;36;22m", "").replace("[0;31;22m", "").replace("[0;35;22m", "").replace("[0;37;22m", "").replace("[0;34;1m", "").replace("[5m", "").replace("[21m", "").replace("[9m", "").replace("[4m", "").replace("[3m", "").replace("[0;33;22m", "").replace("[0;31;1m", "").replace("[0;35;1m", "").replace("[0;32;1m", "").replace("[0;33;22m", "").replace("[0;33;1m", "").replace("[0;37;1m", "").replace("[0;30;1m", "").replace("[0;30;1m", "").replace("[m", "").replace("", "").replace("[m", "")));
+					}
+					
+					else
+					{
+						System.out.println(v);
+					}
+					
+					String f = v.trim();
 					
 					out.add(f);
 				}

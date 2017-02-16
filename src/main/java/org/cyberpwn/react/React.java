@@ -12,6 +12,7 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.controller.ChannelListenController;
 import org.cyberpwn.react.controller.CommandController;
 import org.cyberpwn.react.controller.ConfigurationController;
+import org.cyberpwn.react.controller.ConsoleController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
@@ -79,7 +80,6 @@ public class React extends JavaPlugin implements Configurable
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
 	private static String muix;
-	private HijackedConsole hc;
 	private ConfigurationController configurationController;
 	private DataController dataController;
 	private PlayerController playerController;
@@ -100,6 +100,7 @@ public class React extends JavaPlugin implements Configurable
 	private LimitingController limitingController;
 	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
+	private ConsoleController consoleController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -112,9 +113,7 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onEnable()
 	{
-		hc = new HijackedConsole();
-		HijackedConsole.hijacked = true;
-		hc.start();
+		
 		start = M.ms();
 		justUpdated = false;
 		super.startup();
@@ -173,7 +172,9 @@ public class React extends JavaPlugin implements Configurable
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
 		lagMapController = new LagMapController(this);
+		consoleController = new ConsoleController(this);
 		dataController.load((String) null, configurationController);
+		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
@@ -409,6 +410,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("display.tag", "&b[&8React&b]:", L.CONFIG_REACT_TAG);
 		cc.set("display.no-permission", "&cInsufficient Permission", L.CONFIG_REACT_PERMDENYMSG);
 		cc.set("monitor.allow-title-verbose", true, L.CONFIG_REACT_ALLOWTITLEVERBOSE);
+		cc.set("monitor.scoreboard-interval", 10, "The interval in ticks to send scoreboard packets to monitors.");
 		cc.set("monitor.title-bolding", false, L.CONFIG_REACT_TITLEBOLDING);
 		cc.set("monitor.shift-accuracy", true, L.CONFIG_REACT_ALLOWSHIFTACCURACY);
 		cc.set("monitor.ticking.dynamic", true, L.CONFIG_REACT_TITLETICK_DYNAMIC);

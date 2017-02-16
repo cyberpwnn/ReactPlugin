@@ -137,6 +137,11 @@ public class NMSX
 	
 	public static void sendActionBar(Player player, String message)
 	{
+		if(!VersionBukkit.tc())
+		{
+			return;
+		}
+		
 		try
 		{
 			Object ppoc;
