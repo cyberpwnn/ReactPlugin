@@ -275,6 +275,11 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				CommandSender sender = getSender();
 				React.instance().getUpdateController().checkVersion(sender);
+				
+				for(ChatColor i : ChatColor.values())
+				{
+					s(i + "Using " + i.name());
+				}
 			}
 		}, L.COMMAND_VERSION, "version", "v"));
 		

@@ -40,6 +40,7 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Metrics;
@@ -78,6 +79,7 @@ public class React extends JavaPlugin implements Configurable
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
 	private static String muix;
+	private HijackedConsole hc;
 	private ConfigurationController configurationController;
 	private DataController dataController;
 	private PlayerController playerController;
@@ -110,6 +112,9 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onEnable()
 	{
+		hc = new HijackedConsole();
+		HijackedConsole.hijacked = true;
+		hc.start();
 		start = M.ms();
 		justUpdated = false;
 		super.startup();
@@ -361,6 +366,8 @@ public class React extends JavaPlugin implements Configurable
 				
 			}
 		}
+		
+		HijackedConsole.hijacked = false;
 	}
 	
 	public static void dump()

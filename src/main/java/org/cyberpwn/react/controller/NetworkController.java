@@ -1,7 +1,6 @@
 package org.cyberpwn.react.controller;
 
 import java.io.IOException;
-
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.network.ReactServer;
@@ -20,6 +19,7 @@ public class NetworkController extends Controller
 		server = null;
 	}
 	
+	@Override
 	public void start()
 	{
 		getReact().scheduleSyncTask(40, new Runnable()
@@ -60,6 +60,7 @@ public class NetworkController extends Controller
 		return imeid;
 	}
 	
+	@Override
 	public void tick()
 	{
 		if(server == null)
@@ -77,11 +78,12 @@ public class NetworkController extends Controller
 		ReactServer.runnables.clear();
 	}
 	
+	@Override
 	public void stop()
 	{
 		server.interrupt();
 	}
-
+	
 	public static void chain()
 	{
 		DataController.chain();

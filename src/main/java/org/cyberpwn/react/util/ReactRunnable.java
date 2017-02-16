@@ -9,6 +9,7 @@ public class ReactRunnable implements Runnable
 	public void run(React react)
 	{
 		this.react = react;
+		run();
 	}
 	
 	@Override

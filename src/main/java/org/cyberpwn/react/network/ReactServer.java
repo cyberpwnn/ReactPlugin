@@ -12,7 +12,9 @@ import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.ReactRunnable;
+import org.cyberpwn.react.util.TaskLater;
 
 public class ReactServer extends Thread
 {
@@ -80,7 +82,7 @@ public class ReactServer extends Thread
 				
 				if(cc.contains("react-remote.users." + request.getUsername() + ".enabled") && cc.getBoolean("react-remote.users." + request.getUsername() + ".enabled") && cc.contains("react-remote.users." + request.getUsername() + ".password") && cc.getString("react-remote.users." + request.getUsername() + ".password").equals(request.getPassword()))
 				{
-					handleCommand(request.getCommand().toUpperCase(), response);
+					handleCommand(request.getCommand(), response);
 					requests++;
 				}
 				
@@ -119,6 +121,11 @@ public class ReactServer extends Thread
 			
 			response.put("memory-max", Runtime.getRuntime().maxMemory() / 1024 / 1024);
 			response.put("processor-cores", Runtime.getRuntime().availableProcessors());
+			
+			GList<String> console = HijackedConsole.out.copy();
+			String data = console.toString("\n");
+			
+			response.put("console-s", data);
 		}
 		
 		else if(command.equals(PacketRequestType.GET_ACTIONS.toString()))
@@ -134,12 +141,42 @@ public class ReactServer extends Thread
 			response.put("bukkit-version", Bukkit.getBukkitVersion());
 		}
 		
+		else if(command.startsWith("COMMAND "))
+		{
+			String cmd = command.replaceFirst("COMMAND ", "");
+			
+			response.put("type", PacketResponseType.OK);
+			
+			runnables.add(new ReactRunnable()
+			{
+				@Override
+				public void run()
+				{
+					l("Received Remote command: " + cmd);
+					
+					new TaskLater(2)
+					{
+						@Override
+						public void run()
+						{
+							Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+						}
+					};
+				}
+			});
+		}
+		
 		else if(command.startsWith("ACTION "))
 		{
+			boolean fi = false;
+			
 			for(final String i : actions)
 			{
-				if(command.equals("ACTION " + i))
+				if(command.equalsIgnoreCase("ACTION " + i))
 				{
+					fi = true;
+					response.put("type", PacketResponseType.OK);
+					
 					runnables.add(new ReactRunnable()
 					{
 						@Override
@@ -147,17 +184,20 @@ public class ReactServer extends Thread
 						{
 							for(Actionable j : getReact().getActionController().getActions().k())
 							{
-								if(j.getName().toLowerCase().equals(i.toLowerCase()))
+								if(j.getName().equalsIgnoreCase(i))
 								{
-									j.act();
-									response.put("type", PacketResponseType.OK);
+									l("Action Packet Received: " + j.getName());
+									j.manual(Bukkit.getServer().getConsoleSender());
 									return;
 								}
 							}
 						}
 					});
 				}
-				
+			}
+			
+			if(!fi)
+			{
 				response.put("type", PacketResponseType.ERROR_INVALID_ACTION);
 			}
 		}
