@@ -2,7 +2,7 @@ package org.cyberpwn.react.action;
 
 import java.util.Collections;
 import java.util.Iterator;
-
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
@@ -18,12 +18,13 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.util.E;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.MaterialList;
 import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
 
 public class ActionCullDrops extends Action implements Listener
@@ -42,9 +43,10 @@ public class ActionCullDrops extends Action implements Listener
 		worthsx = new GList<Double>();
 	}
 	
+	@Override
 	public void act()
 	{
-		final int[] cpt = new int[] { 0, 0 };
+		final int[] cpt = new int[] {0, 0};
 		
 		for(World i : getActionController().getReact().getServer().getWorlds())
 		{
@@ -59,9 +61,10 @@ public class ActionCullDrops extends Action implements Listener
 			
 			new Task(0)
 			{
+				@Override
 				public void run()
 				{
-					int[] itx = new int[] { 0 };
+					int[] itx = new int[] {0};
 					while(it.hasNext() && itx[0] <= cpt[0])
 					{
 						cull(it.next());
@@ -83,6 +86,43 @@ public class ActionCullDrops extends Action implements Listener
 		}
 	}
 	
+	public void updateDrop(Item item)
+	{
+		int alive = item.getTicksLived();
+		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		int ticksLeft = max - alive;
+		int secondsLeft = ticksLeft / 20;
+		
+		if(ticksLeft < 1)
+		{
+			item.remove();
+			return;
+		}
+		
+		if(cc.getBoolean("visual.warn.enable-drop-warnings"))
+		{
+			if(ticksLeft < 20 * cc.getInt("visual.warn.time-threshold-seconds"))
+			{
+				String form = F.color(cc.getString("visual.warn.time-format").replaceAll("%time%", String.valueOf(secondsLeft)));
+				item.setCustomName(form);
+				item.setCustomNameVisible(true);
+				
+				if(secondsLeft > 0)
+				{
+					new TaskLater(20)
+					{
+						@Override
+						public void run()
+						{
+							updateDrop(item);
+						}
+					};
+				}
+			}
+		}
+	}
+	
+	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -101,11 +141,12 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public int cull(Chunk chunk)
 	{
+		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
 		GList<Item> drops = new GList<Item>();
 		
 		for(Entity i : chunk.getEntities())
 		{
-			if(i.getType().equals(EntityType.DROPPED_ITEM))
+			if(i.getType().equals(EntityType.DROPPED_ITEM) && i.getTicksLived() < max - (cc.getInt("culler.despawn-delay") * 15))
 			{
 				drops.add((Item) i);
 			}
@@ -116,12 +157,18 @@ public class ActionCullDrops extends Action implements Listener
 		
 		while(!drops.isEmpty() && drops.size() > Math.abs(cc.getInt("drops-per-chunk")))
 		{
-			E.r(drops.get(0));
+			mark(drops.get(0));
 			drops.remove(0);
 			ix++;
 		}
 		
 		return ix;
+	}
+	
+	public void mark(Item item)
+	{
+		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		item.setTicksLived(max - (cc.getInt("culler.despawn-delay") * 15));
 	}
 	
 	public GList<Item> sort(GList<Item> d)
@@ -155,6 +202,7 @@ public class ActionCullDrops extends Action implements Listener
 		return undefinedWorth;
 	}
 	
+	@Override
 	public void onReadConfig()
 	{
 		super.onReadConfig();
@@ -181,11 +229,15 @@ public class ActionCullDrops extends Action implements Listener
 		Collections.sort(worthsx);
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
 		
-		cc.set("drops-per-chunk", 40, "Max drops per chunk before react starts clipping drops.");
+		cc.set("visual.warn.enable-drop-warnings", true, "Show despawn warnings on items");
+		cc.set("visual.warn.time-threshold-seconds", 15, "Time in seconds to start counting down.");
+		cc.set("visual.warn.time-format", "&c\u26a0 &6&l%time%", "The countdown format");
+		cc.set("drops-per-chunk", 26, "Max drops per chunk before react starts clipping drops.");
 		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");
 		cc.set("worth.rubble", 0.1, "The worth of rubble. Keep this lower than more expensive stuff\nunless you want to remove expensive stuff first :P");
 		cc.set("worth.herbs", 0.2, "The worth of plants, seeds and stuff.");
@@ -199,7 +251,7 @@ public class ActionCullDrops extends Action implements Listener
 		cc.set("worth.expensive-tools-armor", 1.0, "The worth of expensive tools and armor");
 		cc.set("worth.other", 1.1, "The worth of Other things that cant be categorized.");
 		cc.set("worth.undefined", 1.2, "The worth of Undefined items in this config");
-		
+		cc.set("culler.despawn-delay", 12, "The delay in seconds to despawn an item.");
 		cc.set("define.rubble", new MaterialList(Material.DIRT, Material.GRASS, Material.COBBLESTONE, Material.COBBLE_WALL, Material.COBBLESTONE_STAIRS, Material.MOSSY_COBBLESTONE, Material.BEDROCK, Material.SANDSTONE, Material.SAND, Material.CLAY, Material.STAINED_CLAY, Material.HARD_CLAY, Material.STONE).getStrings());
 		cc.set("define.herbs", new MaterialList(Material.SEEDS, Material.SUGAR, Material.SUGAR_CANE, Material.SUGAR_CANE_BLOCK, Material.MELON_SEEDS, Material.PUMPKIN_SEEDS, Material.CROPS, Material.SAPLING, Material.VINE, Material.BROWN_MUSHROOM, Material.YELLOW_FLOWER, Material.INK_SACK, Material.RED_MUSHROOM, Material.HUGE_MUSHROOM_1, Material.HUGE_MUSHROOM_2, Material.CACTUS, Material.DEAD_BUSH, Material.LONG_GRASS, Material.LEAVES, Material.LEAVES_2).getStrings());
 		cc.set("define.mob-drops", new MaterialList(Material.SULPHUR, Material.EGG, Material.LEATHER, Material.RAW_BEEF, Material.RAW_CHICKEN, Material.RAW_FISH, Material.FEATHER, Material.PORK, Material.ROTTEN_FLESH).getStrings());

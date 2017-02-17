@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -26,7 +27,6 @@ import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.TaskLater;
-import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
 {
@@ -241,8 +241,15 @@ public class ActionCullEntities extends Action implements Listener
 	{
 		int w = 0;
 		
+		actionController.getActionCullDrops().cull(chunk);
+		
 		for(Entity i : chunk.getEntities())
 		{
+			if(i.getType().equals(EntityType.DROPPED_ITEM))
+			{
+				React.instance().getActionController().getActionCullDrops().updateDrop((Item) i);
+			}
+			
 			if(isCullable(i))
 			{
 				w++;
@@ -281,15 +288,7 @@ public class ActionCullEntities extends Action implements Listener
 		
 		for(EntityType i : EntityType.values())
 		{
-			if(!VersionBukkit.get().equals(VersionBukkit.V7))
-			{
-				if(i.equals(i.equals(EntityType.ARMOR_STAND)))
-				{
-					continue;
-				}
-			}
-			
-			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING))
+			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING) || i.equals(EntityType.ARMOR_STAND))
 			{
 				continue;
 			}

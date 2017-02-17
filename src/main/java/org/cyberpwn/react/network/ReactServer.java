@@ -82,7 +82,7 @@ public class ReactServer extends Thread
 				
 				if(cc.contains("react-remote.users." + request.getUsername() + ".enabled") && cc.getBoolean("react-remote.users." + request.getUsername() + ".enabled") && cc.contains("react-remote.users." + request.getUsername() + ".password") && cc.getString("react-remote.users." + request.getUsername() + ".password").equals(request.getPassword()))
 				{
-					handleCommand(request.getCommand(), response);
+					handleCommand(request.getCommand(), response, request.getUsername());
 					requests++;
 				}
 				
@@ -108,7 +108,7 @@ public class ReactServer extends Thread
 		}
 	}
 	
-	public void handleCommand(String command, final PacketResponse response)
+	public void handleCommand(String command, final PacketResponse response, String name)
 	{
 		if(command.equals(PacketRequestType.GET_SAMPLES.toString()))
 		{
@@ -154,14 +154,30 @@ public class ReactServer extends Thread
 				{
 					l("Received Remote command: " + cmd);
 					
-					new TaskLater(2)
+					if(cc.contains("react-remote.users." + name + ".permission.use-console"))
 					{
-						@Override
-						public void run()
+						if(cc.getBoolean("react-remote.users." + name + ".permission.use-console"))
 						{
-							Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+							new TaskLater(2)
+							{
+								@Override
+								public void run()
+								{
+									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+								}
+							};
 						}
-					};
+						
+						else
+						{
+							l("Permission denied for remote user: " + name + " to use command " + cmd);
+						}
+					}
+					
+					else
+					{
+						l("Permission denied for remote user: " + name + " to use command " + cmd);
+					}
 				}
 			});
 		}
@@ -187,8 +203,26 @@ public class ReactServer extends Thread
 								if(j.getName().equalsIgnoreCase(i))
 								{
 									l("Action Packet Received: " + j.getName());
-									j.manual(Bukkit.getServer().getConsoleSender());
-									return;
+									
+									if(cc.contains("react-remote.users." + name + ".permission.use-console"))
+									{
+										if(cc.getBoolean("react-remote.users." + name + ".permission.use-console"))
+										{
+											l("Action " + j.getName() + " Executed");
+											j.manual(Bukkit.getServer().getConsoleSender());
+											return;
+										}
+										
+										else
+										{
+											l("Permission denied for remote user: " + name + " to use action " + j.getName());
+										}
+									}
+									
+									else
+									{
+										l("Permission denied for remote user: " + name + " to use action " + j.getName());
+									}
 								}
 							}
 						}
