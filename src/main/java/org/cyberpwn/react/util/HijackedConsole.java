@@ -50,7 +50,7 @@ public class HijackedConsole extends Thread
 			
 			catch(InterruptedException e)
 			{
-				e.printStackTrace();
+				
 			}
 			
 			System.out.flush();

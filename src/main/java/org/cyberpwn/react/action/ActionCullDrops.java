@@ -89,7 +89,7 @@ public class ActionCullDrops extends Action implements Listener
 	public void updateDrop(Item item)
 	{
 		int alive = item.getTicksLived();
-		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		int max = dr();
 		int ticksLeft = max - alive;
 		int secondsLeft = ticksLeft / 20;
 		
@@ -141,7 +141,7 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public int cull(Chunk chunk)
 	{
-		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		int max = dr();
 		GList<Item> drops = new GList<Item>();
 		
 		for(Entity i : chunk.getEntities())
@@ -167,7 +167,7 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public void mark(Item item)
 	{
-		int max = Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		int max = dr();
 		item.setTicksLived(max - (cc.getInt("culler.despawn-delay") * 15));
 	}
 	
@@ -229,6 +229,16 @@ public class ActionCullDrops extends Action implements Listener
 		Collections.sort(worthsx);
 	}
 	
+	public int dr()
+	{
+		if(cc.getBoolean("despawn-rate.use-spigot-config"))
+		{
+			return Bukkit.spigot().getConfig().getInt("world-settings.default.item-despawn-rate");
+		}
+		
+		return cc.getInt("despawn-rate.alternate-rate");
+	}
+	
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
@@ -239,6 +249,8 @@ public class ActionCullDrops extends Action implements Listener
 		cc.set("visual.warn.time-format", "&c\u26a0 &6&l%time%", "The countdown format");
 		cc.set("drops-per-chunk", 26, "Max drops per chunk before react starts clipping drops.");
 		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");
+		cc.set("despawn-rate.use-spigot-config", true, "Use the spigot.yml file to find item-despawn rates");
+		cc.set("despawn-rate.alternate-rate", 1200, "Alternate despawn rate (ticks) if spigot config is disabled.");
 		cc.set("worth.rubble", 0.1, "The worth of rubble. Keep this lower than more expensive stuff\nunless you want to remove expensive stuff first :P");
 		cc.set("worth.herbs", 0.2, "The worth of plants, seeds and stuff.");
 		cc.set("worth.mob-drops", 0.3, "The worth of common drops from mobs.");

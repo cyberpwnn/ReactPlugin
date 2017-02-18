@@ -4,6 +4,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.HijackedConsole;
+import org.cyberpwn.react.util.TaskLater;
 
 public class ConsoleController extends Controller implements Configurable
 {
@@ -20,17 +21,28 @@ public class ConsoleController extends Controller implements Configurable
 	@Override
 	public void start()
 	{
-		hc = new HijackedConsole(cc);
-		HijackedConsole.hijacked = true;
-		s("Console hijack enabled");
-		hc.start();
+		React.instance().rsps();
+		
+		new TaskLater(20)
+		{
+			@Override
+			public void run()
+			{
+				hc = new HijackedConsole(cc);
+				HijackedConsole.hijacked = true;
+				s("Console hijack enabled");
+				hc.start();
+			}
+		};
 	}
 	
 	@Override
 	public void stop()
 	{
-		s("Console hijack disabled");
 		HijackedConsole.hijacked = false;
+		hc.interrupt();
+		s("Console hijack disabled");
+		React.instance().rsps();
 	}
 	
 	@Override

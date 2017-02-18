@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.cyberpwn.react.api.SpikeEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
@@ -17,11 +18,13 @@ public class SampleTicksPerSecond extends Sample
 	private GList<Double> samples;
 	private int tickThreshold;
 	private int sampleRadius;
+	private Average avg;
 	
 	public SampleTicksPerSecond(SampleController sampleController)
 	{
 		super(sampleController, "SampleTicksPerSecond", ValueType.DOUBLE, "TPS", "Ticks per second");
 		
+		avg = new Average(32);
 		lastInterval = sampleController.getTick();
 		minDelay = 1;
 		maxDelay = 1;
@@ -41,7 +44,7 @@ public class SampleTicksPerSecond extends Sample
 	public double percentUsed()
 	{
 		Double ms = getSampleController().getReact().getTimingsController().getMs();
-				
+		
 		if(ms != null)
 		{
 			return ms / 50.0;
@@ -50,6 +53,7 @@ public class SampleTicksPerSecond extends Sample
 		return -1;
 	}
 	
+	@Override
 	public void onTick()
 	{
 		if(timeSinceLastTick() < 40l)
@@ -86,6 +90,7 @@ public class SampleTicksPerSecond extends Sample
 		}
 		
 		value.setNumber(tps);
+		avg.put(tps);
 		lastInterval = sampleController.getTick();
 	}
 	
@@ -94,6 +99,7 @@ public class SampleTicksPerSecond extends Sample
 		sampleController.getReact().getServer().getPluginManager().callEvent(new SpikeEvent(new GTime(current), new GTime(since)));
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter(getMetricsValue() + " TPS")
@@ -106,16 +112,19 @@ public class SampleTicksPerSecond extends Sample
 		});
 	}
 	
+	@Override
 	public int getMetricsValue()
 	{
 		return (int) Math.round(getValue().getDouble());
 	}
 	
+	@Override
 	public void onStart()
 	{
 		value.setNumber(20);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		String k = "";
@@ -141,13 +150,20 @@ public class SampleTicksPerSecond extends Sample
 		}
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.GREEN;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_GREEN;
+	}
+	
+	public double getAverage()
+	{
+		return avg.getAverage();
 	}
 }

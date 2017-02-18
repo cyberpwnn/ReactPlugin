@@ -10,7 +10,7 @@ public class ReactData
 	
 	public ReactData()
 	{
-		this.samples = new GMap<String, Double>();
+		samples = new GMap<String, Double>();
 	}
 	
 	public void sample(React react)

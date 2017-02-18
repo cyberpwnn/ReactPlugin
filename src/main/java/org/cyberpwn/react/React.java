@@ -2,6 +2,7 @@ package org.cyberpwn.react;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -109,11 +110,12 @@ public class React extends JavaPlugin implements Configurable
 	private Metrics metrics;
 	private int saved;
 	private long start;
+	private PrintStream old;
 	
 	@Override
 	public void onEnable()
 	{
-		
+		old = System.out;
 		start = M.ms();
 		justUpdated = false;
 		super.startup();
@@ -128,6 +130,11 @@ public class React extends JavaPlugin implements Configurable
 			React.fail(e, L.MESSAGE_LOAD_FAIL);
 			doEnable();
 		}
+	}
+	
+	public void rsps()
+	{
+		System.setOut(old);
 	}
 	
 	public void doEnable()
