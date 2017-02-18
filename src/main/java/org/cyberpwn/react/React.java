@@ -17,7 +17,6 @@ import org.cyberpwn.react.controller.ConsoleController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
-import org.cyberpwn.react.controller.FailureController;
 import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
@@ -94,7 +93,6 @@ public class React extends JavaPlugin implements Configurable
 	private NetworkController networkController;
 	private UpdateController updateController;
 	private WorldController worldController;
-	private FailureController failureController;
 	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
@@ -127,7 +125,6 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(Exception e)
 		{
-			React.fail(e, L.MESSAGE_LOAD_FAIL);
 			doEnable();
 		}
 	}
@@ -162,7 +159,6 @@ public class React extends JavaPlugin implements Configurable
 		
 		configurationController = new ConfigurationController(this);
 		languageController = new LanguageController(this);
-		failureController = new FailureController(this);
 		dataController = new DataController(this);
 		sampleController = new SampleController(this);
 		playerController = new PlayerController(this);
@@ -284,7 +280,7 @@ public class React extends JavaPlugin implements Configurable
 			
 			catch(IOException e)
 			{
-				React.fail(e, L.MESSAGE_METRIC_FAIL);
+				
 			}
 		}
 		
@@ -309,7 +305,7 @@ public class React extends JavaPlugin implements Configurable
 					
 					catch(Exception e)
 					{
-						React.fail(e, "Controller failed to properly tick.");
+						
 					}
 				}
 			}
@@ -390,7 +386,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		catch(IOException e)
 		{
-			React.fail(e, L.MESSAGE_DUMP_FAIL);
+			
 		}
 	}
 	
@@ -654,19 +650,9 @@ public class React extends JavaPlugin implements Configurable
 		return networkController;
 	}
 	
-	public FailureController getFailureController()
-	{
-		return failureController;
-	}
-	
-	public static void fail(Exception e, String msg)
-	{
-		instance.getFailureController().fail(e, msg);
-	}
-	
 	public static void fail(Exception e)
 	{
-		instance.getFailureController().fail(e);
+		
 	}
 	
 	public PlayerController getPlayerController()
@@ -877,11 +863,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setWorldController(WorldController worldController)
 	{
 		this.worldController = worldController;
-	}
-	
-	public void setFailureController(FailureController failureController)
-	{
-		this.failureController = failureController;
 	}
 	
 	public static void setMKX(String mKX)

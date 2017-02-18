@@ -63,6 +63,7 @@ public class L
 	
 	public static String ACTION_GARBAGECOLLECTION = "This takes out the virtual trash (sometimes frees memory up). Warning this will freeze the server for 1-5 seconds. This is only used automatically if it is configured to do so.";
 	public static String ACTION_CULLDROPS = "Drops are determined by their worth within the configs. This will then determine weather react should cull 30 pieces of dirt, or 20 diamonds. Basically, friendly drop culling.";
+	public static String ACTION_STACKENTITIES = "Entities are stacked together to reduce overhead.";
 	public static String ACTION_CULLENTITIES = "Removes excess mobs from highly populated chunks. Additionally prevents spawning if the limit is reached.";
 	public static String ACTION_HEAVYCHUNK = "Teleports you close to the chunk with the most entities in it. If there are no heavy chunks, you may not be teleported or it may not be that laggy at all.";
 	public static String ACTION_INSTABILITYCAUSE = "If any sort of instability is detected, react begins to collect evidence and determine the right thing to do. ";

@@ -190,4 +190,9 @@ public class ActionController extends Controller
 	{
 		return actionHeavyChunk;
 	}
+	
+	public static boolean isEnabled()
+	{
+		return enabled;
+	}
 }

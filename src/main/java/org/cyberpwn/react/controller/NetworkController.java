@@ -21,8 +21,8 @@ public class NetworkController extends Controller
 {
 	public static String imeid;
 	private ReactServer server;
-	private final String uid = "%%__USER__%%";
-	private final String nonce = "%%__NONCE__%%";
+	public static String uid = "%%__USER__%%";
+	public static String nonce = "%%__NONCE__%%";
 	
 	public NetworkController(React react)
 	{
@@ -55,7 +55,6 @@ public class NetworkController extends Controller
 					
 					catch(IOException e)
 					{
-						React.fail(e, "Failed to bind to port.");
 						React.instance().getD().f("FAILED TO BIND TO PORT: " + cc.getInt("react-remote.port"));
 						React.instance().getD().f("React Server failed to bind to the target address");
 						React.instance().getD().w("1. React Failed to shut down the server previously");

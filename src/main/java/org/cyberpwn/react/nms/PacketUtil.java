@@ -2,7 +2,6 @@ package org.cyberpwn.react.nms;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.cyberpwn.react.React;
 
 public class PacketUtil
 {
@@ -54,7 +53,7 @@ public class PacketUtil
 		
 		catch(Exception e)
 		{
-			React.fail(e, "Failed to send title packet to player:" + player.getName() + "stay: " + stay + " in:" + in + " out:" + out + " >> " + title + " <> " + subTitle);
+			
 		}
 	}
 	
@@ -72,7 +71,7 @@ public class PacketUtil
 		
 		catch(Exception e)
 		{
-			React.fail(e, "Failed to send cleartitle packet to player:" + player.getName());
+			
 		}
 	}
 	
@@ -90,7 +89,7 @@ public class PacketUtil
 		
 		catch(Exception e)
 		{
-			React.fail(e, "Failed to send actionbar packet to player:" + player.getName() + " msg:" + message);
+			
 		}
 	}
 }

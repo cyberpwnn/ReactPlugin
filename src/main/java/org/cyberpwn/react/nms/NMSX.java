@@ -17,6 +17,62 @@ public class NMSX
 	private static boolean useOldMethods;
 	public static String nmsver;
 	
+	/**
+	 * Get the bukkit version
+	 * 
+	 * @return the package sub for the nms version
+	 */
+	public static String getBukkitVersion()
+	{
+		return Bukkit.getServer().getClass().getPackage().getName().substring(23);
+	}
+	
+	/**
+	 * Get the base nms package
+	 * 
+	 * @return the nms package
+	 */
+	public static String nmsPackage()
+	{
+		return "net.minecraft.server." + getBukkitVersion();
+	}
+	
+	/**
+	 * Get the crafting package
+	 * 
+	 * @return the entire package
+	 */
+	public static String craftPackage()
+	{
+		return "org.bukkit.craftbukkit." + getBukkitVersion();
+	}
+	
+	/**
+	 * Pick up something
+	 * 
+	 * @param entity
+	 *            the entity
+	 * @param pick
+	 *            the item
+	 */
+	public static void showPickup(Player player, Entity entity, Entity pick)
+	{
+		try
+		{
+			Class<?> craftPlayer = Class.forName(craftPackage() + ".entity.CraftPlayer");
+			Class<?> packetGameStateChange = Class.forName(nmsPackage() + ".PacketPlayOutCollect");
+			Object handle = craftPlayer.getMethod("getHandle").invoke(player);
+			Object packet = packetGameStateChange.getConstructor(int.class, int.class).newInstance(pick.getEntityId(), entity.getEntityId());
+			Object playerConnection = handle.getClass().getDeclaredField("playerConnection").get(handle);
+			playerConnection.getClass().getMethod("sendPacket", Class.forName(nmsPackage() + ".Packet")).invoke(playerConnection, packet);
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
+	}
+	
 	public static void sendPacket(Player player, Object packet)
 	{
 		try

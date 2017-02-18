@@ -81,6 +81,12 @@ public class UpdateController extends Controller implements Configurable
 						@Override
 						public void run()
 						{
+							if(!cc.getBoolean("update-checking.enable"))
+							{
+								cancel();
+								return;
+							}
+							
 							if(failed)
 							{
 								cancel();
@@ -120,7 +126,6 @@ public class UpdateController extends Controller implements Configurable
 							catch(Exception e)
 							{
 								failed = true;
-								React.fail(e, "Failed to check for updates. You must reload react to start the checker again.");
 							}
 						}
 					};
@@ -405,6 +410,5 @@ public class UpdateController extends Controller implements Configurable
 				}
 			}
 		});
-		
 	}
 }

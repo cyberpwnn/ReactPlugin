@@ -1516,14 +1516,22 @@ public class CommandController extends Controller implements CommandExecutor
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e)
 	{
-		if(e.getItemDrop().getItemStack() != null && e.getItemDrop().getItemStack().getType().equals(Material.WRITTEN_BOOK) && e.getItemDrop().getItemStack().hasItemMeta())
+		try
 		{
-			BookMeta bm = (BookMeta) e.getItemDrop().getItemStack().getItemMeta();
-			
-			if(bm.getAuthor().equals(Info.NAME))
+			if(e.getItemDrop().getItemStack() != null && e.getItemDrop().getItemStack().getType().equals(Material.WRITTEN_BOOK) && e.getItemDrop().getItemStack().hasItemMeta())
 			{
-				E.r(e.getItemDrop());
+				BookMeta bm = (BookMeta) e.getItemDrop().getItemStack().getItemMeta();
+				
+				if(bm.getAuthor().equals(Info.NAME))
+				{
+					E.r(e.getItemDrop());
+				}
 			}
+		}
+		
+		catch(Exception ee)
+		{
+			
 		}
 	}
 	

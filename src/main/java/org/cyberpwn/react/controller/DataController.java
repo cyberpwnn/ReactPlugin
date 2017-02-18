@@ -100,19 +100,6 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
-			File file = null;
-			
-			if(category == null)
-			{
-				file = new File(dataFolder, c.getCodeName() + ".yml");
-			}
-			
-			else
-			{
-				file = new File(new File(dataFolder, category), c.getCodeName() + ".yml");
-			}
-			
-			React.fail(e, "Failed to save file:" + file.getAbsolutePath());
 			f("============ DATA FAILURE ============");
 			f("A file has failed to save it's data to");
 			f("your server. If this persists, please ");
@@ -161,19 +148,6 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
-			File file = null;
-			
-			if(category == null)
-			{
-				file = new File(dataFolder, c.getCodeName() + ".yml");
-			}
-			
-			else
-			{
-				file = new File(new File(dataFolder, category), c.getCodeName() + ".yml");
-			}
-			
-			React.fail(e, "Failed to load file:" + file.getAbsolutePath());
 			f("============ DATA FAILURE ============");
 			f("A file has failed to load it's data to");
 			f("your server. If this persists, please ");
@@ -211,7 +185,6 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
-			React.fail(e, "Failed to load file:" + file.getAbsolutePath());
 			f("============ DATA FAILURE ============");
 			f("A file has failed to load it's data to");
 			f("your server. If this persists, please ");

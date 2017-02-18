@@ -1,7 +1,6 @@
 package org.cyberpwn.react.util;
 
 import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -21,7 +20,7 @@ public class Dump implements Configurable
 	public Dump(React pl)
 	{
 		this.pl = pl;
-		this.cc = new ClusterConfig();
+		cc = new ClusterConfig();
 	}
 	
 	@Override
@@ -32,13 +31,6 @@ public class Dump implements Configurable
 		cc.set("react.ai.digest.md5sha256sha512", pl.getNetworkController().getImeid());
 		
 		cc.set("machine.processor.cores", Runtime.getRuntime().availableProcessors());
-		
-		for(Failure i : React.instance().getFailureController().getFailures())
-		{
-			cc.set("react.failures.all." + "time-" + i.getTime() + ".message", i.getMessage());
-			cc.set("react.failures.all." + "time-" + i.getTime() + ".type", i.getType());
-			cc.set("react.failures.all." + "time-" + i.getTime() + ".trace", i.getStackTraceStrings());
-		}
 		
 		for(Samplable i : pl.getSampleController().getSamples().k())
 		{
