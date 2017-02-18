@@ -18,6 +18,7 @@ import org.cyberpwn.react.network.Fetcher;
 import org.cyberpwn.react.util.Download;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PluginUtil;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
@@ -270,6 +271,8 @@ public class UpdateController extends Controller implements Configurable
 								
 								return;
 							}
+							
+							N.t("Update Downloaded: " + fc.getString("package.version"), "version-downloaded", fc.getString("package.version"));
 							
 							broadcast(String.format(Info.HRN, "Updated"));
 							broadcast(Info.TAG + ChatColor.LIGHT_PURPLE + "Version " + fc.getString("package.version"));

@@ -52,6 +52,7 @@ import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.ReactCommand;
 import org.cyberpwn.react.util.Verbose;
@@ -1386,6 +1387,7 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 				
 				fireCommand(sender, sub, args);
+				N.t("Command Executed /react " + new GList<String>(args).toString(" "), "commander", sender.getName(), "subcommand", sub, "args", new GList<String>(args).toString(", "));
 			}
 			
 			return true;

@@ -4,14 +4,14 @@ public abstract class ASYNC
 {
 	public ASYNC()
 	{
-		FAU.async(new Runnable()
+		new Thread()
 		{
 			@Override
 			public void run()
 			{
 				async();
 			}
-		});
+		}.start();
 	}
 	
 	public abstract void async();

@@ -36,6 +36,7 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.ScreenMonitor;
 import org.cyberpwn.react.util.Timer;
@@ -338,6 +339,8 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void startMapping(Player p, boolean disp)
 	{
+		N.t("Mapping Started", "player", p.getName());
+		
 		if(!p.hasPermission(Info.PERM_MONITOR))
 		{
 			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
@@ -415,6 +418,8 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void stopMapping(Player p, boolean disp)
 	{
+		N.t("Mapping Stopped", "player", p.getName());
+		
 		mappers.remove(p);
 		Verbose.x("monitor", p.getName() + ": Mapping disabled");
 		if(disp)
@@ -491,6 +496,8 @@ public class MonitorController extends Controller implements Configurable
 	{
 		if(locks.containsKey(p))
 		{
+			N.t("Monitor Unlocked", "player", p.getName());
+			
 			locks.remove(p);
 			pc.gpd(p).setLockedTab(false);
 			p.sendMessage(Info.TAG + ChatColor.GREEN + "Monitor Unlocked. Use shift + scroll to change tabs.");
@@ -498,6 +505,8 @@ public class MonitorController extends Controller implements Configurable
 		
 		else
 		{
+			N.t("Monitor Locked", "player", p.getName());
+			
 			locks.put(p, monitors.get(p).getB());
 			pc.gpd(p).setLockedTab(true);
 			pc.gpd(p).setMonitoringTab(monitors.get(p).getB());
@@ -507,6 +516,8 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void stopMonitoring(Player p)
 	{
+		N.t("Monitoring Stopped", "player", p.getName());
+		
 		monitors.remove(p);
 		p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_MONITORING_DISABLED);
 		PacketUtil.sendActionBar(p, "  ");
@@ -517,6 +528,8 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void startMonitoring(Player p)
 	{
+		N.t("Monitoring Started", "player", p.getName());
+		
 		if(!p.hasPermission(Info.PERM_MONITOR))
 		{
 			p.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);

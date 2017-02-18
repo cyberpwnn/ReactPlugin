@@ -13,6 +13,7 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.N;
 
 public class Action implements Actionable, Configurable
 {
@@ -55,6 +56,7 @@ public class Action implements Actionable, Configurable
 		
 		if(enabled && !React.isMef())
 		{
+			N.t("Fired Action " + getName());
 			act();
 		}
 	}
@@ -76,6 +78,7 @@ public class Action implements Actionable, Configurable
 			return;
 		}
 		
+		N.t("Manual Action " + getName(), "name", p.getName());
 		p.sendMessage(Info.TAG + ChatColor.YELLOW + L.MESSAGE_MANUAL + getName() + L.MESSAGE_MANUAL_STARTED);
 	}
 	

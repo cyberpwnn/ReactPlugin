@@ -30,6 +30,7 @@ import org.cyberpwn.react.util.GStub;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.MathUtils;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.Verbose;
 
 public class ActionInstabilityCause extends Action
@@ -111,6 +112,8 @@ public class ActionInstabilityCause extends Action
 						{
 							continue;
 						}
+						
+						N.t("Instability Fixed " + i.getName());
 						
 						j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
 					}
@@ -378,6 +381,8 @@ public class ActionInstabilityCause extends Action
 						{
 							continue;
 						}
+						
+						N.t("Instability Detected " + i.getName());
 						
 						if(i.equals(InstabilityCause.REDSTONE))
 						{
