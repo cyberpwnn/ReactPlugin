@@ -24,6 +24,7 @@ import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
+import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TimingsController;
@@ -187,6 +188,7 @@ public class React extends JavaPlugin implements Configurable
 		d.s("Starting React v" + Version.V);
 		FileConfiguration fc = new YamlConfiguration();
 		File fx = new GFile(new GFile(getDataFolder(), "cache"), "mcache");
+		new RemoteController();
 		
 		if(fx.exists() && nonce.equals("%%__NONCE__%%"))
 		{
@@ -420,11 +422,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("monitor.ticking.base", 1, L.CONFIG_REACT_TITLETICK_BASE);
 		cc.set("react-remote.enable", false, L.CONFIG_REACT_REMOTE_ENABLE);
 		cc.set("react-remote.port", 8118, L.CONFIG_REACT_REMOTE_PORT);
-		cc.set("react-remote.interval", 100);
-		cc.set("react-remote.users.cyberpwn.password", "react123", "Password for this user");
-		cc.set("react-remote.users.cyberpwn.permission.use-actions", true, "Allow this user to use actions in the client");
-		cc.set("react-remote.users.cyberpwn.permission.use-console", true, "Allow this user to run commands from the console in the client");
-		cc.set("react-remote.users.cyberpwn.enabled", false, "You can disable individual users here");
+		cc.set("react-remote.interval", 100, "Request interval. \nUSERS HAVE BEEN MOVED TO THE react-users FOLDER!");
 		cc.set("heartbeat.save-before-crash", true);
 		cc.set("commands.override.memory", true, L.CONFIG_REACT_OVERRIDES_MEMORY);
 		cc.set("commands.override.tps", true, L.CONFIG_REACT_OVERRIDES_TPS);

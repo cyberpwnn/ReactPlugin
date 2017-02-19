@@ -15,6 +15,7 @@ import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.ReactRunnable;
 
 public class NetworkController extends Controller
@@ -40,7 +41,6 @@ public class NetworkController extends Controller
 			public void run()
 			{
 				Base64.AU();
-				
 				ClusterConfig cc = React.instance().getConfiguration();
 				
 				if(cc.getBoolean("react-remote.enable"))
@@ -49,12 +49,15 @@ public class NetworkController extends Controller
 					
 					try
 					{
-						server = new ReactServer(port, cc);
+						N.t("React Server Starting");
+						server = new ReactServer(port);
 						server.start();
+						N.t("React Server Started");
 					}
 					
 					catch(IOException e)
 					{
+						N.t("React Server Failed to Bind");
 						React.instance().getD().f("FAILED TO BIND TO PORT: " + cc.getInt("react-remote.port"));
 						React.instance().getD().f("React Server failed to bind to the target address");
 						React.instance().getD().w("1. React Failed to shut down the server previously");

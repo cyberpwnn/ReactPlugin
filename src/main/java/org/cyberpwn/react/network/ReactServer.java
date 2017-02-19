@@ -6,13 +6,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
-import org.cyberpwn.react.cluster.ClusterConfig;
+import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.json.JSONObject;
+import org.cyberpwn.react.server.ReactUser;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HijackedConsole;
+import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.ReactRunnable;
 import org.cyberpwn.react.util.TaskLater;
 
@@ -24,18 +27,19 @@ public class ReactServer extends Thread
 	
 	private boolean running;
 	private ServerSocket serverSocket;
-	private ClusterConfig cc;
 	private GList<String> actions;
+	private RemoteController rc;
+	private long ms;
 	
-	public ReactServer(int port, ClusterConfig config) throws IOException
+	public ReactServer(int port) throws IOException
 	{
 		React.instance().getD().info("Starting React Server @port/" + port);
 		reactData = new ReactData();
-		cc = config;
 		runnables = new GList<ReactRunnable>();
 		serverSocket = new ServerSocket(port);
 		serverSocket.setSoTimeout(500);
 		actions = new GList<String>();
+		rc = new RemoteController();
 		
 		for(Actionable i : React.instance().getActionController().getActions().k())
 		{
@@ -51,6 +55,8 @@ public class ReactServer extends Thread
 	@Override
 	public void run()
 	{
+		ms = M.ms();
+		
 		while(running)
 		{
 			if(Thread.interrupted())
@@ -79,10 +85,11 @@ public class ReactServer extends Thread
 				
 				PacketRequest request = new PacketRequest(new JSONObject(i.readUTF()));
 				PacketResponse response = new PacketResponse();
+				ReactUser u = rc.auth(request.getUsername(), request.getPassword());
 				
-				if(cc.contains("react-remote.users." + request.getUsername() + ".enabled") && cc.getBoolean("react-remote.users." + request.getUsername() + ".enabled") && cc.contains("react-remote.users." + request.getUsername() + ".password") && cc.getString("react-remote.users." + request.getUsername() + ".password").equals(request.getPassword()))
+				if(u != null)
 				{
-					handleCommand(request.getCommand(), response, request.getUsername());
+					handleCommand(request.getCommand(), response, request.getUsername(), u);
 					requests++;
 				}
 				
@@ -108,7 +115,7 @@ public class ReactServer extends Thread
 		}
 	}
 	
-	public void handleCommand(String command, final PacketResponse response, String name)
+	public void handleCommand(String command, final PacketResponse response, String name, ReactUser u)
 	{
 		if(command.equals(PacketRequestType.GET_SAMPLES.toString()))
 		{
@@ -119,13 +126,16 @@ public class ReactServer extends Thread
 				response.put(i, reactData.getSamples().get(i));
 			}
 			
+			response.put("memory allocated exact (MB)", (double) (Runtime.getRuntime().totalMemory() / 1024.0 / 1024.0));
+			response.put("memory free exact (MB)", (double) (Runtime.getRuntime().freeMemory() / 1024.0 / 1024.0));
+			response.put("requests per second", (double) (requests / (1 + (M.ms() - ms) / 1000)));
 			response.put("memory-max", Runtime.getRuntime().maxMemory() / 1024 / 1024);
 			response.put("processor-cores", Runtime.getRuntime().availableProcessors());
 			
 			GList<String> console = HijackedConsole.out.copy();
 			String data = console.toString("\n");
 			
-			response.put("console-s", data);
+			response.put("console-s", u.canViewConsole() ? data : StringUtils.repeat("\n", 40) + "Sorry! You do not have permission to view the console!\n\n=== IDENTITY ===\n" + u.toString());
 		}
 		
 		else if(command.equals(PacketRequestType.GET_ACTIONS.toString()))
@@ -154,24 +164,16 @@ public class ReactServer extends Thread
 				{
 					l("Received Remote command: " + cmd);
 					
-					if(cc.contains("react-remote.users." + name + ".permission.use-console"))
+					if(u.canUseConsole())
 					{
-						if(cc.getBoolean("react-remote.users." + name + ".permission.use-console"))
+						new TaskLater(2)
 						{
-							new TaskLater(2)
+							@Override
+							public void run()
 							{
-								@Override
-								public void run()
-								{
-									Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
-								}
-							};
-						}
-						
-						else
-						{
-							l("Permission denied for remote user: " + name + " to use command " + cmd);
-						}
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+							}
+						};
 					}
 					
 					else
@@ -204,19 +206,11 @@ public class ReactServer extends Thread
 								{
 									l("Action Packet Received: " + j.getName());
 									
-									if(cc.contains("react-remote.users." + name + ".permission.use-console"))
+									if(u.canUseActions())
 									{
-										if(cc.getBoolean("react-remote.users." + name + ".permission.use-console"))
-										{
-											l("Action " + j.getName() + " Executed");
-											j.manual(Bukkit.getServer().getConsoleSender());
-											return;
-										}
-										
-										else
-										{
-											l("Permission denied for remote user: " + name + " to use action " + j.getName());
-										}
+										l("Action " + j.getName() + " Executed");
+										j.manual(Bukkit.getServer().getConsoleSender());
+										return;
 									}
 									
 									else

@@ -549,4 +549,14 @@ public class DataController extends Controller
 	{
 		TimingsController.chain();
 	}
+	
+	public void cleanLoad(File file, Configurable reactUser)
+	{
+		ClusterConfig cc = React.instance().getConfigurationController().getConfiguration().copy();
+		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-default-comments", false);
+		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-comments", false);
+		load(file, reactUser);
+		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-default-comments", cc.getBoolean("configuration.enhancements.add-default-comments"));
+		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-comments", cc.getBoolean("configuration.enhancements.add-comments"));
+	}
 }

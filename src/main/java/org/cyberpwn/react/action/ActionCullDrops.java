@@ -11,7 +11,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemMergeEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -41,6 +43,7 @@ public class ActionCullDrops extends Action implements Listener
 		undefinedWorth = 100.0;
 		worths = new GMap<Double, String>();
 		worthsx = new GList<Double>();
+		React.instance().register(this);
 	}
 	
 	@Override
@@ -169,6 +172,20 @@ public class ActionCullDrops extends Action implements Listener
 	{
 		int max = dr();
 		item.setTicksLived(max - (cc.getInt("culler.despawn-delay") * 15));
+	}
+	
+	@EventHandler
+	public void on(ItemMergeEvent e)
+	{
+		if(e.getEntity().getTicksLived() >= dr() - (cc.getInt("culler.despawn-delay") * 15))
+		{
+			e.setCancelled(true);
+		}
+		
+		if(e.getTarget().getTicksLived() >= dr() - (cc.getInt("culler.despawn-delay") * 15))
+		{
+			e.setCancelled(true);
+		}
 	}
 	
 	public GList<Item> sort(GList<Item> d)
