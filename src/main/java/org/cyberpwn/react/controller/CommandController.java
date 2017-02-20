@@ -56,7 +56,10 @@ import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PlayerData;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactCommand;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
 
 public class CommandController extends Controller implements CommandExecutor
@@ -278,11 +281,6 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				CommandSender sender = getSender();
 				React.instance().getUpdateController().checkVersion(sender);
-				
-				for(ChatColor i : ChatColor.values())
-				{
-					s(i + "Using " + i.name());
-				}
 			}
 		}, L.COMMAND_VERSION, "version", "v"));
 		
@@ -788,6 +786,177 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_MAP, "map", "graph"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@SuppressWarnings("deprecation")
+			@Override
+			public void run()
+			{
+				CommandSender sender = getSender();
+				
+				GMap<P, GMap<String, Integer>> m = new GMap<P, GMap<String, Integer>>();
+				sender.sendMessage(ChatColor.RED + "One Moment Please...");
+				
+				new TaskLater(1)
+				{
+					@Override
+					public void run()
+					{
+						for(P i : React.instance().getTaskManager().topDown().reverse())
+						{
+							if(React.instance().getTaskManager().getQueue().containsKey(i))
+							{
+								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
+								{
+									continue;
+								}
+								
+								GMap<String, Integer> gm = new GMap<String, Integer>();
+								
+								for(Q j : React.instance().getTaskManager().getQueue().get(i))
+								{
+									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
+									{
+										gm.put(ChatColor.GRAY + j.getName(), 0);
+									}
+									
+									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
+								}
+								
+								if(!m.containsKey(i))
+								{
+									m.put(i, new GMap<String, Integer>());
+								}
+								
+								for(String j : gm.k())
+								{
+									if(!m.get(i).containsKey(j))
+									{
+										m.get(i).put(j, 0);
+									}
+									
+									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
+								}
+							}
+						}
+					}
+				};
+				
+				new TaskLater(21)
+				{
+					@Override
+					public void run()
+					{
+						for(P i : React.instance().getTaskManager().topDown().reverse())
+						{
+							if(React.instance().getTaskManager().getQueue().containsKey(i))
+							{
+								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
+								{
+									continue;
+								}
+								
+								GMap<String, Integer> gm = new GMap<String, Integer>();
+								
+								for(Q j : React.instance().getTaskManager().getQueue().get(i))
+								{
+									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
+									{
+										gm.put(ChatColor.GRAY + j.getName(), 0);
+									}
+									
+									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
+								}
+								
+								if(!m.containsKey(i))
+								{
+									m.put(i, new GMap<String, Integer>());
+								}
+								
+								for(String j : gm.k())
+								{
+									if(!m.get(i).containsKey(j))
+									{
+										m.get(i).put(j, 0);
+									}
+									
+									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
+								}
+							}
+						}
+					}
+				};
+				
+				new TaskLater(43)
+				{
+					@Override
+					public void run()
+					{
+						for(P i : React.instance().getTaskManager().topDown().reverse())
+						{
+							if(React.instance().getTaskManager().getQueue().containsKey(i))
+							{
+								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
+								{
+									continue;
+								}
+								
+								GMap<String, Integer> gm = new GMap<String, Integer>();
+								
+								for(Q j : React.instance().getTaskManager().getQueue().get(i))
+								{
+									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
+									{
+										gm.put(ChatColor.GRAY + j.getName(), 0);
+									}
+									
+									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
+								}
+								
+								if(!m.containsKey(i))
+								{
+									m.put(i, new GMap<String, Integer>());
+								}
+								
+								for(String j : gm.k())
+								{
+									if(!m.get(i).containsKey(j))
+									{
+										m.get(i).put(j, 0);
+									}
+									
+									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
+								}
+							}
+						}
+						
+						for(P i : React.instance().getTaskManager().topDown().reverse())
+						{
+							if(m.containsKey(i))
+							{
+								sender.sendMessage(String.format(Info.HRN, StringUtils.capitalise(i.toString().toLowerCase() + "Priority")));
+								
+								for(String j : m.get(i).k())
+								{
+									sender.sendMessage(ChatColor.WHITE + "" + m.get(i).get(j) + "x " + j);
+								}
+							}
+						}
+						
+						sender.sendMessage(String.format(Info.HRN, "Task Manager"));
+						sender.sendMessage(ChatColor.GREEN + "Usage: " + F.f(React.instance().getTaskManager().getUsage(), 4) + "ms (" + F.pc(React.instance().getTaskManager().getUsagePercent(), 0) + ")");
+						
+						if(React.instance().getTaskManager().isBoosting())
+						{
+							sender.sendMessage(ChatColor.RED + "Task Boost Active");
+						}
+						
+						sender.sendMessage(Info.HR);
+					}
+				};
+			}
+		}, L.COMMAND_MAP, "core", "task", "tm"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1406,7 +1575,15 @@ public class CommandController extends Controller implements CommandExecutor
 					
 				}
 				
-				fireCommand(sender, sub, args);
+				new Q(P.HIGHEST, "Command", false)
+				{
+					@Override
+					public void run()
+					{
+						fireCommand(sender, sub, args);
+					}
+				};
+				
 				N.t("Command Executed /react " + new GList<String>(args).toString(" "), "commander", sender.getName(), "subcommand", sub, "args", new GList<String>(args).toString(", "));
 			}
 			

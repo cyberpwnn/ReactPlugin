@@ -137,7 +137,6 @@ public class MonitorController extends Controller implements Configurable
 			Timer t = new Timer();
 			t.start();
 			dispatch();
-			t.stop();
 			
 			if(getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
 			{
@@ -148,6 +147,8 @@ public class MonitorController extends Controller implements Configurable
 			{
 				delay = getReact().getConfiguration().getInt("monitor.ticking.base");
 			}
+			
+			t.stop();
 		}
 		
 		if(dTick)
@@ -546,20 +547,15 @@ public class MonitorController extends Controller implements Configurable
 		
 		pc.gpd(p).setMonitoring(true);
 		cc.set("monitors", cc.getStringList("monitors").qadd(p.getUniqueId().toString()).removeDuplicates());
-		monitors.put(p, new GBiset<Integer, Integer>(p.getInventory().getHeldItemSlot(), pc.gpd(p).getMonitoringTab()));
 		
-		if(!pc.exists(p))
-		{
-			Title t = new Title("", ChatColor.AQUA + "" + ChatColor.BOLD + "<SHIFT> + Scroll Your Mouse", 20, 20, 30);
-			t.send(p);
-		}
+		monitors.put(p, new GBiset<Integer, Integer>(p.getInventory().getHeldItemSlot(), pc.gpd(p).getMonitoringTab()));
 		
 		if(pc.gpd(p).isLockedTab())
 		{
 			locks.put(p, pc.gpd(p).getMonitoringTab());
 		}
 		
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MONITORING_ENABLED);
+		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MONITORING_ENABLED + ChatColor.DARK_GRAY + " Hold <SHIFT> + Scroll Mouse");
 	}
 	
 	public void toggleMonitoring(Player p)
@@ -655,6 +651,8 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 		}
+		
+		monitors.remove(e.getPlayer());
 	}
 	
 	@EventHandler

@@ -1,7 +1,6 @@
 package org.cyberpwn.react;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.bukkit.Bukkit;
@@ -29,9 +28,18 @@ import org.cyberpwn.react.controller.PluginWeightController;
 import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.ScoreboardController;
+import org.cyberpwn.react.controller.TaskManager;
 import org.cyberpwn.react.controller.TimingsController;
 import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
+import org.cyberpwn.react.file.FileHack;
+import org.cyberpwn.react.file.ICopy;
+import org.cyberpwn.react.file.IDeflate;
+import org.cyberpwn.react.file.IDelete;
+import org.cyberpwn.react.file.IDirectory;
+import org.cyberpwn.react.file.IEncrypt;
+import org.cyberpwn.react.file.IInflate;
+import org.cyberpwn.react.file.IModify;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
@@ -42,7 +50,6 @@ import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
-import org.cyberpwn.react.util.FU;
 import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HijackedConsole;
@@ -53,6 +60,8 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
@@ -104,6 +113,7 @@ public class React extends JavaPlugin implements Configurable
 	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
+	private TaskManager taskManager;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -180,11 +190,14 @@ public class React extends JavaPlugin implements Configurable
 		eventListenerController = new EventListenerController(this);
 		lagMapController = new LagMapController(this);
 		consoleController = new ConsoleController(this);
+		taskManager = new TaskManager(this);
+		dataController.load((String) null, taskManager);
 		dataController.load((String) null, configurationController);
 		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
+		
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -301,18 +314,24 @@ public class React extends JavaPlugin implements Configurable
 			@Override
 			public void run()
 			{
-				for(Controllable i : controllers)
+				taskManager.tick();
+				
+				new Q(P.HIGHEST, "Controller", false)
 				{
-					try
+					@Override
+					public void run()
 					{
-						i.tick();
+						for(Controllable i : controllers)
+						{
+							if(i instanceof TaskManager)
+							{
+								continue;
+							}
+							
+							i.tick();
+						}
 					}
-					
-					catch(Exception e)
-					{
-						
-					}
-				}
+				};
 			}
 		};
 		
@@ -993,52 +1012,44 @@ public class React extends JavaPlugin implements Configurable
 	
 	public void compile() throws IOException, InvalidConfigurationException
 	{
-		d.s("========================================");
+		FileHack h = new FileHack();
+		File roo = new File(getDataFolder().getParentFile(), "React.jar");
+		File wor = new File(getDataFolder(), "work");
+		File pat = new File(wor, "patch");
+		File dex = new File(wor, "React.jar.dex");
+		File rex = new File(wor, "React.jar.rex");
+		File paa = new File(wor, "React.jar.pat");
+		File rel = new File("C:/Users/cyberpwn/Documents/development/release/React/React-" + Version.V + ".jar");
+		File mod = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/package.yml");
+		File pak = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/pack/React.jar");
 		
-		File jar = new File(getDataFolder().getParentFile(), "React.jar");
-		File out = new File(getDataFolder(), "output");
-		File oel = new File(out, "release");
-		File enc = new File(out, "React.jar.dex");
-		File rel = new File(oel, "React.jar.kex");
-		File faa = new File("C:/Users/cyberpwn/Documents/development/release/React/React-" + Version.V + ".jar");
-		File fab = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/pack/React.jar");
-		File con = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/package.yml");
-		String rootVersion = "package.version";
-		String rootCode = "package.version-code";
-		String rootDescription = "package.description";
+		h.queue(new IDirectory(h, pat));
+		h.queue(new ICopy(h, roo, dex));
+		h.queue(new ICopy(h, roo, rex));
+		h.queue(new IDeflate(h, dex, pat));
+		h.queue(new IInflate(h, pat, paa));
+		h.queue(new IModify(h, mod, "package.version", Version.V));
+		h.queue(new IModify(h, mod, "package.version-code", Version.C));
+		h.queue(new IModify(h, mod, "package.description", Version.D));
+		h.queue(new ICopy(h, rex, rel));
+		h.queue(new IEncrypt(h, dex, pak));
+		h.queue(new IDelete(h, wor));
 		
-		d.w("Directory: " + ChatColor.RED + out);
-		out.mkdirs();
-		d.w("Directory: " + ChatColor.RED + oel);
-		oel.mkdirs();
-		d.w("Copy: " + ChatColor.RED + jar + ChatColor.YELLOW + " -> " + ChatColor.RED + enc);
-		FU.copyFile(jar, enc);
-		d.w("Copy: " + ChatColor.RED + jar + ChatColor.YELLOW + " -> " + ChatColor.RED + rel);
-		FU.copyFile(jar, rel);
-		d.w("Encrypt: " + ChatColor.RED + enc + ChatColor.YELLOW + " -> " + ChatColor.RED + fab);
-		FM.create(enc, fab);
-		d.w("Copy: " + ChatColor.RED + rel + ChatColor.YELLOW + " -> " + ChatColor.RED + faa);
-		FU.copyFile(rel, faa);
-		ymod(con, rootVersion, Version.V);
-		ymod(con, rootCode, Version.C);
-		ymod(con, rootDescription, Version.D);
-		d.w("Delete: " + ChatColor.RED + enc);
-		enc.delete();
-		d.w("Delete: " + ChatColor.RED + rel);
-		rel.delete();
-		d.w("Delete: " + ChatColor.RED + oel);
-		oel.delete();
-		d.w("Delete: " + ChatColor.RED + out);
-		out.delete();
-		d.s("========================================");
+		h.execute();
 	}
 	
-	public void ymod(File f, String root, Object d) throws FileNotFoundException, IOException, InvalidConfigurationException
+	public ConsoleController getConsoleController()
 	{
-		this.d.w("YMod: " + ChatColor.RED + f + ChatColor.YELLOW + " <-> " + ChatColor.RED + root + ChatColor.YELLOW + " -> " + ChatColor.RED + d.toString());
-		FileConfiguration fc = new YamlConfiguration();
-		fc.load(f);
-		fc.set(root, d);
-		fc.save(f);
+		return consoleController;
+	}
+	
+	public TaskManager getTaskManager()
+	{
+		return taskManager;
+	}
+	
+	public PrintStream getOld()
+	{
+		return old;
 	}
 }

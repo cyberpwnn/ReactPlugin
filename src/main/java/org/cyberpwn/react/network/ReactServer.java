@@ -30,9 +30,13 @@ public class ReactServer extends Thread
 	private GList<String> actions;
 	private RemoteController rc;
 	private long ms;
+	public static int size;
+	public static double perc;
 	
 	public ReactServer(int port) throws IOException
 	{
+		size = 0;
+		perc = 0;
 		React.instance().getD().info("Starting React Server @port/" + port);
 		reactData = new ReactData();
 		runnables = new GList<ReactRunnable>();
@@ -126,6 +130,8 @@ public class ReactServer extends Thread
 				response.put(i, reactData.getSamples().get(i));
 			}
 			
+			response.put("task queue", size);
+			response.put("task load", perc * 100.0);
 			response.put("memory allocated exact (MB)", (double) (Runtime.getRuntime().totalMemory() / 1024.0 / 1024.0));
 			response.put("memory free exact (MB)", (double) (Runtime.getRuntime().freeMemory() / 1024.0 / 1024.0));
 			response.put("requests per second", (double) (requests / (1 + (M.ms() - ms) / 1000)));

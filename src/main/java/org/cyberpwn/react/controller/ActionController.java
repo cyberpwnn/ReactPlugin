@@ -9,6 +9,7 @@ import org.cyberpwn.react.action.ActionInstabilityCause;
 import org.cyberpwn.react.action.ActionPurgeChunks;
 import org.cyberpwn.react.action.ActionPurgeDrops;
 import org.cyberpwn.react.action.ActionPurgeEntities;
+import org.cyberpwn.react.action.ActionStackEntities;
 import org.cyberpwn.react.action.ActionSuppressGrowth;
 import org.cyberpwn.react.action.ActionSuppressLiquid;
 import org.cyberpwn.react.action.ActionSuppressRedstone;
@@ -17,6 +18,8 @@ import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 
 public class ActionController extends Controller
 {
@@ -35,6 +38,7 @@ public class ActionController extends Controller
 	private final ActionPurgeDrops actionPurgeDrops;
 	private final ActionPurgeEntities actionPurgeEntities;
 	private final ActionHeavyChunk actionHeavyChunk;
+	private final ActionStackEntities actionStackEntities;
 	
 	public ActionController(React react)
 	{
@@ -54,6 +58,7 @@ public class ActionController extends Controller
 		actionPurgeEntities = new ActionPurgeEntities(this);
 		actionPurgeDrops = new ActionPurgeDrops(this);
 		actionHeavyChunk = new ActionHeavyChunk(this);
+		actionStackEntities = new ActionStackEntities(this);
 	}
 	
 	public void load()
@@ -88,19 +93,26 @@ public class ActionController extends Controller
 	{
 		for(Actionable i : new GList<Actionable>(actions.keySet()))
 		{
-			actions.put(i, actions.get(i) + 1);
-			
-			if(actions.get(i) >= i.getIdealTick())
+			new Q(P.NORMAL, "Action " + i.getName(), true)
 			{
-				actions.put(i, 0);
-				
-				if(i.isEnabled() && ActionController.enabled)
+				@Override
+				public void run()
 				{
-					long ns = System.nanoTime();
-					i.act();
-					i.setReactionTime(System.nanoTime() - ns);
+					actions.put(i, actions.get(i) + 1);
+					
+					if(actions.get(i) >= i.getIdealTick())
+					{
+						actions.put(i, 0);
+						
+						if(i.isEnabled() && ActionController.enabled)
+						{
+							long ns = System.nanoTime();
+							i.act();
+							i.setReactionTime(System.nanoTime() - ns);
+						}
+					}
 				}
-			}
+			};
 		}
 	}
 	
@@ -194,5 +206,15 @@ public class ActionController extends Controller
 	public static boolean isEnabled()
 	{
 		return enabled;
+	}
+	
+	public ActionStackEntities getActionStackEntities()
+	{
+		return actionStackEntities;
+	}
+	
+	public static void setEnabled(boolean enabled)
+	{
+		ActionController.enabled = enabled;
 	}
 }

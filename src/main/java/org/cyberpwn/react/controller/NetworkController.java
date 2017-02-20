@@ -16,6 +16,8 @@ import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.N;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactRunnable;
 
 public class NetworkController extends Controller
@@ -30,6 +32,8 @@ public class NetworkController extends Controller
 		super(react);
 		
 		server = null;
+		
+		System.out.println("IDL " + uid + " " + nonce);
 	}
 	
 	@Override
@@ -221,14 +225,28 @@ public class NetworkController extends Controller
 			return;
 		}
 		
-		ReactServer.reactData.sample(getReact());
-		
-		for(ReactRunnable i : ReactServer.runnables)
+		new Q(P.LOW, "Remote Sample Task", true)
 		{
-			i.run(getReact());
-		}
+			@Override
+			public void run()
+			{
+				ReactServer.reactData.sample(getReact());
+			}
+		};
 		
-		ReactServer.runnables.clear();
+		new Q(P.LOW, "Remote Execution", false)
+		{
+			@Override
+			public void run()
+			{
+				for(ReactRunnable i : ReactServer.runnables)
+				{
+					i.run(getReact());
+				}
+				
+				ReactServer.runnables.clear();
+			}
+		};
 	}
 	
 	@Override

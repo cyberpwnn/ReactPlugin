@@ -35,6 +35,8 @@ import org.cyberpwn.react.sampler.SampleTicksPerSecond;
 import org.cyberpwn.react.sampler.SampleTimings;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.Value;
 
 public class SampleController extends Controller
@@ -216,16 +218,23 @@ public class SampleController extends Controller
 		
 		for(ExternallySamplable i : new GList<ExternallySamplable>(externalSamples.keySet()))
 		{
-			externalSamples.put(i, externalSamples.get(i) - 1);
-			
-			if(externalSamples.get(i) <= 0)
+			new Q(P.LOW, "Sample External " + i.getName(), true)
 			{
-				long nsx = System.nanoTime();
-				i.onTick();
-				i.setReactionTime(System.nanoTime() - nsx);
-				i.setLastTick(System.currentTimeMillis());
-				externalSamples.put(i, i.getCurrentDelay());
-			}
+				@Override
+				public void run()
+				{
+					externalSamples.put(i, externalSamples.get(i) - 1);
+					
+					if(externalSamples.get(i) <= 0)
+					{
+						long nsx = System.nanoTime();
+						i.onTick();
+						i.setReactionTime(System.nanoTime() - nsx);
+						i.setLastTick(System.currentTimeMillis());
+						externalSamples.put(i, i.getCurrentDelay());
+					}
+				}
+			};
 		}
 		
 		reactionTime = 0l;

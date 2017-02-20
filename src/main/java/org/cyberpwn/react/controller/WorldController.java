@@ -8,6 +8,8 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactWorld;
 import org.cyberpwn.react.util.Task;
 
@@ -22,6 +24,7 @@ public class WorldController extends Controller
 		worlds = new GMap<World, ReactWorld>();
 	}
 	
+	@Override
 	public void start()
 	{
 		for(World i : getReact().getServer().getWorlds())
@@ -31,12 +34,20 @@ public class WorldController extends Controller
 		
 		new Task(10)
 		{
+			@Override
 			public void run()
 			{
-				for(World i : worlds.k())
+				new Q(P.LOW, "World Save Checker", true)
 				{
-					worlds.get(i).save(false);
-				}
+					@Override
+					public void run()
+					{
+						for(World i : worlds.k())
+						{
+							worlds.get(i).save(false);
+						}
+					}
+				};
 			}
 		};
 	}
@@ -56,6 +67,7 @@ public class WorldController extends Controller
 		return true;
 	}
 	
+	@Override
 	public void tick()
 	{
 		

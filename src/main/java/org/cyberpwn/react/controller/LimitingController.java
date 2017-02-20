@@ -16,12 +16,12 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.util.ExecutiveIterator;
-import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.M;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.TaskLater;
 
 @SuppressWarnings("deprecation")
@@ -52,66 +52,62 @@ public class LimitingController extends Controller implements Configurable
 	@Override
 	public void tick()
 	{
-		if(cc.getBoolean("limiting.enable") && getReact().getActionController().getActionInstabilityCause().isLagging())
+		new Q(P.NORMAL, "Player Limiter", true)
 		{
-			if(cc.getBoolean("limiting.players.change-player-limit"))
+			@Override
+			public void run()
 			{
-				playerLimit = cc.getInt("limiting.players.new-player-limit");
-				
-				if(cc.getBoolean("limiting.players.kick-excess-players") && Bukkit.getServer().getOnlinePlayers().size() > playerLimit)
+				if(cc.getBoolean("limiting.enable") && getReact().getActionController().getActionInstabilityCause().isLagging())
 				{
-					GList<Player> kickme = new GList<Player>();
-					Integer kicks = Bukkit.getServer().getOnlinePlayers().size() - playerLimit;
-					
-					if(kicks > 0)
+					if(cc.getBoolean("limiting.players.change-player-limit"))
 					{
-						if(cc.getBoolean("limiting.players.kick-most-afk-first"))
+						playerLimit = cc.getInt("limiting.players.new-player-limit");
+						
+						if(cc.getBoolean("limiting.players.kick-excess-players") && Bukkit.getServer().getOnlinePlayers().size() > playerLimit)
 						{
-							GList<Long> order = playerActions.v();
-							Collections.sort(order);
-							Collections.reverse(order);
+							GList<Player> kickme = new GList<Player>();
+							Integer kicks = Bukkit.getServer().getOnlinePlayers().size() - playerLimit;
 							
-							for(int i = 0; i < kicks; i++)
+							if(kicks > 0)
 							{
-								if(order.hasIndex(i))
+								if(cc.getBoolean("limiting.players.kick-most-afk-first"))
 								{
-									kickme.add(playerActions.findKey(order.get(i)));
+									GList<Long> order = playerActions.v();
+									Collections.sort(order);
+									Collections.reverse(order);
+									
+									for(int i = 0; i < kicks; i++)
+									{
+										if(order.hasIndex(i))
+										{
+											kickme.add(playerActions.findKey(order.get(i)));
+										}
+									}
+								}
+								
+								else
+								{
+									for(int i = 0; i < kicks; i++)
+									{
+										kickme.add(getReact().onlinePlayers()[i]);
+									}
+								}
+								
+								for(Player i : kickme)
+								{
+									kickPlayer(i);
 								}
 							}
 						}
-						
-						else
-						{
-							for(int i = 0; i < kicks; i++)
-							{
-								kickme.add(getReact().onlinePlayers()[i]);
-							}
-						}
-						
-						new ExecutiveIterator<Player>(0.4, kickme.copy(), new ExecutiveRunnable<Player>()
-						{
-							@Override
-							public void run()
-							{
-								kickPlayer(next());
-							}
-						}, new Runnable()
-						{
-							@Override
-							public void run()
-							{
-								
-							}
-						});
 					}
 				}
+				
+				else
+				{
+					playerLimit = Bukkit.getServer().getMaxPlayers();
+				}
 			}
-		}
-		
-		else
-		{
-			playerLimit = Bukkit.getServer().getMaxPlayers();
-		}
+		};
 	}
 	
 	public void kickPlayer(Player p)

@@ -38,7 +38,7 @@ public class ActionCullEntities extends Action implements Listener
 	@Override
 	public void act()
 	{
-		new ExecutiveIterator<World>(1.0, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
+		new ExecutiveIterator<World>(0.1, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
 			@Override
 			public void run()

@@ -11,9 +11,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ItemMergeEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -144,12 +142,11 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public int cull(Chunk chunk)
 	{
-		int max = dr();
 		GList<Item> drops = new GList<Item>();
 		
 		for(Entity i : chunk.getEntities())
 		{
-			if(i.getType().equals(EntityType.DROPPED_ITEM) && i.getTicksLived() < max - (cc.getInt("culler.despawn-delay") * 15))
+			if(i.getType().equals(EntityType.DROPPED_ITEM))
 			{
 				drops.add((Item) i);
 			}
@@ -170,22 +167,7 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public void mark(Item item)
 	{
-		int max = dr();
-		item.setTicksLived(max - (cc.getInt("culler.despawn-delay") * 15));
-	}
-	
-	@EventHandler
-	public void on(ItemMergeEvent e)
-	{
-		if(e.getEntity().getTicksLived() >= dr() - (cc.getInt("culler.despawn-delay") * 15))
-		{
-			e.setCancelled(true);
-		}
-		
-		if(e.getTarget().getTicksLived() >= dr() - (cc.getInt("culler.despawn-delay") * 15))
-		{
-			e.setCancelled(true);
-		}
+		item.remove();
 	}
 	
 	public GList<Item> sort(GList<Item> d)
@@ -266,7 +248,7 @@ public class ActionCullDrops extends Action implements Listener
 		cc.set("visual.warn.time-format", "&c\u26a0 &6&l%time%", "The countdown format");
 		cc.set("drops-per-chunk", 26, "Max drops per chunk before react starts clipping drops.");
 		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");
-		cc.set("despawn-rate.use-spigot-config", true, "Use the spigot.yml file to find item-despawn rates");
+		cc.set("despawn-rate.use-spigot-config", false, "Use the spigot.yml file to find item-despawn rates");
 		cc.set("despawn-rate.alternate-rate", 1200, "Alternate despawn rate (ticks) if spigot config is disabled.");
 		cc.set("worth.rubble", 0.1, "The worth of rubble. Keep this lower than more expensive stuff\nunless you want to remove expensive stuff first :P");
 		cc.set("worth.herbs", 0.2, "The worth of plants, seeds and stuff.");

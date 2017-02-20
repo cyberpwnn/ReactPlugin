@@ -34,15 +34,16 @@ public class Sample implements Samplable, Configurable
 		this.sampleController = sampleController;
 		this.name = name;
 		this.cname = cname;
-		this.codeName = F.cname(cname);
+		codeName = F.cname(cname);
 		this.type = type;
-		this.value = new Value((int) 0);
-		this.lastTick = System.currentTimeMillis();
+		value = new Value((int) 0);
+		lastTick = System.currentTimeMillis();
 		this.sampleController.registerSample(this);
-		this.currentDelay = 1;
-		this.target = "No Target";
-		this.explaination = "No Explaination";
-		this.cc = new ClusterConfig();
+		currentDelay = 1;
+		target = "No Target";
+		explaination = "No Explaination";
+		reactionTime = 0l;
+		cc = new ClusterConfig();
 	}
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description, boolean register)
@@ -51,35 +52,39 @@ public class Sample implements Samplable, Configurable
 		this.name = name;
 		this.cname = cname;
 		this.type = type;
-		this.value = new Value((int) 0);
-		this.lastTick = System.currentTimeMillis();
+		value = new Value((int) 0);
+		lastTick = System.currentTimeMillis();
 		
 		if(register)
 		{
 			this.sampleController.registerSample(this);
 		}
 		
-		this.currentDelay = 1;
-		this.target = "No Target";
-		this.explaination = "No Explaination";
-		this.cc = new ClusterConfig();
+		currentDelay = 1;
+		target = "No Target";
+		explaination = "No Explaination";
+		cc = new ClusterConfig();
 	}
 	
+	@Override
 	public void onTick()
 	{
 		
 	}
 	
+	@Override
 	public void onStart()
 	{
 		
 	}
 	
+	@Override
 	public void onStop()
 	{
 		
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter(getName())
@@ -102,26 +107,31 @@ public class Sample implements Samplable, Configurable
 		return System.currentTimeMillis() - lastTick;
 	}
 	
+	@Override
 	public ValueType getType()
 	{
 		return type;
 	}
 	
+	@Override
 	public Value get()
 	{
 		return value;
 	}
 	
+	@Override
 	public Long getLastTick()
 	{
 		return lastTick;
 	}
 	
+	@Override
 	public void setLastTick(Long lastTick)
 	{
 		this.lastTick = lastTick;
 	}
 	
+	@Override
 	public String getName()
 	{
 		return name;
@@ -132,6 +142,7 @@ public class Sample implements Samplable, Configurable
 		this.name = name;
 	}
 	
+	@Override
 	public String getDescription()
 	{
 		return description;
@@ -152,31 +163,37 @@ public class Sample implements Samplable, Configurable
 		this.value = value;
 	}
 	
+	@Override
 	public Integer getMaxDelay()
 	{
 		return maxDelay;
 	}
 	
+	@Override
 	public void setMaxDelay(Integer maxDelay)
 	{
 		this.maxDelay = maxDelay;
 	}
 	
+	@Override
 	public Integer getMinDelay()
 	{
 		return minDelay;
 	}
 	
+	@Override
 	public void setMinDelay(Integer minDelay)
 	{
 		this.minDelay = minDelay;
 	}
 	
+	@Override
 	public Integer getIdealDelay()
 	{
 		return idealDelay;
 	}
 	
+	@Override
 	public void setIdealDelay(Integer idealDelay)
 	{
 		this.idealDelay = idealDelay;
@@ -192,11 +209,13 @@ public class Sample implements Samplable, Configurable
 		this.type = type;
 	}
 	
+	@Override
 	public Integer getCurrentDelay()
 	{
 		return currentDelay;
 	}
 	
+	@Override
 	public void setCurrentDelay(Integer currentDelay)
 	{
 		this.currentDelay = currentDelay;
@@ -212,6 +231,7 @@ public class Sample implements Samplable, Configurable
 		this.target = target;
 	}
 	
+	@Override
 	public String getExplaination()
 	{
 		return explaination;
@@ -287,7 +307,7 @@ public class Sample implements Samplable, Configurable
 	{
 		return "Problem";
 	}
-
+	
 	@Override
 	public void handleAction()
 	{

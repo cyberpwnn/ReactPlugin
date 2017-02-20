@@ -6,6 +6,8 @@ import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.LagMap;
+import org.cyberpwn.react.util.Q;
+import org.cyberpwn.react.util.Q.P;
 
 public class LagMapController extends Controller
 {
@@ -47,7 +49,14 @@ public class LagMapController extends Controller
 	@Override
 	public void tick()
 	{
-		map.update();
+		new Q(P.LOWEST, "Lag Mapper Update", true)
+		{
+			@Override
+			public void run()
+			{
+				map.update();
+			}
+		};
 	}
 	
 	public LagMap getMap()
