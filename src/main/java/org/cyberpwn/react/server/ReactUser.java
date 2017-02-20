@@ -44,7 +44,7 @@ public class ReactUser implements Configurable
 		username = cc.getString("username");
 		password = cc.getString("password");
 		canViewConsole = cc.getBoolean("permissions.console.view");
-		canViewConsole = cc.getBoolean("permissions.console.use");
+		canUseConsole = cc.getBoolean("permissions.console.use");
 		canUseActions = cc.getBoolean("permissions.actions.use");
 		enabled = cc.getBoolean("enabled");
 	}

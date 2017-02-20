@@ -1,6 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import org.apache.commons.lang.StringUtils;
@@ -11,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -1247,6 +1249,24 @@ public class CommandController extends Controller implements CommandExecutor
 			if(i.onCommand(trigger, sender, args))
 			{
 				return;
+			}
+		}
+		
+		if(trigger.equalsIgnoreCase("compile"))
+		{
+			try
+			{
+				React.instance().compile();
+			}
+			
+			catch(IOException e)
+			{
+				
+			}
+			
+			catch(InvalidConfigurationException e)
+			{
+				
 			}
 		}
 		

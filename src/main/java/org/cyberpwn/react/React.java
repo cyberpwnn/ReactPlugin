@@ -1,10 +1,12 @@
 package org.cyberpwn.react;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -40,6 +42,7 @@ import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
+import org.cyberpwn.react.util.FU;
 import org.cyberpwn.react.util.GFile;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HijackedConsole;
@@ -986,5 +989,56 @@ public class React extends JavaPlugin implements Configurable
 	public static void setDreact(boolean dreact)
 	{
 		React.dreact = dreact;
+	}
+	
+	public void compile() throws IOException, InvalidConfigurationException
+	{
+		d.s("========================================");
+		
+		File jar = new File(getDataFolder().getParentFile(), "React.jar");
+		File out = new File(getDataFolder(), "output");
+		File oel = new File(out, "release");
+		File enc = new File(out, "React.jar.dex");
+		File rel = new File(oel, "React.jar.kex");
+		File faa = new File("C:/Users/cyberpwn/Documents/development/release/React/React-" + Version.V + ".jar");
+		File fab = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/pack/React.jar");
+		File con = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/package.yml");
+		String rootVersion = "package.version";
+		String rootCode = "package.version-code";
+		String rootDescription = "package.description";
+		
+		d.w("Directory: " + ChatColor.RED + out);
+		out.mkdirs();
+		d.w("Directory: " + ChatColor.RED + oel);
+		oel.mkdirs();
+		d.w("Copy: " + ChatColor.RED + jar + ChatColor.YELLOW + " -> " + ChatColor.RED + enc);
+		FU.copyFile(jar, enc);
+		d.w("Copy: " + ChatColor.RED + jar + ChatColor.YELLOW + " -> " + ChatColor.RED + rel);
+		FU.copyFile(jar, rel);
+		d.w("Encrypt: " + ChatColor.RED + enc + ChatColor.YELLOW + " -> " + ChatColor.RED + fab);
+		FM.create(enc, fab);
+		d.w("Copy: " + ChatColor.RED + rel + ChatColor.YELLOW + " -> " + ChatColor.RED + faa);
+		FU.copyFile(rel, faa);
+		ymod(con, rootVersion, Version.V);
+		ymod(con, rootCode, Version.C);
+		ymod(con, rootDescription, Version.D);
+		d.w("Delete: " + ChatColor.RED + enc);
+		enc.delete();
+		d.w("Delete: " + ChatColor.RED + rel);
+		rel.delete();
+		d.w("Delete: " + ChatColor.RED + oel);
+		oel.delete();
+		d.w("Delete: " + ChatColor.RED + out);
+		out.delete();
+		d.s("========================================");
+	}
+	
+	public void ymod(File f, String root, Object d) throws FileNotFoundException, IOException, InvalidConfigurationException
+	{
+		this.d.w("YMod: " + ChatColor.RED + f + ChatColor.YELLOW + " <-> " + ChatColor.RED + root + ChatColor.YELLOW + " -> " + ChatColor.RED + d.toString());
+		FileConfiguration fc = new YamlConfiguration();
+		fc.load(f);
+		fc.set(root, d);
+		fc.save(f);
 	}
 }
