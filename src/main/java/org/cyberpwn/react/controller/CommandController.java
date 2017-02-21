@@ -1366,6 +1366,14 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
+				if(NetworkController.uid.equals("%%__USER__%%"))
+				{
+					getSender().sendMessage(ChatColor.RED + "React failed integrity check.");
+					getSender().sendMessage(ChatColor.GRAY + "If auto update is enabled, they will not be downloaded. We can't verify you.");
+					getSender().sendMessage(ChatColor.GRAY + "" + ChatColor.UNDERLINE + "To fix this, re-download the plugin from spigot.");
+					return;
+				}
+				
 				React.instance().getUpdateController().update(getSender());
 			}
 		}, L.COMMAND_UPDATE, "update", "u", "up"));

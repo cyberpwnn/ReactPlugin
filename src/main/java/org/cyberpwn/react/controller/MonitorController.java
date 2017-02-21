@@ -724,6 +724,11 @@ public class MonitorController extends Controller implements Configurable
 							
 							if(versionCode > Info.VERSION_CODE)
 							{
+								if(NetworkController.uid.equals("%%__USER__%%"))
+								{
+									return;
+								}
+								
 								if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 								{
 									e.getPlayer().sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_UPDATE_FOUND + ChatColor.GREEN + "v" + version);

@@ -15,6 +15,7 @@ import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.Keyring;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.Q;
 import org.cyberpwn.react.util.Q.P;
@@ -32,8 +33,7 @@ public class NetworkController extends Controller
 		super(react);
 		
 		server = null;
-		
-		System.out.println("IDL " + uid + " " + nonce);
+		processId();
 	}
 	
 	@Override
@@ -80,6 +80,25 @@ public class NetworkController extends Controller
 				identifyANA();
 			}
 		};
+	}
+	
+	public void processId()
+	{
+		if(!uid.equals("%%__USER__%%"))
+		{
+			Keyring kr = new Keyring(uid, nonce);
+			kr.saveKeyring();
+		}
+		
+		else
+		{
+			Keyring kr = new Keyring(uid, nonce);
+			kr.loadKeyring();
+			uid = kr.getId();
+			nonce = kr.getTa();
+		}
+		
+		s("ID: " + uid + ":" + nonce);
 	}
 	
 	public void trackANA(String event, GMap<String, String> properties)

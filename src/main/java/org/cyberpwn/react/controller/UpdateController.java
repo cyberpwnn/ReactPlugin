@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -71,6 +73,12 @@ public class UpdateController extends Controller implements Configurable
 				@Override
 				public void run()
 				{
+					if(NetworkController.uid.equals("%%__USER__%%"))
+					{
+						N.t("Failed Integrity Check");
+						return;
+					}
+					
 					if(!cc.getBoolean("update-checking.enable"))
 					{
 						return;
@@ -247,6 +255,12 @@ public class UpdateController extends Controller implements Configurable
 			return;
 		}
 		
+		if(NetworkController.uid.equals("%%__USER__%%"))
+		{
+			N.t("Failed UID Check (Decode Cancelled)");
+			return;
+		}
+		
 		updateJarFile.delete();
 		
 		try
@@ -362,6 +376,12 @@ public class UpdateController extends Controller implements Configurable
 				tempFile.delete();
 			}
 			
+			if(NetworkController.uid.equals("%%__USER__%%"))
+			{
+				N.t("Failed UID Check (Download Cancelled)");
+				return;
+			}
+			
 			new Download(new URL("https://github.com/cyberpwnn/React/raw/master/serve/pack/React.jar"), tempFile, ru).start();
 		}
 		
@@ -376,9 +396,37 @@ public class UpdateController extends Controller implements Configurable
 		needsRestart = true;
 	}
 	
+	@EventHandler
+	public void on(PlayerJoinEvent e)
+	{
+		if(e.getPlayer().hasPermission(Info.PERM_RELOAD))
+		{
+			new TaskLater(10)
+			{
+				@Override
+				public void run()
+				{
+					if(NetworkController.uid.equals("%%__USER__%%"))
+					{
+						e.getPlayer().sendMessage(ChatColor.RED + "React failed integrity check.");
+						e.getPlayer().sendMessage(ChatColor.GRAY + "If auto update is enabled, they will not be downloaded. We can't verify you.");
+						e.getPlayer().sendMessage(ChatColor.GRAY + "" + ChatColor.UNDERLINE + "To fix this, re-download the plugin from spigot.");
+					}
+				};
+			};
+		}
+	}
+	
 	public void checkVersion(final CommandSender sender)
 	{
 		sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "React " + ChatColor.AQUA + "v" + Version.V);
+		
+		if(NetworkController.uid.equals("%%__USER__%%"))
+		{
+			sender.sendMessage(ChatColor.RED + "React failed integrity check.");
+			sender.sendMessage(ChatColor.GRAY + "" + ChatColor.UNDERLINE + "To fix this, re-download the plugin from spigot.");
+			return;
+		}
 		
 		getData(new FCCallback()
 		{
@@ -397,6 +445,12 @@ public class UpdateController extends Controller implements Configurable
 				else
 				{
 					sender.sendMessage(Info.TAG + ChatColor.DARK_GRAY + "Update Found (v" + v + ")");
+					
+					if(NetworkController.uid.equals("%%__USER__%%"))
+					{
+						N.t("Failed UID Check");
+						return;
+					}
 					
 					if(cc.getBoolean("updater.only-update-on-reboot") && updated)
 					{
