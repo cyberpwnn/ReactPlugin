@@ -378,11 +378,6 @@ public class DataController extends Controller
 				{
 					if(j.endsWith("." + key))
 					{
-						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments") || getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-default-comments"))
-						{
-							nd.add(" ");
-						}
-						
 						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments"))
 						{
 							if(c.getConfiguration().hasComment(j))
@@ -418,7 +413,6 @@ public class DataController extends Controller
 		
 		catch(Exception e)
 		{
-			React.fail(e);
 			f("============ DATA FAILURE ============");
 			f("A file has failed to save it's data to");
 			f("your server. If this persists, please ");
@@ -548,15 +542,5 @@ public class DataController extends Controller
 	public static void chain()
 	{
 		TimingsController.chain();
-	}
-	
-	public void cleanLoad(File file, Configurable reactUser)
-	{
-		ClusterConfig cc = React.instance().getConfigurationController().getConfiguration().copy();
-		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-default-comments", false);
-		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-comments", false);
-		load(file, reactUser);
-		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-default-comments", cc.getBoolean("configuration.enhancements.add-default-comments"));
-		React.instance().getConfigurationController().getConfiguration().set("configuration.enhancements.add-comments", cc.getBoolean("configuration.enhancements.add-comments"));
 	}
 }

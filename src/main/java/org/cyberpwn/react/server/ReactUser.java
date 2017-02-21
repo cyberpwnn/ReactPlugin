@@ -63,7 +63,7 @@ public class ReactUser implements Configurable
 	
 	public void reload()
 	{
-		React.instance().getDataController().cleanLoad(new File(new File(React.instance().getDataFolder(), "remote-users"), getCodeName() + ".yml"), this);
+		React.instance().getDataController().load(new File(new File(React.instance().getDataFolder(), "remote-users"), getCodeName() + ".yml"), this);
 	}
 	
 	public String getUsername()

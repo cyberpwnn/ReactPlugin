@@ -34,11 +34,9 @@ import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.file.FileHack;
 import org.cyberpwn.react.file.ICopy;
-import org.cyberpwn.react.file.IDeflate;
 import org.cyberpwn.react.file.IDelete;
 import org.cyberpwn.react.file.IDirectory;
 import org.cyberpwn.react.file.IEncrypt;
-import org.cyberpwn.react.file.IInflate;
 import org.cyberpwn.react.file.IModify;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -191,8 +189,10 @@ public class React extends JavaPlugin implements Configurable
 		lagMapController = new LagMapController(this);
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
-		dataController.load((String) null, taskManager);
+		
 		dataController.load((String) null, configurationController);
+		
+		dataController.load((String) null, taskManager);
 		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
@@ -375,7 +375,16 @@ public class React extends JavaPlugin implements Configurable
 		setTag();
 		
 		d.v(L.DEBUG_FINISHED);
-		Info.splash();
+		
+		if(cc.getBoolean("splash-screen"))
+		{
+			Info.splash();
+		}
+		
+		else
+		{
+			Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "React " + Version.V + " Started!");
+		}
 	}
 	
 	@Override
@@ -428,6 +437,7 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
+		cc.set("splash-screen", true, "Enable the splash screen");
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
 		cc.set("maps.display-static", false);
@@ -1018,7 +1028,6 @@ public class React extends JavaPlugin implements Configurable
 		File pat = new File(wor, "patch");
 		File dex = new File(wor, "React.jar.dex");
 		File rex = new File(wor, "React.jar.rex");
-		File paa = new File(wor, "React.jar.pat");
 		File rel = new File("C:/Users/cyberpwn/Documents/development/release/React/React-" + Version.V + ".jar");
 		File mod = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/package.yml");
 		File pak = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/pack/React.jar");
@@ -1026,8 +1035,6 @@ public class React extends JavaPlugin implements Configurable
 		h.queue(new IDirectory(h, pat));
 		h.queue(new ICopy(h, roo, dex));
 		h.queue(new ICopy(h, roo, rex));
-		h.queue(new IDeflate(h, dex, pat));
-		h.queue(new IInflate(h, pat, paa));
 		h.queue(new IModify(h, mod, "package.version", Version.V));
 		h.queue(new IModify(h, mod, "package.version-code", Version.C));
 		h.queue(new IModify(h, mod, "package.description", Version.D));
