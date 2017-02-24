@@ -35,8 +35,6 @@ import org.cyberpwn.react.sampler.SampleTicksPerSecond;
 import org.cyberpwn.react.sampler.SampleTimings;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.Value;
 
 public class SampleController extends Controller
@@ -143,6 +141,7 @@ public class SampleController extends Controller
 	public void start()
 	{
 		load();
+		reactionTime = 0l;
 		
 		o("Starting Samplers...");
 		
@@ -196,6 +195,7 @@ public class SampleController extends Controller
 	public void tick()
 	{
 		tick++;
+		reactionTime = 0l;
 		
 		if(React.isMef())
 		{
@@ -204,37 +204,46 @@ public class SampleController extends Controller
 		
 		for(Samplable i : new GList<Samplable>(samples.keySet()))
 		{
-			samples.put(i, samples.get(i) - 1);
-			
-			if(samples.get(i) <= 0)
+			try
 			{
-				long nsx = System.nanoTime();
-				i.onTick();
-				i.setReactionTime(System.nanoTime() - nsx);
-				i.setLastTick(System.currentTimeMillis());
-				samples.put(i, i.getCurrentDelay());
+				samples.put(i, samples.get(i) - 1);
+				
+				if(samples.get(i) <= 0)
+				{
+					long nsx = System.nanoTime();
+					i.onTick();
+					i.setReactionTime(System.nanoTime() - nsx);
+					i.setLastTick(System.currentTimeMillis());
+					samples.put(i, i.getCurrentDelay());
+				}
+			}
+			
+			catch(Exception ee)
+			{
+				
 			}
 		}
 		
 		for(ExternallySamplable i : new GList<ExternallySamplable>(externalSamples.keySet()))
 		{
-			new Q(P.LOW, "Sample External " + i.getName(), true)
+			try
 			{
-				@Override
-				public void run()
+				externalSamples.put(i, externalSamples.get(i) - 1);
+				
+				if(externalSamples.get(i) <= 0)
 				{
-					externalSamples.put(i, externalSamples.get(i) - 1);
-					
-					if(externalSamples.get(i) <= 0)
-					{
-						long nsx = System.nanoTime();
-						i.onTick();
-						i.setReactionTime(System.nanoTime() - nsx);
-						i.setLastTick(System.currentTimeMillis());
-						externalSamples.put(i, i.getCurrentDelay());
-					}
+					long nsx = System.nanoTime();
+					i.onTick();
+					i.setReactionTime(System.nanoTime() - nsx);
+					i.setLastTick(System.currentTimeMillis());
+					externalSamples.put(i, i.getCurrentDelay());
 				}
-			};
+			}
+			
+			catch(Exception ee)
+			{
+				
+			}
 		}
 		
 		reactionTime = 0l;

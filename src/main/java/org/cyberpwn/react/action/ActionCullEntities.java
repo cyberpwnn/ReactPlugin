@@ -99,6 +99,11 @@ public class ActionCullEntities extends Action implements Listener
 			{
 				if(isCullable(i))
 				{
+					if(!can(i.getLocation()))
+					{
+						continue;
+					}
+					
 					e.add(i);
 				}
 			}
@@ -137,6 +142,11 @@ public class ActionCullEntities extends Action implements Listener
 				
 				for(Entity i : e.copy())
 				{
+					if(!can(i.getLocation()))
+					{
+						continue;
+					}
+					
 					p.add(i);
 				}
 				
@@ -200,6 +210,11 @@ public class ActionCullEntities extends Action implements Listener
 		
 		for(Entity i : ent)
 		{
+			if(!can(i.getLocation()))
+			{
+				continue;
+			}
+			
 			k += 1;
 			
 			new TaskLater(k)
@@ -217,6 +232,11 @@ public class ActionCullEntities extends Action implements Listener
 	{
 		if(isCullable(e))
 		{
+			if(!can(e.getLocation()))
+			{
+				return;
+			}
+			
 			e.remove();
 		}
 	}
@@ -225,6 +245,8 @@ public class ActionCullEntities extends Action implements Listener
 	{
 		for(Chunk i : w.getLoadedChunks())
 		{
+			getActionController().getActionStackEntities().stack(i);
+			
 			if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 			{
 				cull(i);
@@ -234,6 +256,11 @@ public class ActionCullEntities extends Action implements Listener
 	
 	public boolean isCullable(Entity e)
 	{
+		if(!can(e.getLocation()))
+		{
+			return false;
+		}
+		
 		return cc.getStringList(getCodeName() + ".cullable").contains(e.getType().toString());
 	}
 	

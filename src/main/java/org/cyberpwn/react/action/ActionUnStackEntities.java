@@ -1,25 +1,23 @@
 package org.cyberpwn.react.action;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
+import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.util.E;
+import org.cyberpwn.react.util.StackedEntity;
+import org.cyberpwn.react.util.Task;
 
-public class ActionPurgeDrops extends Action implements Listener
+public class ActionUnStackEntities extends Action implements Listener
 {
-	public ActionPurgeDrops(ActionController actionController)
+	public ActionUnStackEntities(ActionController actionController)
 	{
-		super(actionController, Material.FLINT_AND_STEEL, "purge-drops", "ActionPurgeDrops", 100, "Purge Drops", L.ACTION_PURGEDROPS, true);
+		super(actionController, Material.WOOD_SWORD, "un-stack-entities", "ActionUnStackEntities", 100, "Un-Stack Entities", L.ACTION_UNSTACKENTITIES, true);
 	}
 	
 	@Override
@@ -42,22 +40,45 @@ public class ActionPurgeDrops extends Action implements Listener
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		
-		for(World i : Bukkit.getWorlds())
+		ActionStackEntities ase = actionController.getActionStackEntities();
+		
+		new Task(0)
 		{
-			for(Entity j : i.getEntities())
+			@Override
+			public void run()
 			{
-				if(j.getType().equals(EntityType.DROPPED_ITEM))
+				for(StackedEntity i : ase.getStacks().copy())
 				{
-					if(!can(j.getLocation()))
+					if(i.getSize() < 2)
 					{
-						continue;
+						ase.removeStack(i);
 					}
 					
-					E.r(j);
+					else
+					{
+						ase.unstack(i.getHost());
+					}
+				}
+				
+				if(ase.getStacks().isEmpty())
+				{
+					cancel();
 				}
 			}
-		}
+		};
 		
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+	}
+	
+	@Override
+	public void onReadConfig()
+	{
+		super.onReadConfig();
+	}
+	
+	@Override
+	public void onNewConfig(ClusterConfig cc)
+	{
+		super.onNewConfig(cc);
 	}
 }

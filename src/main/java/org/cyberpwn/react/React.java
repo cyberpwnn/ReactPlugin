@@ -25,6 +25,7 @@ import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
+import org.cyberpwn.react.controller.RegionController;
 import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.ScoreboardController;
@@ -111,6 +112,7 @@ public class React extends JavaPlugin implements Configurable
 	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
+	private RegionController regionController;
 	private TaskManager taskManager;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -189,6 +191,7 @@ public class React extends JavaPlugin implements Configurable
 		lagMapController = new LagMapController(this);
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
+		regionController = new RegionController(this);
 		
 		dataController.load((String) null, configurationController);
 		
@@ -1058,5 +1061,10 @@ public class React extends JavaPlugin implements Configurable
 	public PrintStream getOld()
 	{
 		return old;
+	}
+	
+	public RegionController getRegionController()
+	{
+		return regionController;
 	}
 }

@@ -89,6 +89,11 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public void updateDrop(Item item)
 	{
+		if(!can(item.getLocation()))
+		{
+			return;
+		}
+		
 		int alive = item.getTicksLived();
 		int max = dr();
 		int ticksLeft = max - alive;
@@ -148,6 +153,11 @@ public class ActionCullDrops extends Action implements Listener
 		{
 			if(i.getType().equals(EntityType.DROPPED_ITEM))
 			{
+				if(!can(i.getLocation()))
+				{
+					continue;
+				}
+				
 				drops.add((Item) i);
 			}
 		}
@@ -167,6 +177,11 @@ public class ActionCullDrops extends Action implements Listener
 	
 	public void mark(Item item)
 	{
+		if(!can(item.getLocation()))
+		{
+			return;
+		}
+		
 		item.remove();
 	}
 	

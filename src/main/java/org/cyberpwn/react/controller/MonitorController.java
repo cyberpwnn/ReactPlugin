@@ -3,6 +3,7 @@ package org.cyberpwn.react.controller;
 import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -30,6 +32,7 @@ import org.cyberpwn.react.map.MapGraph;
 import org.cyberpwn.react.map.Mapper;
 import org.cyberpwn.react.network.FCCallback;
 import org.cyberpwn.react.network.Fetcher;
+import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.nms.PacketUtil;
 import org.cyberpwn.react.nms.Title;
 import org.cyberpwn.react.util.F;
@@ -38,6 +41,7 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PlayerData;
+import org.cyberpwn.react.util.RegionProperty;
 import org.cyberpwn.react.util.ScreenMonitor;
 import org.cyberpwn.react.util.Timer;
 import org.cyberpwn.react.util.Verbose;
@@ -46,6 +50,7 @@ import org.cyberpwn.react.util.VersionBukkit;
 public class MonitorController extends Controller implements Configurable
 {
 	private GMap<Player, GBiset<Integer, Integer>> monitors;
+	private GList<Player> pausedMonitors;
 	private GList<Player> mapPause;
 	private GMap<Player, Integer> locks;
 	private Integer delay;
@@ -69,6 +74,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		currentDelay = 0;
+		pausedMonitors = new GList<Player>();
 		disp = "";
 		level = 0;
 		mLevel = 0;
@@ -224,8 +230,53 @@ public class MonitorController extends Controller implements Configurable
 	
 	public void dispatch()
 	{
+		for(Player i : getReact().onlinePlayers())
+		{
+			if(i.hasPermission(Info.PERM_MONITOR))
+			{
+				Location l = i.getLocation();
+				
+				if(isMapping(i) || mapPause.contains(i))
+				{
+					if(!mapPause.contains(i) && getReact().getRegionController().getProperties(l).contains(RegionProperty.DENY_MAPPING))
+					{
+						mapPause.add(i);
+						stopMapping(i, false);
+						i.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_MAPPING_PAUSED + ChatColor.DARK_GRAY + " Region Denies Mapping");
+					}
+					
+					if((i.getOpenInventory().getType().equals(InventoryType.CRAFTING) || i.getOpenInventory().getType().equals(InventoryType.CREATIVE)) && mapPause.contains(i) && !getReact().getRegionController().getProperties(l).contains(RegionProperty.DENY_MAPPING))
+					{
+						mapPause.remove(i);
+						startMapping(i, true);
+						i.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_MAPPING_RESUMED + ChatColor.DARK_GRAY + "");
+					}
+				}
+			}
+		}
+		
 		for(Player i : new GList<Player>(monitors.keySet()))
 		{
+			Location l = i.getLocation();
+			
+			if(!pausedMonitors.contains(i) && getReact().getRegionController().getProperties(l).contains(RegionProperty.DENY_MONITORING))
+			{
+				pausedMonitors.add(i);
+				NMSX.sendActionBar(i, "    ");
+				i.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_MONITORING_PAUSED + ChatColor.DARK_GRAY + " Region Denies Monitoring");
+			}
+			
+			if(pausedMonitors.contains(i) && !getReact().getRegionController().getProperties(l).contains(RegionProperty.DENY_MONITORING))
+			{
+				pausedMonitors.remove(i);
+				i.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_MONITORING_RESUMED + ChatColor.DARK_GRAY + "");
+			}
+			
+			if(pausedMonitors.contains(i))
+			{
+				continue;
+			}
+			
 			int his = i.getInventory().getHeldItemSlot();
 			int ois = monitors.get(i).getA();
 			int cg = monitors.get(i).getB();
@@ -652,6 +703,7 @@ public class MonitorController extends Controller implements Configurable
 			}
 		}
 		
+		pausedMonitors.remove(e.getPlayer());
 		monitors.remove(e.getPlayer());
 	}
 	
@@ -699,7 +751,7 @@ public class MonitorController extends Controller implements Configurable
 			}
 		});
 		
-		if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
+		if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)) && getReact().getUpdateController().can())
 		{
 			react.scheduleSyncTask(5, new Runnable()
 			{
@@ -724,11 +776,6 @@ public class MonitorController extends Controller implements Configurable
 							
 							if(versionCode > Info.VERSION_CODE)
 							{
-								if(NetworkController.uid.equals("%%__USER__%%"))
-								{
-									return;
-								}
-								
 								if((e.getPlayer().isOp() || e.getPlayer().hasPermission(Info.PERM_RELOAD)))
 								{
 									e.getPlayer().sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + L.MESSAGE_UPDATE_FOUND + ChatColor.GREEN + "v" + version);
@@ -760,7 +807,7 @@ public class MonitorController extends Controller implements Configurable
 	{
 		Player p = (Player) e.getPlayer();
 		
-		if(mapPause.contains(p))
+		if(mapPause.contains(p) && !getReact().getRegionController().getProperties(e.getPlayer().getLocation()).contains(RegionProperty.DENY_MAPPING))
 		{
 			mapPause.remove(p);
 			startMapping(p, false);

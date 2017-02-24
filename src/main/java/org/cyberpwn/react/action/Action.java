@@ -2,6 +2,7 @@ package org.cyberpwn.react.action;
 
 import java.util.Collection;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.N;
+import org.cyberpwn.react.util.RegionProperty;
 
 public class Action implements Actionable, Configurable
 {
@@ -44,6 +46,16 @@ public class Action implements Actionable, Configurable
 		this.manual = manual;
 		
 		actionController.registerAction(this);
+	}
+	
+	public boolean can(Location l)
+	{
+		if(getActionController().getReact().getRegionController().getProperties(l).contains(RegionProperty.DENY_REACTION))
+		{
+			return false;
+		}
+		
+		return true;
 	}
 	
 	@Override

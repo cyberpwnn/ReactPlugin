@@ -26,11 +26,13 @@ public class ActionPurgeEntities extends Action implements Listener
 		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", L.ACTION_PURGEENTITIES, true);
 	}
 	
+	@Override
 	public void act()
 	{
 		
 	}
 	
+	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -48,6 +50,11 @@ public class ActionPurgeEntities extends Action implements Listener
 		{
 			for(Entity j : i.getEntities())
 			{
+				if(!can(j.getLocation()))
+				{
+					continue;
+				}
+				
 				if(cc.getStringList(getCodeName() + ".cullable").contains(j.getType().toString()))
 				{
 					if(j.getType().toString().equals("PLAYER"))
@@ -109,6 +116,7 @@ public class ActionPurgeEntities extends Action implements Listener
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);

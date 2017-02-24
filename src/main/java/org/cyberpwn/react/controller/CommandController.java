@@ -771,6 +771,80 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
+				CommandSender sender = getSender();
+				String[] args = getArgs();
+				
+				if(args.length == 1)
+				{
+					sender.sendMessage(String.format(Info.HRN, "Region Help"));
+					sender.sendMessage(ChatColor.GRAY + "Add Custom Flags to world guard to change how react works in regions.");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "list " + ChatColor.GRAY + "- List WG Regions");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "?flag " + ChatColor.GRAY + "- List custom flags");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "?flag <region> " + ChatColor.GRAY + "- View custom flags for region");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "!flag <region> " + ChatColor.GRAY + "- Clear all flags from the region");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "+flag <region> <flag> " + ChatColor.GRAY + "- Add a react flag to a region");
+					sender.sendMessage(ChatColor.AQUA + "/re rg " + ChatColor.YELLOW + "-flag <region> <flag> " + ChatColor.GRAY + "- Remove a react flag to a region");
+					sender.sendMessage(Info.HR);
+				}
+				
+				if(args.length > 1)
+				{
+					RegionController rc = getReact().getRegionController();
+					String c = args[1];
+					
+					if(c.equalsIgnoreCase("list"))
+					{
+						rc.listRegions(sender);
+					}
+					
+					else if(c.equalsIgnoreCase("?flag") && args.length == 2)
+					{
+						rc.listProperties(sender);
+					}
+					
+					else if(args.length > 2)
+					{
+						String d = args[2];
+						
+						if(c.equalsIgnoreCase("!flag"))
+						{
+							rc.remove(sender, d);
+						}
+						
+						else if(c.equalsIgnoreCase("?flag"))
+						{
+							rc.view(sender, d);
+						}
+						
+						else if(args.length > 3)
+						{
+							String e = args[3];
+							
+							if(c.equalsIgnoreCase("+flag"))
+							{
+								rc.add(sender, d, e);
+							}
+							
+							else if(c.equalsIgnoreCase("-flag"))
+							{
+								rc.remove(sender, d, e);
+							}
+						}
+					}
+					
+					else
+					{
+						
+					}
+				}
+			}
+		}, L.COMMAND_RG, "rg", "reg", "region"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
 				Player p = getPlayer();
 				CommandSender sender = getSender();
 				Boolean isPlayer = isPlayer();
@@ -956,7 +1030,7 @@ public class CommandController extends Controller implements CommandExecutor
 					}
 				};
 			}
-		}, L.COMMAND_MAP, "core", "task", "tm"));
+		}, L.COMMAND_TM, "core", "task", "tm"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1366,14 +1440,6 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
-				if(NetworkController.uid.equals("%%__USER__%%"))
-				{
-					getSender().sendMessage(ChatColor.RED + "React failed integrity check.");
-					getSender().sendMessage(ChatColor.GRAY + "If auto update is enabled, they will not be downloaded. We can't verify you.");
-					getSender().sendMessage(ChatColor.GRAY + "" + ChatColor.UNDERLINE + "To fix this, re-download the plugin from spigot.");
-					return;
-				}
-				
 				React.instance().getUpdateController().update(getSender());
 			}
 		}, L.COMMAND_UPDATE, "update", "u", "up"));

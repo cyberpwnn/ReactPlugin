@@ -28,16 +28,19 @@ public class ActionSuppressGrowth extends Action implements Listener
 		cache = new GMap<Chunk, Integer>();
 	}
 	
+	@Override
 	public void start()
 	{
 		getActionController().getReact().register(this);
 	}
 	
+	@Override
 	public void act()
 	{
 		cache.clear();
 	}
 	
+	@Override
 	public void manual(final CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -54,6 +57,11 @@ public class ActionSuppressGrowth extends Action implements Listener
 	@EventHandler
 	public void onGrowth(BlockGrowEvent e)
 	{
+		if(!can(e.getBlock().getLocation()))
+		{
+			return;
+		}
+		
 		if(cache.containsKey(e.getBlock().getChunk()))
 		{
 			cache.put(e.getBlock().getChunk(), cache.get(e.getBlock().getChunk()) + 1);
@@ -70,12 +78,14 @@ public class ActionSuppressGrowth extends Action implements Listener
 		}
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
 		cc.set(getCodeName() + ".max-per-chunk-per-interval", 5, "Max growths per interval defined here.");
 	}
 	
+	@Override
 	public void onReadConfig()
 	{
 		super.onReadConfig();

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -12,8 +13,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -23,20 +27,22 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
+import org.cyberpwn.react.util.GSound;
 import org.cyberpwn.react.util.StackedEntity;
 import org.cyberpwn.react.util.TaskLater;
 
 public class ActionStackEntities extends Action implements Listener
 {
 	private GList<StackedEntity> stacks;
+	private GList<LivingEntity> unstack;
 	
 	public ActionStackEntities(ActionController actionController)
 	{
 		super(actionController, Material.SHEARS, "stack-entities", "ActionStackEntities", 100, "Stack Entities", L.ACTION_STACKENTITIES, false);
 		
+		unstack = new GList<LivingEntity>();
 		stacks = new GList<StackedEntity>();
+		React.instance().register(this);
 	}
 	
 	@Override
@@ -49,19 +55,121 @@ public class ActionStackEntities extends Action implements Listener
 				stack(j);
 			}
 		}
+		
+		for(LivingEntity i : unstack.copy())
+		{
+			if(i.isDead())
+			{
+				unstack.remove(i);
+			}
+		}
+	}
+	
+	public boolean canUnstack(LivingEntity e)
+	{
+		if(!isStacked(e))
+		{
+			return false;
+		}
+		
+		if(getStack(e).getSize() < 2)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public void unstack(LivingEntity e)
+	{
+		StackedEntity s = getStack(e);
+		EntityType et = e.getType();
+		int va = 0;
+		int vb = 0;
+		int to = s.getSize();
+		
+		if(to % 2 == 0)
+		{
+			va = to / 2;
+			vb = va;
+		}
+		
+		else
+		{
+			to--;
+			va = to / 2;
+			vb = va + 1;
+		}
+		
+		Vector da = new Vector((Math.random() - 0.5), 0, (Math.random() - 0.5));
+		Vector db = new Vector(-da.getX(), 0, -da.getZ());
+		Entity ea = e.getLocation().getWorld().spawnEntity(e.getLocation(), et);
+		Entity eb = e.getLocation().getWorld().spawnEntity(e.getLocation(), et);
+		Entity ec = e.getLocation().getWorld().spawnEntity(e.getLocation(), et);
+		Entity ed = e.getLocation().getWorld().spawnEntity(e.getLocation(), et);
+		ea.setVelocity(da);
+		eb.setVelocity(db);
+		removeStack(e);
+		
+		if(cc.getBoolean("modifications.stack-sounds"))
+		{
+			new GSound(Sound.CHICKEN_EGG_POP, 1f, 0.7f).play(e.getLocation());
+		}
+		
+		e.remove();
+		addStack(new StackedEntity((LivingEntity) ea, va));
+		addStack(new StackedEntity((LivingEntity) eb, vb));
+		animateStack((LivingEntity) ec, (LivingEntity) ea);
+		animateStack((LivingEntity) ed, (LivingEntity) eb);
+		ec.remove();
+		ed.remove();
+		unstack.add((LivingEntity) ea);
+		unstack.add((LivingEntity) eb);
+	}
+	
+	@EventHandler
+	public void on(PlayerInteractAtEntityEvent e)
+	{
+		if(!cc.getBoolean("modifications.allow-player-splitting"))
+		{
+			return;
+		}
+		
+		if(e.getRightClicked() != null && e.getRightClicked() instanceof LivingEntity && e.getPlayer().isSneaking() && isStacked((LivingEntity) e.getRightClicked()))
+		{
+			LivingEntity ee = (LivingEntity) e.getRightClicked();
+			
+			if(canUnstack(ee))
+			{
+				unstack(ee);
+			}
+		}
 	}
 	
 	public void stack(Chunk c)
 	{
+		if(!cc.getBoolean("component.enable"))
+		{
+			return;
+		}
+		
 		int t = 0;
 		
 		for(Entity i : c.getEntities())
 		{
 			if(i instanceof LivingEntity && canTouch((LivingEntity) i))
 			{
+				if(isStacked((LivingEntity) i))
+				{
+					if(getStack((LivingEntity) i).getSize() < 2)
+					{
+						removeStack((LivingEntity) i);
+					}
+				}
+				
 				Area a = new Area(i.getLocation(), cc.getDouble("constraints.max-distance"));
 				
-				for(Entity j : a.getNearbyEntities())
+				for(Entity j : new GList<Entity>(a.getNearbyEntities()).shuffle())
 				{
 					if(j instanceof LivingEntity && canTouch((LivingEntity) j))
 					{
@@ -70,7 +178,7 @@ public class ActionStackEntities extends Action implements Listener
 							continue;
 						}
 						
-						t += 4;
+						t += 1;
 						
 						new TaskLater(t)
 						{
@@ -93,31 +201,24 @@ public class ActionStackEntities extends Action implements Listener
 	
 	public void stack(LivingEntity a, LivingEntity b)
 	{
-		new Q(P.NORMAL, "Stack Chunk", true)
+		if(canStack(a, b))
 		{
-			@Override
-			public void run()
+			if(isStacked(a))
 			{
-				if(canStack(a, b))
-				{
-					if(isStacked(a))
-					{
-						getStack(a).insert(b);
-					}
-					
-					else if(isStacked(b))
-					{
-						stack(b, a);
-					}
-					
-					else
-					{
-						createStack(a);
-						stack(a, b);
-					}
-				}
+				getStack(a).insert(b);
 			}
-		};
+			
+			else if(isStacked(b))
+			{
+				stack(b, a);
+			}
+			
+			else
+			{
+				createStack(a);
+				stack(a, b);
+			}
+		}
 	}
 	
 	public void createStack(LivingEntity a)
@@ -127,6 +228,16 @@ public class ActionStackEntities extends Action implements Listener
 	
 	public boolean canStack(LivingEntity a, LivingEntity b)
 	{
+		if(unstack.contains(a) || unstack.contains(b))
+		{
+			return false;
+		}
+		
+		if(!can(a.getLocation()) || !can(b.getLocation()))
+		{
+			return false;
+		}
+		
 		if(!canTouch(a, b))
 		{
 			return false;
@@ -364,7 +475,9 @@ public class ActionStackEntities extends Action implements Listener
 		}
 		
 		cc.set("modifications.stack-health", true);
+		cc.set("modifications.stack-sounds", true);
 		cc.set("modifications.health-stack-multiplier", 0.3);
+		cc.set("modifications.allow-player-splitting", true, "Allow the player to shift right click a mob to split a stack.");
 		cc.set("constraints.max-distance", 4.4);
 		cc.set("constraints.max-stack-size", 8);
 		cc.set("constraints.stack-named-entities", false);
@@ -375,5 +488,15 @@ public class ActionStackEntities extends Action implements Listener
 	public GList<StackedEntity> getStacks()
 	{
 		return stacks;
+	}
+	
+	public double maxSize()
+	{
+		return cc.getInt("constraints.max-stack-size");
+	}
+	
+	public void unstackClear()
+	{
+		unstack.clear();
 	}
 }

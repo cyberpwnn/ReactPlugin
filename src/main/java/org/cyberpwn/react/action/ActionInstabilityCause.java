@@ -300,17 +300,6 @@ public class ActionInstabilityCause extends Action
 			force = false;
 		}
 		
-		if(problems.containsKey(InstabilityCause.LIQUID))
-		{
-			actionController.getActionSuppressLiquid().freeze();
-			Verbose.x("instability", "- LIQUID FREEZE: ON");
-		}
-		
-		else
-		{
-			actionController.getActionSuppressLiquid().unfreeze();
-		}
-		
 		if(problems.containsKey(InstabilityCause.TNT_EXPLOSIONS))
 		{
 			actionController.getActionSuppressTnt().freeze();

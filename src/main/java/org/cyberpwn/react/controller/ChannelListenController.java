@@ -3,7 +3,6 @@ package org.cyberpwn.react.controller;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
@@ -19,7 +18,7 @@ public class ChannelListenController extends Controller implements PluginMessage
 	{
 		super(react);
 		
-		this.scanners = new GList<Player>();
+		scanners = new GList<Player>();
 		
 		getReact().getServer().getMessenger().registerIncomingPluginChannel(getReact(), "BungeeCord", this);
 	}

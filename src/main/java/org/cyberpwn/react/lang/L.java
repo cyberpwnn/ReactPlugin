@@ -64,6 +64,8 @@ public class L
 	public static String ACTION_GARBAGECOLLECTION = "This takes out the virtual trash (sometimes frees memory up). Warning this will freeze the server for 1-5 seconds. This is only used automatically if it is configured to do so.";
 	public static String ACTION_CULLDROPS = "Drops are determined by their worth within the configs. This will then determine weather react should cull 30 pieces of dirt, or 20 diamonds. Basically, friendly drop culling.";
 	public static String ACTION_STACKENTITIES = "Entities are stacked together to reduce overhead.";
+	public static String ACTION_UNSTACKENTITIES = "Unstack all entities stacked and prevent those entities from being re-stacked.";
+	public static String ACTION_RESTACKENTITIES = "Restack all entities force-unstacked";
 	public static String ACTION_CULLENTITIES = "Removes excess mobs from highly populated chunks. Additionally prevents spawning if the limit is reached.";
 	public static String ACTION_HEAVYCHUNK = "Teleports you close to the chunk with the most entities in it. If there are no heavy chunks, you may not be teleported or it may not be that laggy at all.";
 	public static String ACTION_INSTABILITYCAUSE = "If any sort of instability is detected, react begins to collect evidence and determine the right thing to do. ";
@@ -144,8 +146,12 @@ public class L
 	public static String MESSAGE_WORLD_SUCCESS = "PRECAUTIONS TAKEN. HOPEFULLY WE WONT CRASH!";
 	public static String MESSAGE_WORLD_DISABLE = "HEART BEAT SAVING DISABLED. Not saving worlds or players.";
 	public static String MESSAGE_CPUSCORE = "CPU Score: ";
+	public static String MESSAGE_MONITORING_PAUSED = "Monitoring Paused";
+	public static String MESSAGE_MONITORING_RESUMED = "Monitoring Resumed";
 	public static String MESSAGE_MONITORING_ENABLED = "Monitoring Enabled";
 	public static String MESSAGE_MONITORING_DISABLED = "Monitoring Disabled";
+	public static String MESSAGE_MAPPING_PAUSED = "Mapping Paused";
+	public static String MESSAGE_MAPPING_RESUMED = "Mapping Resumed";
 	public static String MESSAGE_MAPPING_ENABLED = "Mapping Enabled";
 	public static String MESSAGE_MAPPING_DISABLED = "Mapping Disabled";
 	public static String MESSAGE_INSUFFICIENT_PERMISSION = "Insufficient Permission";
@@ -181,6 +187,8 @@ public class L
 	public static String MESSAGE_SCOREBOARD_DISABLED = "Scoreboard Monitoring Disabled";
 	public static String MESSAGE_SCOREBOARD_ENABLED = "Scoreboard Monitoring Enabled";
 	
+	public static String COMMAND_TM = "Task Manager Status";
+	public static String COMMAND_RG = "Region Commands for World Guard";
 	public static String COMMAND_CLIENT = "View information on connected react clients.";
 	public static String COMMAND_SCOREBOARD = "View monitoring information via scoreboard.";
 	public static String COMMAND_VERBOSE = "Turn on verbose information ingame/console";

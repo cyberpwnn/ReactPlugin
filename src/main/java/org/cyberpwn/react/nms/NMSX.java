@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.cyberpwn.react.util.NMSClass;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class NMSX
@@ -16,6 +17,71 @@ public class NMSX
 	public static NMSX bountifulAPI;
 	private static boolean useOldMethods;
 	public static String nmsver;
+	
+	public static String getVersion()
+	{
+		final String name = Bukkit.getServer().getClass().getPackage().getName();
+		final String version = name.substring(name.lastIndexOf('.') + 1) + ".";
+		return version;
+	}
+	
+	/**
+	 * Get the nms class
+	 * 
+	 * @param className
+	 *            the class name
+	 * @return returns "net.minecraft.server." + version + "." + className
+	 */
+	public static Class<?> getCBNMSClass(String className)
+	{
+		final String fullName = "net.minecraft.server." + getVersion() + className;
+		
+		Class<?> clazz = null;
+		
+		try
+		{
+			clazz = Class.forName(fullName);
+		}
+		
+		catch(final Exception e)
+		{
+			
+		}
+		
+		return clazz;
+	}
+	
+	public static Object serializeChat(String msg)
+	{
+		try
+		{
+			return NMSClass.ChatSerializer.getDeclaredMethod("a", String.class).invoke(null, msg);
+		}
+		
+		catch(Throwable e)
+		{
+			
+		}
+		
+		return null;
+	}
+	
+	public static Field setAccessible(Field f) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		f.setAccessible(true);
+		Field modifiersField = Field.class.getDeclaredField("modifiers");
+		modifiersField.setAccessible(true);
+		modifiersField.setInt(f, f.getModifiers() & 0xFFFFFFEF);
+		
+		return f;
+	}
+	
+	public static Method setAccessible(Method m) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		m.setAccessible(true);
+		
+		return m;
+	}
 	
 	/**
 	 * Get the bukkit version

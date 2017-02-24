@@ -26,7 +26,7 @@ public class Sample implements Samplable, Configurable
 	protected Integer minDelay;
 	protected Integer idealDelay;
 	protected Integer currentDelay;
-	protected Long reactionTime;
+	protected Long reactionTime = 0l;
 	protected String codeName;
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description)

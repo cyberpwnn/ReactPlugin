@@ -28,6 +28,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		dissd = false;
 	}
 	
+	@Override
 	public void act()
 	{
 		
@@ -46,6 +47,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		frozen = false;
 	}
 	
+	@Override
 	public void manual(final CommandSender p)
 	{
 		if(dissd)
@@ -76,6 +78,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		});
 	}
 	
+	@Override
 	public void start()
 	{
 		if(dissd)
@@ -86,6 +89,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		getActionController().getReact().register(this);
 	}
 	
+	@Override
 	public void stop()
 	{
 		if(dissd)
@@ -96,6 +100,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		getActionController().getReact().unRegister(this);
 	}
 	
+	@Override
 	public void onReadConfig()
 	{
 		super.onReadConfig();
@@ -109,6 +114,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		}
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
@@ -121,6 +127,11 @@ public class ActionSuppressTnt extends Action implements Listener
 	@EventHandler
 	public void onTNT(ExplosionPrimeEvent e)
 	{
+		if(!can(e.getEntity().getLocation()))
+		{
+			return;
+		}
+		
 		if(dissd)
 		{
 			return;

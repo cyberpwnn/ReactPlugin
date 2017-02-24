@@ -9,11 +9,14 @@ import org.cyberpwn.react.util.BoardController;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.IndividualSlate;
 import org.cyberpwn.react.util.ScreenBoard;
+import org.cyberpwn.react.util.Slate;
 
 public class ScoreboardController extends Controller
 {
 	private GMap<Player, GBiset<Integer, Integer>> monitors;
+	private GMap<Player, Slate> slates;
 	private BoardController bc;
 	private ScreenBoard ms;
 	private Integer inx;
@@ -27,6 +30,7 @@ public class ScoreboardController extends Controller
 		bc = new BoardController(ChatColor.AQUA + "React Monitor", getReact());
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		ms = new ScreenBoard();
+		slates = new GMap<Player, Slate>();
 	}
 	
 	@Override
@@ -45,7 +49,7 @@ public class ScoreboardController extends Controller
 		
 		if(delay <= 0)
 		{
-			delay = React.instance().getCc().getInt("monitor.scoreboard-interval") / 2;
+			delay = React.instance().getCc().getInt("monitor.scoreboard-interval") / 8;
 		}
 		
 		else
@@ -119,6 +123,7 @@ public class ScoreboardController extends Controller
 		{
 			bc.remove(p);
 			monitors.remove(p);
+			slates.remove(p);
 			p.sendMessage(Info.TAG + ChatColor.RED + L.MESSAGE_SCOREBOARD_DISABLED);
 		}
 		
@@ -132,6 +137,8 @@ public class ScoreboardController extends Controller
 			}
 			
 			monitors.put(p, new GBiset<Integer, Integer>(0, 0));
+			slates.put(p, new IndividualSlate(ChatColor.AQUA + "Monitor", p));
+			slates.get(p).build();
 			p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SCOREBOARD_ENABLED);
 		}
 	}
@@ -162,6 +169,7 @@ public class ScoreboardController extends Controller
 			k.add(ms.getElements().get(scc).color() + ms.getElements().get(scc).formatted(false));
 		}
 		
-		bc.getBoardManager().set(p, k);
+		slates.get(p).setLines(k);
+		slates.get(p).update();
 	}
 }

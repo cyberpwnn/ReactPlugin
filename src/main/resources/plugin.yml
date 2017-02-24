@@ -1,11 +1,11 @@
 name: React
 main: org.cyberpwn.react.reflect.R
-version: 4.2.6p
+version: 4.3.1p
 description: React is a smart performance plugin designed to automatically fix lag from the source. This is different from lag clearers.
 author: cyberpwn
 authors: [cyberpwn, Puretie]
 website: http://bit.ly/react-plugin
-softdepend: [WorldEdit, AsyncWorldEdit, WorldBorder, PlaceholderAPI, ProtocolLib]
+softdepend: [WorldEdit, AsyncWorldEdit, WorldGuard, FastAsyncWorldEdit, WorldBorder, PlaceholderAPI, ProtocolLib]
 commands:
   react:
     aliases: [re, ract, stability, st]

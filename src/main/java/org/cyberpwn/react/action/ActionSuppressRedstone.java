@@ -26,6 +26,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 		freezeAll = false;
 	}
 	
+	@Override
 	public void act()
 	{
 		
@@ -57,6 +58,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 		frozen = false;
 	}
 	
+	@Override
 	public void manual(final CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -82,16 +84,19 @@ public class ActionSuppressRedstone extends Action implements Listener
 		});
 	}
 	
+	@Override
 	public void start()
 	{
 		getActionController().getReact().register(this);
 	}
 	
+	@Override
 	public void stop()
 	{
 		getActionController().getReact().unRegister(this);
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
@@ -103,6 +108,11 @@ public class ActionSuppressRedstone extends Action implements Listener
 	@EventHandler
 	public void onRedstone(BlockPhysicsEvent e)
 	{
+		if(!can(e.getBlock().getLocation()))
+		{
+			return;
+		}
+		
 		try
 		{
 			if(freezeAll)

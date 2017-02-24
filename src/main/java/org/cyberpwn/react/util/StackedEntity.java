@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -94,6 +95,11 @@ public class StackedEntity implements Listener
 		else
 		{
 			setSize(getSize() + 1);
+		}
+		
+		if(React.instance().getActionController().getActionStackEntities().getConfiguration().getBoolean("modifications.stack-sounds"))
+		{
+			new GSound(Sound.CHICKEN_EGG_POP, 1f, 0.6f + ((float) size) / (float) (React.instance().getActionController().getActionStackEntities().maxSize())).play(e.getLocation());
 		}
 		
 		getRoot().animateStack(e, getHost());
