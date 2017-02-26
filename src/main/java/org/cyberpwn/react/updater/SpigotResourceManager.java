@@ -94,6 +94,7 @@ public class SpigotResourceManager implements ResourceManager
 					Document newDoc = newRes.getDocument();
 					
 					Elements resourceBlocks = newDoc.select("li.primaryContent");
+					
 					for(Element resourceBlock : resourceBlocks)
 					{
 						ResourceUpdate resourceUpdate = new SpigotResourceUpdate();
@@ -101,8 +102,6 @@ public class SpigotResourceManager implements ResourceManager
 						resourceUpdate.setUpdateLink(url + resourceBlock.select("h2.textHeading a").first().attr("href"));
 						resourceUpdate.setTextHeading(resourceBlock.select("h2.textHeading a").first().text());
 						resourceUpdate.setArticle(resourceBlock.select("article blockquote").first().text());
-						// resourceUpdate.setMessageMeta(resourceBlock.select("div.messageMeta
-						// span.item a span").first().attr("title"));
 						
 						updates.add(resourceUpdate);
 					}
@@ -409,6 +408,7 @@ public class SpigotResourceManager implements ResourceManager
 			con.setRequestMethod("POST");
 			con.getOutputStream().write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=" + resourceId).getBytes("UTF-8"));
 			String version = new BufferedReader(new InputStreamReader(con.getInputStream())).readLine();
+			
 			if(version.length() <= 7)
 			{
 				return version;

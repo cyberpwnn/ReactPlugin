@@ -123,6 +123,35 @@ public class SpigotResource implements Resource
 		return null;
 	}
 	
+	public File downloadResource(User user, File output, String special)
+	{
+		try
+		{
+			if(output.exists())
+			{
+				output.delete();
+			}
+			output.getParentFile().mkdirs();
+			
+			HTTPDownloadResponse dlResponse = HTTPUnitRequest.downloadFile(special, user != null ? ((SpigotUser) user).getCookies() : SpigotSiteCore.getBaseCookies());
+			setExternalURL(dlResponse.getUrl().toString());
+			InputStream stream = dlResponse.getStream();
+			FileOutputStream fos = new FileOutputStream(output);
+			byte[] buffer = new byte[stream.available()];
+			stream.read(buffer);
+			fos.write(buffer);
+			fos.close();
+			return output;
+		}
+		
+		catch(Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	@Override
 	public boolean isDeleted()
 	{
