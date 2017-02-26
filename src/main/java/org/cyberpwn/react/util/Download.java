@@ -17,13 +17,20 @@ public class Download extends Thread
 		this.callback = callback;
 	}
 	
+	@Override
 	public void run()
 	{
 		try
 		{
+			if(!path.exists())
+			{
+				path.getParentFile().mkdirs();
+				path.createNewFile();
+			}
+			
 			FU.copyURLToFile(url, path);
 			callback.run();
-		} 
+		}
 		
 		catch(IOException e)
 		{

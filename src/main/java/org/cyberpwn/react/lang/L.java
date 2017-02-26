@@ -203,6 +203,7 @@ public class L
 	public static String COMMAND_RELOAD = "reloads all react configuration files.";
 	public static String COMMAND_BOOK = "Sends a book of updated issues react finds.";
 	public static String COMMAND_VERSION = "Compares your version with any new ones.";
+	public static String COMMAND_AUTH = "Setup spigot authentication for updates.";
 	public static String COMMAND_HELP = "Sends a book of information on help topics.";
 	public static String COMMAND_QUERY = "Query information on plugin(s).";
 	public static String COMMAND_LIST = "List all servers on the network with data.";

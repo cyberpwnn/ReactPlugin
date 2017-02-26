@@ -91,6 +91,8 @@ public class TaskManager extends Controller implements Configurable
 			
 			ReactServer.size = getSize();
 			ReactServer.perc = getUsagePercent();
+			
+			React.runnables.pop().run();
 		}
 		
 		catch(Exception e)

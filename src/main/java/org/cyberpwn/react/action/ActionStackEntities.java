@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -26,6 +27,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.Area;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GSound;
 import org.cyberpwn.react.util.StackedEntity;
@@ -113,7 +115,23 @@ public class ActionStackEntities extends Action implements Listener
 		
 		if(cc.getBoolean("modifications.stack-sounds"))
 		{
-			new GSound(Sound.CHICKEN_EGG_POP, 1f, 0.7f).play(e.getLocation());
+			try
+			{
+				new GSound(Sound.valueOf("CHICKEN_EGG_POP"), 1f, 0.7f).play(e.getLocation());
+			}
+			
+			catch(Exception exx)
+			{
+				try
+				{
+					new GSound(Sound.valueOf("ENTITY_CHICKEN_EGG"), 1f, 0.7f).play(e.getLocation());
+				}
+				
+				catch(Exception ex)
+				{
+					
+				}
+			}
 		}
 		
 		e.remove();
@@ -173,6 +191,8 @@ public class ActionStackEntities extends Action implements Listener
 				{
 					if(j instanceof LivingEntity && canTouch((LivingEntity) j))
 					{
+						updateName((LivingEntity) j);
+						
 						if(!i.getType().equals(j.getType()))
 						{
 							continue;
@@ -224,6 +244,7 @@ public class ActionStackEntities extends Action implements Listener
 	public void createStack(LivingEntity a)
 	{
 		addStack(new StackedEntity(a, 1));
+		updateName(a);
 	}
 	
 	public boolean canStack(LivingEntity a, LivingEntity b)
@@ -276,14 +297,13 @@ public class ActionStackEntities extends Action implements Listener
 	
 	public boolean canTouch(LivingEntity e)
 	{
-		if(isTamed(e) && !cc.getBoolean("constraints.stack-yamed-entities"))
+		if(isTamed(e) && !cc.getBoolean("constraints.stack-tamed-entities"))
 		{
 			return false;
 		}
 		
 		if(isNamed(e) && !cc.getBoolean("constraints.stack-named-entities"))
 		{
-			actionController.s("Not named");
 			return false;
 		}
 		
@@ -293,6 +313,36 @@ public class ActionStackEntities extends Action implements Listener
 		}
 		
 		return true;
+	}
+	
+	public void updateName(LivingEntity e)
+	{
+		if(getSize(e) < 2 && isTagged(e))
+		{
+			e.setCustomNameVisible(false);
+			e.setCustomName(null);
+		}
+		
+		else if(getSize(e) > 1)
+		{
+			e.setCustomNameVisible(true);
+			e.setCustomName(makeName(e));
+		}
+	}
+	
+	public boolean isTagged(LivingEntity e)
+	{
+		if(e.getCustomName() == null)
+		{
+			return false;
+		}
+		
+		if(e.getCustomName().startsWith(suff()) && e.getCustomName().endsWith(suff()))
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public void updateHealth(LivingEntity e, LivingEntity v)
@@ -368,6 +418,11 @@ public class ActionStackEntities extends Action implements Listener
 	public boolean isNamed(LivingEntity e)
 	{
 		if(e.getCustomName() == null)
+		{
+			return false;
+		}
+		
+		if(e.getCustomName().startsWith(suff()) && e.getCustomName().endsWith(suff()))
 		{
 			return false;
 		}
@@ -452,6 +507,27 @@ public class ActionStackEntities extends Action implements Listener
 		super.onReadConfig();
 	}
 	
+	public String nameFormat()
+	{
+		return cc.getString("modifications.name-format");
+	}
+	
+	public String makeName(LivingEntity e)
+	{
+		return makeName(e.getType(), getSize(e));
+	}
+	
+	@SuppressWarnings("deprecation")
+	public String makeName(EntityType t, int amt)
+	{
+		return suff() + ChatColor.WHITE + F.color(nameFormat().replaceAll("%amt%", F.f(amt)).replaceAll("%mob%", StringUtils.capitaliseAllWords(t.getName().toLowerCase()))) + suff();
+	}
+	
+	public String suff()
+	{
+		return ChatColor.BLACK + "" + ChatColor.WHITE + ChatColor.GREEN;
+	}
+	
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
@@ -474,6 +550,7 @@ public class ActionStackEntities extends Action implements Listener
 			}
 		}
 		
+		cc.set("modifications.name-format", "&l&a%amt%x &r&7%mob%");
 		cc.set("modifications.stack-health", true);
 		cc.set("modifications.stack-sounds", true);
 		cc.set("modifications.health-stack-multiplier", 0.3);

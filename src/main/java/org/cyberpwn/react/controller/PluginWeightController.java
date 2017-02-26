@@ -1,7 +1,6 @@
 package org.cyberpwn.react.controller;
 
 import java.util.Collections;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -37,9 +36,10 @@ public class PluginWeightController extends Controller implements Configurable
 		notify = true;
 	}
 	
+	@Override
 	public void start()
 	{
-		react.getDataController().load((String)null, this);
+		react.getDataController().load((String) null, this);
 		
 		if(!React.hashed.contains("raw.githubusercontent.com/cyberpwnn/React"))
 		{
@@ -280,6 +280,8 @@ public class PluginWeightController extends Controller implements Configurable
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
+		cc.set("timings.processing.auto-flush", true, "Keep the timings list grainy (less muddy numbers) spigot only.");
+		cc.set("timings.processing.max-threads", Runtime.getRuntime().availableProcessors(), "The max threads react will use to process incoming data.");
 		cc.set("timings.processing.enabled", true, "Enable processing timings data. If you have trouble with this, disable it.");
 		cc.set("timings.notifier.flush-list-delay", 1200, "How often in ticks to wait before warning about the same plugin.");
 		cc.set("timings.notifier.enable", true, "Enable notifications about plugins consuming lots of timings");

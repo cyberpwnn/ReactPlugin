@@ -134,9 +134,17 @@ public class SampleTicksPerSecond extends Sample
 			k = " (" + F.pc(percentUsed(), 0) + ")";
 		}
 		
-		if(value.getDouble() < getSampleController().getReact().getActionController().getActionInstabilityCause().getConfiguration().getDouble(getSampleController().getReact().getActionController().getActionInstabilityCause().getCodeName() + ".low.tps"))
+		try
 		{
-			return ChatColor.UNDERLINE + "" + ChatColor.BOLD + F.f(getValue().getDouble(), 1) + ChatColor.RESET + ChatColor.GREEN + " TPS" + k;
+			if(value.getDouble() < getSampleController().getReact().getActionController().getActionInstabilityCause().getConfiguration().getDouble(getSampleController().getReact().getActionController().getActionInstabilityCause().getCodeName() + ".low.tps"))
+			{
+				return ChatColor.UNDERLINE + "" + ChatColor.BOLD + F.f(getValue().getDouble(), 1) + ChatColor.RESET + ChatColor.GREEN + " TPS" + k;
+			}
+		}
+		
+		catch(Exception e)
+		{
+			
 		}
 		
 		if(acc)

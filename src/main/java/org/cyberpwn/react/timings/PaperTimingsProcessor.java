@@ -2,7 +2,6 @@ package org.cyberpwn.react.timings;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.lang.Info;
@@ -11,7 +10,10 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
+import org.cyberpwn.react.util.Reflection;
+import org.cyberpwn.react.util.Reflection.FieldAccessor;
 import org.cyberpwn.react.util.Severity;
+import co.aikar.timings.Timings;
 
 public class PaperTimingsProcessor extends Thread
 {
@@ -25,14 +27,15 @@ public class PaperTimingsProcessor extends Thread
 		this.timings = timings;
 		this.plugins = plugins;
 		this.tc = tc;
-		this.reports = new GMap<String, TimingsReport>();
+		reports = new GMap<String, TimingsReport>();
+		hackInterval();
 	}
 	
+	@Override
 	public void run()
 	{
 		scanPlugins();
 		scanRest();
-		
 		GBook k = k();
 		String hh = hh();
 		
@@ -40,6 +43,12 @@ public class PaperTimingsProcessor extends Thread
 		{
 			tc.run(reports, k, hh, reports.get("Server").getData().get("FullServerTick").getMs());
 		}
+	}
+	
+	public void hackInterval()
+	{
+		FieldAccessor<Integer> f = Reflection.getField(Timings.class, "historyInterval", int.class);
+		f.set(null, 40);
 	}
 	
 	public GBook k()

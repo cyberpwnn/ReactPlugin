@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -280,9 +281,32 @@ public class CommandController extends Controller implements CommandExecutor
 			public void run()
 			{
 				CommandSender sender = getSender();
-				React.instance().getUpdateController().checkVersion(sender);
+				sender.sendMessage(Info.TAG + ChatColor.AQUA + "React " + ChatColor.YELLOW + Version.V);
+				React.instance().getUpdateController().version(sender);
 			}
-		}, L.COMMAND_VERSION, "version", "v"));
+		}, L.COMMAND_VERSION, "version", "v", "ver"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
+				CommandSender sender = getSender();
+				String args[] = getArgs();
+				
+				if(args.length == 1)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Authentication data is stored in the react cache");
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* All credentials are encrypted");
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Your credentials will only be used for updates");
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* The command executed will not be logged");
+					sender.sendMessage(Info.TAG + ChatColor.RED + "Console Only!");
+					sender.sendMessage(Info.TAG + ChatColor.RED + "/react-auth <username> <password>");
+					sender.sendMessage(Info.TAG + ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
+					sender.sendMessage(Info.HR);
+				}
+			}
+		}, L.COMMAND_AUTH, "authenticate", "au", "auth"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1491,6 +1515,7 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			if(i.onCommand(trigger, sender, args))
 			{
+				N.t("Command Executed", "name", sender.getName(), "args", new GList<String>(args).toString(","), "trigger", trigger);
 				return;
 			}
 		}
@@ -1706,7 +1731,124 @@ public class CommandController extends Controller implements CommandExecutor
 		}
 	}
 	
+	public void handle(CommandSender s, String msg)
+	{
+		if(msg.startsWith("/react-auth") || msg.startsWith("react-auth"))
+		{
+			String u = "";
+			String p = "";
+			String h = "NONE";
+			
+			if(msg.split(" ").length == 3)
+			{
+				u = msg.split(" ")[1];
+				p = msg.split(" ")[2];
+				React.instance().getUpdateController().auth(s, u, p, h);
+			}
+			
+			else if(msg.split(" ").length == 3)
+			{
+				u = msg.split(" ")[1];
+				p = msg.split(" ")[2];
+				h = msg.split(" ")[3];
+				React.instance().getUpdateController().auth(s, u, p, h);
+			}
+			
+			else
+			{
+				s.sendMessage(ChatColor.RED + "Console Only!");
+				s.sendMessage(ChatColor.RED + "/react-auth <username> <password>");
+				s.sendMessage(ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
+			}
+		}
+	}
+	
 	@EventHandler
+	public void onServer(ServerCommandEvent e)
+	{
+		if(e.getCommand().startsWith("react-auth"))
+		{
+			handle(e.getSender(), e.getCommand());
+			e.setCancelled(true);
+			return;
+		}
+		
+		if(e.getCommand().equalsIgnoreCase("timings off"))
+		{
+			if(e.getSender().hasPermission("bukkit.command.timings"))
+			{
+				React.instance().getTimingsController().off(e.getSender());
+			}
+		}
+		
+		if(e.getCommand().equalsIgnoreCase("timings on"))
+		{
+			if(e.getSender().hasPermission("bukkit.command.timings"))
+			{
+				React.instance().getTimingsController().on(e.getSender());
+			}
+		}
+		
+		if(e.getCommand().equalsIgnoreCase("mem") || e.getCommand().equalsIgnoreCase("memory"))
+		{
+			if(React.isAllowMem())
+			{
+				e.setCancelled(true);
+				
+				CommandSender p = e.getSender();
+				
+				if(e.getSender().hasPermission(Info.PERM_MONITOR))
+				{
+					long d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong() + (getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+					
+					if(d < 0)
+					{
+						d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong());
+					}
+					
+					if(d < 0)
+					{
+						d = 0;
+					}
+					
+					p.sendMessage(String.format(Info.HRN, "Memory"));
+					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_MAX + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryMax() / 1024 / 1024)));
+					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_USED + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryUsed())) + " (" + F.pc(getReact().getSampleController().getSampleMemoryUsed().getPercent(), 0) + ")");
+					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_GARBAGE + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryGarbage())));
+					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
+					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
+					p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
+					p.sendMessage(Info.HR);
+				}
+				
+				else
+				{
+					e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+				}
+			}
+		}
+		
+		if(e.getCommand().equalsIgnoreCase("tps"))
+		{
+			if(React.isAllowMem())
+			{
+				CommandSender p = e.getSender();
+				
+				if(e.getSender().hasPermission("bukkit.command.tps"))
+				{
+					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
+				}
+				
+				else
+				{
+					e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCommandPre(PlayerCommandPreprocessEvent e)
 	{
 		if(e.getMessage().equalsIgnoreCase("/timings off"))

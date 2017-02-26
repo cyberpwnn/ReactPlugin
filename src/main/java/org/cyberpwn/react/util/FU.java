@@ -1,12 +1,9 @@
 /*
  * Copyright 2001-2006 The Apache Software Foundation.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -109,13 +106,16 @@ public class FU
 		if(size / ONE_GB > 0)
 		{
 			displaySize = String.valueOf(size / ONE_GB) + " GB";
-		} else if(size / ONE_MB > 0)
+		}
+		else if(size / ONE_MB > 0)
 		{
 			displaySize = String.valueOf(size / ONE_MB) + " MB";
-		} else if(size / ONE_KB > 0)
+		}
+		else if(size / ONE_KB > 0)
 		{
 			displaySize = String.valueOf(size / ONE_KB) + " KB";
-		} else
+		}
+		else
 		{
 			displaySize = String.valueOf(size) + " bytes";
 		}
@@ -178,7 +178,8 @@ public class FU
 		if(url == null || !url.getProtocol().equals("file"))
 		{
 			return null;
-		} else
+		}
+		else
 		{
 			String filename = url.getFile().replace('/', File.separatorChar);
 			int pos = 0;
@@ -275,7 +276,6 @@ public class FU
 	 *            an existing file to copy, must not be null
 	 * @param destDir
 	 *            the directory to place the copy in, must not be null
-	 *
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -309,7 +309,6 @@ public class FU
 	 *            an existing file to copy, must not be null
 	 * @param destFile
 	 *            the new file, must not be null
-	 * 
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -338,7 +337,6 @@ public class FU
 	 * @param preserveFileDate
 	 *            true if the file date of the copy should be the same as the
 	 *            original
-	 *
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -409,11 +407,13 @@ public class FU
 			try
 			{
 				IOUtils.copy(input, output);
-			} finally
+			}
+			finally
 			{
 				output.close();
 			}
-		} finally
+		}
+		finally
 		{
 			input.close();
 		}
@@ -443,7 +443,6 @@ public class FU
 	 *            an existing directory to copy, must not be null
 	 * @param destDir
 	 *            the directory to place the copy in, must not be null
-	 *
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -488,7 +487,6 @@ public class FU
 	 *            an existing directory to copy, must not be null
 	 * @param destDir
 	 *            the new directory, must not be null
-	 *
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -519,7 +517,6 @@ public class FU
 	 * @param preserveFileDate
 	 *            true if the file date of the copy should be the same as the
 	 *            original
-	 *
 	 * @throws NullPointerException
 	 *             if source or destination is null
 	 * @throws IOException
@@ -574,7 +571,8 @@ public class FU
 			{
 				throw new IOException("Destination '" + destDir + "' exists but is not a directory");
 			}
-		} else
+		}
+		else
 		{
 			if(destDir.mkdirs() == false)
 			{
@@ -595,15 +593,16 @@ public class FU
 		{ // null if security restricted
 			throw new IOException("Failed to list contents of " + srcDir);
 		}
-		for(int i = 0; i < files.length; i++)
+		for(File file : files)
 		{
-			File copiedFile = new File(destDir, files[i].getName());
-			if(files[i].isDirectory())
+			File copiedFile = new File(destDir, file.getName());
+			if(file.isDirectory())
 			{
-				doCopyDirectory(files[i], copiedFile, preserveFileDate);
-			} else
+				doCopyDirectory(file, copiedFile, preserveFileDate);
+			}
+			else
 			{
-				doCopyFile(files[i], copiedFile, preserveFileDate);
+				doCopyFile(file, copiedFile, preserveFileDate);
 			}
 		}
 	}
@@ -620,7 +619,6 @@ public class FU
 	 * @param destination
 	 *            A non-directory <code>File</code> to write bytes to (possibly
 	 *            overwriting).
-	 *
 	 * @throws IOException
 	 *             if
 	 *             <ul>
@@ -631,13 +629,11 @@ public class FU
 	 */
 	public static void copyURLToFile(URL source, File destination) throws IOException
 	{
-		// does destination directory exist ?
 		if(destination.getParentFile() != null && !destination.getParentFile().exists())
 		{
 			destination.getParentFile().mkdirs();
 		}
 		
-		// make sure we can write to destination
 		if(destination.exists() && !destination.canWrite())
 		{
 			String message = "Unable to open file " + destination + " for writing.";
@@ -645,17 +641,23 @@ public class FU
 		}
 		
 		InputStream input = source.openStream();
+		
 		try
 		{
 			FileOutputStream output = new FileOutputStream(destination);
+			
 			try
 			{
 				IOUtils.copy(input, output);
-			} finally
+			}
+			
+			finally
 			{
 				output.close();
 			}
-		} finally
+		}
+		
+		finally
 		{
 			input.close();
 		}
@@ -714,13 +716,13 @@ public class FU
 		}
 		
 		IOException exception = null;
-		for(int i = 0; i < files.length; i++)
+		for(File file : files)
 		{
-			File file = files[i];
 			try
 			{
 				forceDelete(file);
-			} catch(IOException ioe)
+			}
+			catch(IOException ioe)
 			{
 				exception = ioe;
 			}
@@ -764,10 +766,12 @@ public class FU
 			try
 			{
 				Thread.sleep(100);
-			} catch(InterruptedException ignore)
+			}
+			catch(InterruptedException ignore)
 			{
 				;
-			} catch(Exception ex)
+			}
+			catch(Exception ex)
 			{
 				break;
 			}
@@ -800,7 +804,8 @@ public class FU
 		{
 			in = new FileInputStream(file);
 			return IOUtils.toString(in, encoding);
-		} finally
+		}
+		finally
 		{
 			in.close();
 		}
@@ -824,7 +829,8 @@ public class FU
 		{
 			in = new FileInputStream(file);
 			return IOUtils.toByteArray(in);
-		} finally
+		}
+		finally
 		{
 			in.close();
 		}
@@ -856,7 +862,8 @@ public class FU
 		{
 			in = new FileInputStream(file);
 			return IOUtils.readLines(in, encoding);
-		} finally
+		}
+		finally
 		{
 			in.close();
 		}
@@ -886,7 +893,8 @@ public class FU
 		try
 		{
 			IOUtils.write(data, out, encoding);
-		} finally
+		}
+		finally
 		{
 			out.close();
 		}
@@ -909,7 +917,8 @@ public class FU
 		try
 		{
 			out.write(data);
-		} finally
+		}
+		finally
 		{
 			out.close();
 		}
@@ -970,7 +979,8 @@ public class FU
 		try
 		{
 			IOUtils.writeLines(lines, lineEnding, out, encoding);
-		} finally
+		}
+		finally
 		{
 			out.close();
 		}
@@ -999,7 +1009,8 @@ public class FU
 		if(file.isDirectory())
 		{
 			deleteDirectory(file);
-		} else
+		}
+		else
 		{
 			if(!file.exists())
 			{
@@ -1029,7 +1040,8 @@ public class FU
 		if(file.isDirectory())
 		{
 			deleteDirectoryOnExit(file);
-		} else
+		}
+		else
 		{
 			file.deleteOnExit();
 		}
@@ -1087,13 +1099,13 @@ public class FU
 		}
 		
 		IOException exception = null;
-		for(int i = 0; i < files.length; i++)
+		for(File file : files)
 		{
-			File file = files[i];
 			try
 			{
 				forceDeleteOnExit(file);
-			} catch(IOException ioe)
+			}
+			catch(IOException ioe)
 			{
 				exception = ioe;
 			}
@@ -1126,7 +1138,8 @@ public class FU
 				String message = "File " + directory + " exists and is " + "not a directory. Unable to create directory.";
 				throw new IOException(message);
 			}
-		} else
+		}
+		else
 		{
 			if(!directory.mkdirs())
 			{
@@ -1167,14 +1180,13 @@ public class FU
 		{ // null if security restricted
 			return 0L;
 		}
-		for(int i = 0; i < files.length; i++)
+		for(File file : files)
 		{
-			File file = files[i];
-			
 			if(file.isDirectory())
 			{
 				size += sizeOfDirectory(file);
-			} else
+			}
+			else
 			{
 				size += file.length();
 			}

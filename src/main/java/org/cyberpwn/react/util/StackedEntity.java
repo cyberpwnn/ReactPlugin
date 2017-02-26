@@ -83,27 +83,31 @@ public class StackedEntity implements Listener
 		}
 		
 		React.instance().getActionController().getActionStackEntities().updateHealth(host, e);
-		
-		if(getRoot().getStacks().contains(e))
-		{
-			StackedEntity si = getRoot().getStack(e);
-			getRoot().removeStack(si);
-			setSize(getSize() + si.getSize());
-			si.destroy();
-		}
-		
-		else
-		{
-			setSize(getSize() + 1);
-		}
+		setSize(getSize() + getRoot().getSize(e));
+		getRoot().animateStack(e, getHost());
+		getRoot().removeStack(e);
+		e.remove();
 		
 		if(React.instance().getActionController().getActionStackEntities().getConfiguration().getBoolean("modifications.stack-sounds"))
 		{
-			new GSound(Sound.CHICKEN_EGG_POP, 1f, 0.6f + ((float) size) / (float) (React.instance().getActionController().getActionStackEntities().maxSize())).play(e.getLocation());
+			try
+			{
+				new GSound(Sound.valueOf("CHICKEN_EGG_POP"), 1f, 0.6f + ((float) size) / (float) (React.instance().getActionController().getActionStackEntities().maxSize())).play(e.getLocation());
+			}
+			
+			catch(Exception exx)
+			{
+				try
+				{
+					new GSound(Sound.valueOf("ENTITY_CHICKEN_EGG"), 1f, 0.6f + ((float) size) / (float) (React.instance().getActionController().getActionStackEntities().maxSize())).play(e.getLocation());
+				}
+				
+				catch(Exception ex)
+				{
+					
+				}
+			}
 		}
-		
-		getRoot().animateStack(e, getHost());
-		e.remove();
 	}
 	
 	public ActionStackEntities getRoot()

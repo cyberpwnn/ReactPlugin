@@ -15,9 +15,13 @@ import org.cyberpwn.react.util.GList;
 
 public class LanguageController extends Controller
 {
+	private String lang;
+	
 	public LanguageController(React react)
 	{
 		super(react);
+		
+		lang = "en";
 	}
 	
 	@Override
@@ -44,6 +48,7 @@ public class LanguageController extends Controller
 		
 		if(!code.equals("en"))
 		{
+			lang = code;
 			React.instance().getD().s(String.format(Info.URL_LANGUAGE, code));
 			
 			File f = new File(React.instance().getDataFolder(), "lang");
@@ -131,5 +136,10 @@ public class LanguageController extends Controller
 		}
 		
 		return cc;
+	}
+	
+	public String getLang()
+	{
+		return lang;
 	}
 }

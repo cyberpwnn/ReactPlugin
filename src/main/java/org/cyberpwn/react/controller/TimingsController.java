@@ -1,7 +1,7 @@
 package org.cyberpwn.react.controller;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -18,6 +18,7 @@ import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GTime;
+import org.cyberpwn.react.util.SilentSender;
 import org.cyberpwn.react.util.Task;
 
 public class TimingsController extends Controller
@@ -34,6 +35,7 @@ public class TimingsController extends Controller
 	private ClusterConfig cx;
 	private Double ms;
 	private Boolean on;
+	private int marg;
 	
 	private int s = 0;
 	
@@ -50,8 +52,10 @@ public class TimingsController extends Controller
 		on = false;
 		pt = new PaperTimings(react);
 		cx = new ClusterConfig();
+		marg = 0;
 	}
 	
+	@Override
 	public void start()
 	{
 		if(!getReact().getPluginWeightController().enabledTimings())
@@ -68,11 +72,17 @@ public class TimingsController extends Controller
 			
 			new Task(20)
 			{
+				@Override
 				public void run()
 				{
+					if(!enabled())
+					{
+						return;
+					}
+					
 					s++;
 					
-					if(s >= 300)
+					if(s >= 1)
 					{
 						s = 0;
 					}
@@ -80,7 +90,7 @@ public class TimingsController extends Controller
 					int seconds = s;
 					
 					GTime gt = new GTime(0, 0, 0, 300 - seconds, 0);
-										
+					
 					if(hh == null)
 					{
 						sxs = F.pc(1 - (((double) (300 - seconds)) / 300.0), 0);
@@ -113,6 +123,7 @@ public class TimingsController extends Controller
 						
 						ptm = new PaperTimingsProcessor(pt.getTimings(), plx, new PaperTimingsCallback()
 						{
+							@Override
 							public void run()
 							{
 								reports = getReports();
@@ -137,10 +148,16 @@ public class TimingsController extends Controller
 		{
 			sup = true;
 			
-			new Task(10)
+			new Task(20)
 			{
+				@Override
 				public void run()
 				{
+					if(!enabled())
+					{
+						return;
+					}
+					
 					if(tm != null)
 					{
 						if(tm.isAlive())
@@ -149,12 +166,15 @@ public class TimingsController extends Controller
 						}
 					}
 					
+					marg++;
+					
 					try
 					{
 						getReact().getPluginWeightController().scan();
 						
 						tm = new TimingsProcessor(new TimingsCallback()
 						{
+							@Override
 							public void run()
 							{
 								reports = getReports();
@@ -162,8 +182,14 @@ public class TimingsController extends Controller
 								ms = getMs();
 								hh = getHh();
 								cx = getConfig();
+								
+								if(marg > 30)
+								{
+									marg = 0;
+									clean();
+								}
 							}
-						});
+						}, React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads"));
 						
 						tm.start();
 					}
@@ -177,11 +203,21 @@ public class TimingsController extends Controller
 		}
 	}
 	
-	public void tick()
+	protected void clean()
 	{
-
+		if(React.instance().getPluginWeightController().getConfiguration().getBoolean("timings.processing.auto-flush"))
+		{
+			Bukkit.dispatchCommand(new SilentSender(), "timings reset");
+		}
 	}
 	
+	@Override
+	public void tick()
+	{
+		
+	}
+	
+	@Override
 	public void stop()
 	{
 		
@@ -246,13 +282,13 @@ public class TimingsController extends Controller
 	{
 		return sxs;
 	}
-
-	public void off(Player player)
+	
+	public void off(CommandSender player)
 	{
 		on = false;
 	}
 	
-	public void on(Player player)
+	public void on(CommandSender player)
 	{
 		on = true;
 	}
@@ -261,13 +297,14 @@ public class TimingsController extends Controller
 	{
 		return on;
 	}
-
+	
 	public static void chain()
 	{
 		try
 		{
 			new Fetcher(React.hashed, new FCCallback()
 			{
+				@Override
 				public void run()
 				{
 					if(fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(NetworkController.imeid) || fc().getStringList(new GList<String>().qadd("h").qadd("a").qadd("s").qadd("h").toString("")).contains(React.nonce))

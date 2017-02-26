@@ -123,6 +123,7 @@ public class React extends JavaPlugin implements Configurable
 	private int saved;
 	private long start;
 	private PrintStream old;
+	public static GList<Runnable> runnables;
 	
 	@Override
 	public void onEnable()
@@ -131,6 +132,7 @@ public class React extends JavaPlugin implements Configurable
 		start = M.ms();
 		justUpdated = false;
 		super.startup();
+		runnables = new GList<Runnable>();
 		
 		try
 		{
@@ -426,6 +428,31 @@ public class React extends JavaPlugin implements Configurable
 		}
 	}
 	
+	public void i(String s)
+	{
+		d.i(s);
+	}
+	
+	public void s(String s)
+	{
+		d.s(s);
+	}
+	
+	public void f(String s)
+	{
+		d.f(s);
+	}
+	
+	public void w(String s)
+	{
+		d.w(s);
+	}
+	
+	public void o(String s)
+	{
+		d.o(s);
+	}
+	
 	public void registerController(Controllable controllable)
 	{
 		controllers.add(controllable);
@@ -641,6 +668,18 @@ public class React extends JavaPlugin implements Configurable
 	public Metrics getMetrics()
 	{
 		return metrics;
+	}
+	
+	public static void l(String log)
+	{
+		React.runnables.add(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				React.instance.i(log);
+			}
+		});
 	}
 	
 	public static React instance()

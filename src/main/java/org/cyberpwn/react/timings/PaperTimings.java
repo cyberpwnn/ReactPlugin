@@ -3,22 +3,17 @@ package org.cyberpwn.react.timings;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Map;
-
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Reflection;
-
 import com.avaje.ebeaninternal.api.ClassUtil;
 import com.google.common.collect.EvictingQueue;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-
 import co.aikar.timings.TimingHistory;
 import co.aikar.timings.Timings;
 import co.aikar.timings.TimingsManager;
-
-
 
 public class PaperTimings
 {
@@ -39,11 +34,11 @@ public class PaperTimings
 		try
 		{
 			historyIntervall = Reflection.getField("com.destroystokyo.paper.PaperConfig", "config", YamlConfiguration.class).get(null).getInt("timings.history-interval");
-		} 
+		}
 		
 		catch(IllegalArgumentException illegalArgumentException)
 		{
-			historyIntervall = -1;
+			historyIntervall = 10;
 		}
 	}
 	
@@ -88,10 +83,12 @@ public class PaperTimings
 		Map<Integer, String> idHandler = Maps.newHashMap();
 		
 		Map<?, ?> groups = Reflection.getField(TIMINGS_PACKAGE + ".TimingIdentifier", "GROUP_MAP", Map.class).get(null);
+		
 		for(Object group : groups.values())
 		{
 			String groupName = Reflection.getField(group.getClass(), "name", String.class).get(group);
 			ArrayDeque<?> handlers = Reflection.getField(group.getClass(), "handlers", ArrayDeque.class).get(group);
+			
 			for(Object handler : handlers)
 			{
 				int id = Reflection.getField(HANDLER_CLASS, "id", Integer.TYPE).get(handler);
@@ -99,14 +96,14 @@ public class PaperTimings
 				if(name.contains("Combined"))
 				{
 					idHandler.put(id, "Combined " + groupName);
-				} else
+				}
+				else
 				{
 					idHandler.put(id, name);
 				}
 			}
 		}
 		
-		// TimingHistoryEntry
 		Object[] entries = Reflection.getField(TimingHistory.class, "entries", Object[].class).get(lastHistory);
 		
 		for(Object entry : entries)
@@ -119,7 +116,8 @@ public class PaperTimings
 			if(handlerName == null)
 			{
 				parentName = "Unknown-" + childId;
-			} else
+			}
+			else
 			{
 				parentName = handlerName;
 			}
@@ -127,10 +125,6 @@ public class PaperTimings
 			int parentCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(parentData);
 			long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parentData);
 			
-			// long parentLagCount = Reflection.getField(DATA_CLASS, "lagCount",
-			// Integer.TYPE).get(parentData);
-			// long parentLagTime = Reflection.getField(DATA_CLASS, "lagTime",
-			// Long.TYPE).get(parentData);
 			lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
 			
 			Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
@@ -150,7 +144,8 @@ public class PaperTimings
 		if(handlerName == null)
 		{
 			childName = "Unknown-" + childId;
-		} else
+		}
+		else
 		{
 			childName = handlerName;
 		}
@@ -190,7 +185,7 @@ public class PaperTimings
 	{
 		return (float) (Math.round(number * 100.0) / 100.0);
 	}
-
+	
 	public React getPlugin()
 	{
 		return plugin;

@@ -17,6 +17,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTimeBank;
 
@@ -364,64 +365,60 @@ public class DataController extends Controller
 	
 	public void saveFileConfig(File file, FileConfiguration fc, Configurable c)
 	{
-		try
+		new ASYNC()
 		{
-			String data = fc.saveToString();
-			String[] ndx = data.split("\n");
-			GList<String> nd = new GList<String>();
-			
-			for(String element : ndx)
+			@Override
+			public void async()
 			{
-				String key = element.split(": ")[0].replaceAll(" ", "");
-				
-				for(String j : fc.getKeys(true))
+				try
 				{
-					if(j.endsWith("." + key))
+					String data = fc.saveToString();
+					String[] ndx = data.split("\n");
+					GList<String> nd = new GList<String>();
+					
+					for(String element : ndx)
 					{
-						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments"))
+						String key = element.split(": ")[0].replaceAll(" ", "");
+						
+						for(String j : fc.getKeys(true))
 						{
-							if(c.getConfiguration().hasComment(j))
+							if(j.endsWith("." + key))
 							{
-								for(String k : c.getConfiguration().getComment(j))
+								if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-comments"))
 								{
-									int kx = element.split(": ")[0].split(" ").length - 1;
-									nd.add(StringUtils.repeat(" ", kx) + "# " + k);
+									nd.add("");
+									
+									if(c.getConfiguration().hasComment(j))
+									{
+										for(String k : c.getConfiguration().getComment(j))
+										{
+											int kx = element.split(": ")[0].split(" ").length - 1;
+											nd.add(StringUtils.repeat(" ", kx) + "# " + k);
+										}
+									}
 								}
 							}
 						}
 						
-						if(getReact().getConfigurationController().getConfiguration().getBoolean("configuration.enhancements.add-default-comments"))
-						{
-							int kx = element.split(": ")[0].split(" ").length - 1;
-							nd.add(StringUtils.repeat(" ", kx) + "# Default Value: " + getReact().getConfigurationController().getDefaultValue(c, j).toString());
-						}
+						nd.add(element);
 					}
+					
+					PrintWriter pw = new PrintWriter(new FileWriter(file, false));
+					
+					for(String i : nd)
+					{
+						pw.write(i + "\n");
+					}
+					
+					pw.close();
 				}
 				
-				nd.add(element);
+				catch(Exception e)
+				{
+					
+				}
 			}
-			
-			PrintWriter pw = new PrintWriter(new FileWriter(file, false));
-			
-			for(String i : nd)
-			{
-				pw.write(i + "\n");
-			}
-			
-			pw.close();
-		}
-		
-		catch(Exception e)
-		{
-			f("============ DATA FAILURE ============");
-			f("A file has failed to save it's data to");
-			f("your server. If this persists, please ");
-			f("contact support on spigot or github.  ");
-			f("TF: " + ChatColor.YELLOW + file.getName());
-			f("EX: " + ChatColor.YELLOW + e.getClass().getSimpleName());
-			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
-			f("============ ============ ============");
-		}
+		};
 	}
 	
 	public void verifyFile(File file)

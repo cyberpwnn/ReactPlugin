@@ -9,6 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
+import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.json.JSONObject;
 import org.cyberpwn.react.network.ReactServer;
@@ -17,8 +18,6 @@ import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Keyring;
 import org.cyberpwn.react.util.N;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactRunnable;
 
 public class NetworkController extends Controller
@@ -80,6 +79,8 @@ public class NetworkController extends Controller
 				identifyANA();
 			}
 		};
+		
+		N.t("Server Start");
 	}
 	
 	public void processId()
@@ -97,12 +98,13 @@ public class NetworkController extends Controller
 			uid = kr.getId();
 			nonce = kr.getTa();
 		}
-		
-		s("ID: " + uid + ":" + nonce);
 	}
 	
 	public void trackANA(String event, GMap<String, String> properties)
 	{
+		int online = React.instance().onlinePlayers().length;
+		String lang = React.instance().getLanguageController().getLang();
+		
 		new ASYNC()
 		{
 			@Override
@@ -138,8 +140,10 @@ public class NetworkController extends Controller
 					
 					jsx.put("address", address);
 					jsx.put("version", Version.V);
+					jsx.put("language", lang);
 					jsx.put("build", Version.C);
 					jsx.put("uid", uid);
+					jsx.put("online", online);
 					jsx.put("nonce", nonce);
 					js.put("userId", "user:" + uid);
 					js.put("event", event);
@@ -244,28 +248,21 @@ public class NetworkController extends Controller
 			return;
 		}
 		
-		new Q(P.LOW, "Remote Sample Task", true)
-		{
-			@Override
-			public void run()
-			{
-				ReactServer.reactData.sample(getReact());
-			}
-		};
+		long tick = React.instance().getSampleController().getTick();
 		
-		new Q(P.LOW, "Remote Execution", false)
+		if(tick % 72000 == 0)
 		{
-			@Override
-			public void run()
-			{
-				for(ReactRunnable i : ReactServer.runnables)
-				{
-					i.run(getReact());
-				}
-				
-				ReactServer.runnables.clear();
-			}
-		};
+			N.t("Low Wake Check", "running" + tick / 72000 + " Hours", "tps", ReactAPI.getTicksPerSecond() + "", "memory-used", "" + (100 * (ReactAPI.getMemoryUsed() / (ReactAPI.getMemoryFree() + ReactAPI.getMemoryUsed()))));
+		}
+		
+		ReactServer.reactData.sample(getReact());
+		
+		for(ReactRunnable i : ReactServer.runnables)
+		{
+			i.run(getReact());
+		}
+		
+		ReactServer.runnables.clear();
 	}
 	
 	@Override

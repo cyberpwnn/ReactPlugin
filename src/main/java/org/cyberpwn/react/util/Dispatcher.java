@@ -11,7 +11,12 @@ public class Dispatcher
 	
 	public enum DispatchType
 	{
-		INFO, SUCCESS, FAILURE, WARNING, VERBOSE, OVERBOSE
+		INFO,
+		SUCCESS,
+		FAILURE,
+		WARNING,
+		VERBOSE,
+		OVERBOSE
 	}
 	
 	protected String name;
