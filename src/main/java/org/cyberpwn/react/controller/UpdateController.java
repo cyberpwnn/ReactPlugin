@@ -34,8 +34,6 @@ import org.cyberpwn.react.updater.ConnectionFailedException;
 import org.cyberpwn.react.updater.InvalidCredentialsException;
 import org.cyberpwn.react.updater.Resource;
 import org.cyberpwn.react.updater.ResourceManager;
-import org.cyberpwn.react.updater.ResourceUpdate;
-import org.cyberpwn.react.updater.SpigotResourceManager;
 import org.cyberpwn.react.updater.SpigotSiteCore;
 import org.cyberpwn.react.updater.SpigotUser;
 import org.cyberpwn.react.updater.TwoFactorAuthenticationException;
@@ -43,12 +41,12 @@ import org.cyberpwn.react.updater.User;
 import org.cyberpwn.react.updater.UserManager;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
-import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.LibDownloader;
 import org.cyberpwn.react.util.LibDownloader.Library;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.PluginUtil;
+import org.cyberpwn.react.util.SilentSender;
 import org.cyberpwn.react.util.SpigotAuthUser;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
@@ -62,14 +60,12 @@ public class UpdateController extends Controller implements Configurable
 	private File browseCookies;
 	private GMap<String, String> cookie;
 	private boolean setup;
-	private GList<ResourceUpdate> updates;
 	private boolean updated;
 	
 	public UpdateController(React react)
 	{
 		super(react);
 		
-		updates = new GList<ResourceUpdate>();
 		updated = false;
 		setup = false;
 		browseCookies = new File(new File(React.instance().getDataFolder(), "cache"), "chocolate-chip.cookie");
@@ -345,23 +341,7 @@ public class UpdateController extends Controller implements Configurable
 											@Override
 											public void run()
 											{
-												try
-												{
-													getVersions();
-												}
-												catch(ConnectionFailedException e)
-												{
-													// TODO Auto-generated catch
-													// block
-													e.printStackTrace();
-												}
-												catch(Exception e)
-												{
-													// TODO Auto-generated catch
-													// block
-													e.printStackTrace();
-												}
-												// update(new SilentSender());
+												update(new SilentSender());
 											}
 										});
 									}
@@ -409,6 +389,11 @@ public class UpdateController extends Controller implements Configurable
 		sau.save(auth);
 		browseCookies.delete();
 		invalid = false;
+		
+		if(!setup)
+		{
+			initialize();
+		}
 	}
 	
 	public boolean couldUpdate() throws ConnectionFailedException, Exception
@@ -518,29 +503,6 @@ public class UpdateController extends Controller implements Configurable
 	public boolean canAutoInstall()
 	{
 		return cc.getBoolean("updater.auto-install");
-	}
-	
-	public void getVersions() throws ConnectionFailedException, Exception
-	{
-		if(mAuthenticate())
-		{
-			Resource react = getReactResource(getPurchasedResources(user));
-			
-			GList<ResourceUpdate> updates = new GList<ResourceUpdate>();
-			
-			if(react != null)
-			{
-				for(ResourceUpdate ru : ((SpigotResourceManager) api.getResourceManager()).getResourceUpdates(react.getResourceId(), user))
-				{
-					if(ru.getUpdateVersion() != null)
-					{
-						updates.add(ru);
-					}
-				}
-			}
-			
-			this.updates = updates;
-		}
 	}
 	
 	public String getLatestVersion() throws Exception
