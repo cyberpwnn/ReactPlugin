@@ -7,21 +7,22 @@ import java.util.List;
  * 
  * @author Maxim Van de Wynckel
  */
-public interface ForumThread {
+public interface ForumThread
+{
 	/**
 	 * Get thread replies
 	 * 
 	 * @return List of {@link org.cyberpwn.react.updater.Post}
 	 */
 	List<Post> getReplies();
-
+	
 	/**
 	 * Get original post
 	 * 
 	 * @return {@link org.cyberpwn.react.updater.Post}
 	 */
 	Post getOriginalPost();
-
+	
 	/**
 	 * Get thread creator
 	 * 
