@@ -5,9 +5,9 @@ import org.cyberpwn.react.util.GList;
 
 public class Version
 {
-	public static final int C = 4330;
-	public static final String V = "4.3.3";
-	public static final List<String> D = new GList<String>(new String[] {"Timings Processing is now much faster (on the cpu)", "Added timings-controller setting max threads for multithreaded processing", "Paperspigot now only takes 2 seconds to get the first batch of timings instead of 5 minutes", "Improved performance while timings are off"});
+	public static final int C = 4350;
+	public static final String V = "4.3.5";
+	public static final List<String> D = new GList<String>(new String[] {"Updater overhaul. Now downloads updates from spigot (you need to authenticate yourself)", "Added a guide on how to set this up on the release page", "Major performance improvements at startup", "You may need to reconfigure your updater.yml file"});
 	
 	public static String toV(int b)
 	{

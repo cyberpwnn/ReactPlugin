@@ -2,17 +2,6 @@ package org.cyberpwn.react.updater;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.cyberpwn.react.updater.forum.ForumManager;
-import org.cyberpwn.react.updater.forum.SpigotForumManager;
-import org.cyberpwn.react.updater.http.HTTPResponse;
-import org.cyberpwn.react.updater.http.HTTPUnitRequest;
-import org.cyberpwn.react.updater.http.Request;
-import org.cyberpwn.react.updater.resource.ResourceManager;
-import org.cyberpwn.react.updater.resource.SpigotResourceManager;
-import org.cyberpwn.react.updater.user.ConversationManager;
-import org.cyberpwn.react.updater.user.SpigotConversationManager;
-import org.cyberpwn.react.updater.user.SpigotUserManager;
-import org.cyberpwn.react.updater.user.UserManager;
 
 public class SpigotSiteCore implements SpigotSiteAPI {
 	/* Spigot User Manager */
