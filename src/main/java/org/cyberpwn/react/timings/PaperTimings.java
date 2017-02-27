@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.util.AsyncQueue;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Reflection;
 import com.avaje.ebeaninternal.api.ClassUtil;
@@ -43,7 +44,7 @@ public class PaperTimings
 	}
 	
 	@SuppressWarnings("unchecked")
-	public GList<String> getTimings()
+	public GList<String> getTimings(int threads)
 	{
 		GList<String> gdt = new GList<String>();
 		
@@ -66,7 +67,7 @@ public class PaperTimings
 		}
 		
 		List<String> lines = Lists.newArrayList();
-		printTimings(lines, lastHistory);
+		printTimings(lines, lastHistory, threads);
 		
 		for(String i : lines)
 		{
@@ -76,8 +77,19 @@ public class PaperTimings
 		return gdt;
 	}
 	
-	public void printTimings(List<String> lines, TimingHistory lastHistory)
+	public void printTimings(List<String> lines, TimingHistory lastHistory, int threads)
 	{
+		boolean b[] = {true};
+		
+		AsyncQueue q = new AsyncQueue(threads)
+		{
+			@Override
+			public void onComplete()
+			{
+				b[0] = false;
+			}
+		};
+		
 		printHeadData(lastHistory, lines);
 		
 		Map<Integer, String> idHandler = Maps.newHashMap();
@@ -86,51 +98,80 @@ public class PaperTimings
 		
 		for(Object group : groups.values())
 		{
-			String groupName = Reflection.getField(group.getClass(), "name", String.class).get(group);
-			ArrayDeque<?> handlers = Reflection.getField(group.getClass(), "handlers", ArrayDeque.class).get(group);
-			
-			for(Object handler : handlers)
+			q.queue(new Runnable()
 			{
-				int id = Reflection.getField(HANDLER_CLASS, "id", Integer.TYPE).get(handler);
-				String name = Reflection.getField(HANDLER_CLASS, "name", String.class).get(handler);
-				if(name.contains("Combined"))
+				@Override
+				public void run()
 				{
-					idHandler.put(id, "Combined " + groupName);
+					String groupName = Reflection.getField(group.getClass(), "name", String.class).get(group);
+					ArrayDeque<?> handlers = Reflection.getField(group.getClass(), "handlers", ArrayDeque.class).get(group);
+					
+					for(Object handler : handlers)
+					{
+						int id = Reflection.getField(HANDLER_CLASS, "id", Integer.TYPE).get(handler);
+						String name = Reflection.getField(HANDLER_CLASS, "name", String.class).get(handler);
+						if(name.contains("Combined"))
+						{
+							idHandler.put(id, "Combined " + groupName);
+						}
+						else
+						{
+							idHandler.put(id, name);
+						}
+					}
 				}
-				else
-				{
-					idHandler.put(id, name);
-				}
-			}
+			});
 		}
 		
 		Object[] entries = Reflection.getField(TimingHistory.class, "entries", Object[].class).get(lastHistory);
 		
 		for(Object entry : entries)
 		{
-			Object parentData = Reflection.getField(HISTORY_ENTRY_CLASS, "data", Object.class).get(entry);
-			int childId = Reflection.getField(DATA_CLASS, "id", Integer.TYPE).get(parentData);
-			
-			String handlerName = idHandler.get(childId);
-			String parentName;
-			if(handlerName == null)
+			q.queue(new Runnable()
 			{
-				parentName = "Unknown-" + childId;
+				@Override
+				public void run()
+				{
+					Object parentData = Reflection.getField(HISTORY_ENTRY_CLASS, "data", Object.class).get(entry);
+					int childId = Reflection.getField(DATA_CLASS, "id", Integer.TYPE).get(parentData);
+					
+					String handlerName = idHandler.get(childId);
+					String parentName;
+					if(handlerName == null)
+					{
+						parentName = "Unknown-" + childId;
+					}
+					else
+					{
+						parentName = handlerName;
+					}
+					
+					int parentCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(parentData);
+					long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parentData);
+					
+					lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
+					
+					Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
+					for(Object childData : children)
+					{
+						printChilds(parentData, childData, idHandler, lines);
+					}
+				}
+			});
+		}
+		
+		q.start();
+		
+		while(b[0])
+		{
+			try
+			{
+				Thread.sleep(20);
 			}
-			else
+			
+			catch(InterruptedException e)
 			{
-				parentName = handlerName;
-			}
-			
-			int parentCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(parentData);
-			long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parentData);
-			
-			lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
-			
-			Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
-			for(Object childData : children)
-			{
-				printChilds(parentData, childData, idHandler, lines);
+				
 			}
 		}
 	}

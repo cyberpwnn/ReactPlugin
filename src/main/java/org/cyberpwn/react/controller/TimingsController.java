@@ -121,7 +121,7 @@ public class TimingsController extends Controller
 							plx.add(i.getName());
 						}
 						
-						ptm = new PaperTimingsProcessor(pt.getTimings(), plx, new PaperTimingsCallback()
+						ptm = new PaperTimingsProcessor(pt.getTimings(React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads")), plx, new PaperTimingsCallback()
 						{
 							@Override
 							public void run()

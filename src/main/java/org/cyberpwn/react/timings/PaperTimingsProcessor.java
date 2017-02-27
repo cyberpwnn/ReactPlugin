@@ -34,14 +34,22 @@ public class PaperTimingsProcessor extends Thread
 	@Override
 	public void run()
 	{
-		scanPlugins();
-		scanRest();
-		GBook k = k();
-		String hh = hh();
-		
-		if(reports.containsKey("Server") && reports.get("Server").getData().containsKey("FullServerTick"))
+		try
 		{
-			tc.run(reports, k, hh, reports.get("Server").getData().get("FullServerTick").getMs());
+			scanPlugins();
+			scanRest();
+			GBook k = k();
+			String hh = hh();
+			
+			if(reports.containsKey("Server") && reports.get("Server").getData().containsKey("FullServerTick"))
+			{
+				tc.run(reports, k, hh, reports.get("Server").getData().get("FullServerTick").getMs());
+			}
+		}
+		
+		catch(Exception e)
+		{
+			
 		}
 	}
 	
@@ -276,45 +284,54 @@ public class PaperTimingsProcessor extends Thread
 		{
 			for(String p : plugins)
 			{
-				if(i.contains("Combined " + p) && i.startsWith("C"))
+				try
 				{
-					Long time = getValue(i, " Time: ");
-					Long count = getValue(i, " Count: ");
-					
-					TimingsObject to = new TimingsObject(time, count, time, 0l);
-					
-					tr.put(p, to);
-					double ms = to.getMs();
-					
-					if(ms > 5)
+					if(i.contains("Combined " + p) && i.startsWith("C"))
 					{
-						if(ms > 50)
+						Long time = getValue(i, " Time: ");
+						Long count = getValue(i, " Count: ");
+						
+						TimingsObject to = new TimingsObject(time, count, time, 0l);
+						
+						tr.put(p, to);
+						double ms = to.getMs();
+						
+						if(ms > 5)
 						{
-							tr.put(p, Severity.SERIOUS);
+							if(ms > 50)
+							{
+								tr.put(p, Severity.SERIOUS);
+							}
+							
+							else if(ms > 30)
+							{
+								tr.put(p, Severity.PROBLEMATIC);
+							}
+							
+							else if(ms > 20)
+							{
+								tr.put(p, Severity.NOTABLE);
+							}
+							
+							else
+							{
+								tr.put(p, Severity.POSSIBLE);
+							}
 						}
 						
-						else if(ms > 30)
-						{
-							tr.put(p, Severity.PROBLEMATIC);
-						}
-						
-						else if(ms > 20)
-						{
-							tr.put(p, Severity.NOTABLE);
-						}
-						
-						else
-						{
-							tr.put(p, Severity.POSSIBLE);
-						}
+						break;
 					}
+				}
+				
+				catch(Exception e)
+				{
 					
-					break;
 				}
 			}
 		}
 		
 		reports.put("Plugin", tr);
+		
 	}
 	
 	private Long getValue(String line, String key)

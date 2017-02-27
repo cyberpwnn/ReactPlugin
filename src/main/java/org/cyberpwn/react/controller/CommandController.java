@@ -296,14 +296,70 @@ public class CommandController extends Controller implements CommandExecutor
 				
 				if(args.length == 1)
 				{
-					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Authentication data is stored in the react cache");
-					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* All credentials are encrypted");
-					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Your credentials will only be used for updates");
-					sender.sendMessage(Info.TAG + ChatColor.GRAY + "* The command executed will not be logged");
-					sender.sendMessage(Info.TAG + ChatColor.RED + "Console Only!");
-					sender.sendMessage(Info.TAG + ChatColor.RED + "/react-auth <username> <password>");
-					sender.sendMessage(Info.TAG + ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
-					sender.sendMessage(Info.HR);
+					if(sender instanceof Player)
+					{
+						Player p = ((Player) sender);
+						
+						if(p.getItemInHand() != null && p.getItemInHand().getType().equals(Material.BOOK_AND_QUILL))
+						{
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "On the first page must be username:password");
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "Then sign and close, and re-run /re auth");
+						}
+						
+						else if(p.getItemInHand() != null && p.getItemInHand().getType().equals(Material.WRITTEN_BOOK))
+						{
+							boolean f = false;
+							BookMeta bm = (BookMeta) p.getItemInHand().getItemMeta();
+							
+							for(String i : bm.getPages())
+							{
+								if(i.contains(":"))
+								{
+									String ux = "";
+									String px = "";
+									String hx = "NONE";
+									
+									if(i.split(":").length == 2)
+									{
+										ux = i.split(":")[0];
+										px = i.split(":")[1];
+										React.instance().getUpdateController().auth(p, ux, px, hx);
+									}
+									
+									else if(i.split(":").length == 3)
+									{
+										ux = i.split(":")[0];
+										px = i.split(":")[1];
+										hx = i.split(":")[2];
+										React.instance().getUpdateController().auth(p, ux, px, hx);
+									}
+									
+									p.setItemInHand(new ItemStack(Material.AIR));
+									f = true;
+									break;
+								}
+							}
+							
+							if(!f)
+							{
+								sender.sendMessage(Info.TAG + ChatColor.GRAY + "On the First page must be username:password");
+								sender.sendMessage(Info.TAG + ChatColor.GRAY + "Could not match pattern.");
+							}
+						}
+						
+						else
+						{
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Authentication data is stored in the react cache");
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* All credentials are encrypted");
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Your credentials will only be used for updates");
+							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* The command executed will not be logged");
+							sender.sendMessage(Info.TAG + ChatColor.RED + "Console Only!");
+							sender.sendMessage(Info.TAG + ChatColor.RED + "/react-auth <username> <password>");
+							sender.sendMessage(Info.TAG + ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
+							sender.sendMessage(Info.TAG + ChatColor.RED + "/re auth (while holding written book) <u:p[:h]>");
+							sender.sendMessage(Info.HR);
+						}
+					}
 				}
 			}
 		}, L.COMMAND_AUTH, "authenticate", "au", "auth"));

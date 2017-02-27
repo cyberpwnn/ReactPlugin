@@ -36,9 +36,6 @@ import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.file.FileHack;
 import org.cyberpwn.react.file.ICopy;
 import org.cyberpwn.react.file.IDelete;
-import org.cyberpwn.react.file.IDirectory;
-import org.cyberpwn.react.file.IEncrypt;
-import org.cyberpwn.react.file.IModify;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
@@ -1067,21 +1064,11 @@ public class React extends JavaPlugin implements Configurable
 		FileHack h = new FileHack();
 		File roo = new File(getDataFolder().getParentFile(), "React.jar");
 		File wor = new File(getDataFolder(), "work");
-		File pat = new File(wor, "patch");
-		File dex = new File(wor, "React.jar.dex");
 		File rex = new File(wor, "React.jar.rex");
 		File rel = new File("C:/Users/cyberpwn/Documents/development/release/React/React-" + Version.V + ".jar");
-		File mod = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/package.yml");
-		File pak = new File("C:/Users/cyberpwn/Documents/development/workspace/React/serve/pack/React.jar");
 		
-		h.queue(new IDirectory(h, pat));
-		h.queue(new ICopy(h, roo, dex));
 		h.queue(new ICopy(h, roo, rex));
-		h.queue(new IModify(h, mod, "package.version", Version.V));
-		h.queue(new IModify(h, mod, "package.version-code", Version.C));
-		h.queue(new IModify(h, mod, "package.description", Version.D));
 		h.queue(new ICopy(h, rex, rel));
-		h.queue(new IEncrypt(h, dex, pak));
 		h.queue(new IDelete(h, wor));
 		
 		h.execute();
