@@ -7,6 +7,8 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
@@ -108,12 +110,37 @@ public class ActionPurgeEntities extends Action implements Listener
 						}
 					}
 					
+					if(isTamed(j) && cc.getBoolean(getCodeName() + ".filter.ignore-tamed-entities"))
+					{
+						continue;
+					}
+					
 					E.r(j);
 				}
 			}
 		}
 		
 		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+	}
+	
+	public boolean isTamed(Entity e)
+	{
+		if(e instanceof LivingEntity)
+		{
+			LivingEntity ee = (LivingEntity) e;
+			
+			if(ee instanceof Tameable)
+			{
+				Tameable t = (Tameable) ee;
+				
+				if(t.isTamed())
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override
@@ -141,6 +168,7 @@ public class ActionPurgeEntities extends Action implements Listener
 		}
 		
 		cc.set(getCodeName() + ".cullable", allow, "Remove entities from here you dont want being purged.");
+		cc.set(getCodeName() + ".filter.ignore-tamed-entities", true, "Ignore tamed entities");
 		cc.set(getCodeName() + ".filter.ignore-named-entities", false, "Ignore entities with names.");
 		cc.set(getCodeName() + ".filter.ignore-villagers", false, "Ignore testificates.");
 	}

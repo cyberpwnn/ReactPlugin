@@ -13,6 +13,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ChunkPurgeEvent;
 import org.cyberpwn.react.api.ManualActionEvent;
+import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -37,6 +38,11 @@ public class ActionPurgeChunks extends Action implements Listener
 	@Override
 	public void act()
 	{
+		if(ReactAPI.getTicksPerSecond() > 18.5)
+		{
+			return;
+		}
+		
 		limit--;
 		
 		if(limit <= 0)

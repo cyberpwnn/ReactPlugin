@@ -56,8 +56,6 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
@@ -316,24 +314,10 @@ public class React extends JavaPlugin implements Configurable
 			@Override
 			public void run()
 			{
-				taskManager.tick();
-				
-				new Q(P.HIGHEST, "Controller", false)
+				for(Controllable i : controllers)
 				{
-					@Override
-					public void run()
-					{
-						for(Controllable i : controllers)
-						{
-							if(i instanceof TaskManager)
-							{
-								continue;
-							}
-							
-							i.tick();
-						}
-					}
-				};
+					i.tick();
+				}
 			}
 		};
 		

@@ -7,6 +7,7 @@ import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Value;
 import org.cyberpwn.react.util.ValueType;
 
@@ -28,9 +29,13 @@ public class Sample implements Samplable, Configurable
 	protected Integer currentDelay;
 	protected Long reactionTime = 0l;
 	protected String codeName;
+	protected boolean sleepy;
+	protected boolean asleep;
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description)
 	{
+		asleep = false;
+		sleepy = true;
 		this.sampleController = sampleController;
 		this.name = name;
 		this.cname = cname;
@@ -48,6 +53,8 @@ public class Sample implements Samplable, Configurable
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description, boolean register)
 	{
+		asleep = false;
+		sleepy = true;
 		this.sampleController = sampleController;
 		this.name = name;
 		this.cname = cname;
@@ -312,5 +319,37 @@ public class Sample implements Samplable, Configurable
 	public void handleAction()
 	{
 		
+	}
+	
+	@Override
+	public boolean canSleep()
+	{
+		return sleepy;
+	}
+	
+	@Override
+	public void sleep(int ticks)
+	{
+		if(isAsleep() || !canSleep())
+		{
+			return;
+		}
+		
+		asleep = true;
+		
+		new TaskLater(ticks)
+		{
+			@Override
+			public void run()
+			{
+				asleep = false;
+			}
+		};
+	}
+	
+	@Override
+	public boolean isAsleep()
+	{
+		return asleep;
 	}
 }

@@ -7,6 +7,12 @@ import org.cyberpwn.react.util.ValueType;
 
 public interface Samplable
 {
+	boolean canSleep();
+	
+	boolean isAsleep();
+	
+	void sleep(int ticks);
+	
 	void onTick();
 	
 	void onStart();

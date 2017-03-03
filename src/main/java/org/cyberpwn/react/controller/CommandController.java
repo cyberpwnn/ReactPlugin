@@ -40,6 +40,7 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.Amounts;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Callback;
 import org.cyberpwn.react.util.CommandRunnable;
@@ -55,12 +56,11 @@ import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.InstabilityCause;
-import org.cyberpwn.react.util.N;
+import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.Q;
 import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactCommand;
-import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
 
 public class CommandController extends Controller implements CommandExecutor
@@ -943,177 +943,6 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
-			@SuppressWarnings("deprecation")
-			@Override
-			public void run()
-			{
-				CommandSender sender = getSender();
-				
-				GMap<P, GMap<String, Integer>> m = new GMap<P, GMap<String, Integer>>();
-				sender.sendMessage(ChatColor.RED + "One Moment Please...");
-				
-				new TaskLater(1)
-				{
-					@Override
-					public void run()
-					{
-						for(P i : React.instance().getTaskManager().topDown().reverse())
-						{
-							if(React.instance().getTaskManager().getQueue().containsKey(i))
-							{
-								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
-								{
-									continue;
-								}
-								
-								GMap<String, Integer> gm = new GMap<String, Integer>();
-								
-								for(Q j : React.instance().getTaskManager().getQueue().get(i))
-								{
-									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
-									{
-										gm.put(ChatColor.GRAY + j.getName(), 0);
-									}
-									
-									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
-								}
-								
-								if(!m.containsKey(i))
-								{
-									m.put(i, new GMap<String, Integer>());
-								}
-								
-								for(String j : gm.k())
-								{
-									if(!m.get(i).containsKey(j))
-									{
-										m.get(i).put(j, 0);
-									}
-									
-									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
-								}
-							}
-						}
-					}
-				};
-				
-				new TaskLater(21)
-				{
-					@Override
-					public void run()
-					{
-						for(P i : React.instance().getTaskManager().topDown().reverse())
-						{
-							if(React.instance().getTaskManager().getQueue().containsKey(i))
-							{
-								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
-								{
-									continue;
-								}
-								
-								GMap<String, Integer> gm = new GMap<String, Integer>();
-								
-								for(Q j : React.instance().getTaskManager().getQueue().get(i))
-								{
-									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
-									{
-										gm.put(ChatColor.GRAY + j.getName(), 0);
-									}
-									
-									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
-								}
-								
-								if(!m.containsKey(i))
-								{
-									m.put(i, new GMap<String, Integer>());
-								}
-								
-								for(String j : gm.k())
-								{
-									if(!m.get(i).containsKey(j))
-									{
-										m.get(i).put(j, 0);
-									}
-									
-									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
-								}
-							}
-						}
-					}
-				};
-				
-				new TaskLater(43)
-				{
-					@Override
-					public void run()
-					{
-						for(P i : React.instance().getTaskManager().topDown().reverse())
-						{
-							if(React.instance().getTaskManager().getQueue().containsKey(i))
-							{
-								if(React.instance().getTaskManager().getQueue().get(i).isEmpty())
-								{
-									continue;
-								}
-								
-								GMap<String, Integer> gm = new GMap<String, Integer>();
-								
-								for(Q j : React.instance().getTaskManager().getQueue().get(i))
-								{
-									if(!gm.containsKey(ChatColor.GRAY + j.getName()))
-									{
-										gm.put(ChatColor.GRAY + j.getName(), 0);
-									}
-									
-									gm.put(ChatColor.GRAY + j.getName(), gm.get(ChatColor.GRAY + j.getName()) + 1);
-								}
-								
-								if(!m.containsKey(i))
-								{
-									m.put(i, new GMap<String, Integer>());
-								}
-								
-								for(String j : gm.k())
-								{
-									if(!m.get(i).containsKey(j))
-									{
-										m.get(i).put(j, 0);
-									}
-									
-									m.get(i).put(j, m.get(i).get(j) + gm.get(j));
-								}
-							}
-						}
-						
-						for(P i : React.instance().getTaskManager().topDown().reverse())
-						{
-							if(m.containsKey(i))
-							{
-								sender.sendMessage(String.format(Info.HRN, StringUtils.capitalise(i.toString().toLowerCase() + "Priority")));
-								
-								for(String j : m.get(i).k())
-								{
-									sender.sendMessage(ChatColor.WHITE + "" + m.get(i).get(j) + "x " + j);
-								}
-							}
-						}
-						
-						sender.sendMessage(String.format(Info.HRN, "Task Manager"));
-						sender.sendMessage(ChatColor.GREEN + "Usage: " + F.f(React.instance().getTaskManager().getUsage(), 4) + "ms (" + F.pc(React.instance().getTaskManager().getUsagePercent(), 0) + ")");
-						
-						if(React.instance().getTaskManager().isBoosting())
-						{
-							sender.sendMessage(ChatColor.RED + "Task Boost Active");
-						}
-						
-						sender.sendMessage(Info.HR);
-					}
-				};
-			}
-		}, L.COMMAND_TM, "core", "task", "tm"));
-		
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
 			@Override
 			public void run()
 			{
@@ -1247,12 +1076,47 @@ public class CommandController extends Controller implements CommandExecutor
 				CommandSender sender = getSender();
 				
 				sender.sendMessage(String.format(Info.HRN, "Environment"));
-				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Version: " + ChatColor.AQUA + "v" + Version.V + " (" + Version.C + ")");
-				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Obfuscated: " + ChatColor.AQUA + isObfuscated());
-				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Distro: " + ChatColor.AQUA + "Production");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Version: " + ChatColor.WHITE + "v" + Version.V + " (" + Version.C + ")");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Distro: " + ChatColor.WHITE + "Production");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Operating System: " + ChatColor.WHITE + Platform.getName() + " " + ChatColor.GRAY + "(" + Platform.getVersion() + ")");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Java: " + ChatColor.WHITE + Platform.ENVIRONMENT.getJavaVendor() + " " + ChatColor.GRAY + "(" + Platform.ENVIRONMENT.getJavaVersion() + ")");
+				
+				sender.sendMessage(String.format(Info.HRN, "CPU"));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Type: " + ChatColor.WHITE + Amounts.to(Platform.CPU.getAvailableProcessors()) + " Core " + Platform.CPU.getArchitecture());
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Utilization: " + ChatColor.WHITE + F.pc(Platform.CPU.getCPULoad(), 1));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Process Usage: " + ChatColor.WHITE + F.pc(Platform.CPU.getProcessCPULoad(), 1));
+				
+				sender.sendMessage(String.format(Info.HRN, "MEMORY"));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Physical: " + ChatColor.WHITE + F.memSize(Platform.MEMORY.PHYSICAL.getTotalMemory()) + ChatColor.GRAY + " (" + F.memSize(Platform.MEMORY.PHYSICAL.getUsedMemory()) + " / " + F.memSize(Platform.MEMORY.PHYSICAL.getTotalMemory()) + ")");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Swap: " + ChatColor.WHITE + F.memSize(Platform.MEMORY.VIRTUAL.getTotalMemory()) + ChatColor.GRAY + " (" + F.memSize(Platform.MEMORY.VIRTUAL.getUsedMemory()) + " / " + F.memSize(Platform.MEMORY.VIRTUAL.getTotalMemory()) + ")");
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Commit: " + ChatColor.WHITE + F.memSize(Platform.MEMORY.VIRTUAL.getCommittedVirtualMemory()));
+				
+				sender.sendMessage(String.format(Info.HRN, "STORAGE"));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Total: " + ChatColor.WHITE + F.memSize(Platform.STORAGE.getAbsoluteTotalSpace()) + ChatColor.GRAY + " (" + F.memSize(Platform.STORAGE.getAbsoluteUsedSpace()) + " / " + F.memSize(Platform.STORAGE.getAbsoluteTotalSpace()) + ")");
+				
+				for(File i : Platform.STORAGE.getRoots())
+				{
+					try
+					{
+						if(new File(".").getCanonicalPath().equals(i.getCanonicalPath()))
+						{
+							sender.sendMessage(Info.TAG + ChatColor.AQUA + i.toString() + ": " + ChatColor.WHITE + F.memSize(Platform.STORAGE.getTotalSpace(i)) + ChatColor.GRAY + " (" + F.memSize(Platform.STORAGE.getUsedSpace(i)) + " / " + F.memSize(Platform.STORAGE.getTotalSpace(i)) + ")");
+							continue;
+						}
+					}
+					
+					catch(IOException e)
+					{
+						
+					}
+					
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + i.toString() + ": " + ChatColor.WHITE + F.memSize(Platform.STORAGE.getTotalSpace(i)) + ChatColor.GRAY + " (" + F.memSize(Platform.STORAGE.getUsedSpace(i)) + " / " + F.memSize(Platform.STORAGE.getTotalSpace(i)) + ")");
+				}
+				
 				sender.sendMessage(Info.HR);
+				
 			}
-		}, "Check information about react and the server", "environment", "env", "ev"));
+		}, "Check information about react and the server", "environment", "env", "ev", "platform", "plat", "sys", "system"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1260,7 +1124,17 @@ public class CommandController extends Controller implements CommandExecutor
 			public void run()
 			{
 				CommandSender sender = getSender();
-				sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + "CPU Score: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.singleThreaded(50)));
+				
+				sender.sendMessage(String.format(Info.HRN, "CPU Score"));
+				
+				sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + "1 Thread: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.singleThreaded(10)));
+				
+				for(int i = 2; i < Runtime.getRuntime().availableProcessors() + 1; i *= 2)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.BOLD + ChatColor.GOLD + i + " Threads: " + ChatColor.RESET + ChatColor.GREEN + F.f(CPUTest.multiThreaded(i, 10)));
+				}
+				
+				sender.sendMessage(Info.HR);
 			}
 		}, L.COMMAND_CPUSCORE, "cpu-score", "cs", "cpu", "cpuscore"));
 		
@@ -1571,7 +1445,6 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			if(i.onCommand(trigger, sender, args))
 			{
-				N.t("Command Executed", "name", sender.getName(), "args", new GList<String>(args).toString(","), "trigger", trigger);
 				return;
 			}
 		}
@@ -1738,8 +1611,6 @@ public class CommandController extends Controller implements CommandExecutor
 						fireCommand(sender, sub, args);
 					}
 				};
-				
-				N.t("Command Executed /react " + new GList<String>(args).toString(" "), "commander", sender.getName(), "subcommand", sub, "args", new GList<String>(args).toString(", "));
 			}
 			
 			return true;

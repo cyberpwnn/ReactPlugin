@@ -1,7 +1,6 @@
 package org.cyberpwn.react.util;
 
 import org.apache.commons.lang.StringUtils;
-import org.cyberpwn.react.React;
 
 public abstract class Q
 {
@@ -24,7 +23,7 @@ public abstract class Q
 		this.name = name;
 		this.skip = skip;
 		
-		React.instance().getTaskManager().queue(this);
+		run();
 	}
 	
 	public abstract void run();

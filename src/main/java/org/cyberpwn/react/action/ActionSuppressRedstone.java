@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.EventHandler;
@@ -32,6 +33,11 @@ public class ActionSuppressRedstone extends Action implements Listener
 		
 	}
 	
+	public void zap(Chunk c)
+	{
+		
+	}
+	
 	public void freezeAll()
 	{
 		if(cc.getBoolean(getCodeName() + ".freeze-all-redstone-on-lag"))
@@ -51,6 +57,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 		{
 			frozen = true;
 		}
+		
 	}
 	
 	public void unfreeze()
@@ -101,6 +108,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 	{
 		super.onNewConfig(cc);
 		
+		cc.set(getCodeName() + ".freeze-zap-chunks", true, "Individually freeze chunks for 10 ticks");
 		cc.set(getCodeName() + ".freeze-all-redstone-on-lag", true, "Hault redstone on lag?");
 		cc.set(getCodeName() + ".freeze-radius", 64, "The radius to freeze in a location specific redstone lag?");
 	}

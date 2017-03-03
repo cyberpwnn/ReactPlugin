@@ -18,12 +18,14 @@ import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.ReactRunnable;
 import org.cyberpwn.react.util.TaskLater;
+import org.cyberpwn.react.util.TimingsPackage;
 
 public class ReactServer extends Thread
 {
 	public static ReactData reactData;
 	public static GList<ReactRunnable> runnables;
 	public static int requests;
+	public static TimingsPackage pack = null;
 	
 	private boolean running;
 	private ServerSocket serverSocket;
@@ -148,6 +150,21 @@ public class ReactServer extends Thread
 		{
 			response.put("type", PacketResponseType.OK);
 			response.put("actions", actions);
+		}
+		
+		else if(command.equals(PacketRequestType.GET_TIMINGS.toString()))
+		{
+			response.put("type", PacketResponseType.OK);
+			
+			try
+			{
+				response.put("timings", pack.getData());
+			}
+			
+			catch(IOException e)
+			{
+				response.put("type", PacketResponseType.ERROR_NODATA);
+			}
 		}
 		
 		else if(command.equals(PacketRequestType.GET_BASIC.toString()))

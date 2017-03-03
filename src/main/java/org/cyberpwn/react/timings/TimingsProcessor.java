@@ -15,7 +15,6 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Severity;
-import org.cyberpwn.react.util.Timer;
 import org.spigotmc.CustomTimingsHandler;
 
 public class TimingsProcessor extends Thread
@@ -28,10 +27,12 @@ public class TimingsProcessor extends Thread
 	private TimingsCallback cb;
 	private String hh;
 	private Double ms;
+	private AsyncQueue q;
 	private int pc;
 	
 	public TimingsProcessor(TimingsCallback cb, int pc)
 	{
+		q = null;
 		this.cb = cb;
 		this.pc = pc;
 		cc = new ClusterConfig();
@@ -51,8 +52,6 @@ public class TimingsProcessor extends Thread
 	{
 		try
 		{
-			Timer t = new Timer();
-			t.start();
 			ByteArrayOutputStream bs = new ByteArrayOutputStream();
 			PrintStream ps = new PrintStream(bs);
 			CustomTimingsHandler.printTimings(ps);
@@ -64,7 +63,7 @@ public class TimingsProcessor extends Thread
 				data.add(i.trim());
 			}
 			
-			AsyncQueue q = new AsyncQueue(pc)
+			q = new AsyncQueue(pc)
 			{
 				@Override
 				public void onComplete()
@@ -98,7 +97,6 @@ public class TimingsProcessor extends Thread
 					
 					GMap<String, TimingsReport> reports = analyze(normal, tasks, events);
 					GBook k = getAllProc(reports);
-					t.stop();
 					cb.run(reports, k, hh, ms, cc);
 				}
 			};

@@ -102,6 +102,11 @@ public class NetworkController extends Controller
 	
 	public void trackANA(String event, GMap<String, String> properties)
 	{
+		if(!React.isStats())
+		{
+			return;
+		}
+		
 		int online = React.instance().onlinePlayers().length;
 		String lang = React.instance().getLanguageController().getLang();
 		

@@ -14,9 +14,11 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
+import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -38,6 +40,11 @@ public class ActionCullEntities extends Action implements Listener
 	@Override
 	public void act()
 	{
+		if(ReactAPI.getTicksPerSecond() > 18.5)
+		{
+			return;
+		}
+		
 		new ExecutiveIterator<World>(0.1, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
 			@Override
@@ -59,6 +66,26 @@ public class ActionCullEntities extends Action implements Listener
 	public void start()
 	{
 		React.instance().register(this);
+	}
+	
+	public boolean isTamed(Entity e)
+	{
+		if(e instanceof LivingEntity)
+		{
+			LivingEntity ee = (LivingEntity) e;
+			
+			if(ee instanceof Tameable)
+			{
+				Tameable t = (Tameable) ee;
+				
+				if(t.isTamed())
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 	
 	@Override
@@ -256,6 +283,11 @@ public class ActionCullEntities extends Action implements Listener
 	
 	public boolean isCullable(Entity e)
 	{
+		if(isTamed(e) && cc.getBoolean(getCodeName() + ".filter.ignore-tamed-entities"))
+		{
+			return false;
+		}
+		
 		if(!can(e.getLocation()))
 		{
 			return false;
@@ -323,6 +355,7 @@ public class ActionCullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
+		cc.set(getCodeName() + ".filter.ignore-tamed-entities", true, "Ignore tamed entities");
 		cc.set(getCodeName() + ".notify.message", "&cRemoved %amount%x %type%", "Message to notify culls.");
 		cc.set(getCodeName() + ".notify.enable", true);
 		cc.set(getCodeName() + ".notify.enable-non-react-admins", false);

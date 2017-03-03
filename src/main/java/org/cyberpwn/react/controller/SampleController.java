@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.sampler.ExternalSampleWorldBorder;
 import org.cyberpwn.react.sampler.ExternallySamplable;
@@ -206,6 +207,11 @@ public class SampleController extends Controller
 		{
 			try
 			{
+				if(i.isAsleep())
+				{
+					continue;
+				}
+				
 				samples.put(i, samples.get(i) - 1);
 				
 				if(samples.get(i) <= 0)
@@ -215,6 +221,11 @@ public class SampleController extends Controller
 					i.setReactionTime(System.nanoTime() - nsx);
 					i.setLastTick(System.currentTimeMillis());
 					samples.put(i, i.getCurrentDelay());
+				}
+				
+				if(ReactAPI.getTicksPerSecond() > 17.5)
+				{
+					i.sleep((int) (10 + (Math.random() * 30)));
 				}
 			}
 			

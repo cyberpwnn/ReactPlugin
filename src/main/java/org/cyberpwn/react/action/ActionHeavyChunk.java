@@ -1,6 +1,5 @@
 package org.cyberpwn.react.action;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -15,6 +14,9 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.InstabilityCause;
 
 public class ActionHeavyChunk extends Action implements Listener
 {
@@ -23,11 +25,13 @@ public class ActionHeavyChunk extends Action implements Listener
 		super(actionController, Material.GRASS, "hc", "ActionLaggedChunk", 100, "Find Heaviest Chunk", L.ACTION_HEAVYCHUNK, true);
 	}
 	
+	@Override
 	public void act()
 	{
 		
 	}
 	
+	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -41,19 +45,30 @@ public class ActionHeavyChunk extends Action implements Listener
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		int lim = cc.getInt(getCodeName() + ".entity-buffer");
+		int m = 0;
 		Chunk c = null;
+		Location v = null;
+		GList<InstabilityCause> cause = new GList<InstabilityCause>();
 		
-		for(World i : Bukkit.getWorlds())
+		for(Location i : React.instance().getLagMapController().getMap().getMap().k())
 		{
-			for(Chunk j : i.getLoadedChunks())
+			if(React.instance().getLagMapController().getMap().getMap().get(i) > m)
 			{
-				int l = j.getEntities().length;
-				
-				if(l > lim)
+				if(React.instance().getLagMapController().getMap().getCause().get(i).contains(InstabilityCause.CHUNK_GEN) || React.instance().getLagMapController().getMap().getCause().get(i).contains(InstabilityCause.CHUNKS))
 				{
-					lim = l;
-					c = j;
+					continue;
 				}
+				
+				if(React.instance().getLagMapController().getMap().getCause().get(i).contains(InstabilityCause.LIQUID))
+				{
+					continue;
+				}
+				
+				m = React.instance().getLagMapController().getMap().getMap().get(i);
+				v = i;
+				c = v.getChunk();
+				cause.clear();
+				cause.addAll(React.instance().getLagMapController().getMap().getCause().get(i));
 			}
 		}
 		
@@ -61,12 +76,13 @@ public class ActionHeavyChunk extends Action implements Listener
 		
 		if(c == null)
 		{
-			p.sendMessage(Info.TAG + Info.COLOR_ERR + "Could not find any chunks that have more than " + lim + " entities.");
+			p.sendMessage(Info.TAG + Info.COLOR_ERR + "Could not find any chunks that have more than " + lim + " score.");
 		}
 		
 		else
 		{
-			p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Found " + lim + " entities @ " + c.getWorld().getName() + " [" + c.getX() + ", " + c.getZ() + "]");
+			p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Found " + F.f(m) + " score @ " + c.getWorld().getName() + " [" + c.getX() + ", " + c.getZ() + "]");
+			p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Detected: " + ChatColor.GRAY + cause.toString(", "));
 			((Player) p).teleport(safe(c));
 		}
 	}
@@ -90,6 +106,7 @@ public class ActionHeavyChunk extends Action implements Listener
 		return 255;
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);

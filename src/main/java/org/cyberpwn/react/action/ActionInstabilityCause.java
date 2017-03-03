@@ -14,6 +14,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitTask;
 import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.controller.SampleController;
@@ -61,6 +62,11 @@ public class ActionInstabilityCause extends Action
 	public void act()
 	{
 		if(actionController.getReact().getConfig().getBoolean("runtime.disable-reactions") || React.isMef())
+		{
+			return;
+		}
+		
+		if(ReactAPI.getTicksPerSecond() > 17.5)
 		{
 			return;
 		}
@@ -220,7 +226,7 @@ public class ActionInstabilityCause extends Action
 			actionController.getActionSuppressRedstone().freeze();
 			Verbose.x("instability", "- REDSTONE FREEZE SMALL ENABLED");
 			
-			actionController.getReact().scheduleSyncTask(20, new Runnable()
+			actionController.getReact().scheduleSyncTask(40, new Runnable()
 			{
 				@Override
 				public void run()
@@ -670,7 +676,7 @@ public class ActionInstabilityCause extends Action
 		long playermb = getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong();
 		long playerch = (long) (((((Bukkit.getServer().getViewDistance() * 2) + 1) * 2)) / 12.8);
 		
-		long playerimp = playermb - playerch;
+		long playerimp = (playermb - playerch) + 1;
 		long max = mb;
 		
 		return max / playerimp;

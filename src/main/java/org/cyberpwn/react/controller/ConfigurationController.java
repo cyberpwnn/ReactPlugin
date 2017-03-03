@@ -10,9 +10,6 @@ import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
-import org.cyberpwn.react.util.Task;
 
 public class ConfigurationController extends Controller implements Configurable
 {
@@ -49,43 +46,7 @@ public class ConfigurationController extends Controller implements Configurable
 	@Override
 	public void start()
 	{
-		if(cc.getBoolean("configuration.mechanics.auto-inject"))
-		{
-			new Task(cc.getInt("configuration.mechanics.inject-delay-seconds") * 20)
-			{
-				@Override
-				public void run()
-				{
-					new Q(P.LOW, "File Injector", true)
-					{
-						@Override
-						public void run()
-						{
-							for(File i : configurations.k())
-							{
-								if(!i.exists())
-								{
-									s("File Deleted: " + i.getName() + ", Regenerating.");
-									getReact().getDataController().load(i, configurations.get(i));
-								}
-								
-								if(modified(configurations.get(i)))
-								{
-									Configurable c = configurations.get(i);
-									mods.put(configurations.get(i), i.lastModified());
-									int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
-									
-									if(changes > 0)
-									{
-										notif("Injected " + changes + " change(s) from " + i.getName());
-									}
-								}
-							}
-						}
-					};
-				}
-			};
-		}
+		
 	}
 	
 	public void notif(String s)

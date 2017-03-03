@@ -10,6 +10,7 @@ import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
+import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleTicksPerSecond extends Sample
@@ -24,7 +25,8 @@ public class SampleTicksPerSecond extends Sample
 	{
 		super(sampleController, "SampleTicksPerSecond", ValueType.DOUBLE, "TPS", "Ticks per second");
 		
-		avg = new Average(32);
+		sleepy = false;
+		avg = new Average(2);
 		lastInterval = sampleController.getTick();
 		minDelay = 1;
 		maxDelay = 1;
@@ -132,6 +134,19 @@ public class SampleTicksPerSecond extends Sample
 		if(percentUsed() > 0 && getSampleController().getReact().getTimingsController().enabled())
 		{
 			k = " (" + F.pc(percentUsed(), 0) + ")";
+		}
+		
+		else
+		{
+			try
+			{
+				k = " (" + F.pc(Platform.CPU.getProcessCPULoad(), 0) + ")";
+			}
+			
+			catch(Exception e)
+			{
+				k = "";
+			}
 		}
 		
 		try
