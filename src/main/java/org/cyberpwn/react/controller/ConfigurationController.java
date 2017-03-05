@@ -8,8 +8,12 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.LOAD;
+import org.cyberpwn.react.util.Task;
+import org.cyberpwn.react.util.TaskLater;
 
 public class ConfigurationController extends Controller implements Configurable
 {
@@ -17,11 +21,13 @@ public class ConfigurationController extends Controller implements Configurable
 	private GMap<File, ClusterConfig> cache;
 	private GMap<Configurable, Long> mods;
 	private ClusterConfig cc;
+	private boolean scanning;
 	
 	public ConfigurationController(React react)
 	{
 		super(react);
 		
+		scanning = false;
 		configurations = new GMap<File, Configurable>();
 		cache = new GMap<File, ClusterConfig>();
 		mods = new GMap<Configurable, Long>();
@@ -46,7 +52,95 @@ public class ConfigurationController extends Controller implements Configurable
 	@Override
 	public void start()
 	{
+		if(cc.getBoolean("configuration.mechanics.auto-inject"))
+		{
+			new Task(5)
+			{
+				@Override
+				public void run()
+				{
+					scan();
+				}
+			};
+		}
+	}
+	
+	public void scan()
+	{
+		if(scanning)
+		{
+			return;
+		}
 		
+		if(!LOAD.INTENSE.min())
+		{
+			return;
+		}
+		
+		new ASYNC()
+		{
+			@Override
+			public void async()
+			{
+				for(File i : configurations.k())
+				{
+					if(React.STOPPING)
+					{
+						break;
+					}
+					
+					if(!i.exists())
+					{
+						new TaskLater(0)
+						{
+							@Override
+							public void run()
+							{
+								notif("File Deleted: " + i.getName() + " (Regenerating Defaults)");
+								getReact().getDataController().load(i, configurations.get(i));
+							}
+						};
+					}
+					
+					if(modified(configurations.get(i)))
+					{
+						Configurable c = configurations.get(i);
+						mods.put(configurations.get(i), i.lastModified());
+						int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
+						
+						if(changes > 0)
+						{
+							new TaskLater(0)
+							{
+								@Override
+								public void run()
+								{
+									c.onReadConfig();
+									notif("Injected " + changes + " change(s) to " + i.getName());
+								}
+							};
+						}
+					}
+				}
+				
+				if(React.STOPPING)
+				{
+					return;
+				}
+				
+				try
+				{
+					Thread.sleep(2000);
+				}
+				
+				catch(InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+				
+				scanning = false;
+			}
+		};
 	}
 	
 	public void notif(String s)

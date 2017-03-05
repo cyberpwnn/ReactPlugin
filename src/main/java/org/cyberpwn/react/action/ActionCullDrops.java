@@ -14,7 +14,6 @@ import org.bukkit.entity.Item;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
-import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -48,11 +47,6 @@ public class ActionCullDrops extends Action implements Listener
 	@Override
 	public void act()
 	{
-		if(ReactAPI.getTicksPerSecond() > 18.5)
-		{
-			return;
-		}
-		
 		final int[] cpt = new int[] {0, 0};
 		
 		for(World i : getActionController().getReact().getServer().getWorlds())

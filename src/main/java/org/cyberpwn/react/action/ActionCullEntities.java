@@ -18,7 +18,6 @@ import org.bukkit.entity.Tameable;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ManualActionEvent;
-import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
@@ -40,11 +39,6 @@ public class ActionCullEntities extends Action implements Listener
 	@Override
 	public void act()
 	{
-		if(ReactAPI.getTicksPerSecond() > 18.5)
-		{
-			return;
-		}
-		
 		new ExecutiveIterator<World>(0.1, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
 			@Override
