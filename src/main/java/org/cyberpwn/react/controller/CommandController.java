@@ -1190,6 +1190,12 @@ public class CommandController extends Controller implements CommandExecutor
 						return;
 					}
 					
+					if(getArgs()[1].equalsIgnoreCase("-compass"))
+					{
+						react.getMonitorController().toggleCompass(p);
+						return;
+					}
+					
 					if(getArgs()[1].equalsIgnoreCase("-lock"))
 					{
 						if(react.getMonitorController().isMonitoring(p))

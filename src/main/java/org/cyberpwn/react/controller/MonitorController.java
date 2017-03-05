@@ -18,6 +18,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.cyberpwn.react.React;
@@ -32,11 +33,15 @@ import org.cyberpwn.react.map.Mapper;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.nms.PacketUtil;
 import org.cyberpwn.react.nms.Title;
+import org.cyberpwn.react.util.Average;
+import org.cyberpwn.react.util.CompassUtil;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.LOAD;
 import org.cyberpwn.react.util.N;
+import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.RegionProperty;
 import org.cyberpwn.react.util.ScreenMonitor;
@@ -64,11 +69,15 @@ public class MonitorController extends Controller implements Configurable
 	private int dispTicks;
 	private int overflow;
 	private PlayerController pc;
+	private GList<Player> compass;
+	private Average a;
 	
 	public MonitorController(React react)
 	{
 		super(react);
 		
+		a = new Average(9);
+		compass = new GList<Player>();
 		monitors = new GMap<Player, GBiset<Integer, Integer>>();
 		currentDelay = 0;
 		pausedMonitors = new GList<Player>();
@@ -100,9 +109,82 @@ public class MonitorController extends Controller implements Configurable
 		}
 	}
 	
+	public void toggleCompass(Player p)
+	{
+		if(p.hasPermission(Info.PERM_MONITOR))
+		{
+			if(hasCompass(p))
+			{
+				disableCompass(p);
+			}
+			
+			else
+			{
+				enableCompass(p);
+			}
+		}
+	}
+	
+	public boolean hasCompass(Player p)
+	{
+		return compass.contains(p);
+	}
+	
+	public void enableCompass(Player p)
+	{
+		if(!compass.contains(p))
+		{
+			compass.add(p);
+			
+			ItemStack i = new ItemStack(Material.COMPASS);
+			ItemMeta im = i.getItemMeta();
+			im.setDisplayName(ChatColor.RED + "CPU Guage");
+			im.setLore(new GList<String>().qadd(ChatColor.GRAY + "Measures CPU Utilization via Dial").qadd(ChatColor.GREEN + "Usage: 0%"));
+			i.setItemMeta(im);
+			i.addUnsafeEnchantment(Enchantment.DURABILITY, 1336);
+			i.setAmount(1);
+			p.getInventory().addItem(i);
+		}
+	}
+	
+	public void disableCompass(Player p)
+	{
+		compass.remove(p);
+		
+		p.setCompassTarget(p.getWorld().getSpawnLocation());
+		
+		for(int i = 0; i < p.getInventory().getSize() * 9; i++)
+		{
+			try
+			{
+				ItemStack is = p.getInventory().getItem(i);
+				
+				if(is != null && is.getType().equals(Material.COMPASS) && is.hasItemMeta())
+				{
+					ItemMeta im = is.getItemMeta();
+					
+					if(im.getDisplayName().startsWith(ChatColor.RED + "CPU Guage") && is.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
+					{
+						p.getInventory().setItem(i, new ItemStack(Material.AIR));
+					}
+				}
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
+		}
+	}
+	
 	@Override
 	public void stop()
 	{
+		for(Player i : compass.copy())
+		{
+			disableCompass(i);
+		}
+		
 		react.getDataController().save("cache", this);
 	}
 	
@@ -110,6 +192,8 @@ public class MonitorController extends Controller implements Configurable
 	public void tick()
 	{
 		getReact().getScoreboardController().dispatch();
+		
+		handleCompass();
 		
 		dispTicks--;
 		
@@ -222,7 +306,28 @@ public class MonitorController extends Controller implements Configurable
 		}
 		
 		mTick++;
-		currentDelay--;
+		
+		currentDelay -= 2;
+		
+		if(LOAD.HEAVY.min())
+		{
+			currentDelay++;
+		}
+		
+		if(LOAD.LIGHT.min())
+		{
+			currentDelay--;
+		}
+	}
+	
+	public void handleCompass()
+	{
+		a.put(Platform.CPU.getProcessCPULoad() * Platform.CPU.getAvailableProcessors());
+		
+		for(Player i : compass)
+		{
+			CompassUtil.updatePlayerCompassFor(i, a.getAverage());
+		}
 	}
 	
 	public void dispatch()
@@ -702,6 +807,7 @@ public class MonitorController extends Controller implements Configurable
 		
 		pausedMonitors.remove(e.getPlayer());
 		monitors.remove(e.getPlayer());
+		compass.remove(e.getPlayer());
 	}
 	
 	@EventHandler
@@ -759,6 +865,32 @@ public class MonitorController extends Controller implements Configurable
 			stopMapping(p, false);
 			mapPause.add(p);
 		}
+		
+		if(hasCompass(p))
+		{
+			for(int i = 0; i < p.getInventory().getSize() * 9; i++)
+			{
+				try
+				{
+					ItemStack is = p.getInventory().getItem(i);
+					
+					if(is != null && is.getType().equals(Material.COMPASS) && is.hasItemMeta())
+					{
+						ItemMeta im = is.getItemMeta();
+						
+						if(im.getDisplayName().startsWith(ChatColor.RED + "CPU Guage") && is.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
+						{
+							p.getInventory().setItem(i, new ItemStack(Material.AIR));
+						}
+					}
+				}
+				
+				catch(Exception ex)
+				{
+					
+				}
+			}
+		}
 	}
 	
 	@EventHandler
@@ -770,6 +902,18 @@ public class MonitorController extends Controller implements Configurable
 		{
 			mapPause.remove(p);
 			startMapping(p, false);
+		}
+		
+		if(hasCompass(p))
+		{
+			ItemStack i = new ItemStack(Material.COMPASS);
+			ItemMeta im = i.getItemMeta();
+			im.setDisplayName(ChatColor.RED + "CPU Guage");
+			im.setLore(new GList<String>().qadd(ChatColor.GRAY + "Measures CPU Utilization via Dial").qadd(ChatColor.GREEN + "Usage: 0%"));
+			i.setItemMeta(im);
+			i.addUnsafeEnchantment(Enchantment.DURABILITY, 1336);
+			i.setAmount(1);
+			p.getInventory().addItem(i);
 		}
 	}
 	
@@ -783,6 +927,19 @@ public class MonitorController extends Controller implements Configurable
 			if(i.getType().equals(Material.MAP))
 			{
 				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+				{
+					e.setCancelled(true);
+				}
+			}
+		}
+		
+		if(hasCompass(e.getPlayer()))
+		{
+			ItemStack i = e.getItemDrop().getItemStack();
+			
+			if(i.getType().equals(Material.COMPASS))
+			{
+				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
 				{
 					e.setCancelled(true);
 				}

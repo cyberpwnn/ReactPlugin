@@ -103,11 +103,6 @@ public class PluginWeightController extends Controller implements Configurable
 			return;
 		}
 		
-		if(times.containsKey("React"))
-		{
-			getReact().getSampleController().getSampleReactionTime().setOpn(times.get("React"));
-		}
-		
 		times.clear();
 		
 		for(Plugin i : Bukkit.getPluginManager().getPlugins())
@@ -165,11 +160,6 @@ public class PluginWeightController extends Controller implements Configurable
 		if(pt == null || pe == null)
 		{
 			return;
-		}
-		
-		if(times.containsKey("React"))
-		{
-			getReact().getSampleController().getSampleReactionTime().setOpn(times.get("React"));
 		}
 		
 		times.clear();
