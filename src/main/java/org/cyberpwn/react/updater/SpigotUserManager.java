@@ -147,6 +147,7 @@ public class SpigotUserManager implements UserManager
 		}
 		String key = sb.toString().toLowerCase();
 		String code = TOTP.generateTOTP(key, 6);
+		
 		try
 		{
 			String url = SpigotSiteCore.getBaseURL() + "login/two-step";

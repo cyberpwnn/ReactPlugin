@@ -5,8 +5,8 @@ import org.cyberpwn.react.util.GList;
 
 public class Version
 {
-	public static final int C = 4410;
-	public static final String V = "4.4.1";
+	public static final int C = 4440;
+	public static final String V = "4.4.4";
 	public static final List<String> D = new GList<String>(new String[] {"Updater overhaul. Now downloads updates from spigot (you need to authenticate yourself)", "Added a guide on how to set this up on the release page", "Major performance improvements at startup", "You may need to reconfigure your updater.yml file"});
 	
 	public static String toV(int b)

@@ -7,6 +7,8 @@ import com.sun.management.OperatingSystemMXBean;
 @SuppressWarnings("restriction")
 public class Platform
 {
+	public static double PROC_CPU = CPU.getLiveProcessCPULoad();
+	
 	public static class ENVIRONMENT
 	{
 		public static String getJavaHome()
@@ -149,6 +151,11 @@ public class Platform
 		}
 		
 		public static double getProcessCPULoad()
+		{
+			return PROC_CPU;
+		}
+		
+		public static double getLiveProcessCPULoad()
 		{
 			return getSystem().getProcessCpuLoad();
 		}

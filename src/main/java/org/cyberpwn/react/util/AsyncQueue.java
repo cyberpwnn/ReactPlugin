@@ -1,5 +1,7 @@
 package org.cyberpwn.react.util;
 
+import org.cyberpwn.react.React;
+
 public abstract class AsyncQueue
 {
 	private int maxThreads;
@@ -29,7 +31,17 @@ public abstract class AsyncQueue
 			{
 				while(!queue.isEmpty())
 				{
+					if(React.STOPPING)
+					{
+						break;
+					}
+					
 					chomp();
+				}
+				
+				if(React.STOPPING)
+				{
+					return;
 				}
 				
 				onComplete();
