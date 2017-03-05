@@ -18,7 +18,6 @@ import org.cyberpwn.react.controller.ConsoleController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
-import org.cyberpwn.react.controller.InstabilityController;
 import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
@@ -112,7 +111,6 @@ public class React extends JavaPlugin implements Configurable
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
 	private RegionController regionController;
-	private InstabilityController instabilityController;
 	private TaskManager taskManager;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
@@ -198,7 +196,6 @@ public class React extends JavaPlugin implements Configurable
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
-		instabilityController = new InstabilityController(this);
 		
 		dataController.load((String) null, configurationController);
 		
