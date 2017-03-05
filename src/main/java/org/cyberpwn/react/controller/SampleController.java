@@ -221,6 +221,7 @@ public class SampleController extends Controller
 					i.setReactionTime(System.nanoTime() - nsx);
 					i.setLastTick(System.currentTimeMillis());
 					samples.put(i, i.getCurrentDelay());
+					reactionTime += i.getReactionTime();
 				}
 				
 				if(ReactAPI.getTicksPerSecond() > 17.5)

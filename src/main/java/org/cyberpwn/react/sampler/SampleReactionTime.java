@@ -12,7 +12,6 @@ import org.cyberpwn.react.util.ValueType;
 public class SampleReactionTime extends Sample
 {
 	private double max;
-	private Double opn;
 	private GList<Long> average;
 	
 	public SampleReactionTime(SampleController sampleController)
@@ -28,14 +27,9 @@ public class SampleReactionTime extends Sample
 		average = new GList<Long>();
 	}
 	
+	@Override
 	public void onTick()
 	{
-		if(opn != null)
-		{
-			value.setNumber(opn * 1000000);
-			return;
-		}
-		
 		average.add(sampleController.getReactionTime());
 		
 		if(average.size() > 20)
@@ -70,11 +64,13 @@ public class SampleReactionTime extends Sample
 		return value.getDouble() / max;
 	}
 	
+	@Override
 	public void onStart()
 	{
 		value.setNumber(1);
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter(getName())
@@ -87,16 +83,13 @@ public class SampleReactionTime extends Sample
 		});
 	}
 	
-	public void setOpn(Double v)
-	{
-		this.opn = v;
-	}
-	
+	@Override
 	public int getMetricsValue()
 	{
 		return (int) (getValue().getDouble() / 1000000.0);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		if(acc)
@@ -110,11 +103,13 @@ public class SampleReactionTime extends Sample
 		}
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.GREEN;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_GREEN;

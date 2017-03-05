@@ -70,6 +70,7 @@ public class SampleMemoryUsed extends Sample
 		return mb;
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter((((int) (getPercent() * 100)) / 10) + "0%")
@@ -82,6 +83,7 @@ public class SampleMemoryUsed extends Sample
 		});
 	}
 	
+	@Override
 	public int getMetricsValue()
 	{
 		return getValue().getInteger();
@@ -117,9 +119,10 @@ public class SampleMemoryUsed extends Sample
 		return (getAverage().doubleValue()) / (getMemoryMax().doubleValue() / 1024.0 / 1024.0);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
-		if(getPercent() > getSampleController().getReact().getActionController().getActionInstabilityCause().getConfiguration().getDouble(getSampleController().getReact().getActionController().getActionInstabilityCause().getCodeName() + ".high.memory.percent"))
+		if(getPercent() > 0.8)
 		{
 			return ChatColor.UNDERLINE + "" + ChatColor.UNDERLINE + F.mem(getValue().getLong()) + " (" + F.pc(getValue().getLong(), (getMemoryMax() / 1024 / 1024)) + ")" + ChatColor.RESET;
 		}
@@ -135,11 +138,13 @@ public class SampleMemoryUsed extends Sample
 		}
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.GOLD;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.GOLD;

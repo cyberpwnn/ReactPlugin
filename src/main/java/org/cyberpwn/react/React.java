@@ -18,6 +18,7 @@ import org.cyberpwn.react.controller.ConsoleController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
+import org.cyberpwn.react.controller.InstabilityController;
 import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.LimitingController;
@@ -39,6 +40,7 @@ import org.cyberpwn.react.file.IDelete;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
@@ -56,6 +58,7 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.PlaceholderHook;
+import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Timer;
@@ -63,6 +66,7 @@ import org.cyberpwn.react.util.Verbose;
 
 public class React extends JavaPlugin implements Configurable
 {
+	public static boolean STOPPING = false;
 	private static boolean staticy;
 	private static boolean debug;
 	private static boolean stats;
@@ -108,21 +112,25 @@ public class React extends JavaPlugin implements Configurable
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
 	private RegionController regionController;
+	private InstabilityController instabilityController;
 	private TaskManager taskManager;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
 	private Dispatcher d;
+	private boolean asr;
 	public static boolean dreact = false;
 	private Metrics metrics;
 	private int saved;
 	private long start;
 	private PrintStream old;
+	private int imh;
 	public static GList<Runnable> runnables;
 	
 	@Override
 	public void onEnable()
 	{
+		imh = 0;
 		old = System.out;
 		start = M.ms();
 		justUpdated = false;
@@ -151,6 +159,7 @@ public class React extends JavaPlugin implements Configurable
 		instance = this;
 		
 		setVerbose(false);
+		asr = false;
 		cc = new ClusterConfig();
 		controllers = new GList<Controllable>();
 		debug = true;
@@ -189,6 +198,7 @@ public class React extends JavaPlugin implements Configurable
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
+		instabilityController = new InstabilityController(this);
 		
 		dataController.load((String) null, configurationController);
 		
@@ -307,8 +317,6 @@ public class React extends JavaPlugin implements Configurable
 			d.w("Statistics Disabled");
 		}
 		
-		saved = 20 * 60;
-		
 		new Task(0)
 		{
 			@Override
@@ -317,6 +325,33 @@ public class React extends JavaPlugin implements Configurable
 				for(Controllable i : controllers)
 				{
 					i.tick();
+				}
+				
+				imh++;
+				
+				if(imh > 2)
+				{
+					imh = 0;
+					
+					try
+					{
+						if(!asr)
+						{
+							new ASYNC()
+							{
+								@Override
+								public void async()
+								{
+									Platform.PROC_CPU = Platform.CPU.getLiveProcessCPULoad();
+								}
+							};
+						}
+					}
+					
+					catch(Exception e)
+					{
+						
+					}
 				}
 			}
 		};
@@ -376,6 +411,8 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onDisable()
 	{
+		STOPPING = true;
+		
 		for(Controllable i : controllers)
 		{
 			try

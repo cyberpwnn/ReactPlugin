@@ -3,7 +3,6 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
@@ -24,6 +23,7 @@ public class SampleStability extends Sample
 		explaination = L.SAMPLER_GENERAL_STABILITY;
 	}
 	
+	@Override
 	public void onTick()
 	{
 		tps.add(sampleController.getSampleTicksPerSecond().getValue().getDouble());
@@ -46,6 +46,7 @@ public class SampleStability extends Sample
 		value.setNumber(tpx);
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter(getMetricsValue() / 10 + "0%")
@@ -58,34 +59,31 @@ public class SampleStability extends Sample
 		});
 	}
 	
+	@Override
 	public int getMetricsValue()
 	{
 		return (int) (getValue().getDouble() * 100);
 	}
 	
+	@Override
 	public void onStart()
 	{
 		value.setNumber(1);
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
-		if(acc)
-		{
-			return F.pc(getValue().getDouble(), 3);
-		}
-		
-		else
-		{
-			return F.pc(getValue().getDouble(), 1) + ChatColor.DARK_GREEN + " STABLE";
-		}
+		return getSampleController().getSampleTicksPerSecond().getLoad(acc);
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.GREEN;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.DARK_GREEN;

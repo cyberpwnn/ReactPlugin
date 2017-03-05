@@ -11,6 +11,7 @@ import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Platform;
+import org.cyberpwn.react.util.U;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleTicksPerSecond extends Sample
@@ -20,12 +21,20 @@ public class SampleTicksPerSecond extends Sample
 	private int tickThreshold;
 	private int sampleRadius;
 	private Average avg;
+	private double cpu;
+	private Average cpua;
+	private Average cpub;
+	private int del;
 	
 	public SampleTicksPerSecond(SampleController sampleController)
 	{
 		super(sampleController, "SampleTicksPerSecond", ValueType.DOUBLE, "TPS", "Ticks per second");
 		
+		cpu = -1;
+		del = 0;
 		sleepy = false;
+		cpua = new Average(12);
+		cpub = new Average(12);
 		avg = new Average(2);
 		lastInterval = sampleController.getTick();
 		minDelay = 1;
@@ -91,9 +100,42 @@ public class SampleTicksPerSecond extends Sample
 			return;
 		}
 		
+		try
+		{
+			del++;
+			
+			if(del > 1)
+			{
+				cpu = Platform.CPU.getProcessCPULoad() * Platform.CPU.getAvailableProcessors();
+				
+				if(cpua.getData().size() > 4)
+				{
+					if(!cpub.getData().contains(cpu))
+					{
+						cpub.put(cpu);
+					}
+				}
+				
+				cpua.put(cpu);
+				
+				U.cpu = cpub.getAverage();
+				del = 0;
+			}
+		}
+		
+		catch(Exception e)
+		{
+			cpu = -1;
+		}
+		
 		value.setNumber(tps);
 		avg.put(tps);
 		lastInterval = sampleController.getTick();
+	}
+	
+	public String getLoad(boolean acc)
+	{
+		return F.pc(cpua.getAverage(), acc ? 2 : 0) + ChatColor.GRAY + " (" + ChatColor.YELLOW + U.getTerm() + ChatColor.GRAY + ")";
 	}
 	
 	public void spiked(long since, long current)
@@ -140,7 +182,10 @@ public class SampleTicksPerSecond extends Sample
 		{
 			try
 			{
-				k = " (" + F.pc(Platform.CPU.getProcessCPULoad(), 0) + ")";
+				if(cpu > -1)
+				{
+					k = " (" + F.pc(cpua.getAverage(), 0) + ")";
+				}
 			}
 			
 			catch(Exception e)

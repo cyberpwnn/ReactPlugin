@@ -16,6 +16,7 @@ import org.cyberpwn.react.server.ReactUser;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.M;
+import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.ReactRunnable;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.TimingsPackage;
@@ -65,6 +66,11 @@ public class ReactServer extends Thread
 		
 		while(running)
 		{
+			if(React.STOPPING)
+			{
+				interrupt();
+			}
+			
 			if(Thread.interrupted())
 			{
 				running = false;
@@ -139,6 +145,11 @@ public class ReactServer extends Thread
 			response.put("requests per second", (double) (requests / (1 + (M.ms() - ms) / 1000)));
 			response.put("memory-max", Runtime.getRuntime().maxMemory() / 1024 / 1024);
 			response.put("processor-cores", Runtime.getRuntime().availableProcessors());
+			response.put("CPU Usage", 100 * (Platform.CPU.getCPULoad() * Platform.CPU.getAvailableProcessors()));
+			response.put("CPU Process Usage", 100 * (Platform.CPU.getProcessCPULoad() * Platform.CPU.getAvailableProcessors()));
+			response.put("Physical Memory Usage", Platform.MEMORY.PHYSICAL.getUsedMemory() / 1024 / 1024);
+			response.put("Virtual Memory Usage", Platform.MEMORY.VIRTUAL.getUsedMemory() / 1024 / 1024);
+			response.put("Virtual Commit", Platform.MEMORY.VIRTUAL.getCommittedVirtualMemory() / 1024 / 1024);
 			
 			GList<String> console = HijackedConsole.out.copy();
 			String data = console.toString("\n");
