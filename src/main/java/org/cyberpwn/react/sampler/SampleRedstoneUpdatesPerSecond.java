@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
@@ -20,6 +21,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	private int loadedTick;
 	private GMap<Chunk, Integer> chunkMap;
 	private Chunk chunk;
+	private long last;
 	
 	public SampleRedstoneUpdatesPerSecond(SampleController sampleController)
 	{
@@ -27,6 +29,7 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 		minDelay = 20;
 		maxDelay = 20;
 		idealDelay = 20;
+		last = 0;
 		target = "Lower is better. However this will vary.";
 		explaination = L.SAMPLER_WORLD_REDSTONE;
 		chunkMap = new GMap<Chunk, Integer>();
@@ -36,7 +39,9 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	@Override
 	public void onTick()
 	{
-		value.setNumber(loadedTick);
+		long dur = React.instance().getSampleController().getTick() - last;
+		last = React.instance().getSampleController().getTick();
+		value.setNumber(loadedTick / ((dur / 20) + 1));
 		loadedTick = 0;
 		
 		int m = 0;

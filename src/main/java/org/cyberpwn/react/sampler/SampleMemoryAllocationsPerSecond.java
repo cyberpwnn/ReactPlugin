@@ -1,6 +1,7 @@
 package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
@@ -13,6 +14,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 {
 	private long lastSample;
 	private GList<Long> samples;
+	private long last;
 	
 	public SampleMemoryAllocationsPerSecond(SampleController sampleController)
 	{
@@ -22,11 +24,13 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		samples = new GList<Long>().qadd(lastSample);
 		minDelay = 1;
 		maxDelay = 1;
+		last = 0;
 		idealDelay = 1;
 		target = "Lower is better.";
 		explaination = L.SAMPLER_MEMORY_MAHS;
 	}
 	
+	@Override
 	public void onMetricsPlot(Graph graph)
 	{
 		graph.addPlotter(new Metrics.Plotter("MAH/S")
@@ -39,6 +43,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		});
 	}
 	
+	@Override
 	public int getMetricsValue()
 	{
 		return getValue().getInteger();
@@ -47,13 +52,19 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 	@Override
 	public void onTick()
 	{
+		long el = React.instance().getSampleController().getTick() - last;
+		last = React.instance().getSampleController().getTick();
+		
 		long currentSample = sampleController.getSampleMemoryUsed().getMemoryUsed();
 		
 		if(lastSample < currentSample)
 		{
-			samples.add(currentSample - lastSample);
+			for(int i = 0; i < el; i++)
+			{
+				samples.add(currentSample - lastSample);
+			}
 			
-			if(samples.size() > 20)
+			while(samples.size() > 20)
 			{
 				samples.remove(0);
 			}
@@ -82,6 +93,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		return (getValue().getDouble() / (getSampleController().getSampleMemoryUsed().getAverage().doubleValue() * 8.0));
 	}
 	
+	@Override
 	public String formatted(boolean acc)
 	{
 		if(acc)
@@ -95,11 +107,13 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		}
 	}
 	
+	@Override
 	public ChatColor color()
 	{
 		return ChatColor.GOLD;
 	}
 	
+	@Override
 	public ChatColor darkColor()
 	{
 		return ChatColor.GOLD;

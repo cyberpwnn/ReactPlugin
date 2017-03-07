@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
@@ -34,7 +35,7 @@ import org.cyberpwn.react.util.MathUtils;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.Verbose;
 
-public class ActionInstabilityCause extends Action
+public class ActionInstabilityCause extends Action implements Listener
 {
 	private GMap<Player, Float> speeds;
 	private final GMap<InstabilityCause, Integer> problems;
@@ -56,6 +57,11 @@ public class ActionInstabilityCause extends Action
 		lagging = false;
 		force = false;
 		maxRedstone = -1;
+	}
+	
+	public boolean su(Player p)
+	{
+		return false;
 	}
 	
 	@Override
@@ -95,7 +101,11 @@ public class ActionInstabilityCause extends Action
 							{
 								try
 								{
-									k.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SLOWED_FIXED);
+									if(!su(k))
+									{
+										k.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SLOWED_FIXED);
+									}
+									
 									k.setFlySpeed(speeds.get(k));
 								}
 								
@@ -121,7 +131,10 @@ public class ActionInstabilityCause extends Action
 						
 						N.t("Instability Fixed " + i.getName());
 						
-						j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
+						if(!su(j))
+						{
+							j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
+						}
 					}
 				}
 			}
@@ -172,7 +185,14 @@ public class ActionInstabilityCause extends Action
 				Verbose.x("instability", "- LIQUID: " + liquid);
 			}
 			
-			if(redstone > cc.getInt(getCodeName() + ".high.redstone"))
+			int redm = cc.getInt(getCodeName() + ".high.redstone");
+			
+			if(redm < 1024)
+			{
+				redm = 1024;
+			}
+			
+			if(redstone > redm)
 			{
 				problems.put(InstabilityCause.REDSTONE, 30);
 				Verbose.x("instability", "- REDSTONE: " + redstone);
@@ -196,7 +216,12 @@ public class ActionInstabilityCause extends Action
 						if(i.isFlying() && i.getFlySpeed() > 0.4 && !speeds.containsKey(i))
 						{
 							speeds.put(i, i.getFlySpeed());
-							i.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_SLOWED);
+							
+							if(!su(i))
+							{
+								i.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_SLOWED);
+							}
+							
 							i.setFlySpeed(0.4f);
 						}
 					}
@@ -252,7 +277,10 @@ public class ActionInstabilityCause extends Action
 												continue;
 											}
 											
-											j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + Info.COLOR_ERR + " Applying Force.");
+											if(!su(j))
+											{
+												j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + Info.COLOR_ERR + " Applying Force.");
+											}
 										}
 									}
 								}
@@ -284,7 +312,10 @@ public class ActionInstabilityCause extends Action
 														continue;
 													}
 													
-													j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + Info.COLOR_ERR + " Applying Force.");
+													if(!su(j))
+													{
+														j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + Info.COLOR_ERR + " Applying Force.");
+													}
 												}
 											}
 										}
@@ -391,7 +422,10 @@ public class ActionInstabilityCause extends Action
 						
 						else
 						{
-							j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + Info.COLOR_ERR + ChatColor.BOLD + L.MESSAGE_ISSUES.replaceAll("\\.{3}", ChatColor.MAGIC + "..."));
+							if(!su(j))
+							{
+								j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + Info.COLOR_ERR + ChatColor.BOLD + L.MESSAGE_ISSUES.replaceAll("\\.{3}", ChatColor.MAGIC + "..."));
+							}
 						}
 					}
 				}

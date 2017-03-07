@@ -196,6 +196,7 @@ public class L
 	public static String COMMAND_PING = "Shows highest ping, lowest, and yours.";
 	public static String COMMAND_STATUS = "Sends a book of updated issues React finds.";
 	public static String COMMAND_CPUSCORE = "Get your server's CPU score.";
+	public static String COMMAND_STFU = "Silence React Warnings";
 	public static String COMMAND_SERVERS = "List all servers on the network with data.";
 	public static String COMMAND_GUESSMEMORY = "Guess server capabilities with X Ram";
 	public static String COMMAND_MONITOR = "enables title-text monitoring";

@@ -539,7 +539,12 @@ public class ActionStackEntities extends Action implements Listener
 		
 		for(EntityType i : EntityType.values())
 		{
-			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.VILLAGER) || i.equals(EntityType.HORSE) || i.equals(EntityType.OCELOT) || i.equals(EntityType.WOLF) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING) || i.equals(EntityType.ARMOR_STAND))
+			if(i.toString().equals("ARMOR_STAND"))
+			{
+				continue;
+			}
+			
+			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.VILLAGER) || i.equals(EntityType.HORSE) || i.equals(EntityType.OCELOT) || i.equals(EntityType.WOLF) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING))
 			{
 				continue;
 			}

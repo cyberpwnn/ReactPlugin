@@ -981,6 +981,23 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
+				try
+				{
+					getReact().getRebootController().restart();
+				}
+				
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}, L.COMMAND_PLUGINS, "reb"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
 				Player p = getPlayer();
 				CommandSender sender = getSender();
 				String[] args = getArgs();

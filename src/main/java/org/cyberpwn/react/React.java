@@ -25,6 +25,7 @@ import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
+import org.cyberpwn.react.controller.RebootController;
 import org.cyberpwn.react.controller.RegionController;
 import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
@@ -112,6 +113,7 @@ public class React extends JavaPlugin implements Configurable
 	private ConsoleController consoleController;
 	private RegionController regionController;
 	private TaskManager taskManager;
+	private RebootController rebootController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -196,6 +198,7 @@ public class React extends JavaPlugin implements Configurable
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
+		rebootController = new RebootController(this);
 		
 		dataController.load((String) null, configurationController);
 		
@@ -485,6 +488,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("splash-screen", true, "Enable the splash screen");
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
+		cc.set("startup.system-profiling", true, "Some systems can have trouble with system profiling. \nIf you have weird issues, try disabling this first.");
 		cc.set("maps.display-static", false);
 		cc.set("startup.verbose", false, L.CONFIG_REACT_VERBOSE);
 		cc.set("startup.anonymous-statistics", true, L.CONFIG_REACT_STATS);
@@ -517,6 +521,7 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onReadConfig()
 	{
+		Platform.ENABLE = cc.getBoolean("startup.system-profiling");
 		debug = cc.getBoolean("debug-messages");
 		staticy = cc.getBoolean("maps.display-static");
 		stats = cc.getBoolean("startup.anonymous-statistics");
@@ -1110,5 +1115,30 @@ public class React extends JavaPlugin implements Configurable
 	public RegionController getRegionController()
 	{
 		return regionController;
+	}
+	
+	public static boolean isSTOPPING()
+	{
+		return STOPPING;
+	}
+	
+	public RebootController getRebootController()
+	{
+		return rebootController;
+	}
+	
+	public boolean isAsr()
+	{
+		return asr;
+	}
+	
+	public int getImh()
+	{
+		return imh;
+	}
+	
+	public static GList<Runnable> getRunnables()
+	{
+		return runnables;
 	}
 }

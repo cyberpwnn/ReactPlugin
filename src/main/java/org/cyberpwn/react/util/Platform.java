@@ -7,22 +7,43 @@ import com.sun.management.OperatingSystemMXBean;
 @SuppressWarnings("restriction")
 public class Platform
 {
+	public static boolean ENABLE = true;
 	public static double PROC_CPU = CPU.getLiveProcessCPULoad();
 	
 	public static class ENVIRONMENT
 	{
+		public static boolean canRunBatch()
+		{
+			return getSystem().getName().toLowerCase().contains("windows");
+		}
+		
 		public static String getJavaHome()
 		{
+			if(!ENABLE)
+			{
+				return "";
+			}
+			
 			return System.getProperty("java.home");
 		}
 		
 		public static String getJavaVendor()
 		{
+			if(!ENABLE)
+			{
+				return "";
+			}
+			
 			return System.getProperty("java.vendor");
 		}
 		
 		public static String getJavaVersion()
 		{
+			if(!ENABLE)
+			{
+				return "";
+			}
+			
 			return System.getProperty("java.version");
 		}
 	}
@@ -100,16 +121,31 @@ public class Platform
 		{
 			public static long getTotalMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getSystem().getTotalPhysicalMemorySize();
 			}
 			
 			public static long getFreeMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getSystem().getFreePhysicalMemorySize();
 			}
 			
 			public static long getUsedMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getTotalMemory() - getFreeMemory();
 			}
 		}
@@ -118,21 +154,41 @@ public class Platform
 		{
 			public static long getTotalMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getSystem().getTotalSwapSpaceSize();
 			}
 			
 			public static long getFreeMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getSystem().getFreeSwapSpaceSize();
 			}
 			
 			public static long getUsedMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getTotalMemory() - getFreeMemory();
 			}
 			
 			public static long getCommittedVirtualMemory()
 			{
+				if(!ENABLE)
+				{
+					return 0;
+				}
+				
 				return getSystem().getCommittedVirtualMemorySize();
 			}
 		}
@@ -142,37 +198,72 @@ public class Platform
 	{
 		public static int getAvailableProcessors()
 		{
+			if(!ENABLE)
+			{
+				return Runtime.getRuntime().availableProcessors();
+			}
+			
 			return getSystem().getAvailableProcessors();
 		}
 		
 		public static double getCPULoad()
 		{
+			if(!ENABLE)
+			{
+				return 0;
+			}
+			
 			return getSystem().getSystemCpuLoad();
 		}
 		
 		public static double getProcessCPULoad()
 		{
+			if(!ENABLE)
+			{
+				return 0;
+			}
+			
 			return PROC_CPU;
 		}
 		
 		public static double getLiveProcessCPULoad()
 		{
+			if(!ENABLE)
+			{
+				return 0;
+			}
+			
 			return getSystem().getProcessCpuLoad();
 		}
 		
 		public static String getArchitecture()
 		{
+			if(!ENABLE)
+			{
+				return "?";
+			}
+			
 			return getSystem().getArch();
 		}
 	}
 	
 	public static String getVersion()
 	{
+		if(!ENABLE)
+		{
+			return "?";
+		}
+		
 		return getSystem().getVersion();
 	}
 	
 	public static String getName()
 	{
+		if(!ENABLE)
+		{
+			return "?";
+		}
+		
 		return getSystem().getName();
 	}
 	
