@@ -223,7 +223,16 @@ public class MonitorController extends Controller implements Configurable
 			
 			Timer t = new Timer();
 			t.start();
-			dispatch();
+			
+			try
+			{
+				dispatch();
+			}
+			
+			catch(Exception e)
+			{
+				
+			}
 			
 			if(getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))
 			{
@@ -444,7 +453,10 @@ public class MonitorController extends Controller implements Configurable
 				light = true;
 			}
 			
-			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking(), light);
+			boolean lxx = light;
+			boolean tmm = tryMove;
+			
+			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking(), lxx);
 			
 			if(!ms.getIgnoreDisp().contains(i))
 			{
@@ -456,7 +468,7 @@ public class MonitorController extends Controller implements Configurable
 				}
 			}
 			
-			if(tryMove)
+			if(tmm)
 			{
 				tx.setAction(ChatColor.RED + "[LOCK] " + tx.getAction() + " " + ChatColor.RED + "[LOCK]");
 			}

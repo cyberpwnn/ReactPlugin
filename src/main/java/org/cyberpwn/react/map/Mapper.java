@@ -53,11 +53,19 @@ public class Mapper
 	@SuppressWarnings("deprecation")
 	public void sample(SampleController s)
 	{
-		q1.put(MapPalette.DARK_GREEN, s.getSampleTicksPerSecond().getPercent());
-		q1.put(MapPalette.LIGHT_GREEN, s.getSampleStability().getValue().getDouble());
-		q2.put(MapPalette.DARK_BROWN, 1.0 - s.getSampleChunkMemory().getPercent() * (s.getSampleMemoryUsed().getPercentAverage()));
-		q2.put(MapPalette.PALE_BLUE, 1.0 - (Bukkit.getServer().getOnlinePlayers().size() * s.getSampleMemoryPerPlayer().getPercentOfMem()) * (s.getSampleMemoryUsed().getPercentAverage()) / 2);
-		q2.put(MapPalette.RED, 1.0 - s.getSampleMemoryUsed().getPercentAverage());
+		try
+		{
+			q1.put(MapPalette.DARK_GREEN, s.getSampleTicksPerSecond().getPercent());
+			q1.put(MapPalette.LIGHT_GREEN, s.getSampleStability().getValue().getDouble());
+			q2.put(MapPalette.DARK_BROWN, 1.0 - s.getSampleChunkMemory().getPercent() * (s.getSampleMemoryUsed().getPercentAverage()));
+			q2.put(MapPalette.PALE_BLUE, 1.0 - (Bukkit.getServer().getOnlinePlayers().size() * s.getSampleMemoryPerPlayer().getPercentOfMem()) * (s.getSampleMemoryUsed().getPercentAverage()) / 2);
+			q2.put(MapPalette.RED, 1.0 - s.getSampleMemoryUsed().getPercentAverage());
+		}
+		
+		catch(Exception e)
+		{
+			
+		}
 	}
 	
 	@SuppressWarnings("deprecation")

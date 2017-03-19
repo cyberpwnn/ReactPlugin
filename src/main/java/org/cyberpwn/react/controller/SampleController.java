@@ -34,6 +34,7 @@ import org.cyberpwn.react.sampler.SampleStability;
 import org.cyberpwn.react.sampler.SampleTNTPerSecond;
 import org.cyberpwn.react.sampler.SampleTicksPerSecond;
 import org.cyberpwn.react.sampler.SampleTimings;
+import org.cyberpwn.react.util.EX;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Value;
@@ -207,26 +208,46 @@ public class SampleController extends Controller
 		{
 			try
 			{
+				samples.put(i, samples.get(i) - 1);
+				
 				if(i.isAsleep())
 				{
 					continue;
 				}
 				
-				samples.put(i, samples.get(i) - 1);
-				
 				if(samples.get(i) <= 0)
 				{
-					long nsx = System.nanoTime();
-					i.onTick();
-					i.setReactionTime(System.nanoTime() - nsx);
-					i.setLastTick(System.currentTimeMillis());
-					samples.put(i, i.getCurrentDelay());
-					reactionTime += i.getReactionTime();
+					if(i.isPooled())
+					{
+						new EX()
+						{
+							@Override
+							public void execute()
+							{
+								long nsx = System.nanoTime();
+								i.onTick();
+								i.setReactionTime(System.nanoTime() - nsx);
+								i.setLastTick(System.currentTimeMillis());
+								samples.put(i, i.getCurrentDelay());
+								reactionTime += i.getReactionTime();
+							}
+						};
+					}
+					
+					else
+					{
+						long nsx = System.nanoTime();
+						i.onTick();
+						i.setReactionTime(System.nanoTime() - nsx);
+						i.setLastTick(System.currentTimeMillis());
+						samples.put(i, i.getCurrentDelay());
+						reactionTime += i.getReactionTime();
+					}
 				}
 				
 				if(ReactAPI.getTicksPerSecond() > 17.5)
 				{
-					i.sleep((int) (10 + (Math.random() * 30)));
+					i.sleep((int) (10 + (Math.random() * 40)));
 				}
 			}
 			

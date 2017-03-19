@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.generator.ChunkGenerator;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -25,7 +26,6 @@ import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PlayerController;
 import org.cyberpwn.react.controller.PluginWeightController;
-import org.cyberpwn.react.controller.RebootController;
 import org.cyberpwn.react.controller.RegionController;
 import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
@@ -37,15 +37,16 @@ import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.file.FileHack;
 import org.cyberpwn.react.file.ICopy;
 import org.cyberpwn.react.file.IDelete;
+import org.cyberpwn.react.gen.FastChunkGenerator;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.sampler.Samplable;
-import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
+import org.cyberpwn.react.util.EX;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GFile;
@@ -57,6 +58,7 @@ import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
+import org.cyberpwn.react.util.Paste;
 import org.cyberpwn.react.util.PlaceholderHook;
 import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.Task;
@@ -113,7 +115,6 @@ public class React extends JavaPlugin implements Configurable
 	private ConsoleController consoleController;
 	private RegionController regionController;
 	private TaskManager taskManager;
-	private RebootController rebootController;
 	public static String nonce = "%%__NONCE__%%";
 	private static String MKX = ".com/cyberpwnn/React";
 	public static String hashed = "https://raw.githubusercontent.com/cyberpwnn/React/master/serve/war/hash.yml";
@@ -198,7 +199,6 @@ public class React extends JavaPlugin implements Configurable
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
-		rebootController = new RebootController(this);
 		
 		dataController.load((String) null, configurationController);
 		
@@ -324,7 +324,15 @@ public class React extends JavaPlugin implements Configurable
 			{
 				for(Controllable i : controllers)
 				{
-					i.tick();
+					try
+					{
+						i.tick();
+					}
+					
+					catch(Exception e)
+					{
+						
+					}
 				}
 				
 				imh++;
@@ -337,10 +345,10 @@ public class React extends JavaPlugin implements Configurable
 					{
 						if(!asr)
 						{
-							new ASYNC()
+							new EX()
 							{
 								@Override
-								public void async()
+								public void execute()
 								{
 									Platform.PROC_CPU = Platform.CPU.getLiveProcessCPULoad();
 								}
@@ -430,20 +438,30 @@ public class React extends JavaPlugin implements Configurable
 		HijackedConsole.hijacked = false;
 	}
 	
-	public static void dump()
+	@Override
+	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
+	{
+		return new FastChunkGenerator();
+	}
+	
+	public static String dump()
 	{
 		Dump dump = new Dump(instance);
 		dump.onNewConfig(dump.getConfiguration());
+		String pString = null;
 		
 		try
 		{
 			dump.getConfiguration().toYaml().save(new GFile(new GFile(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
+			pString = Paste.paste(dump.getConfiguration().toYaml().saveToString());
 		}
 		
-		catch(IOException e)
+		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
+		
+		return pString;
 	}
 	
 	public void i(String s)
@@ -482,12 +500,28 @@ public class React extends JavaPlugin implements Configurable
 		return cc;
 	}
 	
+	public static boolean shouldMulticore()
+	{
+		if(Runtime.getRuntime().freeMemory() / 1024 / 1024 < 1024)
+		{
+			return false;
+		}
+		
+		if(Runtime.getRuntime().maxMemory() / 1024 / 1024 < corec() * 768)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		cc.set("splash-screen", true, "Enable the splash screen");
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
+		cc.set("startup.multicore", shouldMulticore(), "Use multiple threads to handle react processing");
 		cc.set("startup.system-profiling", true, "Some systems can have trouble with system profiling. \nIf you have weird issues, try disabling this first.");
 		cc.set("maps.display-static", false);
 		cc.set("startup.verbose", false, L.CONFIG_REACT_VERBOSE);
@@ -1122,11 +1156,6 @@ public class React extends JavaPlugin implements Configurable
 		return STOPPING;
 	}
 	
-	public RebootController getRebootController()
-	{
-		return rebootController;
-	}
-	
 	public boolean isAsr()
 	{
 		return asr;
@@ -1140,5 +1169,10 @@ public class React extends JavaPlugin implements Configurable
 	public static GList<Runnable> getRunnables()
 	{
 		return runnables;
+	}
+	
+	public static int corec()
+	{
+		return (Runtime.getRuntime().availableProcessors() > 2 ? 2 : Runtime.getRuntime().availableProcessors());
 	}
 }

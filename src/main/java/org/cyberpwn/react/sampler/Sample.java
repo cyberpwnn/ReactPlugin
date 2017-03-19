@@ -31,9 +31,11 @@ public class Sample implements Samplable, Configurable
 	protected String codeName;
 	protected boolean sleepy;
 	protected boolean asleep;
+	protected boolean pooled;
 	
 	public Sample(SampleController sampleController, String cname, ValueType type, String name, String description)
 	{
+		pooled = true;
 		asleep = false;
 		sleepy = true;
 		this.sampleController = sampleController;
@@ -351,5 +353,11 @@ public class Sample implements Samplable, Configurable
 	public boolean isAsleep()
 	{
 		return asleep;
+	}
+	
+	@Override
+	public boolean isPooled()
+	{
+		return pooled;
 	}
 }

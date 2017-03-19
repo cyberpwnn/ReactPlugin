@@ -32,6 +32,7 @@ public class SampleTicksPerSecond extends Sample
 		
 		cpu = -1;
 		del = 0;
+		pooled = false;
 		sleepy = false;
 		cpua = new Average(12);
 		cpub = new Average(12);

@@ -1,5 +1,9 @@
 package org.cyberpwn.react.controller;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
@@ -21,12 +25,16 @@ public class TaskManager extends Controller implements Configurable
 	private double delay;
 	private double overflow;
 	private Average usage;
+	private ExecutorService executor;
 	
 	public TaskManager(React react)
 	{
 		super(react);
 		
 		cc = new ClusterConfig();
+		
+		executor = Executors.newFixedThreadPool(React.corec());
+		((ThreadPoolExecutor) executor).setKeepAliveTime(1, TimeUnit.MINUTES);
 	}
 	
 	@Override
@@ -72,6 +80,11 @@ public class TaskManager extends Controller implements Configurable
 	@Override
 	public void tick()
 	{
+		if(React.STOPPING)
+		{
+			executor.shutdownNow();
+		}
+		
 		try
 		{
 			if(delay > 0)
@@ -274,5 +287,30 @@ public class TaskManager extends Controller implements Configurable
 	public GMap<P, GList<Q>> getQueue()
 	{
 		return queue;
+	}
+	
+	public ClusterConfig getCc()
+	{
+		return cc;
+	}
+	
+	public double getThrottle()
+	{
+		return throttle;
+	}
+	
+	public double getDelay()
+	{
+		return delay;
+	}
+	
+	public double getOverflow()
+	{
+		return overflow;
+	}
+	
+	public ExecutorService getExecutor()
+	{
+		return executor;
 	}
 }

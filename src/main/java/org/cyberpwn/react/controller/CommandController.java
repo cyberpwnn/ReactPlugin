@@ -3,7 +3,6 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
@@ -46,6 +45,7 @@ import org.cyberpwn.react.util.Callback;
 import org.cyberpwn.react.util.CommandRunnable;
 import org.cyberpwn.react.util.Configurator;
 import org.cyberpwn.react.util.E;
+import org.cyberpwn.react.util.EX;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FSMap;
 import org.cyberpwn.react.util.GBook;
@@ -981,23 +981,6 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
-				try
-				{
-					getReact().getRebootController().restart();
-				}
-				
-				catch(IOException e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}, L.COMMAND_PLUGINS, "reb"));
-		
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
-			@Override
-			public void run()
-			{
 				Player p = getPlayer();
 				CommandSender sender = getSender();
 				String[] args = getArgs();
@@ -1097,6 +1080,26 @@ public class CommandController extends Controller implements CommandExecutor
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Distro: " + ChatColor.WHITE + "Production");
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Operating System: " + ChatColor.WHITE + Platform.getName() + " " + ChatColor.GRAY + "(" + Platform.getVersion() + ")");
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Java: " + ChatColor.WHITE + Platform.ENVIRONMENT.getJavaVendor() + " " + ChatColor.GRAY + "(" + Platform.ENVIRONMENT.getJavaVersion() + ")");
+				
+				if(ReactAPI.getMemoryFree() / 1024 / 1024 < 1024)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Multicore Status: " + ChatColor.RED + "OFFLINE " + ChatColor.WHITE + "(Not Enough Free Memory)");
+				}
+				
+				else if(Runtime.getRuntime().maxMemory() / 1024 / 1024 < React.corec() * 768)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Multicore Status: " + ChatColor.RED + "OFFLINE " + ChatColor.WHITE + "(Not Enough Usable Memory for " + React.corec() + " processors. You need at least " + ((React.corec() * 768) - Runtime.getRuntime().maxMemory() / 1024 / 1024) + "mb more memory.");
+				}
+				
+				else if(React.instance().getConfiguration().getBoolean("startup.multicore"))
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Multicore Status: " + ChatColor.GREEN + "ONLINE ");
+				}
+				
+				else
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GREEN + "Multicore Status: " + ChatColor.RED + "OFFLINE " + ChatColor.WHITE + "(disabled in configuration)");
+				}
 				
 				sender.sendMessage(String.format(Info.HRN, "CPU"));
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Type: " + ChatColor.WHITE + Amounts.to(Platform.CPU.getAvailableProcessors()) + " Core " + Platform.CPU.getArchitecture());
@@ -1247,11 +1250,16 @@ public class CommandController extends Controller implements CommandExecutor
 			public void run()
 			{
 				CommandSender sender = getSender();
-				React.dump();
-				Date d = new Date();
-				@SuppressWarnings("deprecation")
-				String nme = "React/dumps/" + (d.getHours() + 1) + "-" + (d.getMinutes() + 1) + "-" + (d.getSeconds() + 1) + "-" + d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getYear() + ".yml";
-				sender.sendMessage(Info.TAG + L.MESSAGE_DUMPED + nme);
+				
+				new EX()
+				{
+					@Override
+					public void execute()
+					{
+						String url = React.dump();
+						sender.sendMessage(Info.TAG + ChatColor.GRAY + "Dumped: " + ChatColor.WHITE + url);
+					}
+				};
 			}
 		}, L.COMMAND_DUMP, "dump", "d", "du", "out"));
 		
