@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
@@ -23,14 +24,21 @@ public class SampleChunksLoaded extends Sample
 	
 	public void onTick()
 	{
-		int k = 0;
-		
-		for(World i : Bukkit.getWorlds())
+		new ASYNC()
 		{
-			k += i.getLoadedChunks().length;
-		}
-		
-		getValue().setNumber(k);
+			@Override
+			public void async()
+			{
+				int k = 0;
+				
+				for(World i : Bukkit.getWorlds())
+				{
+					k += i.getLoadedChunks().length;
+				}
+				
+				getValue().setNumber(k);
+			}
+		};
 	}
 	
 	public void onStart()

@@ -3,6 +3,7 @@ package org.cyberpwn.react.sampler;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
@@ -22,12 +23,19 @@ public class SampleChunkMemory extends Sample
 	
 	public void onTick()
 	{
-		value.setNumber((long) (((double) getSampleController().getSampleChunksLoaded().getValue().getInteger()) / 12.8));
-		
-		if(value.getLong() >= getSampleController().getSampleMemoryUsed().getValue().getLong())
+		new ASYNC()
 		{
-			value.setNumber(getSampleController().getSampleMemoryUsed().getValue().getLong() - 80);
-		}
+			@Override
+			public void async()
+			{
+				value.setNumber((long) (((double) getSampleController().getSampleChunksLoaded().getValue().getInteger()) / 12.8));
+				
+				if(value.getLong() >= getSampleController().getSampleMemoryUsed().getValue().getLong())
+				{
+					value.setNumber(getSampleController().getSampleMemoryUsed().getValue().getLong() - 80);
+				}
+			}
+		};
 	}
 	
 	public void onMetricsPlot(Graph graph)

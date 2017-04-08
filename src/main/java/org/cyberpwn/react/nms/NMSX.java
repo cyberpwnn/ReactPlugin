@@ -17,6 +17,9 @@ public class NMSX
 	public static NMSX bountifulAPI;
 	private static boolean useOldMethods;
 	public static String nmsver;
+	public static Object eTimes = null;
+	public static Object eTitle = null;
+	public static Object eSubtitle = null;
 	
 	public static String getVersion()
 	{
@@ -175,18 +178,36 @@ public class NMSX
 		try
 		{
 			Object e;
+			
+			if(eTimes == null)
+			{
+				eTimes = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get(null);
+			}
+			
+			if(eTitle == null)
+			{
+				eTitle = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
+			}
+			
+			if(eSubtitle == null)
+			{
+				eSubtitle = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
+			}
+			
+			
 			Constructor<?> subtitleConstructor;
 			
 			if(title != null)
 			{
 				title = ChatColor.translateAlternateColorCodes((char) '&', (String) title);
 				title = title.replaceAll("%player%", player.getDisplayName());
-				e = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get(null);
+				e = eTimes;
 				Object chatTitle = NMSX.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + title + "\"}");
 				subtitleConstructor = NMSX.getNMSClass("PacketPlayOutTitle").getConstructor(NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], NMSX.getNMSClass("IChatBaseComponent"), Integer.TYPE, Integer.TYPE, Integer.TYPE);
 				Object titlePacket = subtitleConstructor.newInstance(e, chatTitle, fadeIn, stay, fadeOut);
 				NMSX.sendPacket(player, titlePacket);
-				e = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TITLE").get(null);
+				
+				e = eTitle;
 				chatTitle = NMSX.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + title + "\"}");
 				subtitleConstructor = NMSX.getNMSClass("PacketPlayOutTitle").getConstructor(NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], NMSX.getNMSClass("IChatBaseComponent"));
 				titlePacket = subtitleConstructor.newInstance(e, chatTitle);
@@ -197,12 +218,15 @@ public class NMSX
 			{
 				subtitle = ChatColor.translateAlternateColorCodes((char) '&', (String) subtitle);
 				subtitle = subtitle.replaceAll("%player%", player.getDisplayName());
-				e = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("TIMES").get(null);
+				
+				e = eTimes;
+				
 				Object chatSubtitle = NMSX.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + title + "\"}");
 				subtitleConstructor = NMSX.getNMSClass("PacketPlayOutTitle").getConstructor(NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], NMSX.getNMSClass("IChatBaseComponent"), Integer.TYPE, Integer.TYPE, Integer.TYPE);
 				Object subtitlePacket = subtitleConstructor.newInstance(e, chatSubtitle, fadeIn, stay, fadeOut);
 				NMSX.sendPacket(player, subtitlePacket);
-				e = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
+				
+				e = eSubtitle;
 				chatSubtitle = NMSX.getNMSClass("IChatBaseComponent").getDeclaredClasses()[0].getMethod("a", String.class).invoke(null, "{\"text\":\"" + subtitle + "\"}");
 				subtitleConstructor = NMSX.getNMSClass("PacketPlayOutTitle").getConstructor(NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0], NMSX.getNMSClass("IChatBaseComponent"), Integer.TYPE, Integer.TYPE, Integer.TYPE);
 				subtitlePacket = subtitleConstructor.newInstance(e, chatSubtitle, fadeIn, stay, fadeOut);

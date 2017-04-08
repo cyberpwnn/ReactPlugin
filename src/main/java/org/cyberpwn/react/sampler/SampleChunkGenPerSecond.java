@@ -8,6 +8,7 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.InstabilityCause;
@@ -34,24 +35,31 @@ public class SampleChunkGenPerSecond extends Sample implements Listener
 	@Override
 	public void onTick()
 	{
-		int chunksLoad = 0;
-		
-		average.add(loadedTick);
-		loadedTick = 0;
-		
-		if(average.size() > 10)
+		new ASYNC()
 		{
-			average.remove(0);
-		}
-		
-		for(Integer i : average)
-		{
-			chunksLoad += i;
-		}
-		
-		chunksLoad /= average.size();
-		
-		value.setNumber(chunksLoad);
+			@Override
+			public void async()
+			{
+				int chunksLoad = 0;
+				
+				average.add(loadedTick);
+				loadedTick = 0;
+				
+				if(average.size() > 10)
+				{
+					average.remove(0);
+				}
+				
+				for(Integer i : average)
+				{
+					chunksLoad += i;
+				}
+				
+				chunksLoad /= average.size();
+				
+				value.setNumber(chunksLoad);
+			}
+		};
 	}
 	
 	@Override

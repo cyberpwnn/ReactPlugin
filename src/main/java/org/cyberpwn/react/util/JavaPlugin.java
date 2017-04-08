@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.net.URL;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,18 +27,19 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 	
 	public void onReload(CommandSender sender)
 	{
+		React.instance().getPoolManager().shutdown();
+		React.instance().destroyOldThreads();
+		
 		if(sender == null)
 		{
-			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
-			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			reload();
 			
 			return;
 		}
 		
 		if(sender.hasPermission(Info.PERM_RELOAD))
 		{
-			Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin("React"));
-			Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin("React"));
+			reload();
 			sender.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_RELOADED);
 		}
 		
@@ -48,6 +47,17 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 		{
 			sender.sendMessage(Info.TAG + L.MESSAGE_INSUFFICIENT_PERMISSION);
 		}
+	}
+	
+	private void reload()
+	{
+		new TaskLater(1)
+		{
+			public void run()
+			{
+				PluginUtil.reload(React.instance());
+			}
+		};
 	}
 	
 	public boolean canFindPlayer(String search)

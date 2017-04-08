@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleHistory extends Sample
@@ -29,10 +30,17 @@ public class SampleHistory extends Sample
 			return;
 		}
 		
-		getSampleController().getReact().getDataController().getTb().push("stability", getSampleController().getSampleStability().getValue().getDouble());
-		getSampleController().getReact().getDataController().getTb().push("players", getSampleController().getReact().onlinePlayers().length);
-		getSampleController().getReact().getDataController().getTb().push("memory", getSampleController().getSampleMemoryUsed().getValue().getDouble());
-		getSampleController().getReact().getMonitorController().getMapper().updateSlow(getSampleController().getReact().getDataController().getTb());
+		new ASYNC()
+		{
+			@Override
+			public void async()
+			{
+				getSampleController().getReact().getDataController().getTb().push("stability", getSampleController().getSampleStability().getValue().getDouble());
+				getSampleController().getReact().getDataController().getTb().push("players", getSampleController().getReact().onlinePlayers().length);
+				getSampleController().getReact().getDataController().getTb().push("memory", getSampleController().getSampleMemoryUsed().getValue().getDouble());
+				getSampleController().getReact().getMonitorController().getMapper().updateSlow(getSampleController().getReact().getDataController().getTb());
+			}
+		};
 	}
 	
 	public void onStart()

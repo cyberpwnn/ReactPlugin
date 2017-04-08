@@ -5,6 +5,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
@@ -26,17 +27,24 @@ public class SampleDrops extends Sample
 	@Override
 	public void onTick()
 	{
-		getValue().setNumber(drops);
-		drops = 0;
-		final int[] cpt = new int[] {0};
-		
-		for(World i : sampleController.getReact().getServer().getWorlds())
+		new ASYNC()
 		{
-			drops += i.getEntitiesByClass(Item.class).size();
-			cpt[0] += i.getLoadedChunks().length;
-		}
-		
-		cpt[0] /= (idealDelay + 1);
+			@Override
+			public void async()
+			{
+				getValue().setNumber(drops);
+				drops = 0;
+				final int[] cpt = new int[] {0};
+				
+				for(World i : sampleController.getReact().getServer().getWorlds())
+				{
+					drops += i.getEntitiesByClass(Item.class).size();
+					cpt[0] += i.getLoadedChunks().length;
+				}
+				
+				cpt[0] /= (idealDelay + 1);
+			}
+		};
 	}
 	
 	@Override

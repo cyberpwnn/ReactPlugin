@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
@@ -27,17 +28,24 @@ public class SampleEntities extends Sample implements Listener
 	@Override
 	public void onTick()
 	{
-		getValue().setNumber(entities);
-		entities = 0;
-		final int[] cpt = new int[] {0};
-		
-		for(World i : sampleController.getReact().getServer().getWorlds())
+		new ASYNC()
 		{
-			entities += i.getEntities().size();
-			cpt[0] += i.getLoadedChunks().length;
-		}
-		
-		cpt[0] /= (idealDelay + 1);
+			@Override
+			public void async()
+			{
+				getValue().setNumber(entities);
+				entities = 0;
+				final int[] cpt = new int[] {0};
+				
+				for(World i : sampleController.getReact().getServer().getWorlds())
+				{
+					entities += i.getEntities().size();
+					cpt[0] += i.getLoadedChunks().length;
+				}
+				
+				cpt[0] /= (idealDelay + 1);
+			}
+		};
 	}
 	
 	@Override

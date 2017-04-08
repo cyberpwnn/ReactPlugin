@@ -82,60 +82,56 @@ public class ConfigurationController extends Controller implements Configurable
 			@Override
 			public void async()
 			{
-				for(File i : configurations.k())
+				int f = 0;
+				
+				for(File i : configurations.k().copy().shuffle())
 				{
-					if(React.STOPPING)
+					f++;
+					
+					if(f > 4)
 					{
 						break;
 					}
 					
-					if(!i.exists())
+					new ASYNC()
 					{
-						new TaskLater(0)
+						@Override
+						public void async()
 						{
-							@Override
-							public void run()
+							if(!i.exists())
 							{
-								notif("File Deleted: " + i.getName() + " (Regenerating Defaults)");
-								getReact().getDataController().load(i, configurations.get(i));
-							}
-						};
-					}
-					
-					if(modified(configurations.get(i)))
-					{
-						Configurable c = configurations.get(i);
-						mods.put(configurations.get(i), i.lastModified());
-						int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
-						
-						if(changes > 0)
-						{
-							new TaskLater(0)
-							{
-								@Override
-								public void run()
+								new TaskLater(0)
 								{
-									c.onReadConfig();
-									notif("Injected " + changes + " change(s) to " + i.getName());
+									@Override
+									public void run()
+									{
+										notif("File Deleted: " + i.getName() + " (Regenerating Defaults)");
+										getReact().getDataController().load(i, configurations.get(i));
+									}
+								};
+							}
+							
+							if(modified(configurations.get(i)))
+							{
+								Configurable c = configurations.get(i);
+								mods.put(configurations.get(i), i.lastModified());
+								int changes = getReact().getDataController().updateConfigurableSettings(i, c.getConfiguration());
+								
+								if(changes > 0)
+								{
+									new TaskLater(0)
+									{
+										@Override
+										public void run()
+										{
+											c.onReadConfig();
+											notif("Injected " + changes + " change(s) to " + i.getName());
+										}
+									};
 								}
-							};
+							}
 						}
-					}
-				}
-				
-				if(React.STOPPING)
-				{
-					return;
-				}
-				
-				try
-				{
-					Thread.sleep(2000);
-				}
-				
-				catch(InterruptedException e)
-				{
-					e.printStackTrace();
+					};
 				}
 				
 				scanning = false;

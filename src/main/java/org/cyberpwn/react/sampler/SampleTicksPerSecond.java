@@ -107,7 +107,7 @@ public class SampleTicksPerSecond extends Sample
 			
 			if(del > 1)
 			{
-				cpu = Platform.CPU.getProcessCPULoad() * Platform.CPU.getAvailableProcessors();
+				cpu = Platform.CPU.getProcessCPULoad();
 				
 				if(cpua.getData().size() > 4)
 				{

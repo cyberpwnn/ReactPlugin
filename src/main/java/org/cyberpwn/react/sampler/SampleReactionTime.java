@@ -1,6 +1,8 @@
 package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
+import org.cyberpwn.react.React;
+import org.cyberpwn.react.api.U;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
@@ -92,6 +94,11 @@ public class SampleReactionTime extends Sample
 	@Override
 	public String formatted(boolean acc)
 	{
+		if(React.canMulticore())
+		{
+			return U.status(acc);
+		}
+		
 		if(acc)
 		{
 			return F.fd(getValue().getDouble() / 1000000.0, 4) + "ms";

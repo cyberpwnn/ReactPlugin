@@ -33,6 +33,7 @@ import org.cyberpwn.react.map.Mapper;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.nms.PacketUtil;
 import org.cyberpwn.react.nms.Title;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.CompassUtil;
 import org.cyberpwn.react.util.F;
@@ -456,29 +457,36 @@ public class MonitorController extends Controller implements Configurable
 			boolean lxx = light;
 			boolean tmm = tryMove;
 			
-			Title tx = ms.update(monitors.get(i).getB(), i.isSneaking(), lxx);
-			
-			if(!ms.getIgnoreDisp().contains(i))
+			new ASYNC()
 			{
-				tx.setTitle(" ");
-				
-				if(!ms.doubled(monitors.get(i).getB()))
+				@Override
+				public void async()
 				{
-					tx.setSubTitle(" ");
+					Title tx = ms.update(monitors.get(i).getB(), i.isSneaking(), lxx);
+					
+					if(!ms.getIgnoreDisp().contains(i))
+					{
+						tx.setTitle(" ");
+						
+						if(!ms.doubled(monitors.get(i).getB()))
+						{
+							tx.setSubTitle(" ");
+						}
+					}
+					
+					if(tmm)
+					{
+						tx.setAction(ChatColor.RED + "[LOCK] " + tx.getAction() + " " + ChatColor.RED + "[LOCK]");
+					}
+					
+					if(getReact().getActionController().getActionInstabilityCause().issues())
+					{
+						tx.setAction(Info.COLOR_ERR + org.apache.commons.lang.StringUtils.repeat(">", level) + " " + ChatColor.RESET + tx.getAction() + Info.COLOR_ERR + " " + org.apache.commons.lang.StringUtils.repeat("<", level));
+					}
+					
+					tx.send(i);
 				}
-			}
-			
-			if(tmm)
-			{
-				tx.setAction(ChatColor.RED + "[LOCK] " + tx.getAction() + " " + ChatColor.RED + "[LOCK]");
-			}
-			
-			if(getReact().getActionController().getActionInstabilityCause().issues())
-			{
-				tx.setAction(Info.COLOR_ERR + org.apache.commons.lang.StringUtils.repeat(">", level) + " " + ChatColor.RESET + tx.getAction() + Info.COLOR_ERR + " " + org.apache.commons.lang.StringUtils.repeat("<", level));
-			}
-			
-			tx.send(i);
+			};
 		}
 	}
 	

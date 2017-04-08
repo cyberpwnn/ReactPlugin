@@ -34,7 +34,7 @@ import org.cyberpwn.react.sampler.SampleStability;
 import org.cyberpwn.react.sampler.SampleTNTPerSecond;
 import org.cyberpwn.react.sampler.SampleTicksPerSecond;
 import org.cyberpwn.react.sampler.SampleTimings;
-import org.cyberpwn.react.util.EX;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.Value;
@@ -219,10 +219,10 @@ public class SampleController extends Controller
 				{
 					if(i.isPooled())
 					{
-						new EX()
+						new ASYNC()
 						{
 							@Override
-							public void execute()
+							public void async()
 							{
 								long nsx = System.nanoTime();
 								i.onTick();

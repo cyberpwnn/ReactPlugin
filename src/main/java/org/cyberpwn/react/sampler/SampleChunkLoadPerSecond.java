@@ -7,6 +7,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.InstabilityCause;
@@ -33,24 +34,31 @@ public class SampleChunkLoadPerSecond extends Sample implements Listener
 	@Override
 	public void onTick()
 	{
-		double chunksLoad = 0;
-		
-		average.add((double) loadedTick);
-		loadedTick = 0;
-		
-		if(average.size() > 10)
+		new ASYNC()
 		{
-			average.remove(0);
-		}
-		
-		for(Double i : average)
-		{
-			chunksLoad += i;
-		}
-		
-		chunksLoad /= (double) average.size();
-		
-		value.setNumber(chunksLoad);
+			@Override
+			public void async()
+			{
+				double chunksLoad = 0;
+				
+				average.add((double) loadedTick);
+				loadedTick = 0;
+				
+				if(average.size() > 10)
+				{
+					average.remove(0);
+				}
+				
+				for(Double i : average)
+				{
+					chunksLoad += i;
+				}
+				
+				chunksLoad /= (double) average.size();
+				
+				value.setNumber(chunksLoad);
+			}
+		};
 	}
 	
 	@Override

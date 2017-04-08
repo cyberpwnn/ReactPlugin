@@ -39,13 +39,13 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.network.ReactServer;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Amounts;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Callback;
 import org.cyberpwn.react.util.CommandRunnable;
 import org.cyberpwn.react.util.Configurator;
 import org.cyberpwn.react.util.E;
-import org.cyberpwn.react.util.EX;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FSMap;
 import org.cyberpwn.react.util.GBook;
@@ -1251,10 +1251,10 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				CommandSender sender = getSender();
 				
-				new EX()
+				new ASYNC()
 				{
 					@Override
-					public void execute()
+					public void async()
 					{
 						String url = React.dump();
 						sender.sendMessage(Info.TAG + ChatColor.GRAY + "Dumped: " + ChatColor.WHITE + url);

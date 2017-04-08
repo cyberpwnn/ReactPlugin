@@ -145,8 +145,8 @@ public class ReactServer extends Thread
 			response.put("requests per second", (double) (requests / (1 + (M.ms() - ms) / 1000)));
 			response.put("memory-max", Runtime.getRuntime().maxMemory() / 1024 / 1024);
 			response.put("processor-cores", Runtime.getRuntime().availableProcessors());
-			response.put("CPU Usage", 100 * (Platform.CPU.getCPULoad() * Platform.CPU.getAvailableProcessors()));
-			response.put("CPU Process Usage", 100 * (Platform.CPU.getProcessCPULoad() * Platform.CPU.getAvailableProcessors()));
+			response.put("CPU Usage", 100 * (Platform.CPU.getCPULoad()));
+			response.put("CPU Process Usage", 100 * (Platform.CPU.getProcessCPULoad()));
 			response.put("Physical Memory Usage", Platform.MEMORY.PHYSICAL.getUsedMemory() / 1024 / 1024);
 			response.put("Virtual Memory Usage", Platform.MEMORY.VIRTUAL.getUsedMemory() / 1024 / 1024);
 			response.put("Virtual Commit", Platform.MEMORY.VIRTUAL.getCommittedVirtualMemory() / 1024 / 1024);

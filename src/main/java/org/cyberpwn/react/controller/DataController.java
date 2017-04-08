@@ -159,6 +159,7 @@ public class DataController extends Controller
 			f("TG: " + ChatColor.YELLOW + e.getStackTrace()[0].getMethodName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
 			f("TC: " + ChatColor.YELLOW + e.getStackTrace()[0].getClassName() + "(" + e.getStackTrace()[0].getLineNumber() + ")");
 			f("============ ============ ============");
+			e.printStackTrace();
 		}
 	}
 	

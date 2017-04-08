@@ -40,13 +40,15 @@ import org.cyberpwn.react.file.IDelete;
 import org.cyberpwn.react.gen.FastChunkGenerator;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.queue.ParallelPoolManager;
+import org.cyberpwn.react.queue.TICK;
 import org.cyberpwn.react.sampler.Samplable;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
 import org.cyberpwn.react.util.Dump;
-import org.cyberpwn.react.util.EX;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GFile;
@@ -69,6 +71,7 @@ import org.cyberpwn.react.util.Verbose;
 public class React extends JavaPlugin implements Configurable
 {
 	public static boolean STOPPING = false;
+	private ParallelPoolManager poolManager;
 	private static boolean staticy;
 	private static boolean debug;
 	private static boolean stats;
@@ -207,7 +210,7 @@ public class React extends JavaPlugin implements Configurable
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
-		
+		setupTicker();
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
@@ -345,10 +348,10 @@ public class React extends JavaPlugin implements Configurable
 					{
 						if(!asr)
 						{
-							new EX()
+							new ASYNC()
 							{
 								@Override
-								public void execute()
+								public void async()
 								{
 									Platform.PROC_CPU = Platform.CPU.getLiveProcessCPULoad();
 								}
@@ -414,6 +417,92 @@ public class React extends JavaPlugin implements Configurable
 		{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "React " + Version.V + " Started!");
 		}
+	}
+	
+	public void onLoad()
+	{
+		destroyOldThreads();
+		readCurrentTick();
+	}
+	
+	@SuppressWarnings("deprecation")
+	public void destroyOldThreads()
+	{
+		boolean k = false;
+		
+		for(Thread i : new GList<Thread>(Thread.getAllStackTraces().keySet()))
+		{
+			if(i.getName().startsWith("CT Parallel Tick Thread "))
+			{
+				k = true;
+				
+				try
+				{
+					System.out.println("WAITING FOR OLD THREAD TO DIE: " + i.getName());
+					i.interrupt();
+					i.join(100);
+				}
+				
+				catch(InterruptedException e)
+				{
+					
+				}
+				
+				catch(Throwable e)
+				{
+					e.printStackTrace();
+				}
+				
+				if(i.isAlive())
+				{
+					try
+					{
+						System.out.println("FORCE KILLING");
+						i.stop();
+					}
+					
+					catch(Throwable e)
+					{
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		if(k)
+		{
+			System.out.println("Killed off stale threads from pre-reload");
+		}
+	}
+	
+	private void readCurrentTick()
+	{
+		long ms = System.currentTimeMillis();
+		File prop = new File("server.properties");
+		TICK.tick = (ms - prop.lastModified()) / 50;
+		System.out.println("Setting Tick to " + TICK.tick);
+	}
+	
+	private void setupTicker()
+	{
+		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
+		{
+			public void run()
+			{
+				TICK.tick++;
+			}
+		}, 0, 0);
+		
+		poolManager = new ParallelPoolManager(cc.getInt("startup.multicore-threads"));
+		poolManager.start();
+		
+		new TaskLater(100)
+		{
+			public void run()
+			{
+				poolManager.checkThreads();
+			}
+		};
 	}
 	
 	@Override
@@ -500,6 +589,11 @@ public class React extends JavaPlugin implements Configurable
 		return cc;
 	}
 	
+	public static boolean canMulticore()
+	{
+		return React.instance.getConfig().getBoolean("startup.multicore");
+	}
+	
 	public static boolean shouldMulticore()
 	{
 		if(Runtime.getRuntime().freeMemory() / 1024 / 1024 < 1024)
@@ -522,6 +616,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
 		cc.set("startup.multicore", shouldMulticore(), "Use multiple threads to handle react processing");
+		cc.set("startup.multicore-threads", 1, "Use multiple threads to handle react processing\nIf multicore is off, this feature wont be used.");
 		cc.set("startup.system-profiling", true, "Some systems can have trouble with system profiling. \nIf you have weird issues, try disabling this first.");
 		cc.set("maps.display-static", false);
 		cc.set("startup.verbose", false, L.CONFIG_REACT_VERBOSE);
@@ -565,6 +660,7 @@ public class React extends JavaPlugin implements Configurable
 		allowTps = cc.getBoolean("commands.override.tps");
 		nf = cc.getBoolean("messages.notify-instability");
 		dreact = cc.getBoolean("runtime.disable-reactions");
+		cc.set("startup.multicore", true, "Use multiple threads to handle react processing");
 		
 		if(cc.contains("placeholders"))
 		{
@@ -1171,6 +1267,11 @@ public class React extends JavaPlugin implements Configurable
 		return runnables;
 	}
 	
+	public ParallelPoolManager getPoolManager()
+	{
+		return poolManager;
+	}
+
 	public static int corec()
 	{
 		return (Runtime.getRuntime().availableProcessors() > 2 ? 2 : Runtime.getRuntime().availableProcessors());

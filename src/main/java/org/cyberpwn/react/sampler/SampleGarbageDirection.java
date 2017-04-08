@@ -5,6 +5,7 @@ import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.ValueType;
@@ -50,34 +51,41 @@ public class SampleGarbageDirection extends Sample
 	
 	public void onTick()
 	{
-		kmx++;
-		
-		if(kmx > 10)
+		new ASYNC()
 		{
-			long currentSample = (long) ReactAPI.getMemoryGarbage();
-			
-			if(lastSample != currentSample)
+			@Override
+			public void async()
 			{
-				direction = currentSample - lastSample;
-			}
-			
-			else
-			{
-				direction = 0;
-			}
-			
-			lastSample = currentSample;
-			
-			if(direction != 0)
-			{
-				if(direction < 0)
+				kmx++;
+				
+				if(kmx > 10)
 				{
-					overhead = -direction;
+					long currentSample = (long) ReactAPI.getMemoryGarbage();
+					
+					if(lastSample != currentSample)
+					{
+						direction = currentSample - lastSample;
+					}
+					
+					else
+					{
+						direction = 0;
+					}
+					
+					lastSample = currentSample;
+					
+					if(direction != 0)
+					{
+						if(direction < 0)
+						{
+							overhead = -direction;
+						}
+					}
+					
+					kmx = 0;
 				}
 			}
-			
-			kmx = 0;
-		}
+		};
 	}
 	
 	public void onStart()
