@@ -202,6 +202,7 @@ public class ReactWorld implements Configurable, Listener
 		return world.getName() + "-settings";
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onChunk(ChunkLoadEvent e)
 	{

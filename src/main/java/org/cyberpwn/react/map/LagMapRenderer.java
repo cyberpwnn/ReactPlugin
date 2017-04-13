@@ -38,17 +38,12 @@ public class LagMapRenderer extends MapRenderer
 				c.setPixel(cc.getX() - vv.getX() + 64, cc.getZ() - vv.getZ() + 64, MapPalette.PALE_BLUE);
 			}
 			
-			if(b.equals(Biome.BEACH) || b.equals(Biome.FROZEN_RIVER) || b.equals(Biome.RIVER))
-			{
-				c.setPixel(cc.getX() - vv.getX() + 64, cc.getZ() - vv.getZ() + 64, MapPalette.BLUE);
-			}
-			
-			if(b.equals(Biome.DESERT) || b.equals(Biome.DESERT_HILLS) || b.equals(Biome.DESERT_MOUNTAINS))
+			if(b.equals(Biome.DESERT) || b.equals(Biome.DESERT_HILLS))
 			{
 				c.setPixel(cc.getX() - vv.getX() + 64, cc.getZ() - vv.getZ() + 64, MapPalette.LIGHT_BROWN);
 			}
 			
-			if(b.equals(Biome.SWAMPLAND) || b.equals(Biome.SWAMPLAND_MOUNTAINS) || b.toString().contains("TAIGA"))
+			if(b.equals(Biome.SWAMPLAND) || b.toString().contains("TAIGA"))
 			{
 				c.setPixel(cc.getX() - vv.getX() + 64, cc.getZ() - vv.getZ() + 64, MapPalette.DARK_GREEN);
 			}

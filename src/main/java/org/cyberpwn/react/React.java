@@ -421,58 +421,7 @@ public class React extends JavaPlugin implements Configurable
 	
 	public void onLoad()
 	{
-		destroyOldThreads();
 		readCurrentTick();
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void destroyOldThreads()
-	{
-		boolean k = false;
-		
-		for(Thread i : new GList<Thread>(Thread.getAllStackTraces().keySet()))
-		{
-			if(i.getName().startsWith("CT Parallel Tick Thread "))
-			{
-				k = true;
-				
-				try
-				{
-					System.out.println("WAITING FOR OLD THREAD TO DIE: " + i.getName());
-					i.interrupt();
-					i.join(100);
-				}
-				
-				catch(InterruptedException e)
-				{
-					
-				}
-				
-				catch(Throwable e)
-				{
-					e.printStackTrace();
-				}
-				
-				if(i.isAlive())
-				{
-					try
-					{
-						System.out.println("FORCE KILLING");
-						i.stop();
-					}
-					
-					catch(Throwable e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		if(k)
-		{
-			System.out.println("Killed off stale threads from pre-reload");
-		}
 	}
 	
 	private void readCurrentTick()
@@ -495,14 +444,6 @@ public class React extends JavaPlugin implements Configurable
 		
 		poolManager = new ParallelPoolManager(cc.getInt("startup.multicore-threads"));
 		poolManager.start();
-		
-		new TaskLater(100)
-		{
-			public void run()
-			{
-				poolManager.checkThreads();
-			}
-		};
 	}
 	
 	@Override

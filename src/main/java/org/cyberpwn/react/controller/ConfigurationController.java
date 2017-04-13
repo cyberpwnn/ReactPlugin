@@ -3,10 +3,12 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
+import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
@@ -34,6 +36,27 @@ public class ConfigurationController extends Controller implements Configurable
 		cc = new ClusterConfig();
 	}
 	
+	public void rebuildConfigurations(CommandSender sender)
+	{
+		sender.sendMessage(ChatColor.GREEN + "Rebuilding Configuration Map");
+		
+		int s = configurations.size();
+		int c = 0;
+		
+		for(File i : configurations.k())
+		{
+			sender.sendMessage(ChatColor.AQUA + "Rebuilding (" + F.pc((double) c / (double) s) + ") -> " + ChatColor.YELLOW + i.getPath());
+			fix(configurations.get(i), i, sender);
+			React.instance().getDataController().load(i, configurations.get(i));
+			c++;
+		}
+		
+		sender.sendMessage(ChatColor.GREEN + "Cleaned Configurations.");
+		sender.sendMessage(ChatColor.GREEN + "Rebuilding Configurations.");
+		rebuildConfigurations();
+		sender.sendMessage(ChatColor.GREEN + "Cleaned.");
+	}
+	
 	public void rebuildConfigurations()
 	{
 		s("Rebuilding Configuration Map");
@@ -43,9 +66,61 @@ public class ConfigurationController extends Controller implements Configurable
 		
 		for(File i : configurations.k())
 		{
+			o("Rebuilding (" + F.pc((double) c / (double) s) + ") -> " + ChatColor.RED + i.getName());
 			React.instance().getDataController().load(i, configurations.get(i));
 			c++;
-			o("Rebuilding (" + F.pc((double) c / (double) s) + ") -> " + ChatColor.RED + i.getName());
+		}
+	}
+	
+	public void fix(Configurable c, File f, CommandSender s)
+	{
+		ClusterConfig fc = new ClusterConfig();
+		ClusterConfig cc = new ClusterConfig();
+		c.onNewConfig(cc);
+		fc.set(react.getDataController().loadFileConfig(f));
+		boolean save = false;
+		
+		s.sendMessage(ChatColor.GREEN + "Checking " + f.getPath());
+		
+		for(String i : cc.getData().k())
+		{
+			ClusterDataType cdt = cc.getType(i);
+			
+			if(!fc.contains(i))
+			{
+				save = true;
+				s.sendMessage(ChatColor.RED + " Warning: Missing Required Key: " + i);
+				s.sendMessage(ChatColor.YELLOW + " - Adding Missing Key " + i);
+				fc.getData().put(i, cc.get(i));
+				s.sendMessage(ChatColor.GREEN + " - Fixed Key");
+			}
+			
+			if(!fc.getType(i).equals(cdt))
+			{
+				save = true;
+				s.sendMessage(ChatColor.RED + " Warning: Invalid Key Type at " + i + " expected Type: " + cdt + ". given: " + fc.getType(i));
+				s.sendMessage(ChatColor.YELLOW + " - Removing Key");
+				fc.getData().remove(i);
+				s.sendMessage(ChatColor.YELLOW + " - Adding Default Key/Val pair");
+				fc.getData().put(i, cc.get(i));
+				s.sendMessage(ChatColor.GREEN + " - Fixed Key");
+			}
+		}
+		
+		for(String i : fc.getData().k())
+		{
+			if(!cc.contains(i))
+			{
+				s.sendMessage(ChatColor.RED + " Warning: Unused Key: " + i);
+				fc.getData().remove(i);
+				s.sendMessage(ChatColor.GREEN + " Removed Key: " + i);
+				save = true;
+			}
+		}
+		
+		if(save)
+		{
+			react.getDataController().saveFileConfig(f, fc.toYaml(), c);
 		}
 	}
 	

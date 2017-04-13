@@ -67,6 +67,7 @@ public class L
 	public static String ACTION_UNSTACKENTITIES = "Unstack all entities stacked and prevent those entities from being re-stacked.";
 	public static String ACTION_RESTACKENTITIES = "Restack all entities force-unstacked";
 	public static String ACTION_CULLENTITIES = "Removes excess mobs from highly populated chunks. Additionally prevents spawning if the limit is reached.";
+	public static String ACTION_DULLENTITIES = "Dulls down entities (removing ai)";
 	public static String ACTION_CACHEENTITIES = "Cache mobs far away from players";
 	public static String ACTION_HEAVYCHUNK = "Teleports you close to the chunk with the most entities in it. If there are no heavy chunks, you may not be teleported or it may not be that laggy at all.";
 	public static String ACTION_INSTABILITYCAUSE = "If any sort of instability is detected, react begins to collect evidence and determine the right thing to do. ";
@@ -197,6 +198,7 @@ public class L
 	public static String COMMAND_PING = "Shows highest ping, lowest, and yours.";
 	public static String COMMAND_STATUS = "Sends a book of updated issues React finds.";
 	public static String COMMAND_CPUSCORE = "Get your server's CPU score.";
+	public static String COMMAND_CLEAN = "Cleanup the configurations & data";
 	public static String COMMAND_STFU = "Silence React Warnings";
 	public static String COMMAND_SERVERS = "List all servers on the network with data.";
 	public static String COMMAND_GUESSMEMORY = "Guess server capabilities with X Ram";

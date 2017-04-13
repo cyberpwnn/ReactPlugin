@@ -112,6 +112,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		
 		new Task(0)
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{

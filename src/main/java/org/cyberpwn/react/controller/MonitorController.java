@@ -288,6 +288,7 @@ public class MonitorController extends Controller implements Configurable
 			
 			for(Player p : mappers.keySet())
 			{
+				@SuppressWarnings("deprecation")
 				ItemStack mp = p.getItemInHand();
 				if(mp.getType() == Material.MAP)
 				{

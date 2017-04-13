@@ -1,9 +1,7 @@
 package org.cyberpwn.react.queue;
 
-import org.cyberpwn.react.React;
-import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.PluginUtil;
+import org.cyberpwn.react.util.TaskLater;
 
 public class ParallelPoolManager
 {
@@ -32,160 +30,18 @@ public class ParallelPoolManager
 	
 	public void start()
 	{
-		createThreads(threadCount);
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void destroyOldThreads()
-	{
-		boolean k = false;
-		
-		for(Thread i : new GList<Thread>(Thread.getAllStackTraces().keySet()))
+		new TaskLater(20)
 		{
-			if(i.getName().startsWith("CT Parallel Tick Thread "))
-			{
-				k = true;
-				
-				try
-				{
-					System.out.println("WAITING FOR OLD THREAD TO DIE: " + i.getName());
-					i.interrupt();
-					i.join(100);
-				}
-				
-				catch(InterruptedException e)
-				{
-					
-				}
-				
-				catch(Throwable e)
-				{
-					e.printStackTrace();
-				}
-				
-				if(i.isAlive())
-				{
-					try
-					{
-						System.out.println("FORCE KILLING");
-						i.stop();
-					}
-					
-					catch(Throwable e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		if(k)
-		{
-			System.out.println("Killed off stale threads from pre-reload");
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	public void destroyOldThreadsLocking()
-	{
-		boolean k = false;
-		
-		for(Thread i : new GList<Thread>(Thread.getAllStackTraces().keySet()))
-		{
-			if(i.getName().startsWith("CT Parallel Tick Thread "))
-			{
-				k = true;
-				
-				try
-				{
-					System.out.println("WAITING FOR OLD THREAD TO DIE: " + i.getName());
-					i.interrupt();
-					i.join(1000);
-				}
-				
-				catch(InterruptedException e)
-				{
-					
-				}
-				
-				catch(Throwable e)
-				{
-					e.printStackTrace();
-				}
-				
-				if(i.isAlive())
-				{
-					try
-					{
-						System.out.println("FORCE KILLING");
-						i.stop();
-					}
-					
-					catch(Throwable e)
-					{
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		if(k)
-		{
-			System.out.println("Killed off stale threads from pre-reload");
-		}
-		
-		threads.clear();
-	}
-	
-	public void checkThreads()
-	{
-		new Thread(new Runnable()
-		{
-			@Override
 			public void run()
 			{
-				boolean msg[] = {false};
-				
-				new ASYNC()
-				{
-					@Override
-					public void async()
-					{
-						msg[0] = true;
-					}
-				};
-				
-				int v = 0;
-				
-				while(!msg[0])
-				{
-					try
-					{
-						Thread.sleep(500);
-					}
-					
-					catch(InterruptedException e)
-					{
-						
-					}
-					
-					v++;
-					
-					if(v > 4)
-					{
-						System.out.println("WARNING: No Response from Thread Pool. Restarting...");
-						PluginUtil.reload(React.instance());
-						break;
-					}
-				}
+				createThreads(threadCount);
 			}
-		}).start();
+		};
 	}
 	
 	public void restart()
 	{
 		shutdown();
-		destroyOldThreadsLocking();
 		start();
 	}
 	
@@ -195,8 +51,6 @@ public class ParallelPoolManager
 		{
 			i.interrupt();
 		}
-		
-		destroyOldThreads();
 	}
 	
 	public ParallelPoolManager(int threadCount)
@@ -206,6 +60,12 @@ public class ParallelPoolManager
 	
 	public void queue(Execution e)
 	{
+		if(threads.isEmpty())
+		{
+			e.run();
+			return;
+		}
+		
 		nextThread().queue(e);
 	}
 	

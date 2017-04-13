@@ -9,12 +9,20 @@ public enum VersionBukkit
 	V8,
 	V9,
 	V11,
-	V111,
-	V1112;
-	
+	V111;	
 	public static boolean tc()
 	{
 		if(get().equals(V7))
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static boolean uc()
+	{
+		if(get().equals(V7) || get().equals(V8))
 		{
 			return false;
 		}
@@ -47,11 +55,6 @@ public enum VersionBukkit
 		if(Bukkit.getBukkitVersion().startsWith("1.11"))
 		{
 			return V111;
-		}
-		
-		if(Bukkit.getBukkitVersion().startsWith("1.11.2"))
-		{
-			return V1112;
 		}
 		
 		return VU;

@@ -10,6 +10,23 @@ import org.bukkit.inventory.ItemStack;
 
 public class W
 {
+	public static GList<Chunk> chunkRadius(Chunk c, int rad)
+	{
+		GList<Chunk> cx = new GList<Chunk>();
+		
+		for(int i = c.getX() - rad + 1; i < c.getX() + rad; i++)
+		{
+			for(int j = c.getZ() - rad + 1; j < c.getZ() + rad; j++)
+			{
+				cx.add(c.getWorld().getChunkAt(i, j));
+			}
+		}
+		
+		cx.add(c);
+		
+		return cx;
+	}
+	
 	public static int firstItem(Inventory inv)
 	{
 		if(inventoryEmpty(inv))

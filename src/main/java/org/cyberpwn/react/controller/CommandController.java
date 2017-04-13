@@ -288,6 +288,7 @@ public class CommandController extends Controller implements CommandExecutor
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run()
 			{
@@ -1163,6 +1164,15 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
+				getReact().getConfigurationController().rebuildConfigurations(getSender());
+			}
+		}, L.COMMAND_CLEAN, "clean", "wipe", "clear", "fix"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
 				Player p = getPlayer();
 				CommandSender sender = getSender();
 				
@@ -1650,6 +1660,7 @@ public class CommandController extends Controller implements CommandExecutor
 		return false;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDrop(final PlayerInteractEvent e)
 	{

@@ -273,6 +273,8 @@ public class ActionCullEntities extends Action implements Listener
 			{
 				cull(i);
 			}
+			
+			actionController.getActionDullEntities().dull(i);
 		}
 	}
 	

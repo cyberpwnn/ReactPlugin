@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -28,6 +29,22 @@ public class NMSX
 		return version;
 	}
 	
+	public static void setAi(LivingEntity e, boolean ai)
+	{
+		try
+		{
+			if(VersionBukkit.uc())
+			{
+				e.setAI(ai);
+			}
+		}
+		
+		catch(Exception ex)
+		{
+			
+		}
+	}
+	
 	/**
 	 * Get the nms class
 	 * 
@@ -38,6 +55,25 @@ public class NMSX
 	public static Class<?> getCBNMSClass(String className)
 	{
 		final String fullName = "net.minecraft.server." + getVersion() + className;
+		
+		Class<?> clazz = null;
+		
+		try
+		{
+			clazz = Class.forName(fullName);
+		}
+		
+		catch(final Exception e)
+		{
+			
+		}
+		
+		return clazz;
+	}
+	
+	public static Class<?> getCBClass(String className)
+	{
+		final String fullName = "org.bukkit.craftbukkit." + getVersion() + className;
 		
 		Class<?> clazz = null;
 		

@@ -4,6 +4,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.ActionCollectGarbage;
 import org.cyberpwn.react.action.ActionCullDrops;
 import org.cyberpwn.react.action.ActionCullEntities;
+import org.cyberpwn.react.action.ActionDullEntities;
 import org.cyberpwn.react.action.ActionHeavyChunk;
 import org.cyberpwn.react.action.ActionInstabilityCause;
 import org.cyberpwn.react.action.ActionPurgeChunks;
@@ -39,6 +40,7 @@ public class ActionController extends Controller
 	private final ActionStackEntities actionStackEntities;
 	private final ActionUnStackEntities actionUnStackEntities;
 	private final ActionReStackEntities actionReStackEntities;
+	private final ActionDullEntities actionDullEntities;
 	
 	public ActionController(React react)
 	{
@@ -60,6 +62,7 @@ public class ActionController extends Controller
 		actionStackEntities = new ActionStackEntities(this);
 		actionUnStackEntities = new ActionUnStackEntities(this);
 		actionReStackEntities = new ActionReStackEntities(this);
+		actionDullEntities = new ActionDullEntities(this);
 	}
 	
 	public void load()
@@ -215,5 +218,10 @@ public class ActionController extends Controller
 	public ActionReStackEntities getActionReStackEntities()
 	{
 		return actionReStackEntities;
+	}
+
+	public ActionDullEntities getActionDullEntities()
+	{
+		return actionDullEntities;
 	}
 }

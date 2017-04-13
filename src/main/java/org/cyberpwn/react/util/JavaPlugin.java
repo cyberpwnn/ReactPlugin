@@ -28,7 +28,6 @@ public class JavaPlugin extends org.bukkit.plugin.java.JavaPlugin
 	public void onReload(CommandSender sender)
 	{
 		React.instance().getPoolManager().shutdown();
-		React.instance().destroyOldThreads();
 		
 		if(sender == null)
 		{
