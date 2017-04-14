@@ -204,6 +204,7 @@ public class ActionDullEntities extends Action implements Listener
 			allow.add(i.toString());
 		}
 		
+		cc.set("component.enable", false, "ABOUT " + getName() + "\n" + getDescription() + "\n\nYou can disable " + getName() + " here.");
 		cc.set(getCodeName() + ".filter.ignore-tamed-entities", true, "Ignore tamed entities");
 		cc.set(getCodeName() + ".chunk-distance", 2, "Max chunk distance a player must be to keep entities with ai");
 		cc.set(getCodeName() + ".dullable", allow, "Entities allowed to be dulled. \nIf you dont want something culled, remove it from here.");

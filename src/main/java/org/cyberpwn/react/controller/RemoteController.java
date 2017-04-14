@@ -3,6 +3,7 @@ package org.cyberpwn.react.controller;
 import java.io.File;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.server.ReactUser;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.GList;
 
 public class RemoteController
@@ -30,30 +31,37 @@ public class RemoteController
 	
 	public void reload()
 	{
-		users.clear();
-		System.out.println("[React Server]: Loading Remote Users");
-		File base = new File(React.instance().getDataFolder(), "remote-users");
-		
-		if(!base.exists())
+		new ASYNC()
 		{
-			base.mkdirs();
-		}
-		
-		ReactUser m = new ReactUser("example-user");
-		m.reload();
-		
-		for(File i : base.listFiles())
-		{
-			ReactUser u = new ReactUser(i.getName().substring(0, i.getName().length() - 4));
-			u.reload();
-			
-			if(!u.isEnabled())
+			@Override
+			public void async()
 			{
-				continue;
+				users.clear();
+				System.out.println("[React Server]: Loading Remote Users");
+				File base = new File(React.instance().getDataFolder(), "remote-users");
+				
+				if(!base.exists())
+				{
+					base.mkdirs();
+				}
+				
+				ReactUser m = new ReactUser("example-user");
+				m.reload();
+				
+				for(File i : base.listFiles())
+				{
+					ReactUser u = new ReactUser(i.getName().substring(0, i.getName().length() - 4));
+					u.reload();
+					
+					if(!u.isEnabled())
+					{
+						continue;
+					}
+					
+					System.out.println("[React Server]: Loaded User: " + u.getUsername());
+					users.add(u);
+				}
 			}
-			
-			System.out.println("[React Server]: Loaded User: " + u.getUsername());
-			users.add(u);
-		}
+		};
 	}
 }

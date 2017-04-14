@@ -13,6 +13,7 @@ import org.cyberpwn.react.timings.PaperTimingsProcessor;
 import org.cyberpwn.react.timings.TimingsCallback;
 import org.cyberpwn.react.timings.TimingsProcessor;
 import org.cyberpwn.react.timings.TimingsReport;
+import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
@@ -63,14 +64,14 @@ public class TimingsController extends Controller
 			f("Timings Processing Disabled");
 			return;
 		}
-		
-		pt = new PaperTimings(getReact());
-		
+				
 		if(Bukkit.getVersion().contains("Paper") || Bukkit.getVersion().contains("Taco"))
 		{
+			pt = new PaperTimings(getReact());
+			
 			sup = false;
 			
-			new Task(20)
+			new Task(40)
 			{
 				@Override
 				public void run()
@@ -102,14 +103,6 @@ public class TimingsController extends Controller
 						sxs = null;
 					}
 					
-					if(ptm != null)
-					{
-						if(ptm.isAlive())
-						{
-							return;
-						}
-					}
-					
 					try
 					{
 						getReact().getPluginWeightController().scan();
@@ -121,19 +114,31 @@ public class TimingsController extends Controller
 							plx.add(i.getName());
 						}
 						
-						ptm = new PaperTimingsProcessor(pt.getTimings(React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads")), plx, new PaperTimingsCallback()
+						if(ptm == null)
+						{
+							ptm = new PaperTimingsProcessor(pt.getTimings(React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads")), plx, new PaperTimingsCallback()
+							{
+								@Override
+								public void run()
+								{
+									reports = getReports();
+									all = getAll();
+									ms = getMs();
+									hh = getHh();
+								}
+							});
+						}
+						
+						ptm.setTimings(pt.getTimings(React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads")));
+						
+						new ASYNC()
 						{
 							@Override
-							public void run()
+							public void async()
 							{
-								reports = getReports();
-								all = getAll();
-								ms = getMs();
-								hh = getHh();
+								ptm.run();
 							}
-						});
-						
-						ptm.start();
+						};
 					}
 					
 					catch(Exception e)
@@ -148,7 +153,7 @@ public class TimingsController extends Controller
 		{
 			sup = true;
 			
-			new Task(20)
+			new Task(40)
 			{
 				@Override
 				public void run()
@@ -158,40 +163,42 @@ public class TimingsController extends Controller
 						return;
 					}
 					
-					if(tm != null)
-					{
-						if(tm.isAlive())
-						{
-							return;
-						}
-					}
-					
 					marg++;
 					
 					try
 					{
 						getReact().getPluginWeightController().scan();
 						
-						tm = new TimingsProcessor(new TimingsCallback()
+						if(tm == null)
+						{
+							tm = new TimingsProcessor(new TimingsCallback()
+							{
+								@Override
+								public void run()
+								{
+									reports = getReports();
+									all = getAll();
+									ms = getMs();
+									hh = getHh();
+									cx = getConfig();
+									
+									if(marg > 30)
+									{
+										marg = 0;
+										clean();
+									}
+								}
+							});
+						}
+						
+						new ASYNC()
 						{
 							@Override
-							public void run()
+							public void async()
 							{
-								reports = getReports();
-								all = getAll();
-								ms = getMs();
-								hh = getHh();
-								cx = getConfig();
-								
-								if(marg > 30)
-								{
-									marg = 0;
-									clean();
-								}
+								tm.run();
 							}
-						}, React.instance().getPluginWeightController().getConfiguration().getInt("timings.processing.max-threads"));
-						
-						tm.start();
+						};
 					}
 					
 					catch(Exception e)
@@ -220,7 +227,7 @@ public class TimingsController extends Controller
 	@Override
 	public void stop()
 	{
-		
+
 	}
 	
 	public boolean supported()

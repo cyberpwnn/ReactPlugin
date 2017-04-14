@@ -11,7 +11,7 @@ import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Platform;
-import org.cyberpwn.react.util.U;
+import org.cyberpwn.react.util.UC;
 import org.cyberpwn.react.util.ValueType;
 
 public class SampleTicksPerSecond extends Sample
@@ -119,7 +119,7 @@ public class SampleTicksPerSecond extends Sample
 				
 				cpua.put(cpu);
 				
-				U.cpu = cpub.getAverage();
+				UC.cpu = cpub.getAverage();
 				del = 0;
 			}
 		}
@@ -136,7 +136,7 @@ public class SampleTicksPerSecond extends Sample
 	
 	public String getLoad(boolean acc)
 	{
-		return F.pc(cpua.getAverage(), acc ? 2 : 0) + ChatColor.GRAY + " (" + ChatColor.YELLOW + U.getTerm() + ChatColor.GRAY + ")";
+		return F.pc(cpua.getAverage(), acc ? 2 : 0) + ChatColor.GRAY + " (" + ChatColor.YELLOW + UC.getTerm() + ChatColor.GRAY + ")";
 	}
 	
 	public void spiked(long since, long current)

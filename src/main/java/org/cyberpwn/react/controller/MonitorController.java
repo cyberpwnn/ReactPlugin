@@ -791,18 +791,26 @@ public class MonitorController extends Controller implements Configurable
 		
 		if(p.hasPermission(Info.PERM_MONITOR))
 		{
-			PlayerData pd = pc.gpd(p);
-			pd.setMonitoring(isMonitoring(p));
-			pd.setMapping(isMapping(p));
-			pd.setLockedTab(locks.containsKey(p));
-			
-			if(isMonitoring(p))
+			try
 			{
-				pd.setMonitoringTab(monitors.get(p).getB());
+				PlayerData pd = pc.gpd(p);
+				pd.setMonitoring(isMonitoring(p));
+				pd.setMapping(isMapping(p));
+				pd.setLockedTab(locks.containsKey(p));
+				
+				if(isMonitoring(p))
+				{
+					pd.setMonitoringTab(monitors.get(p).getB());
+				}
+				
+				pc.spd(p, pd);
+				pc.save(p);
 			}
 			
-			pc.spd(p, pd);
-			pc.save(p);
+			catch(Exception ex)
+			{
+				
+			}
 		}
 		
 		if(p.getInventory().contains(map))

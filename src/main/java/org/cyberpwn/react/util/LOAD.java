@@ -24,6 +24,6 @@ public enum LOAD
 	
 	public boolean min()
 	{
-		return U.getLoad().getScale() <= getScale();
+		return UC.getLoad().getScale() <= getScale();
 	}
 }

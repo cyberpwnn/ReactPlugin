@@ -46,8 +46,8 @@ public class ConfigurationController extends Controller implements Configurable
 		for(File i : configurations.k())
 		{
 			sender.sendMessage(ChatColor.AQUA + "Rebuilding (" + F.pc((double) c / (double) s) + ") -> " + ChatColor.YELLOW + i.getPath());
-			fix(configurations.get(i), i, sender);
 			React.instance().getDataController().load(i, configurations.get(i));
+			fix(configurations.get(i), i, sender);
 			c++;
 		}
 		

@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collection;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -88,6 +89,15 @@ public class Action implements Actionable, Configurable
 		if(mae.isCancelled())
 		{
 			return;
+		}
+		
+
+		for(Player j : Bukkit.getOnlinePlayers())
+		{
+			if(j.hasPermission(Info.PERM_MONITOR) && React.isBroadcast() && !j.equals(p))
+			{
+				j.sendMessage(Info.TAG + p.getName() + " Executed " + getKey());
+			}
 		}
 		
 		N.t("Manual Action " + getName(), "name", p.getName());

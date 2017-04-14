@@ -37,6 +37,8 @@ public class U
 	{
 		String st = "";
 		
+		acc = true;
+		
 		for(ParallelThread i : getThreads())
 		{
 			String stat = "";

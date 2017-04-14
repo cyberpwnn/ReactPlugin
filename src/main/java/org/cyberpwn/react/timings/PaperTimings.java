@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.util.AsyncQueue;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Reflection;
 import com.avaje.ebeaninternal.api.ClassUtil;
@@ -79,17 +78,6 @@ public class PaperTimings
 	
 	public void printTimings(List<String> lines, TimingHistory lastHistory, int threads)
 	{
-		boolean b[] = {true};
-		
-		AsyncQueue q = new AsyncQueue(threads)
-		{
-			@Override
-			public void onComplete()
-			{
-				b[0] = false;
-			}
-		};
-		
 		printHeadData(lastHistory, lines);
 		
 		Map<Integer, String> idHandler = Maps.newHashMap();
@@ -98,80 +86,51 @@ public class PaperTimings
 		
 		for(Object group : groups.values())
 		{
-			q.queue(new Runnable()
+			String groupName = Reflection.getField(group.getClass(), "name", String.class).get(group);
+			ArrayDeque<?> handlers = Reflection.getField(group.getClass(), "handlers", ArrayDeque.class).get(group);
+			
+			for(Object handler : handlers)
 			{
-				@Override
-				public void run()
+				int id = Reflection.getField(HANDLER_CLASS, "id", Integer.TYPE).get(handler);
+				String name = Reflection.getField(HANDLER_CLASS, "name", String.class).get(handler);
+				if(name.contains("Combined"))
 				{
-					String groupName = Reflection.getField(group.getClass(), "name", String.class).get(group);
-					ArrayDeque<?> handlers = Reflection.getField(group.getClass(), "handlers", ArrayDeque.class).get(group);
-					
-					for(Object handler : handlers)
-					{
-						int id = Reflection.getField(HANDLER_CLASS, "id", Integer.TYPE).get(handler);
-						String name = Reflection.getField(HANDLER_CLASS, "name", String.class).get(handler);
-						if(name.contains("Combined"))
-						{
-							idHandler.put(id, "Combined " + groupName);
-						}
-						else
-						{
-							idHandler.put(id, name);
-						}
-					}
+					idHandler.put(id, "Combined " + groupName);
 				}
-			});
+				else
+				{
+					idHandler.put(id, name);
+				}
+			}
 		}
 		
 		Object[] entries = Reflection.getField(TimingHistory.class, "entries", Object[].class).get(lastHistory);
 		
 		for(Object entry : entries)
 		{
-			q.queue(new Runnable()
+			Object parentData = Reflection.getField(HISTORY_ENTRY_CLASS, "data", Object.class).get(entry);
+			int childId = Reflection.getField(DATA_CLASS, "id", Integer.TYPE).get(parentData);
+			
+			String handlerName = idHandler.get(childId);
+			String parentName;
+			if(handlerName == null)
 			{
-				@Override
-				public void run()
-				{
-					Object parentData = Reflection.getField(HISTORY_ENTRY_CLASS, "data", Object.class).get(entry);
-					int childId = Reflection.getField(DATA_CLASS, "id", Integer.TYPE).get(parentData);
-					
-					String handlerName = idHandler.get(childId);
-					String parentName;
-					if(handlerName == null)
-					{
-						parentName = "Unknown-" + childId;
-					}
-					else
-					{
-						parentName = handlerName;
-					}
-					
-					int parentCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(parentData);
-					long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parentData);
-					
-					lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
-					
-					Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
-					for(Object childData : children)
-					{
-						printChilds(parentData, childData, idHandler, lines);
-					}
-				}
-			});
-		}
-		
-		q.start();
-		
-		while(b[0])
-		{
-			try
+				parentName = "Unknown-" + childId;
+			}
+			else
 			{
-				Thread.sleep(20);
+				parentName = handlerName;
 			}
 			
-			catch(InterruptedException e)
+			int parentCount = Reflection.getField(DATA_CLASS, "count", Integer.TYPE).get(parentData);
+			long parentTime = Reflection.getField(DATA_CLASS, "totalTime", Long.TYPE).get(parentData);
+			
+			lines.add(parentName + " Count: " + parentCount + " Time: " + parentTime);
+			
+			Object[] children = Reflection.getField(HISTORY_ENTRY_CLASS, "children", Object[].class).get(entry);
+			for(Object childData : children)
 			{
-				
+				printChilds(parentData, childData, idHandler, lines);
 			}
 		}
 	}

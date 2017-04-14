@@ -208,6 +208,11 @@ public class ClusterConfig
 			return ((ClusterBoolean) get(key)).get();
 		}
 		
+		if(contains(key) && getType(key).equals(ClusterDataType.DOUBLE))
+		{
+			return ((ClusterDouble) get(key)).get() == 1;
+		}
+		
 		return null;
 	}
 	
@@ -226,6 +231,11 @@ public class ClusterConfig
 		if(contains(key) && getType(key).equals(ClusterDataType.DOUBLE))
 		{
 			return ((ClusterDouble) get(key)).get();
+		}
+		
+		if(contains(key) && getType(key).equals(ClusterDataType.BOOLEAN))
+		{
+			return ((ClusterBoolean) get(key)).get() ? 1.0 : 0.0;
 		}
 		
 		return null;

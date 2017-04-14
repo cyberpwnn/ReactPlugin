@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.io.PrintStream;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.entity.Player;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -37,9 +38,9 @@ import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.file.FileHack;
 import org.cyberpwn.react.file.ICopy;
 import org.cyberpwn.react.file.IDelete;
-import org.cyberpwn.react.gen.FastChunkGenerator;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.nms.Title;
 import org.cyberpwn.react.queue.ParallelPoolManager;
 import org.cyberpwn.react.queue.TICK;
 import org.cyberpwn.react.sampler.Samplable;
@@ -61,6 +62,7 @@ import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
 import org.cyberpwn.react.util.Paste;
+import org.cyberpwn.react.util.PhantomSpinner;
 import org.cyberpwn.react.util.PlaceholderHook;
 import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.Task;
@@ -217,7 +219,14 @@ public class React extends JavaPlugin implements Configurable
 		d.s("Starting React v" + Version.V);
 		FileConfiguration fc = new YamlConfiguration();
 		File fx = new GFile(new GFile(getDataFolder(), "cache"), "mcache");
-		new RemoteController();
+		
+		new TaskLater(10)
+		{
+			public void run()
+			{
+				new RemoteController();
+			}
+		};
 		
 		if(fx.exists() && nonce.equals("%%__NONCE__%%"))
 		{
@@ -304,9 +313,6 @@ public class React extends JavaPlugin implements Configurable
 					Graph gmsamplers = metrics.createGraph("R1-" + i.getName());
 					i.onMetricsPlot(gmsamplers);
 				}
-				
-				metrics.start();
-				d.v("Metrics Started!");
 			}
 			
 			catch(IOException e)
@@ -439,6 +445,8 @@ public class React extends JavaPlugin implements Configurable
 			public void run()
 			{
 				TICK.tick++;
+				
+				poolManager.chk();
 			}
 		}, 0, 0);
 		
@@ -466,12 +474,6 @@ public class React extends JavaPlugin implements Configurable
 		}
 		
 		HijackedConsole.hijacked = false;
-	}
-	
-	@Override
-	public ChunkGenerator getDefaultWorldGenerator(String worldName, String id)
-	{
-		return new FastChunkGenerator();
 	}
 	
 	public static String dump()
@@ -568,6 +570,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("monitor.allow-title-verbose", true, L.CONFIG_REACT_ALLOWTITLEVERBOSE);
 		cc.set("monitor.scoreboard-interval", 10, "The interval in ticks to send scoreboard packets to monitors.");
 		cc.set("monitor.title-bolding", false, L.CONFIG_REACT_TITLEBOLDING);
+		cc.set("monitor.broadcast-monitors", true, "Inform other players with the permission react.monitor \nwhen a player manually executes an action.");
 		cc.set("monitor.shift-accuracy", true, L.CONFIG_REACT_ALLOWSHIFTACCURACY);
 		cc.set("monitor.ticking.dynamic", true, L.CONFIG_REACT_TITLETICK_DYNAMIC);
 		cc.set("monitor.ticking.base", 1, L.CONFIG_REACT_TITLETICK_BASE);
@@ -1212,9 +1215,43 @@ public class React extends JavaPlugin implements Configurable
 	{
 		return poolManager;
 	}
-
+	
 	public static int corec()
 	{
 		return (Runtime.getRuntime().availableProcessors() > 2 ? 2 : Runtime.getRuntime().availableProcessors());
+	}
+	
+	public static boolean isBroadcast()
+	{
+		return React.instance.getConfiguration().getBoolean("monitor.broadcast-monitors");
+	}
+	
+	public static void requestAll(CommandSender sender)
+	{
+		PhantomSpinner s = new PhantomSpinner();
+		
+		new Task(0)
+		{
+			public void run()
+			{
+				Title t = new Title();
+				t.setSubTitle(ChatColor.AQUA + "" + ChatColor.STRIKETHROUGH + "        " + ChatColor.DARK_AQUA + "" + ChatColor.STRIKETHROUGH + "   " + ChatColor.DARK_GRAY + "" + ChatColor.STRIKETHROUGH + "                 ");
+				t.setTitle(ChatColor.AQUA + s.toString());
+				t.setAction("               ");
+				t.send((Player) sender);
+			}
+		};
+	}
+	
+	public static void requestAction(CommandSender sender)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public static void requestMonitoring(CommandSender sender)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 }

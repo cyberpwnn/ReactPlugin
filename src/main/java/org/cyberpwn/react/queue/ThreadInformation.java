@@ -9,6 +9,7 @@ public class ThreadInformation
 	private boolean processing;
 	private double utilization;
 	private Average ticksPerSecondAverage;
+	private Average utilizationAverage;
 	private long tick;
 	private final int id;
 	
@@ -20,6 +21,7 @@ public class ThreadInformation
 		queuedSize = 0;
 		processing = false;
 		ticksPerSecondAverage = new Average(20);
+		utilizationAverage = new Average(20);
 		tick = TICK.tick;
 	}
 
@@ -62,6 +64,12 @@ public class ThreadInformation
 	public void setUtilization(double utilization)
 	{
 		this.utilization = utilization;
+		utilizationAverage.put(utilization);
+	}
+	
+	public double getUtilizationAverage()
+	{
+		return utilizationAverage.getAverage();
 	}
 	
 	public double getTicksPerSecondAverage()

@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.lang.Info;
-import org.cyberpwn.react.util.AsyncQueue;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBook;
 import org.cyberpwn.react.util.GList;
@@ -27,14 +26,10 @@ public class TimingsProcessor extends Thread
 	private TimingsCallback cb;
 	private String hh;
 	private Double ms;
-	private AsyncQueue q;
-	private int pc;
 	
-	public TimingsProcessor(TimingsCallback cb, int pc)
+	public TimingsProcessor(TimingsCallback cb)
 	{
-		q = null;
 		this.cb = cb;
-		this.pc = pc;
 		cc = new ClusterConfig();
 		data = new GList<String>();
 		events = new GMap<String, TimingsObject>();
@@ -63,57 +58,41 @@ public class TimingsProcessor extends Thread
 				data.add(i.trim());
 			}
 			
-			q = new AsyncQueue(pc)
-			{
-				@Override
-				public void onComplete()
-				{
-					for(String i : normal.keySet())
-					{
-						cc.set("normal." + StringUtils.remove(i, '.') + ".time", normal.get(i).getTime() / 1000000);
-						cc.set("normal." + StringUtils.remove(i, '.') + ".count", normal.get(i).getCount());
-						cc.set("normal." + StringUtils.remove(i, '.') + ".avg", normal.get(i).getAvg() / 1000000);
-						cc.set("normal." + StringUtils.remove(i, '.') + ".violations", normal.get(i).getViolations());
-						cc.set("normal." + StringUtils.remove(i, '.') + ".ms", (double) normal.get(i).getTime() / 1000000.0 / (double) normal.get(i).getCount());
-					}
-					
-					for(String i : events.keySet())
-					{
-						cc.set("events." + StringUtils.remove(i, '.') + ".time", events.get(i).getTime() / 1000000);
-						cc.set("events." + StringUtils.remove(i, '.') + ".count", events.get(i).getCount());
-						cc.set("events." + StringUtils.remove(i, '.') + ".avg", events.get(i).getAvg() / 1000000);
-						cc.set("events." + StringUtils.remove(i, '.') + ".violations", events.get(i).getViolations());
-						cc.set("events." + StringUtils.remove(i, '.') + ".ms", (double) events.get(i).getTime() / 1000000.0 / (double) events.get(i).getCount());
-					}
-					
-					for(String i : tasks.keySet())
-					{
-						cc.set("tasks." + StringUtils.remove(i, '.') + ".time", tasks.get(i).getTime() / 1000000);
-						cc.set("tasks." + StringUtils.remove(i, '.') + ".count", tasks.get(i).getCount());
-						cc.set("tasks." + StringUtils.remove(i, '.') + ".avg", tasks.get(i).getAvg() / 1000000);
-						cc.set("tasks." + StringUtils.remove(i, '.') + ".violations", tasks.get(i).getViolations());
-						cc.set("tasks." + StringUtils.remove(i, '.') + ".ms", (double) tasks.get(i).getTime() / 1000000.0 / (double) tasks.get(i).getCount());
-					}
-					
-					GMap<String, TimingsReport> reports = analyze(normal, tasks, events);
-					GBook k = getAllProc(reports);
-					cb.run(reports, k, hh, ms, cc);
-				}
-			};
-			
 			for(String i : data)
 			{
-				q.queue(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						parseTCAV(i);
-					}
-				});
+				parseTCAV(i);
 			}
 			
-			q.start();
+			for(String i : normal.keySet())
+			{
+				cc.set("normal." + StringUtils.remove(i, '.') + ".time", normal.get(i).getTime() / 1000000);
+				cc.set("normal." + StringUtils.remove(i, '.') + ".count", normal.get(i).getCount());
+				cc.set("normal." + StringUtils.remove(i, '.') + ".avg", normal.get(i).getAvg() / 1000000);
+				cc.set("normal." + StringUtils.remove(i, '.') + ".violations", normal.get(i).getViolations());
+				cc.set("normal." + StringUtils.remove(i, '.') + ".ms", (double) normal.get(i).getTime() / 1000000.0 / (double) normal.get(i).getCount());
+			}
+			
+			for(String i : events.keySet())
+			{
+				cc.set("events." + StringUtils.remove(i, '.') + ".time", events.get(i).getTime() / 1000000);
+				cc.set("events." + StringUtils.remove(i, '.') + ".count", events.get(i).getCount());
+				cc.set("events." + StringUtils.remove(i, '.') + ".avg", events.get(i).getAvg() / 1000000);
+				cc.set("events." + StringUtils.remove(i, '.') + ".violations", events.get(i).getViolations());
+				cc.set("events." + StringUtils.remove(i, '.') + ".ms", (double) events.get(i).getTime() / 1000000.0 / (double) events.get(i).getCount());
+			}
+			
+			for(String i : tasks.keySet())
+			{
+				cc.set("tasks." + StringUtils.remove(i, '.') + ".time", tasks.get(i).getTime() / 1000000);
+				cc.set("tasks." + StringUtils.remove(i, '.') + ".count", tasks.get(i).getCount());
+				cc.set("tasks." + StringUtils.remove(i, '.') + ".avg", tasks.get(i).getAvg() / 1000000);
+				cc.set("tasks." + StringUtils.remove(i, '.') + ".violations", tasks.get(i).getViolations());
+				cc.set("tasks." + StringUtils.remove(i, '.') + ".ms", (double) tasks.get(i).getTime() / 1000000.0 / (double) tasks.get(i).getCount());
+			}
+			
+			GMap<String, TimingsReport> reports = analyze(normal, tasks, events);
+			GBook k = getAllProc(reports);
+			cb.run(reports, k, hh, ms, cc);
 		}
 		
 		catch(Exception e)

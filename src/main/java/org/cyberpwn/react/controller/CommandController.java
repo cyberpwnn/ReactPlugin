@@ -27,6 +27,7 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.Version;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.api.ReactAPI;
+import org.cyberpwn.react.api.U;
 import org.cyberpwn.react.cluster.Cluster;
 import org.cyberpwn.react.cluster.ClusterBoolean;
 import org.cyberpwn.react.cluster.ClusterConfig.ClusterDataType;
@@ -58,8 +59,6 @@ import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.PlayerData;
-import org.cyberpwn.react.util.Q;
-import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactCommand;
 import org.cyberpwn.react.util.Verbose;
 
@@ -143,6 +142,7 @@ public class CommandController extends Controller implements CommandExecutor
 							if(args[1].equalsIgnoreCase(i.getKey()))
 							{
 								i.manual(sender);
+								
 								return;
 							}
 						}
@@ -1106,6 +1106,7 @@ public class CommandController extends Controller implements CommandExecutor
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Type: " + ChatColor.WHITE + Amounts.to(Platform.CPU.getAvailableProcessors()) + " Core " + Platform.CPU.getArchitecture());
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Utilization: " + ChatColor.WHITE + F.pc(Platform.CPU.getCPULoad(), 1));
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Process Usage: " + ChatColor.WHITE + F.pc(Platform.CPU.getProcessCPULoad(), 1));
+				sender.sendMessage(Info.TAG + ChatColor.GREEN + "CoreTick: " + U.status(true));
 				
 				sender.sendMessage(String.format(Info.HRN, "MEMORY"));
 				sender.sendMessage(Info.TAG + ChatColor.GREEN + "Physical: " + ChatColor.WHITE + F.memSize(Platform.MEMORY.PHYSICAL.getTotalMemory()) + ChatColor.GRAY + " (" + F.memSize(Platform.MEMORY.PHYSICAL.getUsedMemory()) + " / " + F.memSize(Platform.MEMORY.PHYSICAL.getTotalMemory()) + ")");
@@ -1644,14 +1645,7 @@ public class CommandController extends Controller implements CommandExecutor
 					
 				}
 				
-				new Q(P.HIGHEST, "Command", false)
-				{
-					@Override
-					public void run()
-					{
-						fireCommand(sender, sub, args);
-					}
-				};
+				fireCommand(sender, sub, args);
 			}
 			
 			return true;

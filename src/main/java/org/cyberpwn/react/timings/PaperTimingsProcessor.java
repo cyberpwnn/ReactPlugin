@@ -28,7 +28,6 @@ public class PaperTimingsProcessor extends Thread
 		this.plugins = plugins;
 		this.tc = tc;
 		reports = new GMap<String, TimingsReport>();
-		hackInterval();
 	}
 	
 	@Override
@@ -36,6 +35,7 @@ public class PaperTimingsProcessor extends Thread
 	{
 		try
 		{
+			hackInterval();
 			scanPlugins();
 			scanRest();
 			GBook k = k();
@@ -433,5 +433,45 @@ public class PaperTimingsProcessor extends Thread
 		}
 		
 		return key;
+	}
+
+	public GList<String> getTimings()
+	{
+		return timings;
+	}
+
+	public GList<String> getPlugins()
+	{
+		return plugins;
+	}
+
+	public GMap<String, TimingsReport> getReports()
+	{
+		return reports;
+	}
+
+	public PaperTimingsCallback getTc()
+	{
+		return tc;
+	}
+
+	public void setTimings(GList<String> timings)
+	{
+		this.timings = timings;
+	}
+
+	public void setPlugins(GList<String> plugins)
+	{
+		this.plugins = plugins;
+	}
+
+	public void setReports(GMap<String, TimingsReport> reports)
+	{
+		this.reports = reports;
+	}
+
+	public void setTc(PaperTimingsCallback tc)
+	{
+		this.tc = tc;
 	}
 }

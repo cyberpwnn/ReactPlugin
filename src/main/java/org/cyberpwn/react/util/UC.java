@@ -2,7 +2,7 @@ package org.cyberpwn.react.util;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class U
+public class UC
 {
 	public static double cpu = -1;
 	

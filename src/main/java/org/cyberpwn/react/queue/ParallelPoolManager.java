@@ -1,7 +1,6 @@
 package org.cyberpwn.react.queue;
 
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.TaskLater;
 
 public class ParallelPoolManager
 {
@@ -9,6 +8,7 @@ public class ParallelPoolManager
 	private GList<ParallelThread> threads;
 	private int next;
 	private int threadCount;
+	private int lt;
 	
 	public ParallelPoolManager(int threadCount, QueueMode mode)
 	{
@@ -22,6 +22,7 @@ public class ParallelPoolManager
 			System.out.println("WARNING: HIGH THREAD COUNT FOR CORETICK");
 		}
 		
+		lt = 0;
 		threads = new GList<ParallelThread>();
 		this.threadCount = threadCount;
 		next = 0;
@@ -30,13 +31,16 @@ public class ParallelPoolManager
 	
 	public void start()
 	{
-		new TaskLater(20)
+		createThreads(threadCount);
+	}
+	
+	public void check()
+	{
+		if(threads.size() != threadCount)
 		{
-			public void run()
-			{
-				createThreads(threadCount);
-			}
-		};
+			System.out.println("Invalid Pool, Resetting");
+			restart();
+		}
 	}
 	
 	public void restart()
@@ -51,11 +55,32 @@ public class ParallelPoolManager
 		{
 			i.interrupt();
 		}
+		
+		threads.clear();
 	}
 	
 	public ParallelPoolManager(int threadCount)
 	{
 		this(threadCount, QueueMode.ROUND_ROBIN);
+	}
+	
+	public void chk()
+	{
+		try
+		{
+			if(lt > 20)
+			{
+				lt = 0;
+				check();
+			}
+			
+			lt++;
+		}
+		
+		catch(Exception ex)
+		{
+			
+		}
 	}
 	
 	public void queue(Execution e)
