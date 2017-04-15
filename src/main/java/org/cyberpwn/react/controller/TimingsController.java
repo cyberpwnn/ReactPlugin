@@ -64,7 +64,7 @@ public class TimingsController extends Controller
 			f("Timings Processing Disabled");
 			return;
 		}
-				
+		
 		if(Bukkit.getVersion().contains("Paper") || Bukkit.getVersion().contains("Taco"))
 		{
 			pt = new PaperTimings(getReact());
@@ -181,14 +181,14 @@ public class TimingsController extends Controller
 									ms = getMs();
 									hh = getHh();
 									cx = getConfig();
-									
-									if(marg > 30)
-									{
-										marg = 0;
-										clean();
-									}
 								}
 							});
+							
+							if(marg > 30)
+							{
+								marg = 0;
+								clean();
+							}
 						}
 						
 						new ASYNC()
@@ -227,7 +227,7 @@ public class TimingsController extends Controller
 	@Override
 	public void stop()
 	{
-
+		
 	}
 	
 	public boolean supported()
