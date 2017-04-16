@@ -47,7 +47,15 @@ public class PlayerCache implements Configurable
 			return 10;
 		}
 		
-		return cc.getDouble("cache.c" + i + ".v");
+		try
+		{
+			return cc.getDouble("cache.c" + i + ".v");
+		}
+		
+		catch(Exception e)
+		{
+			return 10;
+		}
 	}
 	
 	public double pull()

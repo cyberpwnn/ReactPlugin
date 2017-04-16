@@ -23,6 +23,10 @@ public class ActionHeavyChunk extends Action implements Listener
 	public ActionHeavyChunk(ActionController actionController)
 	{
 		super(actionController, Material.GRASS, "hc", "ActionLaggedChunk", 100, "Find Heaviest Chunk", L.ACTION_HEAVYCHUNK, true);
+		
+		aliases.add("heavy");
+		aliases.add("findlag");
+		aliases.add("source");
 	}
 	
 	@Override
@@ -72,17 +76,19 @@ public class ActionHeavyChunk extends Action implements Listener
 			}
 		}
 		
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 		
 		if(c == null)
 		{
-			p.sendMessage(Info.TAG + Info.COLOR_ERR + "Could not find any chunks that have more than " + lim + " score.");
+			p.sendMessage(Info.TAG + ChatColor.GRAY + "Could not find any chunks that have more than " + lim + " score.");
 		}
 		
 		else
 		{
-			p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Found " + F.f(m) + " score @ " + c.getWorld().getName() + " [" + c.getX() + ", " + c.getZ() + "]");
-			p.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + "Detected: " + ChatColor.GRAY + cause.toString(", "));
+			p.sendMessage(Info.TAG + ChatColor.GRAY + "Found " + ChatColor.WHITE + F.f(m) + ChatColor.GRAY + " score @ " + ChatColor.WHITE + c.getWorld().getName() + " [" + c.getX() + ", " + c.getZ() + "]");
+			p.sendMessage(Info.TAG + ChatColor.GRAY + "Detected: " + ChatColor.WHITE + cause.toString(", "));
 			((Player) p).teleport(safe(c));
 		}
 	}

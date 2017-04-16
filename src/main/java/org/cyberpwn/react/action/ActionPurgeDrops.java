@@ -14,12 +14,16 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.E;
+import org.cyberpwn.react.util.F;
 
 public class ActionPurgeDrops extends Action implements Listener
 {
 	public ActionPurgeDrops(ActionController actionController)
 	{
 		super(actionController, Material.FLINT_AND_STEEL, "purge-drops", "ActionPurgeDrops", 100, "Purge Drops", L.ACTION_PURGEDROPS, true);
+		
+		aliases.add("purged");
+		aliases.add("pd");
 	}
 	
 	@Override
@@ -41,6 +45,7 @@ public class ActionPurgeDrops extends Action implements Listener
 		
 		super.manual(p);
 		long ms = System.currentTimeMillis();
+		int v = 0;
 		
 		for(World i : Bukkit.getWorlds())
 		{
@@ -54,10 +59,13 @@ public class ActionPurgeDrops extends Action implements Listener
 					}
 					
 					E.r(j);
+					v++;
 				}
 			}
 		}
 		
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " purged " + ChatColor.WHITE + F.f(v) + ChatColor.GRAY + " drops in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 }

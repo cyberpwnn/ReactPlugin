@@ -2,6 +2,7 @@ package org.cyberpwn.react.action;
 
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.cyberpwn.react.util.GList;
 
 public interface Actionable
 {
@@ -12,6 +13,8 @@ public interface Actionable
 	void start();
 	
 	void stop();
+	
+	GList<String> getAliases();
 	
 	long getReactionTime();
 	

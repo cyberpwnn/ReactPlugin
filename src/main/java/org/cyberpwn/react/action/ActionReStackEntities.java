@@ -16,6 +16,8 @@ public class ActionReStackEntities extends Action implements Listener
 	public ActionReStackEntities(ActionController actionController)
 	{
 		super(actionController, Material.SLIME_BALL, "re-stack-entities", "ActionReStackEntities", 100, "Re-Stack Entities", L.ACTION_RESTACKENTITIES, true);
+		
+		aliases.add("restack");
 	}
 	
 	@Override
@@ -40,7 +42,9 @@ public class ActionReStackEntities extends Action implements Listener
 		
 		ActionStackEntities ase = actionController.getActionStackEntities();
 		ase.unstackClear();
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	@Override

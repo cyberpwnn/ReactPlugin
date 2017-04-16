@@ -45,6 +45,7 @@ public class ActionStackEntities extends Action implements Listener
 		unstack = new GList<LivingEntity>();
 		stacks = new GList<StackedEntity>();
 		React.instance().register(this);
+		aliases.add("stack");
 	}
 	
 	@Override
@@ -498,7 +499,9 @@ public class ActionStackEntities extends Action implements Listener
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		act();
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	@Override

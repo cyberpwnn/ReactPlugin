@@ -26,6 +26,9 @@ public class ActionDullEntities extends Action implements Listener
 	public ActionDullEntities(ActionController actionController)
 	{
 		super(actionController, Material.SHEARS, "dull-mobs", "ActionDullEntities", 100, "Mob Duller", L.ACTION_DULLENTITIES, true);
+		
+		aliases.add("dm");
+		aliases.add("dull");
 	}
 	
 	@Override
@@ -160,7 +163,9 @@ public class ActionDullEntities extends Action implements Listener
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		act();
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	public boolean isDullable(Entity e)

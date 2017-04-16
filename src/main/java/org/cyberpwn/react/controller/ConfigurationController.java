@@ -98,6 +98,8 @@ public class ConfigurationController extends Controller implements Configurable
 			if(!fc.getType(i).equals(cdt))
 			{
 				save = true;
+				s.sendMessage("fc Value: " + fc.getString(i) + " Type: " + fc.getType(i));
+				s.sendMessage("cc Value: " + cc.getString(i) + " Type: " + cc.getType(i));
 				s.sendMessage(ChatColor.RED + " Warning: Invalid Key Type at " + i + " expected Type: " + cdt + ". given: " + fc.getType(i));
 				s.sendMessage(ChatColor.YELLOW + " - Removing Key");
 				fc.getData().remove(i);

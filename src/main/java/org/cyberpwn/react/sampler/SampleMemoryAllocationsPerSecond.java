@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.queue.M;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Metrics;
@@ -15,6 +16,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 	private long lastSample;
 	private GList<Long> samples;
 	private long last;
+	private long lastMs;
 	
 	public SampleMemoryAllocationsPerSecond(SampleController sampleController)
 	{
@@ -25,6 +27,7 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 		minDelay = 1;
 		maxDelay = 1;
 		last = 0;
+		lastMs = M.ms();
 		idealDelay = 1;
 		target = "Lower is better.";
 		explaination = L.SAMPLER_MEMORY_MAHS;
@@ -77,7 +80,22 @@ public class SampleMemoryAllocationsPerSecond extends Sample
 			total += i;
 		}
 		
-		value.setNumber(((total) / 1024 / 1024));
+		long timeSinceLast = M.ms() - lastMs;
+		
+		if(timeSinceLast < 50)
+		{
+			timeSinceLast = 50;
+		}
+		
+		double ticks = (double)timeSinceLast / 50.0;
+		
+		if(ticks < 1)
+		{
+			ticks = 1;
+		}
+		
+		value.setNumber(((total / ticks) / 1024 / 1024));
+		lastMs = M.ms();
 		
 		lastSample = currentSample;
 	}

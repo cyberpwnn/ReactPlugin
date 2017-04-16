@@ -13,8 +13,8 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
-import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.RegionProperty;
 
@@ -31,9 +31,11 @@ public class Action implements Actionable, Configurable
 	protected Long reactionTime;
 	protected Boolean enabled;
 	protected Integer idealTick;
+	protected GList<String> aliases;
 	
 	public Action(ActionController actionController, Material material, String key, String cname, Integer idealTick, String name, String description, boolean manual)
 	{
+		this.aliases = new GList<String>();
 		this.actionController = actionController;
 		this.idealTick = idealTick;
 		this.material = material;
@@ -91,17 +93,18 @@ public class Action implements Actionable, Configurable
 			return;
 		}
 		
-
+		N.t("Manual Action " + getName(), "name", p.getName());
+	}
+	
+	public void notifyOf(String s, CommandSender ex)
+	{
 		for(Player j : Bukkit.getOnlinePlayers())
 		{
-			if(j.hasPermission(Info.PERM_MONITOR) && React.isBroadcast() && !j.equals(p))
+			if(j.hasPermission(Info.PERM_MONITOR) && React.isBroadcast() && !j.equals(ex))
 			{
-				j.sendMessage(Info.TAG + p.getName() + " Executed " + getKey());
+				j.sendMessage(Info.TAG + ChatColor.GRAY + (ex.getName()) + " ran " + s);
 			}
 		}
-		
-		N.t("Manual Action " + getName(), "name", p.getName());
-		p.sendMessage(Info.TAG + ChatColor.YELLOW + L.MESSAGE_MANUAL + getName() + L.MESSAGE_MANUAL_STARTED);
 	}
 	
 	@Override
@@ -224,5 +227,11 @@ public class Action implements Actionable, Configurable
 	public Boolean getEnabled()
 	{
 		return enabled;
+	}
+
+	@Override
+	public GList<String> getAliases()
+	{
+		return aliases;
 	}
 }

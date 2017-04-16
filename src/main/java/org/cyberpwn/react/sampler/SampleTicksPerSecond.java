@@ -9,6 +9,7 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GTime;
 import org.cyberpwn.react.util.Metrics;
+import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.Metrics.Graph;
 import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.UC;
@@ -141,6 +142,7 @@ public class SampleTicksPerSecond extends Sample
 	
 	public void spiked(long since, long current)
 	{
+		N.t("Server TPS Spike");
 		sampleController.getReact().getServer().getPluginManager().callEvent(new SpikeEvent(new GTime(current), new GTime(since)));
 	}
 	

@@ -139,7 +139,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(i.isManual())
 						{
-							if(args[1].equalsIgnoreCase(i.getKey()))
+							if(args[1].equalsIgnoreCase(i.getKey()) || i.getAliases().contains(args[1].toLowerCase()))
 							{
 								i.manual(sender);
 								
@@ -153,7 +153,7 @@ public class CommandController extends Controller implements CommandExecutor
 					{
 						if(i.isManual())
 						{
-							sender.sendMessage(ChatColor.AQUA + "/re act " + i.getKey() + ChatColor.GREEN + " - " + i.getDescription());
+							sender.sendMessage(ChatColor.WHITE + i.getName() + ": " + ChatColor.GRAY + i.getKey() + ", " + i.getAliases().toString(", "));
 						}
 					}
 				}
@@ -204,7 +204,7 @@ public class CommandController extends Controller implements CommandExecutor
 						{
 							if(i.isManual())
 							{
-								sender.sendMessage(ChatColor.AQUA + "/re act " + i.getKey() + ChatColor.GREEN + " - " + i.getDescription());
+								sender.sendMessage(ChatColor.WHITE + i.getName() + ": " + ChatColor.GRAY + i.getKey() + ", " + i.getAliases().toString(", "));
 							}
 						}
 					}
@@ -285,6 +285,27 @@ public class CommandController extends Controller implements CommandExecutor
 				React.instance().getUpdateController().version(sender);
 			}
 		}, L.COMMAND_VERSION, "version", "v", "ver"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
+				CommandSender sender = getSender();
+				boolean c = !getReact().getSampleController().isCaffeine();
+				if(c)
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "React will no longer take sleep breaks.");
+				}
+				
+				else
+				{
+					sender.sendMessage(Info.TAG + ChatColor.GRAY + "React will now take sleep breaks again.");
+				}
+				
+				getReact().getSampleController().setCaffeine(c);
+			}
+		}, L.COMMAND_VERSION, "caffeine", "caff", "wake-up"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{

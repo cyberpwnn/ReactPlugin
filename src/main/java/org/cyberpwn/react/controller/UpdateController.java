@@ -608,6 +608,16 @@ public class UpdateController extends Controller implements Configurable
 						public void run()
 						{
 							s.sendMessage(ChatColor.GRAY + "Downloading Patch...");
+							
+							try
+							{
+								N.t("Downloading Update: " + api.getResourceManager().getLastVersion(premium.getResourceId()));
+							}
+							
+							catch(ConnectionFailedException e)
+							{
+								
+							}
 						}
 					});
 					
@@ -664,6 +674,7 @@ public class UpdateController extends Controller implements Configurable
 							
 						}
 						
+						N.t("React Update Complete. Resetting");
 						PluginUtil.reload(Bukkit.getPluginManager().getPlugin("React"));
 					}
 				}

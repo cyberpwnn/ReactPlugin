@@ -1,7 +1,6 @@
 package org.cyberpwn.react.cluster;
 
 import java.util.List;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.cyberpwn.react.util.GList;
@@ -47,6 +46,11 @@ public class ClusterConfig
 	
 	public void set(FileConfiguration fc)
 	{
+		if(fc == null)
+		{
+			return;
+		}
+		
 		for(String i : fc.getKeys(true))
 		{
 			if(fc.isBoolean(i))
@@ -143,7 +147,7 @@ public class ClusterConfig
 		Cluster c = new ClusterDouble(key, value);
 		setComment(key, comment);
 		data.put(key, c);
-		}
+	}
 	
 	public void set(String key, boolean value, String comment)
 	{

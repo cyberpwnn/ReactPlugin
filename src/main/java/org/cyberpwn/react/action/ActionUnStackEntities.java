@@ -18,6 +18,8 @@ public class ActionUnStackEntities extends Action implements Listener
 	public ActionUnStackEntities(ActionController actionController)
 	{
 		super(actionController, Material.WOOD_SWORD, "un-stack-entities", "ActionUnStackEntities", 100, "Un-Stack Entities", L.ACTION_UNSTACKENTITIES, true);
+		
+		aliases.add("unstack");
 	}
 	
 	@Override
@@ -67,7 +69,9 @@ public class ActionUnStackEntities extends Action implements Listener
 			}
 		};
 		
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	@Override

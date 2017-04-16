@@ -174,7 +174,7 @@ public class L
 	public static String MESSAGE_SLOWED_FIXED = "Your fly speed has been restored.";
 	public static String MESSAGE_MANUAL = "Manual Action: ";
 	public static String MESSAGE_MANUAL_STARTED = " started.";
-	public static String MESSAGE_MANUAL_FINISH = "Manual Action: ";
+	public static String MESSAGE_MANUAL_FINISH = "Action: ";
 	public static String MESSAGE_MANUAL_FINISHED = " finished ";
 	public static String MESSAGE_UPDATE = "Update Found! ";
 	public static String MESSAGE_LOAD_FAIL = "React Failed to load correctly. Attempting to force start.";

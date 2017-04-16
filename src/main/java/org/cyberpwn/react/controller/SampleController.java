@@ -45,6 +45,7 @@ public class SampleController extends Controller
 	private GMap<ExternallySamplable, Integer> externalSamples;
 	private Long tick;
 	private Long reactionTime;
+	private boolean caffeine;
 	
 	private final SampleStability sampleStability;
 	private final SampleReactionTime sampleReactionTime;
@@ -82,7 +83,7 @@ public class SampleController extends Controller
 		externalSamples = new GMap<ExternallySamplable, Integer>();
 		tick = 0l;
 		reactionTime = 0l;
-		
+		caffeine = false;
 		sampleStability = new SampleStability(this);
 		sampleReactionTime = new SampleReactionTime(this);
 		sampleTicksPerSecond = new SampleTicksPerSecond(this);
@@ -210,7 +211,7 @@ public class SampleController extends Controller
 			{
 				samples.put(i, samples.get(i) - 1);
 				
-				if(i.isAsleep())
+				if(i.isAsleep() && !caffeine)
 				{
 					continue;
 				}
@@ -245,7 +246,7 @@ public class SampleController extends Controller
 					}
 				}
 				
-				if(ReactAPI.getTicksPerSecond() > 17.5)
+				if(ReactAPI.getTicksPerSecond() > 17.5 && !caffeine)
 				{
 					i.sleep((int) (10 + (Math.random() * 40)));
 				}
@@ -490,5 +491,15 @@ public class SampleController extends Controller
 	public SamplePHPhoton getSamplePHPhoton()
 	{
 		return samplePHPhoton;
+	}
+
+	public boolean isCaffeine()
+	{
+		return caffeine;
+	}
+
+	public void setCaffeine(boolean caffeine)
+	{
+		this.caffeine = caffeine;
 	}
 }

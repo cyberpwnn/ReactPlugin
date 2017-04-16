@@ -33,6 +33,7 @@ public class ActionCullDrops extends Action implements Listener
 	private Double undefinedWorth;
 	private GMap<Double, String> worths;
 	private GList<Double> worthsx;
+	private int lastCull;
 	
 	public ActionCullDrops(ActionController actionController)
 	{
@@ -41,13 +42,23 @@ public class ActionCullDrops extends Action implements Listener
 		undefinedWorth = 100.0;
 		worths = new GMap<Double, String>();
 		worthsx = new GList<Double>();
+		lastCull = 0;
 		React.instance().register(this);
+		aliases.add("cd");
+		aliases.add("culld");
 	}
 	
 	@Override
 	public void act()
 	{
+		cullAll();
+	}
+
+	public int cullAll()
+	{
+		lastCull = 0;
 		final int[] cpt = new int[] {0, 0};
+		final int[] cx = new int[] {0};
 		
 		for(World i : getActionController().getReact().getServer().getWorlds())
 		{
@@ -68,7 +79,7 @@ public class ActionCullDrops extends Action implements Listener
 					int[] itx = new int[] {0};
 					while(it.hasNext() && itx[0] <= cpt[0])
 					{
-						cull(it.next());
+						lastCull += cull(it.next());
 						itx[0]++;
 						cpt[1]++;
 					}
@@ -79,12 +90,14 @@ public class ActionCullDrops extends Action implements Listener
 						
 						if(cpt[0] > 0)
 						{
-							Verbose.x("cull", "Culled " + cpt[0] + " Drops");
+							Verbose.x("cull", "Culled " + cx[0] + " Drops");
 						}
 					}
 				}
 			};
 		}
+		
+		return lastCull;
 	}
 	
 	public void updateDrop(Item item)
@@ -140,9 +153,12 @@ public class ActionCullDrops extends Action implements Listener
 		}
 		
 		super.manual(p);
-		long ms = System.currentTimeMillis();
-		act();
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		final long ms = System.currentTimeMillis();
+		
+		cullAll();
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " culled " + ChatColor.WHITE + lastCull + " Drops" + ChatColor.GRAY + " across " + ChatColor.WHITE + F.f(((System.currentTimeMillis() - ms) / 50), 1) + " ticks" + ChatColor.GRAY;
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	public int cull(Chunk chunk)

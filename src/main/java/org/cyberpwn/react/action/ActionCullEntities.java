@@ -32,20 +32,34 @@ import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
 {
+	private int lastCulled;
+	private int lastTick;
+	
 	public ActionCullEntities(ActionController actionController)
 	{
 		super(actionController, Material.SHEARS, "cull-mobs", "ActionCullEntities", 100, "Mob Culler", L.ACTION_CULLENTITIES, true);
+		
+		lastCulled = 0;
+		lastTick = 0;
+		aliases.add("cm");
+		aliases.add("ce");
+		aliases.add("cullm");
+		aliases.add("culle");
 	}
 	
 	@Override
 	public void act()
 	{
+		lastCulled = 0;
+		lastTick = 0;
+		
 		new ExecutiveIterator<World>(0.1, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
 		{
 			@Override
 			public void run()
 			{
 				cull(next());
+				lastTick++;
 			}
 		}, new Runnable()
 		{
@@ -101,9 +115,9 @@ public class ActionCullEntities extends Action implements Listener
 		}
 		
 		super.manual(p);
-		long ms = System.currentTimeMillis();
-		act();
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " culled " + ChatColor.WHITE + lastCulled + " Mobs" + ChatColor.GRAY + " across " + ChatColor.WHITE + F.f((lastTick * 50), 1) + " ticks" + ChatColor.GRAY;
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -192,6 +206,7 @@ public class ActionCullEntities extends Action implements Listener
 			
 			e.clear();
 			cull(b);
+			lastCulled += b.size();
 			
 			if(b.size() == 1)
 			{

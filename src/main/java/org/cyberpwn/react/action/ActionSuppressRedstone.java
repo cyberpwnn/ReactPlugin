@@ -25,6 +25,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 		super(actionController, Material.REDSTONE, "cull-redstone", "ActionSuppressRedstone", 20, "Redstone Suppression", L.ACTION_SUPPRESSREDSTONE, true);
 		frozen = false;
 		freezeAll = false;
+		aliases.add("rfreeze");
 	}
 	
 	@Override
@@ -77,7 +78,6 @@ public class ActionSuppressRedstone extends Action implements Listener
 		}
 		
 		super.manual(p);
-		final long ms = System.currentTimeMillis();
 		freeze();
 		
 		getActionController().getReact().scheduleSyncTask(20, new Runnable()
@@ -86,7 +86,9 @@ public class ActionSuppressRedstone extends Action implements Listener
 			public void run()
 			{
 				unfreeze();
-				p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+				String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " for " + ChatColor.WHITE + (20) + " ticks";
+				p.sendMessage(Info.TAG + msg);
+				notifyOf(msg, p);
 			}
 		});
 	}

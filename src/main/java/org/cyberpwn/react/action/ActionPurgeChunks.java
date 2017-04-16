@@ -31,7 +31,9 @@ public class ActionPurgeChunks extends Action implements Listener
 	public ActionPurgeChunks(ActionController actionController)
 	{
 		super(actionController, Material.GRASS, "purge-chunks", "ActionPurgeChunks", 20, "Purge Chunks", L.ACTION_PURGECHUNKS, true);
-		
+
+		aliases.add("purgec");
+		aliases.add("pc");
 		limit = 60;
 	}
 	
@@ -91,7 +93,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		
 		if(p != null)
 		{
-			p.sendMessage(Info.TAG + ChatColor.GREEN + "Purging Chunks...");
+			p.sendMessage(Info.TAG + ChatColor.GRAY + "Purging Chunks in " + ChatColor.WHITE + Bukkit.getServer().getWorlds().size() + " Worlds");
 		}
 		
 		for(World i : Bukkit.getServer().getWorlds())
@@ -104,11 +106,6 @@ public class ActionPurgeChunks extends Action implements Listener
 	{
 		final Iterator<Chunk> it = new GList<Chunk>(world.getLoadedChunks()).iterator();
 		final int[] mx = new int[] {0};
-		
-		if(p != null)
-		{
-			p.sendMessage(Info.TAG + ChatColor.GREEN + "Started Cull @ " + world.getName());
-		}
 		
 		new Task(0)
 		{
@@ -166,7 +163,14 @@ public class ActionPurgeChunks extends Action implements Listener
 				{
 					if(p != null)
 					{
-						p.sendMessage(Info.TAG + ChatColor.GREEN + "Finished Cull @ " + world.getName() + ", culled " + mx[0] + " chunks.");
+						String msg = ChatColor.GRAY + "Chunk Purge @ " + ChatColor.WHITE + world.getName() + ChatColor.GRAY + ", culled " + ChatColor.WHITE + mx[0] + " chunks.";
+						
+						if(mx[0] > 0)
+						{
+							notifyOf(msg, p);
+						}
+						
+						p.sendMessage(Info.TAG + msg);
 					}
 					
 					cancel();

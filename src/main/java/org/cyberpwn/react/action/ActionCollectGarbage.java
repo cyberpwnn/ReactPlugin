@@ -27,6 +27,7 @@ public class ActionCollectGarbage extends Action implements Listener
 		
 		load = 0;
 		last = System.currentTimeMillis();
+		aliases.add("garbage");
 	}
 	
 	public void start()
@@ -53,18 +54,15 @@ public class ActionCollectGarbage extends Action implements Listener
 		{
 			return;
 		}
+		
 		super.manual(p);
+		
 		final long ms = System.currentTimeMillis();
 		
-		actionController.getReact().scheduleSyncTask(1, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				takeOutTrash();
-				p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
-			}
-		});
+		long mb = takeOutTrash();
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " freed " + ChatColor.WHITE + F.mem(mb) + ChatColor.GRAY + " in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	public boolean canGC()
@@ -74,9 +72,11 @@ public class ActionCollectGarbage extends Action implements Listener
 		return gt.getMinutes() >= cc.getInt(getCodeName() + ".auto.conditions.minutes-per");
 	}
 	
-	public void takeOutTrash()
+	public long takeOutTrash()
 	{
+		long mb = Runtime.getRuntime().totalMemory();
 		System.gc();
+		return (mb - Runtime.getRuntime().totalMemory()) /1024/1024;
 	}
 	
 	public void onNewConfig(ClusterConfig cc)

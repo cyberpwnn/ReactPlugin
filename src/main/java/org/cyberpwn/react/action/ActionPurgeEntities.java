@@ -31,6 +31,11 @@ public class ActionPurgeEntities extends Action implements Listener
 		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", L.ACTION_PURGEENTITIES, true);
 		
 		React.instance().register(this);
+		
+		aliases.add("purgee");
+		aliases.add("pe");
+		aliases.add("purgem");
+		aliases.add("pm");
 	}
 	
 	@Override
@@ -127,7 +132,9 @@ public class ActionPurgeEntities extends Action implements Listener
 			}
 		}
 		
-		p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms (" + F.f(v) + " entities)");
+		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " purged " + ChatColor.WHITE + F.f(v) + ChatColor.GRAY + " entities in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
+		p.sendMessage(Info.TAG + msg);
+		notifyOf(msg, p);
 	}
 	
 	@EventHandler

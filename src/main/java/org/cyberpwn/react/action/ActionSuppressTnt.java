@@ -26,6 +26,8 @@ public class ActionSuppressTnt extends Action implements Listener
 		super(actionController, Material.TNT, "purge-tnt", "ActionSuppressTnt", 20, "TNT Suppression", L.ACTION_SUPPRESSTNT, true);
 		
 		dissd = false;
+		aliases.add("tnt");
+		aliases.add("ptnt");
 	}
 	
 	@Override
@@ -64,7 +66,6 @@ public class ActionSuppressTnt extends Action implements Listener
 		}
 		
 		super.manual(p);
-		final long ms = System.currentTimeMillis();
 		freeze();
 		
 		getActionController().getReact().scheduleSyncTask(20, new Runnable()
@@ -73,7 +74,9 @@ public class ActionSuppressTnt extends Action implements Listener
 			public void run()
 			{
 				unfreeze();
-				p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_MANUAL_FINISH + getName() + L.MESSAGE_MANUAL_FINISHED + "in " + (System.currentTimeMillis() - ms) + "ms");
+				String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " for " + ChatColor.WHITE + (20) + " ticks";
+				p.sendMessage(Info.TAG + msg);
+				notifyOf(msg, p);
 			}
 		});
 	}
