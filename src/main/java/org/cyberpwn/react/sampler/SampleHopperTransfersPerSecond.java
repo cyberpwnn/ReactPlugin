@@ -2,13 +2,14 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.block.Block;
+import org.bukkit.block.Hopper;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockRedstoneEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.controller.SampleController;
-import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
@@ -16,22 +17,22 @@ import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
 
-public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
+public class SampleHopperTransfersPerSecond extends Sample implements Listener
 {
 	private int loadedTick;
 	private GMap<Chunk, Integer> chunkMap;
 	private Chunk chunk;
 	private long last;
 	
-	public SampleRedstoneUpdatesPerSecond(SampleController sampleController)
+	public SampleHopperTransfersPerSecond(SampleController sampleController)
 	{
-		super(sampleController, "SampleRedstoneUpdatesPerSecond", ValueType.DOUBLE, "RED/S", "Redstone Updates per Second");
+		super(sampleController, "SampleHopperTransfersPerSecond", ValueType.DOUBLE, "HOP/S", "Hopper Transfers per Second");
 		minDelay = 20;
 		maxDelay = 20;
 		idealDelay = 20;
 		last = 0;
 		target = "Lower is better. However this will vary.";
-		explaination = L.SAMPLER_WORLD_REDSTONE;
+		explaination = L.SAMPLER_WORLD_HOPPER;
 		chunkMap = new GMap<Chunk, Integer>();
 		chunk = null;
 	}
@@ -76,27 +77,25 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	@Override
 	public String formatted(boolean acc)
 	{
-		return F.f(getValue().getInteger()) + ChatColor.DARK_RED + " RED/S";
+		return F.f(getValue().getInteger()) + ChatColor.AQUA + " HOP/S";
 	}
 	
 	@Override
 	public ChatColor color()
 	{
-		return Info.COLOR_ERR;
+		return ChatColor.BLUE;
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onBlockFromTo(BlockRedstoneEvent e)
+	public void onBlockFromTo(InventoryMoveItemEvent e)
 	{
 		loadedTick++;
-		Lag.report(e.getBlock().getLocation(), InstabilityCause.REDSTONE, 178);
 		
-		if(!chunkMap.containsKey(e.getBlock().getChunk()))
+		if(e.getSource().getHolder() instanceof Hopper)
 		{
-			chunkMap.put(e.getBlock().getChunk(), 0);
+			Block hopper = ((Hopper)e.getSource().getHolder()).getBlock();
+			Lag.report(hopper.getLocation(), InstabilityCause.HOPPER, 67);
 		}
-		
-		chunkMap.put(e.getBlock().getChunk(), chunkMap.get(e.getBlock().getChunk()) + 1);
 	}
 	
 	public int getLoadedTick()
@@ -117,6 +116,6 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	@Override
 	public ChatColor darkColor()
 	{
-		return ChatColor.DARK_RED;
+		return ChatColor.DARK_BLUE;
 	}
 }

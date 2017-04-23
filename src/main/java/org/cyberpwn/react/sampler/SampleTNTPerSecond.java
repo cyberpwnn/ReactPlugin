@@ -89,7 +89,7 @@ public class SampleTNTPerSecond extends Sample implements Listener
 	@EventHandler
 	public void onChunkLoad(ExplosionPrimeEvent e)
 	{
-		Lag.report(e.getEntity().getLocation(), InstabilityCause.TNT_EXPLOSIONS, 450);
+		Lag.report(e.getEntity().getLocation(), InstabilityCause.TNT_EXPLOSIONS, 364);
 		loadedTick++;
 	}
 	

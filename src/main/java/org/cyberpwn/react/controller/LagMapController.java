@@ -1,8 +1,11 @@
 package org.cyberpwn.react.controller;
 
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ReactAPI;
+import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.LagMap;
@@ -18,6 +21,21 @@ public class LagMapController extends Controller
 		super(react);
 		
 		map = new LagMap();
+	}
+	
+	public void reportList(CommandSender sender)
+	{
+		if(sender instanceof Player)
+		{
+			sender.sendMessage(String.format(Info.HRN, "Lag Map"));
+			map.getDamaged((Player) sender);
+			sender.sendMessage(Info.HR);
+		}
+		
+		else
+		{
+			
+		}
 	}
 	
 	public GMap<InstabilityCause, Double> report()

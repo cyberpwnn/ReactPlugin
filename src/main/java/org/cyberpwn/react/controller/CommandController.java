@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -285,6 +286,16 @@ public class CommandController extends Controller implements CommandExecutor
 				React.instance().getUpdateController().version(sender);
 			}
 		}, L.COMMAND_VERSION, "version", "v", "ver"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
+				CommandSender sender = getSender();
+				getReact().getLagMapController().reportList(sender);
+			}
+		}, "List the Laggiest Chunks. If there is no lag, there may not be any significant chunks.", "lagchunk", "lagmap", "lc"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1840,6 +1851,20 @@ public class CommandController extends Controller implements CommandExecutor
 			if(e.getPlayer().hasPermission("bukkit.command.timings"))
 			{
 				React.instance().getTimingsController().off(e.getPlayer());
+			}
+		}
+		
+		if(e.getMessage().startsWith("/reacttp"))
+		{
+			if(e.getPlayer().hasPermission(Info.PERM_ACT))
+			{
+				String world = e.getMessage().split(" ")[1];
+				int x = Integer.valueOf(e.getMessage().split(" ")[2]);
+				int y = Integer.valueOf(e.getMessage().split(" ")[3]);
+				int z = Integer.valueOf(e.getMessage().split(" ")[4]);
+				e.getPlayer().teleport(new Location(Bukkit.getWorld(world), x, y, z));
+				e.setCancelled(true);
+				return;
 			}
 		}
 		

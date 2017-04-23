@@ -23,7 +23,7 @@ public class ScreenMonitor
 		elements.put(this.react.getSampleController().getSampleTicksPerSecond(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleStability()).qadd(this.react.getSampleController().getSampleReactionTime()), 0));
 		elements.put(this.react.getSampleController().getSampleMemoryUsed(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleMemoryVolatility()).qadd(this.react.getSampleController().getSampleMemorySweepFrequency()).qadd(this.react.getSampleController().getSampleGarbageDirection()), 1));
 		elements.put(this.react.getSampleController().getSampleChunksLoaded(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleChunkLoadPerSecond()).qadd(this.react.getSampleController().getSampleRedstoneUpdatesPerSecond()).qadd(this.react.getSampleController().getSampleMemoryPerPlayer()), 2));
-		elements.put(this.react.getSampleController().getSamplePHEntities(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleDrops()).qadd(this.react.getSampleController().getSampleEntities()), 3));
+		elements.put(this.react.getSampleController().getSamplePHEntities(), new GBiset<GList<Samplable>, Integer>(new GList<Samplable>().qadd(this.react.getSampleController().getSampleDrops()).qadd(this.react.getSampleController().getSampleEntities()).qadd(this.react.getSampleController().getSampleHopperTransfersPerSecond()), 3));
 	}
 	
 	public static GMap<Samplable, GBiset<GList<Samplable>, Integer>> elements()

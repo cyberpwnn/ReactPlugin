@@ -202,6 +202,12 @@ public class ConfigurationController extends Controller implements Configurable
 										public void run()
 										{
 											c.onReadConfig();
+											
+											if(i.getName().equalsIgnoreCase("hits.yml"))
+											{
+												return;
+											}
+											
 											notif("Injected " + changes + " change(s) to " + i.getName());
 										}
 									};

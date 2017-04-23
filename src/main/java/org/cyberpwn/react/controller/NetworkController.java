@@ -176,7 +176,7 @@ public class NetworkController extends Controller
 				
 				catch(Exception e)
 				{
-					e.printStackTrace();
+					
 				}
 			}
 		};
@@ -236,7 +236,7 @@ public class NetworkController extends Controller
 		
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			
 		}
 	}
 	

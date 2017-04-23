@@ -18,6 +18,7 @@ import org.cyberpwn.react.sampler.SampleEntities;
 import org.cyberpwn.react.sampler.SampleGarbageDirection;
 import org.cyberpwn.react.sampler.SampleHistory;
 import org.cyberpwn.react.sampler.SampleHitRate;
+import org.cyberpwn.react.sampler.SampleHopperTransfersPerSecond;
 import org.cyberpwn.react.sampler.SampleLiquidFlowPerSecond;
 import org.cyberpwn.react.sampler.SampleMemoryAllocationsPerSecond;
 import org.cyberpwn.react.sampler.SampleMemoryPerPlayer;
@@ -63,6 +64,7 @@ public class SampleController extends Controller
 	private final SampleTNTPerSecond sampleTNTPerSecond;
 	private final SampleMonitoredPlugins sampleMonitoredPlugins;
 	private final SampleMemoryPerPlayer sampleMemoryPerPlayer;
+	private final SampleHopperTransfersPerSecond sampleHopperTransfersPerSecond;
 	private final SampleEntities sampleEntities;
 	private final SampleDrops sampleDrops;
 	private final SampleHitRate sampleHitRate;
@@ -99,6 +101,7 @@ public class SampleController extends Controller
 		sampleTNTPerSecond = new SampleTNTPerSecond(this);
 		sampleMonitoredPlugins = new SampleMonitoredPlugins(this);
 		sampleMemoryPerPlayer = new SampleMemoryPerPlayer(this);
+		sampleHopperTransfersPerSecond = new SampleHopperTransfersPerSecond(this);
 		sampleEntities = new SampleEntities(this);
 		sampleDrops = new SampleDrops(this);
 		sampleHitRate = new SampleHitRate(this);
@@ -501,5 +504,10 @@ public class SampleController extends Controller
 	public void setCaffeine(boolean caffeine)
 	{
 		this.caffeine = caffeine;
+	}
+
+	public SampleHopperTransfersPerSecond getSampleHopperTransfersPerSecond()
+	{
+		return sampleHopperTransfersPerSecond;
 	}
 }

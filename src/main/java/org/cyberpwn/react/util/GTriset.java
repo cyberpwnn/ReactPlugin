@@ -1,5 +1,6 @@
 package org.cyberpwn.react.util;
 
+@SuppressWarnings("hiding")
 public class GTriset<A, B, C>
 {
 	private A a;

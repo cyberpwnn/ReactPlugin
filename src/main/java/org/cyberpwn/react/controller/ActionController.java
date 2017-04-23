@@ -106,7 +106,17 @@ public class ActionController extends Controller
 				if(i.isEnabled() && ActionController.enabled)
 				{
 					long ns = System.nanoTime();
-					i.act();
+					
+					try
+					{
+						i.act();
+					}
+					
+					catch(Exception e)
+					{
+						
+					}
+					
 					i.setReactionTime(System.nanoTime() - ns);
 				}
 			}

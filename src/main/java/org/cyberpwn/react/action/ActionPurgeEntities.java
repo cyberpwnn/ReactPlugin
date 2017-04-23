@@ -144,7 +144,6 @@ public class ActionPurgeEntities extends Action implements Listener
 		{
 			if(e.getPlayer().hasPermission(Info.PERM_ACT))
 			{
-				e.getPlayer().sendMessage("caught");
 				manual(e.getPlayer());
 				e.setCancelled(true);
 			}

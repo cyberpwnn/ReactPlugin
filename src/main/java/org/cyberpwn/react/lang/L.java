@@ -46,6 +46,7 @@ public class L
 	public static String SAMPLER_WORLD_LIQUIDFLOW = "Liquid Flows per Second. This is when liquid expands or drains.";
 	public static String SAMPLER_WORLD_TNT = "The average tnt primes per second.";
 	public static String SAMPLER_WORLD_REDSTONE = "Redstone Updates per Second. Every time redstone updates at all.";
+	public static String SAMPLER_WORLD_HOPPER = "Hopper Transfers per Second. Every time a hopper tranfers something at all.";
 	public static String SAMPLER_MEMORY_GARBAGEDIRECTION = "When the server uses memory, and is done using it, it marks it as trash. This sample measures the direction of it.";
 	public static String SAMPLER_MEMORY_MAHS = "This measures the rate the server consumes memory. Note that more than 90% of this memory will be quickly restored for reuse.";
 	public static String SAMPLER_MEMORY_PLAYERS = "A very rough estimate of how many megabytes a player takes up.";
@@ -77,6 +78,7 @@ public class L
 	public static String ACTION_SUPPRESSGROWTH = "This dynamically changes the growth modifiers depending on how dense the growth is.";
 	public static String ACTION_SUPPRESSLIQUID = "Suppresses liquid if and only if the instability threshold reaches a limit for liquid.";
 	public static String ACTION_SUPPRESSREDSTONE = "Suppresses redstone if and only if the instability threshold reaches a limit for redstone.";
+	public static String ACTION_SUPPRESSHOPPER = "Suppresses hoppers if and only if the instability threshold reaches a limit for hoppers.";
 	public static String ACTION_SUPPRESSTNT = "Suppresses tnt if and only if the instability threshold reaches a limit for tnt.";
 	public static String ACTION_TELEPORTDROPS = "When enabled, some drops will be teleported and given to the player who broke the block only when the server has too many drops or is lagging.";
 	
