@@ -26,10 +26,13 @@ public class NetworkController extends Controller
 	private ReactServer server;
 	public static String uid = "%%__USER__%%";
 	public static String nonce = "%%__NONCE__%%";
+	private boolean started;
 	
 	public NetworkController(React react)
 	{
 		super(react);
+		
+		started = false;
 		
 		server = null;
 		processId();
@@ -56,6 +59,7 @@ public class NetworkController extends Controller
 						server = new ReactServer(port);
 						server.start();
 						N.t("React Server Started");
+						started = true;
 					}
 					
 					catch(IOException e)
@@ -67,6 +71,7 @@ public class NetworkController extends Controller
 						React.instance().getD().w("2. That port is already in use.");
 						React.instance().getD().s("To fix this, try rebooting. Reloading won't work.");
 					}
+					
 				}
 			}
 		});
@@ -268,6 +273,28 @@ public class NetworkController extends Controller
 		}
 		
 		ReactServer.runnables.clear();
+		if(tick % 100 == 0)
+		{
+			if(server != null && !server.isAlive() && started)
+			{
+				ClusterConfig cc = React.instance().getConfiguration();
+				int port = cc.getInt("react-remote.port");
+				
+				try
+				{
+					React.instance().getD().w("React Remote Server not responding... Attempting to restart.");
+					server = new ReactServer(port);
+					server.start();
+					
+				}
+				
+				catch(IOException e)
+				{
+					React.instance().getD().f("Failed to restart... Aborting.");
+					started = false;
+				}
+			}
+		}
 	}
 	
 	@Override
