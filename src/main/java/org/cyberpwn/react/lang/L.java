@@ -84,7 +84,7 @@ public class L
 	public static String ACTION_TELEPORTDROPS = "When enabled, some drops will be teleported and given to the player who broke the block only when the server has too many drops or is lagging.";
 	
 	public static String BOOK_SAMPLES_TITLE = "Samples";
-	public static String BOOK_SAMPLES_TEXT = "For React to accuratley judge lag, you cannot simply track the Ticks per second. If you dont know what is CAUSING the lag, you can't guarantee a fix. Welcome to react!";
+	public static String BOOK_SAMPLES_TEXT = "For React to accurately judge lag, you cannot simply track the Ticks per second. If you don't know what is CAUSING the lag, you can't guarantee a fix. Welcome to react!";
 	public static String BOOK_REACTIONS_TITLE = "Reactions";
 	public static String BOOK_REACTIONS_TEXT = "Since react is sampling many aspects of the server, we can now determine the source of the lag. This allows us to 'react to it', fixing the problem automatically.";
 	public static String BOOK_TRIALERROR_TITLE = "Trial & Error";
@@ -92,15 +92,15 @@ public class L
 	public static String BOOK_MONITORING_TITLE = "Monitoring";
 	public static String BOOK_MONITORING_TEXT = "React is not opaque. You are able to view everything react sees, to start monitoring, use /react monitor, but you may want to use /re help monitoring first to see how it works.";
 	public static String BOOK_CONFIGURATION_TITLE = "Configuration";
-	public static String BOOK_CONFIGURATION_TEXT = "React is highly configurable. You can disable any feature you wish, and configure any timings as you like. React can be taylored to literally any server.";
+	public static String BOOK_CONFIGURATION_TEXT = "React is highly configurable. You can disable any feature you wish, and configure any timings as you like. React can be tailored to literally any server.";
 	public static String BOOK_MONITOR_TITLE = "How to Monitor";
 	public static String BOOK_MONITOR_TEXT = "The base command for monitoring is /re mon (/react monitor). This command sends title messages to you with numbers. If you don't know what a sample is, use /re help samplers";
 	public static String BOOK_TABS_TITLE = "Changing Tabs";
 	public static String BOOK_TABS_TEXT = "Each element in the monitor actually contains more samples. Hold Shift and scroll your mouse wheel to select the tab you like. Try it!";
-	public static String BOOK_PERFORMANCE_TITLE = "Performence Charting";
-	public static String BOOK_PERFORMANCE_TEXT = "You can also view a live graph of your server performence. It is rendered on a map. Use /re map";
-	public static String BOOK_PERSISTANCE_TITLE = "Persistance";
-	public static String BOOK_PERSISTANCE_TEXT = "If you log off, or the server reboots, your monitor/map mode will be turned back on (unless you turn it off)";
+	public static String BOOK_PERFORMANCE_TITLE = "Performance Charting";
+	public static String BOOK_PERFORMANCE_TEXT = "You can also view a live graph of your server . It is rendered on a map. Use /re map";
+	public static String BOOK_PERSISTENCE_TITLE = "Persistence";
+	public static String BOOK_PERSISTENCE_TEXT = "If you log off, or the server reboots, your monitor/map mode will be turned back on (unless you turn it off)";
 	public static String BOOK_GREETING = "Hello There";
 	public static String BOOK_GREETING_TEXT = "React is a plugin that handles server lag in a judge & react way. This plugin does not just remove entities on a timer and call it 'lag remover'. React fixes this problem.";
 	

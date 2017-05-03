@@ -108,7 +108,7 @@ public class CommandController extends Controller implements CommandExecutor
 				bookMonitoring.addPage(new GPage().put(L.BOOK_MONITOR_TITLE, L.BOOK_MONITOR_TEXT));
 				bookMonitoring.addPage(new GPage().put(L.BOOK_TABS_TITLE, L.BOOK_TABS_TEXT));
 				bookMonitoring.addPage(new GPage().put(L.BOOK_PERFORMANCE_TITLE, L.BOOK_PERFORMANCE_TEXT));
-				bookMonitoring.addPage(new GPage().put(L.BOOK_PERSISTANCE_TITLE, L.BOOK_PERSISTANCE_TEXT));
+				bookMonitoring.addPage(new GPage().put(L.BOOK_PERSISTENCE_TITLE, L.BOOK_PERSISTENCE_TEXT));
 				
 				bookAbout = new GBook(ChatColor.GREEN + "About React");
 				bookAbout.addPage(new GPage().put(L.BOOK_GREETING, L.BOOK_GREETING_TEXT));
