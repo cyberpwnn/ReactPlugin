@@ -216,12 +216,13 @@ public class React extends JavaPlugin implements Configurable
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
 		d.setSilent(!cc.getBoolean("startup.verbose"));
-		d.s("Starting React v" + Version.V);
+		d.s(L.DEBUG_STARTING + Version.V);
 		FileConfiguration fc = new YamlConfiguration();
 		File fx = new GFile(new GFile(getDataFolder(), "cache"), "mcache");
 		
 		new TaskLater(10)
 		{
+			@Override
 			public void run()
 			{
 				new RemoteController();
@@ -425,6 +426,7 @@ public class React extends JavaPlugin implements Configurable
 		}
 	}
 	
+	@Override
 	public void onLoad()
 	{
 		readCurrentTick();
@@ -442,6 +444,7 @@ public class React extends JavaPlugin implements Configurable
 	{
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				TICK.tick++;
@@ -1232,6 +1235,7 @@ public class React extends JavaPlugin implements Configurable
 		
 		new Task(0)
 		{
+			@Override
 			public void run()
 			{
 				Title t = new Title();

@@ -10,6 +10,7 @@ public class L
 	public static String DEBUG_OFMEMORY = " of memory.";
 	public static String DEBUG_FINISHED = "All good to go!";
 	public static String DEBUG_CONTROLLER_STOPPING = "Stopping Controller: ";
+	public static String DEBUG_STARTING = "Starting React v";
 	
 	public static String CONFIG_REACT_DEBUGMESSAGES = "Run the garbage collector after startup to prevent memory issues from reloading and startup.";
 	public static String CONFIG_REACT_VERBOSE = "Startup verbose for extra information.";
