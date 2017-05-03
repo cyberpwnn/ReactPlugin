@@ -275,9 +275,10 @@ public class NetworkController extends Controller
 		ReactServer.runnables.clear();
 		if(tick % 100 == 0)
 		{
-			if(server != null && !server.isAlive() && started)
+			ClusterConfig cc = React.instance().getConfiguration();
+			if(server != null && !server.isAlive() && started && cc.getBoolean("react-remote.auto-restart"))
 			{
-				ClusterConfig cc = React.instance().getConfiguration();
+				
 				int port = cc.getInt("react-remote.port");
 				
 				try

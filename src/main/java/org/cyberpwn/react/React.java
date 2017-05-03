@@ -580,6 +580,7 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("react-remote.enable", false, L.CONFIG_REACT_REMOTE_ENABLE);
 		cc.set("react-remote.port", 8118, L.CONFIG_REACT_REMOTE_PORT);
 		cc.set("react-remote.interval", 100, L.CONFIG_REACT_INTERVAL);
+		cc.set("react-remote.auto-restart", false, L.CONFIG_REACT_RESTART);
 		cc.set("heartbeat.save-before-crash", true);
 		cc.set("commands.override.memory", true, L.CONFIG_REACT_OVERRIDES_MEMORY);
 		cc.set("commands.override.tps", true, L.CONFIG_REACT_OVERRIDES_TPS);

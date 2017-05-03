@@ -2,6 +2,7 @@ package org.cyberpwn.react.lang;
 
 public class L
 {
+	
 	public static String DEBUG_START = "Started ";
 	public static String DEBUG_IN = " in ";
 	public static String DEBUG_MS = "ms";
@@ -18,6 +19,7 @@ public class L
 	public static String CONFIG_REACT_SCOREBOARD = "The interval in ticks to send scoreboard packets to monitors.";
 	public static String CONFIG_REACT_BROADCAST = "Inform other players with the permission react.monitor \nwhen a player manually executes an action.";
 	public static String CONFIG_REACT_INTERVAL = "Request interval. \nUSERS HAVE BEEN MOVED TO THE react-users FOLDER!";
+	public static String CONFIG_REACT_RESTART = "Should React automagically attempt to restart the server should it fail?";
 	
 	public static String CONFIG_REACT_DEBUGMESSAGES = "Run the garbage collector after startup to prevent memory issues from reloading and startup.";
 	public static String CONFIG_REACT_VERBOSE = "Startup verbose for extra information.";
