@@ -11,6 +11,13 @@ public class L
 	public static String DEBUG_FINISHED = "All good to go!";
 	public static String DEBUG_CONTROLLER_STOPPING = "Stopping Controller: ";
 	public static String DEBUG_STARTING = "Starting React v";
+	public static String CONFIG_REACT_SPLASH = "Enable the splash screen";
+	public static String CONFIG_REACT_MULTICORE = "Use multiple threads to handle react processing";
+	public static String CONFIG_REACT_MULTITHREAD = "Use multiple threads to handle react processing\nIf multicore is off, this feature wont be used.";
+	public static String CONFIG_REACT_STARTUPPROF = "Some systems can have trouble with system profiling. \nIf you have weird issues, try disabling this first.";
+	public static String CONFIG_REACT_SCOREBOARD = "The interval in ticks to send scoreboard packets to monitors.";
+	public static String CONFIG_REACT_BROADCAST = "Inform other players with the permission react.monitor \nwhen a player manually executes an action.";
+	public static String CONFIG_REACT_INTERVAL = "Request interval. \nUSERS HAVE BEEN MOVED TO THE react-users FOLDER!";
 	
 	public static String CONFIG_REACT_DEBUGMESSAGES = "Run the garbage collector after startup to prevent memory issues from reloading and startup.";
 	public static String CONFIG_REACT_VERBOSE = "Startup verbose for extra information.";

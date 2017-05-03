@@ -558,12 +558,12 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
-		cc.set("splash-screen", true, "Enable the splash screen");
+		cc.set("splash-screen", true, L.CONFIG_REACT_SPLASH);
 		cc.set("debug-messages", true);
 		cc.set("startup.prevent-memory-leaks", true, L.CONFIG_REACT_DEBUGMESSAGES);
-		cc.set("startup.multicore", shouldMulticore(), "Use multiple threads to handle react processing");
-		cc.set("startup.multicore-threads", 1, "Use multiple threads to handle react processing\nIf multicore is off, this feature wont be used.");
-		cc.set("startup.system-profiling", true, "Some systems can have trouble with system profiling. \nIf you have weird issues, try disabling this first.");
+		cc.set("startup.multicore", shouldMulticore(), L.CONFIG_REACT_MULTICORE);
+		cc.set("startup.multicore-threads", 1, L.CONFIG_REACT_MULTITHREAD);
+		cc.set("startup.system-profiling", true, L.CONFIG_REACT_STARTUPPROF);
 		cc.set("maps.display-static", false);
 		cc.set("startup.verbose", false, L.CONFIG_REACT_VERBOSE);
 		cc.set("startup.anonymous-statistics", true, L.CONFIG_REACT_STATS);
@@ -571,15 +571,15 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("display.tag", "&b[&8React&b]:", L.CONFIG_REACT_TAG);
 		cc.set("display.no-permission", "&cInsufficient Permission", L.CONFIG_REACT_PERMDENYMSG);
 		cc.set("monitor.allow-title-verbose", true, L.CONFIG_REACT_ALLOWTITLEVERBOSE);
-		cc.set("monitor.scoreboard-interval", 10, "The interval in ticks to send scoreboard packets to monitors.");
+		cc.set("monitor.scoreboard-interval", 10, L.CONFIG_REACT_SCOREBOARD);
 		cc.set("monitor.title-bolding", false, L.CONFIG_REACT_TITLEBOLDING);
-		cc.set("monitor.broadcast-monitors", true, "Inform other players with the permission react.monitor \nwhen a player manually executes an action.");
+		cc.set("monitor.broadcast-monitors", true, L.CONFIG_REACT_BROADCAST);
 		cc.set("monitor.shift-accuracy", true, L.CONFIG_REACT_ALLOWSHIFTACCURACY);
 		cc.set("monitor.ticking.dynamic", true, L.CONFIG_REACT_TITLETICK_DYNAMIC);
 		cc.set("monitor.ticking.base", 1, L.CONFIG_REACT_TITLETICK_BASE);
 		cc.set("react-remote.enable", false, L.CONFIG_REACT_REMOTE_ENABLE);
 		cc.set("react-remote.port", 8118, L.CONFIG_REACT_REMOTE_PORT);
-		cc.set("react-remote.interval", 100, "Request interval. \nUSERS HAVE BEEN MOVED TO THE react-users FOLDER!");
+		cc.set("react-remote.interval", 100, L.CONFIG_REACT_INTERVAL);
 		cc.set("heartbeat.save-before-crash", true);
 		cc.set("commands.override.memory", true, L.CONFIG_REACT_OVERRIDES_MEMORY);
 		cc.set("commands.override.tps", true, L.CONFIG_REACT_OVERRIDES_TPS);
