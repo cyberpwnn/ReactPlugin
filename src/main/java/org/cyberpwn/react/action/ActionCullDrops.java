@@ -53,7 +53,7 @@ public class ActionCullDrops extends Action implements Listener
 	{
 		cullAll();
 	}
-
+	
 	public int cullAll()
 	{
 		lastCull = 0;
@@ -276,7 +276,7 @@ public class ActionCullDrops extends Action implements Listener
 		
 		cc.set("visual.warn.enable-drop-warnings", true, "Show despawn warnings on items");
 		cc.set("visual.warn.time-threshold-seconds", 15, "Time in seconds to start counting down.");
-		cc.set("visual.warn.time-format", "&c\u26a0 &6&l%time%", "The countdown format");
+		cc.set("visual.warn.time-format", "&c! &6&l%time%", "The countdown format");
 		cc.set("drops-per-chunk", 26, "Max drops per chunk before react starts clipping drops.");
 		cc.set("ignore-all-worth-when-culling", false, "Blatantly ignore worth and just remove whater react wants first.");
 		cc.set("despawn-rate.use-spigot-config", false, "Use the spigot.yml file to find item-despawn rates");
