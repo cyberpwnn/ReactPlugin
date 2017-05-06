@@ -1830,7 +1830,7 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				CommandSender p = e.getSender();
 				
-				if(e.getSender().hasPermission("bukkit.command.tps"))
+				if(e.getSender().hasPermission("bukkit.command.tps") || e.getSender().hasPermission(Info.PERM_MONITOR))
 				{
 					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
 				}
