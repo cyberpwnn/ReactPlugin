@@ -14,6 +14,7 @@ import org.cyberpwn.react.timings.TimingsReport;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.TaskLater;
 
 public class PluginWeightController extends Controller implements Configurable
 {
@@ -270,6 +271,7 @@ public class PluginWeightController extends Controller implements Configurable
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
+		cc.set("timings.automatic-start", false, "Automatically start timings when react is enabled.\nIf turned off, react will not start it back up again.");
 		cc.set("timings.processing.auto-flush", true, "Keep the timings list grainy (less muddy numbers) spigot only.");
 		cc.set("timings.processing.max-threads", Runtime.getRuntime().availableProcessors(), "The max threads react will use to process incoming data.");
 		cc.set("timings.processing.enabled", true, "Enable processing timings data. If you have trouble with this, disable it.");
@@ -284,6 +286,20 @@ public class PluginWeightController extends Controller implements Configurable
 		wait = cc.getInt("timings.notifier.flush-list-delay");
 		notify = cc.getBoolean("timings.notifier.enable");
 		high = cc.getDouble("timings.notifier.considered-high-ms");
+		
+		new TaskLater(4)
+		{
+			@Override
+			public void run()
+			{
+				if(cc.getBoolean("timings.automatic-start"))
+				{
+					s("Enabling Timings.");
+					Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "timings on");
+					React.instance().getTimingsController().on(null);
+				}
+			}
+		};
 	}
 	
 	@Override
