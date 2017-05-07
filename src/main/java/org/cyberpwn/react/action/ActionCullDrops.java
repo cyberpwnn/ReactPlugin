@@ -26,6 +26,7 @@ import org.cyberpwn.react.util.MaterialList;
 import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.Verbose;
+import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullDrops extends Action implements Listener
 {
@@ -120,22 +121,25 @@ public class ActionCullDrops extends Action implements Listener
 		
 		if(cc.getBoolean("visual.warn.enable-drop-warnings"))
 		{
-			if(ticksLeft < 20 * cc.getInt("visual.warn.time-threshold-seconds"))
+			if(VersionBukkit.tc())
 			{
-				String form = F.color(cc.getString("visual.warn.time-format").replaceAll("%time%", String.valueOf(secondsLeft)));
-				item.setCustomName(form);
-				item.setCustomNameVisible(true);
-				
-				if(secondsLeft > 0)
+				if(ticksLeft < 20 * cc.getInt("visual.warn.time-threshold-seconds"))
 				{
-					new TaskLater(20)
+					String form = F.color(cc.getString("visual.warn.time-format").replaceAll("%time%", String.valueOf(secondsLeft)));
+					item.setCustomName(form);
+					item.setCustomNameVisible(true);
+					
+					if(secondsLeft > 0)
 					{
-						@Override
-						public void run()
+						new TaskLater(20)
 						{
-							updateDrop(item);
-						}
-					};
+							@Override
+							public void run()
+							{
+								updateDrop(item);
+							}
+						};
+					}
 				}
 			}
 		}
