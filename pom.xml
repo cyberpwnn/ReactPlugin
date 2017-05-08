@@ -12,7 +12,7 @@
 		<react.libs>${project.basedir}/lib</react.libs>
 		<ct.libs>${project.basedir}/lib</ct.libs>
 		<react.proguard>${project.basedir}/proguard</react.proguard>
-		<react.production.folder>C:\Users\cyberpwn\Documents\development\release\react</react.production.folder>
+		<react.production.folder>${project.basedir}\release</react.production.folder>
 		<react.development.folder>C:\Users\cyberpwn\Documents\development\servers\dynamic\plugins</react.development.folder>
 	</properties>
 	<build>
