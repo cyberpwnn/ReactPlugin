@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn.react</groupId>
 	<artifactId>React</artifactId>
-	<version>4.7.5</version>
+	<version>4.7.6</version>
 	<name>React</name>
 	<description>Smart Server Performance</description>
 	<properties>
@@ -19,6 +19,7 @@
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
 				<includes>
 					<include>**/*.yml</include>
 					<include>**/*.txt</include>

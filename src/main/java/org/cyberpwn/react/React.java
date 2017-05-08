@@ -136,6 +136,7 @@ public class React extends JavaPlugin implements Configurable
 	@Override
 	public void onEnable()
 	{
+		updateVersion();
 		imh = 0;
 		old = System.out;
 		start = M.ms();
@@ -593,6 +594,13 @@ public class React extends JavaPlugin implements Configurable
 		Info.MSG_PERM = F.color(cc.getString("display.no-permission"));
 		Info.TAG = F.color(cc.getString("display.tag")) + " " + ChatColor.GRAY;
 		L.MESSAGE_INSUFFICIENT_PERMISSION = Info.MSG_PERM;
+	}
+	
+	public void updateVersion()
+	{
+		String version = getDescription().getVersion();
+		Version.V = version;
+		Version.C = Version.toB(version);
 	}
 	
 	@Override
