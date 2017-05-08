@@ -37,6 +37,8 @@ import org.cyberpwn.react.util.Verbose;
 
 public class ActionInstabilityCause extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private GMap<Player, Float> speeds;
 	private final GMap<InstabilityCause, Integer> problems;
 	private final GList<InstabilityCause> notified;

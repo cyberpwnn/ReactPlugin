@@ -18,6 +18,9 @@ import org.cyberpwn.react.util.F;
 
 public class ActionPurgeDrops extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionPurgeDrops(ActionController actionController)
 	{
 		super(actionController, Material.FLINT_AND_STEEL, "purge-drops", "ActionPurgeDrops", 100, "Purge Drops", L.ACTION_PURGEDROPS, true);

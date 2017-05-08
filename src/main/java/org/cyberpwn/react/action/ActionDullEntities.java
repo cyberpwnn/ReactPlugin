@@ -23,6 +23,9 @@ import org.cyberpwn.react.util.W;
 
 public class ActionDullEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionDullEntities(ActionController actionController)
 	{
 		super(actionController, Material.SHEARS, "dull-mobs", "ActionDullEntities", 100, "Mob Duller", L.ACTION_DULLENTITIES, true);

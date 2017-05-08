@@ -13,6 +13,9 @@ import org.cyberpwn.react.lang.L;
 
 public class ActionReStackEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionReStackEntities(ActionController actionController)
 	{
 		super(actionController, Material.SLIME_BALL, "re-stack-entities", "ActionReStackEntities", 100, "Re-Stack Entities", L.ACTION_RESTACKENTITIES, true);

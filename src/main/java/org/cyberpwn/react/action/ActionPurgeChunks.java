@@ -26,12 +26,14 @@ import org.cyberpwn.react.util.Verbose;
 
 public class ActionPurgeChunks extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private int limit;
 	
 	public ActionPurgeChunks(ActionController actionController)
 	{
 		super(actionController, Material.GRASS, "purge-chunks", "ActionPurgeChunks", 20, "Purge Chunks", L.ACTION_PURGECHUNKS, true);
-
+		
 		aliases.add("purgec");
 		aliases.add("pc");
 		limit = 60;

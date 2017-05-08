@@ -15,6 +15,9 @@ import org.cyberpwn.react.util.Task;
 
 public class ActionUnStackEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionUnStackEntities(ActionController actionController)
 	{
 		super(actionController, Material.WOOD_SWORD, "un-stack-entities", "ActionUnStackEntities", 100, "Un-Stack Entities", L.ACTION_UNSTACKENTITIES, true);

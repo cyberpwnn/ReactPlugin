@@ -5,6 +5,8 @@ import org.cyberpwn.react.util.GList;
 
 public class Version
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	public static int C = -1;
 	public static String V = "null";
 	public static final List<String> D = new GList<String>(new String[] {"Updater overhaul. Now downloads updates from spigot (you need to authenticate yourself)", "Added a guide on how to set this up on the release page", "Major performance improvements at startup", "You may need to reconfigure your updater.yml file"});

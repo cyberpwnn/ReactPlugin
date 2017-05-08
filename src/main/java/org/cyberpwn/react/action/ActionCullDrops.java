@@ -30,6 +30,8 @@ import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullDrops extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private GMap<String, GBiset<Double, GList<Material>>> worth;
 	private Double undefinedWorth;
 	private GMap<Double, String> worths;

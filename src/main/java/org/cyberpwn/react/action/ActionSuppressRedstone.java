@@ -17,6 +17,8 @@ import org.cyberpwn.react.util.MathUtils;
 
 public class ActionSuppressRedstone extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private boolean frozen;
 	private boolean freezeAll;
 	

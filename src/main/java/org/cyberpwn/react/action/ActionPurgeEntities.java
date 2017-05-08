@@ -26,6 +26,9 @@ import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionPurgeEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionPurgeEntities(ActionController actionController)
 	{
 		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", L.ACTION_PURGEENTITIES, true);

@@ -17,6 +17,8 @@ import org.cyberpwn.react.util.GMap;
 
 public class ActionSuppressGrowth extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private GMap<Chunk, Integer> cache;
 	private int maxPerInterval;
 	

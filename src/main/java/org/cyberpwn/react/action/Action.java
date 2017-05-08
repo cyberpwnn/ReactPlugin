@@ -20,6 +20,8 @@ import org.cyberpwn.react.util.RegionProperty;
 
 public class Action implements Actionable, Configurable
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	protected final ActionController actionController;
 	protected final String name;
 	protected final String cname;
@@ -35,7 +37,7 @@ public class Action implements Actionable, Configurable
 	
 	public Action(ActionController actionController, Material material, String key, String cname, Integer idealTick, String name, String description, boolean manual)
 	{
-		this.aliases = new GList<String>();
+		aliases = new GList<String>();
 		this.actionController = actionController;
 		this.idealTick = idealTick;
 		this.material = material;
@@ -228,7 +230,7 @@ public class Action implements Actionable, Configurable
 	{
 		return enabled;
 	}
-
+	
 	@Override
 	public GList<String> getAliases()
 	{

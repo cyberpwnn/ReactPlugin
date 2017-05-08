@@ -35,6 +35,8 @@ import org.cyberpwn.react.util.TaskLater;
 
 public class ActionStackEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private GList<StackedEntity> stacks;
 	private GList<LivingEntity> unstack;
 	

@@ -18,6 +18,8 @@ import org.cyberpwn.react.util.Timer;
 
 public class ActionCollectGarbage extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private int load;
 	private long last;
 	
@@ -30,21 +32,25 @@ public class ActionCollectGarbage extends Action implements Listener
 		aliases.add("garbage");
 	}
 	
+	@Override
 	public void start()
 	{
 		getActionController().getReact().register(this);
 	}
 	
+	@Override
 	public void stop()
 	{
 		getActionController().getReact().unRegister(this);
 	}
 	
+	@Override
 	public void act()
 	{
 		
 	}
 	
+	@Override
 	public void manual(final CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
@@ -76,9 +82,10 @@ public class ActionCollectGarbage extends Action implements Listener
 	{
 		long mb = Runtime.getRuntime().totalMemory();
 		System.gc();
-		return (mb - Runtime.getRuntime().totalMemory()) /1024/1024;
+		return (mb - Runtime.getRuntime().totalMemory()) / 1024 / 1024;
 	}
 	
+	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);

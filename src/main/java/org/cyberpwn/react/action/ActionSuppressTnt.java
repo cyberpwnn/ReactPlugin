@@ -18,6 +18,8 @@ import org.cyberpwn.react.lang.L;
 
 public class ActionSuppressTnt extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private boolean frozen;
 	private boolean dissd;
 	

@@ -6,6 +6,9 @@ import org.cyberpwn.react.util.GList;
 
 public interface Actionable
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	void preAct();
 	
 	void act();

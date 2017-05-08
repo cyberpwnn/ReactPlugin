@@ -20,6 +20,9 @@ import org.cyberpwn.react.util.InstabilityCause;
 
 public class ActionHeavyChunk extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
+	
 	public ActionHeavyChunk(ActionController actionController)
 	{
 		super(actionController, Material.GRASS, "hc", "ActionLaggedChunk", 100, "Find Heaviest Chunk", L.ACTION_HEAVYCHUNK, true);

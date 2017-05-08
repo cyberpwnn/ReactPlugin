@@ -32,6 +32,8 @@ import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
 {
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	private int lastCulled;
 	private int lastTick;
 	
