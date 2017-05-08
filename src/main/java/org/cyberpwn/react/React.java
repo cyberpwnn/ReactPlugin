@@ -132,6 +132,8 @@ public class React extends JavaPlugin implements Configurable
 	private PrintStream old;
 	private int imh;
 	public static GList<Runnable> runnables;
+	public static String RC_NONCE = "%%__NONCE__%%";
+	public static String RC_UIVD = "%%__UID__%%";
 	
 	@Override
 	public void onEnable()
