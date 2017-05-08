@@ -1,4 +1,4 @@
-package org.cyberpwn.react.network;
+package org.cyberpwn.react.server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -12,7 +12,11 @@ import org.cyberpwn.react.React;
 import org.cyberpwn.react.action.Actionable;
 import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.server.ReactUser;
+import org.cyberpwn.react.network.PacketRequest;
+import org.cyberpwn.react.network.PacketRequestType;
+import org.cyberpwn.react.network.PacketResponse;
+import org.cyberpwn.react.network.PacketResponseType;
+import org.cyberpwn.react.network.ReactData;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.M;

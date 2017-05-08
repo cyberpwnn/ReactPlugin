@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
-import org.cyberpwn.react.network.ReactServer;
+import org.cyberpwn.react.server.ReactServer;
 import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;

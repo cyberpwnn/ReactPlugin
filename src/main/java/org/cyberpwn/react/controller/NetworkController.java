@@ -12,7 +12,7 @@ import org.cyberpwn.react.Version;
 import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.json.JSONObject;
-import org.cyberpwn.react.network.ReactServer;
+import org.cyberpwn.react.server.ReactServer;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.GMap;
