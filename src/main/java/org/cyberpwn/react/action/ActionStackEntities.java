@@ -151,6 +151,11 @@ public class ActionStackEntities extends Action implements Listener
 	@EventHandler
 	public void on(PlayerInteractAtEntityEvent e)
 	{
+		if(!isEnabled())
+		{
+			return;
+		}
+		
 		if(!cc.getBoolean("modifications.allow-player-splitting"))
 		{
 			return;
