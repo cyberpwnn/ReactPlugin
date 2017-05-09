@@ -229,4 +229,5 @@ public class L
 	public static String COMMAND_GUESS = "Guess Server Capabilities.";
 	public static String COMMAND_TIMINGS = "Send a book of the hardest hitting timings.";
 	public static String COMMAND_LANG = "Change or list supported languages";
+	public static String COMMAND_SCAN = "Scan the current chunk and list the number of entities (and tile entities) for that given chunk.";
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -43,6 +44,7 @@ import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.server.ReactServer;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Amounts;
+import org.cyberpwn.react.util.C;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Callback;
 import org.cyberpwn.react.util.CommandRunnable;
@@ -212,6 +214,27 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_ACT, "act", "action", "a"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
+				if(getSender() instanceof Player)
+				{
+					Player p = (Player) getSender();
+					Chunk z = p.getLocation().getChunk();
+					int eCount = z.getEntities().length;
+					int tCount = z.getTileEntities().length;
+					p.sendMessage(Info.TAG + "There are " + F.f(eCount) + " entities in this chunk.");
+					p.sendMessage(Info.TAG + "There are " + F.f(tCount) + " tile entities in this chunk.");
+				}
+				else
+				{
+					getSender().sendMessage(C.RED + "This command is for players only!");
+				}
+			}
+		}, L.COMMAND_SCAN, "scan", "sc"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{

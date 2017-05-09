@@ -269,7 +269,15 @@ public class NetworkController extends Controller
 		
 		for(ReactRunnable i : ReactServer.runnables)
 		{
-			i.run(getReact());
+			try
+			{
+				i.run(getReact());
+			}
+			
+			catch(Throwable e)
+			{
+				
+			}
 		}
 		
 		ReactServer.runnables.clear();

@@ -242,7 +242,7 @@ public class ReactServer extends Thread
 							{
 								if(j.getName().equalsIgnoreCase(i))
 								{
-									l("Action Packet Received: " + j.getName());
+									l("Action Packet Received: " + j.getName() + " (ran by " + name + ")");
 									
 									if(u.canUseActions())
 									{
