@@ -53,6 +53,7 @@ public class L
 	public static String SAMPLER_CHUNK_LOADED = "Counts all chunks in all loaded worlds.";
 	public static String SAMPLER_WORLD_DROPS = "Counts all drops loaded on all worlds.";
 	public static String SAMPLER_WORLD_ENTITIES = "Counts all entities loaded on all worlds.";
+	public static String SAMPLER_WORLD_TILEENTITIES = "Counts all tile entities loaded on all worlds.";
 	public static String SAMPLER_WORLD_LIQUIDFLOW = "Liquid Flows per Second. This is when liquid expands or drains.";
 	public static String SAMPLER_WORLD_TNT = "The average tnt primes per second.";
 	public static String SAMPLER_WORLD_REDSTONE = "Redstone Updates per Second. Every time redstone updates at all.";

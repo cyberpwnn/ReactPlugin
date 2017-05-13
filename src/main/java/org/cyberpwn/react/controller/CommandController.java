@@ -60,6 +60,7 @@ import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
 import org.cyberpwn.react.util.InstabilityCause;
+import org.cyberpwn.react.util.LagMap;
 import org.cyberpwn.react.util.Platform;
 import org.cyberpwn.react.util.PlayerData;
 import org.cyberpwn.react.util.ReactCommand;
@@ -226,9 +227,25 @@ public class CommandController extends Controller implements CommandExecutor
 					Chunk z = p.getLocation().getChunk();
 					int eCount = z.getEntities().length;
 					int tCount = z.getTileEntities().length;
+					
+					LagMap map = getReact().getLagMapController().getMap();
+					GMap<InstabilityCause, Integer> h = map.report(z);
+					
+					int csize = h.k().size();
+					p.sendMessage(String.format(Info.HRN, "Scan [" + z.getX() + ", " + z.getZ() + "]"));
+					p.sendMessage(Info.TAG + "There are " + csize + " lag contributing factors in this chunk.");
+					
+					for(InstabilityCause i : h.k())
+					{
+						int weight = h.get(i);
+						p.sendMessage(Info.TAG + i.getName() + ": " + C.WHITE + weight);
+					}
+					
 					p.sendMessage(Info.TAG + "There are " + F.f(eCount) + " entities in this chunk.");
 					p.sendMessage(Info.TAG + "There are " + F.f(tCount) + " tile entities in this chunk.");
+					p.sendMessage(Info.HR);
 				}
+				
 				else
 				{
 					getSender().sendMessage(C.RED + "This command is for players only!");

@@ -34,6 +34,7 @@ import org.cyberpwn.react.sampler.SampleRedstoneUpdatesPerSecond;
 import org.cyberpwn.react.sampler.SampleStability;
 import org.cyberpwn.react.sampler.SampleTNTPerSecond;
 import org.cyberpwn.react.sampler.SampleTicksPerSecond;
+import org.cyberpwn.react.sampler.SampleTiles;
 import org.cyberpwn.react.sampler.SampleTimings;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.GList;
@@ -49,6 +50,7 @@ public class SampleController extends Controller
 	private boolean caffeine;
 	
 	private final SampleStability sampleStability;
+	private final SampleTiles sampleTiles;
 	private final SampleReactionTime sampleReactionTime;
 	private final SampleTicksPerSecond sampleTicksPerSecond;
 	private final SampleMemoryUsed sampleMemoryUsed;
@@ -86,6 +88,7 @@ public class SampleController extends Controller
 		tick = 0l;
 		reactionTime = 0l;
 		caffeine = false;
+		sampleTiles = new SampleTiles(this);
 		sampleStability = new SampleStability(this);
 		sampleReactionTime = new SampleReactionTime(this);
 		sampleTicksPerSecond = new SampleTicksPerSecond(this);
@@ -495,19 +498,24 @@ public class SampleController extends Controller
 	{
 		return samplePHPhoton;
 	}
-
+	
 	public boolean isCaffeine()
 	{
 		return caffeine;
 	}
-
+	
 	public void setCaffeine(boolean caffeine)
 	{
 		this.caffeine = caffeine;
 	}
-
+	
 	public SampleHopperTransfersPerSecond getSampleHopperTransfersPerSecond()
 	{
 		return sampleHopperTransfersPerSecond;
+	}
+	
+	public SampleTiles getSampleTiles()
+	{
+		return sampleTiles;
 	}
 }
