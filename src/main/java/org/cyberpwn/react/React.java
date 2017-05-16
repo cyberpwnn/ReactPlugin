@@ -1,6 +1,5 @@
 package org.cyberpwn.react;
 
-// Go home hacker fag.
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -33,6 +32,7 @@ import org.cyberpwn.react.controller.RemoteController;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TaskManager;
+import org.cyberpwn.react.controller.TileController;
 import org.cyberpwn.react.controller.TimingsController;
 import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
@@ -119,6 +119,7 @@ public class React extends JavaPlugin implements Configurable
 	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
+	private TileController tileController;
 	private RegionController regionController;
 	private TaskManager taskManager;
 	public static String nonce = "%%__NONCE__%%";
@@ -208,6 +209,7 @@ public class React extends JavaPlugin implements Configurable
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
+		tileController = new TileController(this);
 		
 		dataController.load((String) null, configurationController);
 		
@@ -216,6 +218,7 @@ public class React extends JavaPlugin implements Configurable
 		dataController.load((String) null, this);
 		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
+		dataController.load((String) null, tileController);
 		setupTicker();
 		Info.rebuildLang();
 		GFile fcx = new GFile(new GFile(getDataFolder(), "cache"), "timings.yml");
@@ -1269,5 +1272,20 @@ public class React extends JavaPlugin implements Configurable
 	{
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public TileController getTileController()
+	{
+		return tileController;
+	}
+	
+	public static String getRC_NONCE()
+	{
+		return RC_NONCE;
+	}
+	
+	public static String getRC_UIVD()
+	{
+		return RC_UIVD;
 	}
 }

@@ -233,16 +233,25 @@ public class CommandController extends Controller implements CommandExecutor
 					
 					int csize = h.k().size();
 					p.sendMessage(String.format(Info.HRN, "Scan [" + z.getX() + ", " + z.getZ() + "]"));
-					p.sendMessage(Info.TAG + "There are " + csize + " lag contributing factors in this chunk.");
 					
-					for(InstabilityCause i : h.k())
+					if(csize > 0)
 					{
-						int weight = h.get(i);
-						p.sendMessage(Info.TAG + i.getName() + ": " + C.WHITE + weight);
+						p.sendMessage(Info.TAG + "There are " + csize + " lag contributing factors in this chunk.");
+						
+						for(InstabilityCause i : h.k())
+						{
+							int weight = h.get(i);
+							p.sendMessage(Info.TAG + i.getName() + ": " + C.WHITE + weight);
+						}
 					}
 					
-					p.sendMessage(Info.TAG + "There are " + F.f(eCount) + " entities in this chunk.");
-					p.sendMessage(Info.TAG + "There are " + F.f(tCount) + " tile entities in this chunk.");
+					p.sendMessage(Info.TAG + "Entities: " + C.WHITE + F.f(eCount) + C.GRAY + " Tiles: " + C.WHITE + F.f(tCount));
+					
+					if(React.instance().getTileController().is())
+					{
+						p.sendMessage(Info.TAG + "Tile Utilization: " + C.WHITE + F.f(z.getTileEntities().length) + " / " + F.f(React.instance().getTileController().getMaxTc()) + " (" + F.pc((double) z.getTileEntities().length / (double) React.instance().getTileController().getMaxTc()) + ")");
+					}
+					
 					p.sendMessage(Info.HR);
 				}
 				

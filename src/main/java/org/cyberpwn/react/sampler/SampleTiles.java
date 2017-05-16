@@ -6,7 +6,6 @@ import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
-import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.ValueType;
 
@@ -28,23 +27,16 @@ public class SampleTiles extends Sample implements Listener
 	@Override
 	public void onTick()
 	{
-		new ASYNC()
+		getValue().setNumber(entities);
+		entities = 0;
+		
+		for(World i : sampleController.getReact().getServer().getWorlds())
 		{
-			@Override
-			public void async()
+			for(Chunk c : i.getLoadedChunks())
 			{
-				getValue().setNumber(entities);
-				entities = 0;
-				
-				for(World i : sampleController.getReact().getServer().getWorlds())
-				{
-					for(Chunk c : i.getLoadedChunks())
-					{
-						entities += c.getTileEntities().length;
-					}
-				}
+				entities += c.getTileEntities().length;
 			}
-		};
+		}
 	}
 	
 	@Override
