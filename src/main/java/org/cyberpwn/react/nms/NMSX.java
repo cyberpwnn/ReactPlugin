@@ -230,7 +230,6 @@ public class NMSX
 				eSubtitle = NMSX.getNMSClass("PacketPlayOutTitle").getDeclaredClasses()[0].getField("SUBTITLE").get(null);
 			}
 			
-			
 			Constructor<?> subtitleConstructor;
 			
 			if(title != null)
@@ -410,7 +409,7 @@ public class NMSX
 	
 	public static String getEntityName(Entity e)
 	{
-		if(VersionBukkit.tc())
+		if(!VersionBukkit.tc())
 		{
 			return null;
 		}

@@ -9,7 +9,8 @@ public enum VersionBukkit
 	V8,
 	V9,
 	V11,
-	V111;	
+	V111;
+	
 	public static boolean tc()
 	{
 		if(get().equals(V7))

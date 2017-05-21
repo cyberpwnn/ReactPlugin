@@ -210,9 +210,7 @@ public class React extends JavaPlugin implements Configurable
 		taskManager = new TaskManager(this);
 		regionController = new RegionController(this);
 		tileController = new TileController(this);
-		
 		dataController.load((String) null, configurationController);
-		
 		dataController.load((String) null, taskManager);
 		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);

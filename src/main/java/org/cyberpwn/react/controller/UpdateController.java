@@ -92,10 +92,10 @@ public class UpdateController extends Controller implements Configurable
 			return;
 		}
 		
-		new ASYNC()
+		new Thread(new Runnable()
 		{
 			@Override
-			public void async()
+			public void run()
 			{
 				try
 				{
@@ -116,7 +116,7 @@ public class UpdateController extends Controller implements Configurable
 					ex.printStackTrace();
 				}
 			}
-		};
+		});
 	}
 	
 	public void auth(final CommandSender sender, String u, String p, String h)

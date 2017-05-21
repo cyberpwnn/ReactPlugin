@@ -726,6 +726,11 @@ public class ActionInstabilityCause extends Action implements Listener
 		long playerimp = playermb - playerch;
 		long max = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryMax() / 1024 / 1024;
 		
+		if(playerimp == 0)
+		{
+			playerimp = 1;
+		}
+		
 		return max / playerimp;
 	}
 	

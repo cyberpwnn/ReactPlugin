@@ -12,7 +12,7 @@ public class Controller implements Controllable, Listener
 	public Controller(React react)
 	{
 		this.react = react;
-		this.dispatcher = new Dispatcher(this.getClass().getSimpleName());
+		dispatcher = new Dispatcher(this.getClass().getSimpleName());
 		this.react.register(this);
 		this.react.registerController(this);
 	}
