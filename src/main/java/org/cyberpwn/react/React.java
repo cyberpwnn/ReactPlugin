@@ -34,7 +34,6 @@ import org.cyberpwn.react.controller.ScoreboardController;
 import org.cyberpwn.react.controller.TaskManager;
 import org.cyberpwn.react.controller.TileController;
 import org.cyberpwn.react.controller.TimingsController;
-import org.cyberpwn.react.controller.UpdateController;
 import org.cyberpwn.react.controller.WorldController;
 import org.cyberpwn.react.file.FileHack;
 import org.cyberpwn.react.file.ICopy;
@@ -110,7 +109,6 @@ public class React extends JavaPlugin implements Configurable
 	private ActionController actionController;
 	private LanguageController languageController;
 	private NetworkController networkController;
-	private UpdateController updateController;
 	private WorldController worldController;
 	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
@@ -202,7 +200,6 @@ public class React extends JavaPlugin implements Configurable
 		timingsController = new TimingsController(this);
 		channelListenController = new ChannelListenController(this);
 		worldController = new WorldController(this);
-		updateController = new UpdateController(this);
 		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
 		lagMapController = new LagMapController(this);
@@ -214,7 +211,6 @@ public class React extends JavaPlugin implements Configurable
 		dataController.load((String) null, taskManager);
 		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);
-		dataController.load((String) null, updateController);
 		dataController.load((String) null, limitingController);
 		dataController.load((String) null, tileController);
 		setupTicker();
@@ -1092,11 +1088,6 @@ public class React extends JavaPlugin implements Configurable
 		return justUpdated;
 	}
 	
-	public UpdateController getUpdateController()
-	{
-		return updateController;
-	}
-	
 	public ScoreboardController getScoreboardController()
 	{
 		return scoreboardController;
@@ -1110,11 +1101,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setJustUpdated(boolean justUpdated)
 	{
 		this.justUpdated = justUpdated;
-	}
-	
-	public void setUpdateController(UpdateController updateController)
-	{
-		this.updateController = updateController;
 	}
 	
 	public ChannelListenController getChannelListenController()

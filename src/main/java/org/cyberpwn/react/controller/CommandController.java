@@ -332,7 +332,6 @@ public class CommandController extends Controller implements CommandExecutor
 			{
 				CommandSender sender = getSender();
 				sender.sendMessage(Info.TAG + ChatColor.AQUA + "React " + ChatColor.YELLOW + Version.V);
-				React.instance().getUpdateController().version(sender);
 			}
 		}, L.COMMAND_VERSION, "version", "v", "ver"));
 		
@@ -366,85 +365,6 @@ public class CommandController extends Controller implements CommandExecutor
 				getReact().getSampleController().setCaffeine(c);
 			}
 		}, L.COMMAND_VERSION, "caffeine", "caff", "wake-up"));
-		
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
-			@SuppressWarnings("deprecation")
-			@Override
-			public void run()
-			{
-				CommandSender sender = getSender();
-				String args[] = getArgs();
-				
-				if(args.length == 1)
-				{
-					if(sender instanceof Player)
-					{
-						Player p = ((Player) sender);
-						
-						if(p.getItemInHand() != null && p.getItemInHand().getType().equals(Material.BOOK_AND_QUILL))
-						{
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "On the first page must be username:password");
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "Then sign and close, and re-run /re auth");
-						}
-						
-						else if(p.getItemInHand() != null && p.getItemInHand().getType().equals(Material.WRITTEN_BOOK))
-						{
-							boolean f = false;
-							BookMeta bm = (BookMeta) p.getItemInHand().getItemMeta();
-							
-							for(String i : bm.getPages())
-							{
-								if(i.contains(":"))
-								{
-									String ux = "";
-									String px = "";
-									String hx = "NONE";
-									
-									if(i.split(":").length == 2)
-									{
-										ux = i.split(":")[0];
-										px = i.split(":")[1];
-										React.instance().getUpdateController().auth(p, ux, px, hx);
-									}
-									
-									else if(i.split(":").length == 3)
-									{
-										ux = i.split(":")[0];
-										px = i.split(":")[1];
-										hx = i.split(":")[2];
-										React.instance().getUpdateController().auth(p, ux, px, hx);
-									}
-									
-									p.setItemInHand(new ItemStack(Material.AIR));
-									f = true;
-									break;
-								}
-							}
-							
-							if(!f)
-							{
-								sender.sendMessage(Info.TAG + ChatColor.GRAY + "On the First page must be username:password");
-								sender.sendMessage(Info.TAG + ChatColor.GRAY + "Could not match pattern.");
-							}
-						}
-						
-						else
-						{
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Authentication data is stored in the react cache");
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* All credentials are encrypted");
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* Your credentials will only be used for updates");
-							sender.sendMessage(Info.TAG + ChatColor.GRAY + "* The command executed will not be logged");
-							sender.sendMessage(Info.TAG + ChatColor.RED + "Console Only!");
-							sender.sendMessage(Info.TAG + ChatColor.RED + "/react-auth <username> <password>");
-							sender.sendMessage(Info.TAG + ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
-							sender.sendMessage(Info.TAG + ChatColor.RED + "/re auth (while holding written book) <u:p[:h]>");
-							sender.sendMessage(Info.HR);
-						}
-					}
-				}
-			}
-		}, L.COMMAND_AUTH, "authenticate", "au", "auth"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
@@ -1517,15 +1437,6 @@ public class CommandController extends Controller implements CommandExecutor
 			@Override
 			public void run()
 			{
-				React.instance().getUpdateController().update(getSender());
-			}
-		}, L.COMMAND_UPDATE, "update", "u", "up"));
-		
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
-			@Override
-			public void run()
-			{
 				CommandSender sender = getSender();
 				getReact().onReload(sender);
 			}
@@ -1775,48 +1686,9 @@ public class CommandController extends Controller implements CommandExecutor
 		}
 	}
 	
-	public void handle(CommandSender s, String msg)
-	{
-		if(msg.startsWith("/react-auth") || msg.startsWith("react-auth"))
-		{
-			String u = "";
-			String p = "";
-			String h = "NONE";
-			
-			if(msg.split(" ").length == 3)
-			{
-				u = msg.split(" ")[1];
-				p = msg.split(" ")[2];
-				React.instance().getUpdateController().auth(s, u, p, h);
-			}
-			
-			else if(msg.split(" ").length == 3)
-			{
-				u = msg.split(" ")[1];
-				p = msg.split(" ")[2];
-				h = msg.split(" ")[3];
-				React.instance().getUpdateController().auth(s, u, p, h);
-			}
-			
-			else
-			{
-				s.sendMessage(ChatColor.RED + "Console Only!");
-				s.sendMessage(ChatColor.RED + "/react-auth <username> <password>");
-				s.sendMessage(ChatColor.RED + "2fa: /react-auth <username> <password> <2fa secret>");
-			}
-		}
-	}
-	
 	@EventHandler
 	public void onServer(ServerCommandEvent e)
 	{
-		if(e.getCommand().startsWith("react-auth"))
-		{
-			handle(e.getSender(), e.getCommand());
-			e.setCancelled(true);
-			return;
-		}
-		
 		if(e.getCommand().equalsIgnoreCase("timings off"))
 		{
 			if(e.getSender().hasPermission("bukkit.command.timings"))

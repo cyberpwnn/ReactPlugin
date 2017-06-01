@@ -175,6 +175,11 @@ public class ActionCullDrops extends Action implements Listener
 		{
 			if(i.getType().equals(EntityType.DROPPED_ITEM))
 			{
+				if(((Item) i).getTicksLived() < 10)
+				{
+					continue;
+				}
+				
 				if(!can(i.getLocation()))
 				{
 					continue;
