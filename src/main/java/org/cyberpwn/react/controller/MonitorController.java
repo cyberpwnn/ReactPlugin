@@ -232,7 +232,7 @@ public class MonitorController extends Controller implements Configurable
 			
 			catch(Exception e)
 			{
-				
+				e.printStackTrace();
 			}
 			
 			if(getReact().getConfiguration().getBoolean("monitor.ticking.dynamic"))

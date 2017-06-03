@@ -347,7 +347,18 @@ public class NMSX
 				c2 = Class.forName("net.minecraft.server." + nmsver + ".ChatComponentText");
 				c3 = Class.forName("net.minecraft.server." + nmsver + ".IChatBaseComponent");
 				Object o = c2.getConstructor(String.class).newInstance(message);
-				ppoc = c4.getConstructor(c3, Byte.TYPE).newInstance(o, Byte.valueOf((byte) 2));
+				
+				if(VersionBukkit.get().equals(VersionBukkit.V112))
+				{
+					Class<?> c6 = Class.forName("net.minecraft.server." + nmsver + ".ChatMessageType");
+					Object type = c6.getMethod("valueOf", String.class).invoke(null, "GAME_INFO");
+					ppoc = c4.getConstructor(c3, c6).newInstance(o, type);
+				}
+				
+				else
+				{
+					ppoc = c4.getConstructor(c3, Byte.TYPE).newInstance(o, Byte.valueOf((byte) 2));
+				}
 			}
 			
 			Method m1 = c1.getDeclaredMethod("getHandle", new Class[0]);

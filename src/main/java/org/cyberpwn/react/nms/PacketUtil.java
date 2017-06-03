@@ -11,7 +11,8 @@ public class PacketUtil
 		R18,
 		R19,
 		R111,
-		R110;
+		R110,
+		R112;
 	}
 	
 	public static V getVersion()
@@ -19,6 +20,11 @@ public class PacketUtil
 		if(Bukkit.getBukkitVersion().startsWith("1.11"))
 		{
 			return V.R111;
+		}
+		
+		if(Bukkit.getBukkitVersion().startsWith("1.12"))
+		{
+			return V.R112;
 		}
 		
 		if(Bukkit.getBukkitVersion().startsWith("1.10"))
@@ -89,7 +95,7 @@ public class PacketUtil
 		
 		catch(Exception e)
 		{
-			
+			e.printStackTrace();
 		}
 	}
 }
