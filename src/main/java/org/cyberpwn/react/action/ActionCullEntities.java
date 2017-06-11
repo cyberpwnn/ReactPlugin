@@ -23,10 +23,9 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
-import org.cyberpwn.react.util.ExecutiveIterator;
-import org.cyberpwn.react.util.ExecutiveRunnable;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.Task;
 import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.VersionBukkit;
 
@@ -55,22 +54,11 @@ public class ActionCullEntities extends Action implements Listener
 		lastCulled = 0;
 		lastTick = 0;
 		
-		new ExecutiveIterator<World>(0.1, new GList<World>(Bukkit.getWorlds()), new ExecutiveRunnable<World>()
+		for(World i : Bukkit.getWorlds())
 		{
-			@Override
-			public void run()
-			{
-				cull(next());
-				lastTick++;
-			}
-		}, new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				
-			}
-		});
+			cull(i);
+			lastTick++;
+		}
 	}
 	
 	@Override
@@ -282,17 +270,30 @@ public class ActionCullEntities extends Action implements Listener
 	
 	public void cull(World w)
 	{
-		for(Chunk i : w.getLoadedChunks())
+		GList<Chunk> c = new GList<Chunk>(w.getLoadedChunks());
+		
+		new Task(0)
 		{
-			getActionController().getActionStackEntities().stack(i);
-			
-			if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
+			@Override
+			public void run()
 			{
-				cull(i);
+				if(c.isEmpty())
+				{
+					cancel();
+					return;
+				}
+				
+				Chunk i = c.pop();
+				getActionController().getActionStackEntities().stack(i);
+				
+				if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
+				{
+					cull(i);
+				}
+				
+				actionController.getActionDullEntities().dull(i);
 			}
-			
-			actionController.getActionDullEntities().dull(i);
-		}
+		};
 	}
 	
 	public boolean isCullable(Entity e)

@@ -10,10 +10,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -334,6 +337,39 @@ public class CommandController extends Controller implements CommandExecutor
 				sender.sendMessage(Info.TAG + ChatColor.AQUA + "React " + ChatColor.YELLOW + Version.V);
 			}
 		}, L.COMMAND_VERSION, "version", "v", "ver"));
+		
+		commands.add(new ReactCommand(new CommandRunnable()
+		{
+			@Override
+			public void run()
+			{
+				int v = 0;
+				
+				for(World i : Bukkit.getWorlds())
+				{
+					for(Chunk j : i.getLoadedChunks())
+					{
+						for(Entity k : j.getEntities())
+						{
+							if(k instanceof Player)
+							{
+								continue;
+							}
+							
+							if(!(k instanceof LivingEntity))
+							{
+								continue;
+							}
+							
+							v++;
+							NMSX.setAi((LivingEntity) k, true);
+						}
+					}
+				}
+				
+				getSender().sendMessage(Info.TAG + "Fixed " + F.f(v) + " entities!");
+			}
+		}, "Fix entities stuck without ai", "fix-entities", "fixe", "fe"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{
