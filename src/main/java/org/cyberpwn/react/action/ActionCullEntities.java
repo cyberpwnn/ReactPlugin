@@ -272,6 +272,11 @@ public class ActionCullEntities extends Action implements Listener
 	{
 		GList<Chunk> c = new GList<Chunk>(w.getLoadedChunks());
 		
+		if(c.isEmpty())
+		{
+			return;
+		}
+		
 		new Task(0)
 		{
 			@Override
