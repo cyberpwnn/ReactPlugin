@@ -14,6 +14,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredListener;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scheduler.BukkitWorker;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.ReactAPI;
 import org.cyberpwn.react.cluster.ClusterConfig;
@@ -753,6 +754,21 @@ public class ActionInstabilityCause extends Action implements Listener
 		GList<BukkitTask> br = new GList<BukkitTask>();
 		
 		for(BukkitTask i : getActionController().getReact().getServer().getScheduler().getPendingTasks())
+		{
+			if(i.getOwner().equals(plugin))
+			{
+				br.add(i);
+			}
+		}
+		
+		return br;
+	}
+	
+	public GList<BukkitWorker> tasksActive(Plugin plugin)
+	{
+		GList<BukkitWorker> br = new GList<BukkitWorker>();
+		
+		for(BukkitWorker i : getActionController().getReact().getServer().getScheduler().getActiveWorkers())
 		{
 			if(i.getOwner().equals(plugin))
 			{

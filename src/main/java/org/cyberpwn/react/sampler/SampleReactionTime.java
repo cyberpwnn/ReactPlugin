@@ -1,6 +1,7 @@
 package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
+import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.U;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
@@ -92,7 +93,7 @@ public class SampleReactionTime extends Sample
 	@Override
 	public String formatted(boolean acc)
 	{
-		return U.status(acc);
+		return U.status(acc) + " (" + React.instance.getActionController().getActionInstabilityCause().tasksActive(React.instance) + " / " + React.instance.getActionController().getActionInstabilityCause().tasks(React.instance).size() + " Tasks)";
 	}
 	
 	@Override

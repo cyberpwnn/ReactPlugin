@@ -25,8 +25,6 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
-import org.cyberpwn.react.util.Task;
-import org.cyberpwn.react.util.TaskLater;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionCullEntities extends Action implements Listener
@@ -233,7 +231,6 @@ public class ActionCullEntities extends Action implements Listener
 	public void cull(GList<Entity> ent)
 	{
 		Collections.shuffle(ent);
-		int k = 0;
 		
 		for(Entity i : ent)
 		{
@@ -242,16 +239,7 @@ public class ActionCullEntities extends Action implements Listener
 				continue;
 			}
 			
-			k += 1;
-			
-			new TaskLater(k)
-			{
-				@Override
-				public void run()
-				{
-					cull(i);
-				}
-			};
+			cull(i);
 		}
 	}
 	
@@ -277,28 +265,22 @@ public class ActionCullEntities extends Action implements Listener
 			return;
 		}
 		
-		new Task(0)
+		if(c.isEmpty())
 		{
-			@Override
-			public void run()
+			return;
+		}
+		
+		for(Chunk i : c)
+		{
+			getActionController().getActionStackEntities().stack(i);
+			
+			if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 			{
-				if(c.isEmpty())
-				{
-					cancel();
-					return;
-				}
-				
-				Chunk i = c.pop();
-				getActionController().getActionStackEntities().stack(i);
-				
-				if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
-				{
-					cull(i);
-				}
-				
-				actionController.getActionDullEntities().dull(i);
+				cull(i);
 			}
-		};
+			
+			actionController.getActionDullEntities().dull(i);
+		}
 	}
 	
 	public boolean isCullable(Entity e)

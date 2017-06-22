@@ -93,7 +93,7 @@ public class React extends JavaPlugin implements Configurable
 	private static String vText;
 	private static boolean nf;
 	private static MonitorPacket packet;
-	private static React instance;
+	public static React instance;
 	private final int[] tskx = {0};
 	private GList<Controllable> controllers;
 	private ClusterConfig cc;
