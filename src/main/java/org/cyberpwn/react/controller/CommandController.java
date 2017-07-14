@@ -45,7 +45,6 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.server.ReactServer;
-import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Amounts;
 import org.cyberpwn.react.util.C;
 import org.cyberpwn.react.util.CPUTest;
@@ -1291,25 +1290,6 @@ public class CommandController extends Controller implements CommandExecutor
 				}
 			}
 		}, L.COMMAND_MONITOR, "monitor", "mon", "m"));
-		
-		commands.add(new ReactCommand(new CommandRunnable()
-		{
-			@Override
-			public void run()
-			{
-				CommandSender sender = getSender();
-				
-				new ASYNC()
-				{
-					@Override
-					public void async()
-					{
-						String url = React.dump();
-						sender.sendMessage(Info.TAG + ChatColor.GRAY + "Dumped: " + ChatColor.WHITE + url);
-					}
-				};
-			}
-		}, L.COMMAND_DUMP, "dump", "d", "du", "out"));
 		
 		commands.add(new ReactCommand(new CommandRunnable()
 		{

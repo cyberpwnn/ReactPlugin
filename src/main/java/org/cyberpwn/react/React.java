@@ -22,7 +22,6 @@ import org.cyberpwn.react.controller.DataController;
 import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
-import org.cyberpwn.react.controller.LimitingController;
 import org.cyberpwn.react.controller.MonitorController;
 import org.cyberpwn.react.controller.NetworkController;
 import org.cyberpwn.react.controller.PlayerController;
@@ -43,13 +42,11 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.Title;
 import org.cyberpwn.react.queue.ParallelPoolManager;
 import org.cyberpwn.react.queue.TICK;
-import org.cyberpwn.react.sampler.Samplable;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
 import org.cyberpwn.react.util.Dispatcher;
-import org.cyberpwn.react.util.Dump;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.FM;
 import org.cyberpwn.react.util.GFile;
@@ -58,10 +55,7 @@ import org.cyberpwn.react.util.HijackedConsole;
 import org.cyberpwn.react.util.JavaPlugin;
 import org.cyberpwn.react.util.M;
 import org.cyberpwn.react.util.Metrics;
-import org.cyberpwn.react.util.Metrics.Graph;
-import org.cyberpwn.react.util.Metrics.Plotter;
 import org.cyberpwn.react.util.MonitorPacket;
-import org.cyberpwn.react.util.Paste;
 import org.cyberpwn.react.util.PhantomSpinner;
 import org.cyberpwn.react.util.PlaceholderHook;
 import org.cyberpwn.react.util.Platform;
@@ -113,7 +107,6 @@ public class React extends JavaPlugin implements Configurable
 	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
-	private LimitingController limitingController;
 	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
@@ -200,7 +193,6 @@ public class React extends JavaPlugin implements Configurable
 		timingsController = new TimingsController(this);
 		channelListenController = new ChannelListenController(this);
 		worldController = new WorldController(this);
-		limitingController = new LimitingController(this);
 		eventListenerController = new EventListenerController(this);
 		lagMapController = new LagMapController(this);
 		consoleController = new ConsoleController(this);
@@ -211,7 +203,6 @@ public class React extends JavaPlugin implements Configurable
 		dataController.load((String) null, taskManager);
 		dataController.load((String) null, consoleController);
 		dataController.load((String) null, this);
-		dataController.load((String) null, limitingController);
 		dataController.load((String) null, tileController);
 		setupTicker();
 		Info.rebuildLang();
@@ -294,39 +285,7 @@ public class React extends JavaPlugin implements Configurable
 			}
 		};
 		
-		if(stats)
-		{
-			try
-			{
-				d.v(L.DEBUG_METRICS_START);
-				metrics = new Metrics(React.this);
-				Graph gversion = metrics.createGraph("R1-React Version");
-				gversion.addPlotter(new Plotter(ChatColor.stripColor(Info.VERSION))
-				{
-					@Override
-					public int getValue()
-					{
-						return 1;
-					}
-				});
-				
-				for(Samplable i : sampleController.getSamples().keySet())
-				{
-					Graph gmsamplers = metrics.createGraph("R1-" + i.getName());
-					i.onMetricsPlot(gmsamplers);
-				}
-			}
-			
-			catch(IOException e)
-			{
-				
-			}
-		}
-		
-		else
-		{
-			d.w("Statistics Disabled");
-		}
+		stats = false;
 		
 		new Task(0)
 		{
@@ -478,26 +437,6 @@ public class React extends JavaPlugin implements Configurable
 		}
 		
 		HijackedConsole.hijacked = false;
-	}
-	
-	public static String dump()
-	{
-		Dump dump = new Dump(instance);
-		dump.onNewConfig(dump.getConfiguration());
-		String pString = null;
-		
-		try
-		{
-			dump.getConfiguration().toYaml().save(new GFile(new GFile(instance.getDataFolder(), "dumps"), dump.getCodeName() + ".yml"));
-			pString = Paste.paste(dump.getConfiguration().toYaml().saveToString());
-		}
-		
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-		return pString;
 	}
 	
 	public void i(String s)
@@ -1111,16 +1050,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setChannelListenController(ChannelListenController channelListenController)
 	{
 		this.channelListenController = channelListenController;
-	}
-	
-	public LimitingController getLimitingController()
-	{
-		return limitingController;
-	}
-	
-	public void setLimitingController(LimitingController limitingController)
-	{
-		this.limitingController = limitingController;
 	}
 	
 	public static void setNonce(String nonce)
