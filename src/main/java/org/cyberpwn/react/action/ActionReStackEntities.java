@@ -21,6 +21,7 @@ public class ActionReStackEntities extends Action implements Listener
 		super(actionController, Material.SLIME_BALL, "re-stack-entities", "ActionReStackEntities", 100, "Re-Stack Entities", L.ACTION_RESTACKENTITIES, true);
 		
 		aliases.add("restack");
+		maxSleepFactor = 3.2;
 	}
 	
 	@Override

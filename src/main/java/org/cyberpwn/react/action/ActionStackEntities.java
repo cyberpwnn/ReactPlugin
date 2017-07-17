@@ -48,6 +48,7 @@ public class ActionStackEntities extends Action implements Listener
 		stacks = new GList<StackedEntity>();
 		React.instance().register(this);
 		aliases.add("stack");
+		maxSleepFactor = 3.2;
 	}
 	
 	@Override

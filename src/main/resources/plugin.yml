@@ -9,7 +9,7 @@ softdepend: [WorldEdit, AsyncWorldEdit, WorldGuard, FastAsyncWorldEdit, WorldBor
 commands:
   react:
     aliases: [re, ract, stability, st]
-permissions:
+permissions: 
   react.*:
     description: Gives access to all React permissions
     default: op

@@ -60,6 +60,8 @@ public class ActionInstabilityCause extends Action implements Listener
 		lagging = false;
 		force = false;
 		maxRedstone = -1;
+		maxSleepFactor = 1;
+		sleepy = false;
 	}
 	
 	public boolean su(Player p)

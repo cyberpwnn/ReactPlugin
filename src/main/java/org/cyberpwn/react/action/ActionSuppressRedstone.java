@@ -28,6 +28,7 @@ public class ActionSuppressRedstone extends Action implements Listener
 		frozen = false;
 		freezeAll = false;
 		aliases.add("rfreeze");
+		maxSleepFactor = 3.2;
 	}
 	
 	@Override

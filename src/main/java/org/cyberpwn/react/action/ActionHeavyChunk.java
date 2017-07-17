@@ -30,6 +30,7 @@ public class ActionHeavyChunk extends Action implements Listener
 		aliases.add("heavy");
 		aliases.add("findlag");
 		aliases.add("source");
+		maxSleepFactor = 8.2;
 	}
 	
 	@Override

@@ -27,6 +27,7 @@ public class ActionPurgeDrops extends Action implements Listener
 		
 		aliases.add("purged");
 		aliases.add("pd");
+		maxSleepFactor = 2.2;
 	}
 	
 	@Override

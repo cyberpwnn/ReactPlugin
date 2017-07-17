@@ -44,6 +44,7 @@ public class ActionCullEntities extends Action implements Listener
 		aliases.add("ce");
 		aliases.add("cullm");
 		aliases.add("culle");
+		maxSleepFactor = 1.2;
 	}
 	
 	@Override

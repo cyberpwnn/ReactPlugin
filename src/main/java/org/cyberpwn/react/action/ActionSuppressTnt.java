@@ -30,6 +30,7 @@ public class ActionSuppressTnt extends Action implements Listener
 		dissd = false;
 		aliases.add("tnt");
 		aliases.add("ptnt");
+		maxSleepFactor = 3.2;
 	}
 	
 	@Override

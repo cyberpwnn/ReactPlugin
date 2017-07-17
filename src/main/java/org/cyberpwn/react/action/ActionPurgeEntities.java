@@ -39,6 +39,7 @@ public class ActionPurgeEntities extends Action implements Listener
 		aliases.add("pe");
 		aliases.add("purgem");
 		aliases.add("pm");
+		maxSleepFactor = 1.2;
 	}
 	
 	@Override

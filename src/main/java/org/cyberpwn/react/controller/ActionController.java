@@ -109,7 +109,7 @@ public class ActionController extends Controller
 					
 					try
 					{
-						i.act();
+						i.preAct();
 					}
 					
 					catch(Exception e)
@@ -229,7 +229,7 @@ public class ActionController extends Controller
 	{
 		return actionReStackEntities;
 	}
-
+	
 	public ActionDullEntities getActionDullEntities()
 	{
 		return actionDullEntities;

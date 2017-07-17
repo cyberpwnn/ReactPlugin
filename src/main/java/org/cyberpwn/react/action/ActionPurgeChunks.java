@@ -37,6 +37,7 @@ public class ActionPurgeChunks extends Action implements Listener
 		aliases.add("purgec");
 		aliases.add("pc");
 		limit = 60;
+		maxSleepFactor = 10.2;
 	}
 	
 	@Override

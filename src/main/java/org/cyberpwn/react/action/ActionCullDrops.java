@@ -49,6 +49,7 @@ public class ActionCullDrops extends Action implements Listener
 		React.instance().register(this);
 		aliases.add("cd");
 		aliases.add("culld");
+		maxSleepFactor = 2.2;
 	}
 	
 	@Override

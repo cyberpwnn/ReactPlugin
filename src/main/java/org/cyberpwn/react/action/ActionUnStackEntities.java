@@ -23,6 +23,7 @@ public class ActionUnStackEntities extends Action implements Listener
 		super(actionController, Material.WOOD_SWORD, "un-stack-entities", "ActionUnStackEntities", 100, "Un-Stack Entities", L.ACTION_UNSTACKENTITIES, true);
 		
 		aliases.add("unstack");
+		maxSleepFactor = 3.2;
 	}
 	
 	@Override

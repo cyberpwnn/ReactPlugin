@@ -28,6 +28,7 @@ public class ActionSuppressGrowth extends Action implements Listener
 		
 		maxPerInterval = 5;
 		cache = new GMap<Chunk, Integer>();
+		maxSleepFactor = 8.2;
 	}
 	
 	@Override

@@ -2,9 +2,9 @@ package org.cyberpwn.react.sampler;
 
 import org.bukkit.ChatColor;
 import org.cyberpwn.react.React;
-import org.cyberpwn.react.api.U;
 import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.Metrics;
 import org.cyberpwn.react.util.Metrics.Graph;
@@ -93,7 +93,7 @@ public class SampleReactionTime extends Sample
 	@Override
 	public String formatted(boolean acc)
 	{
-		return U.status(acc) + " (" + React.instance.getActionController().getActionInstabilityCause().tasksActive(React.instance) + " / " + React.instance.getActionController().getActionInstabilityCause().tasks(React.instance).size() + " Tasks)";
+		return "APM: " + F.f((int) (React.afn.getAverage() * 20 * 60));
 	}
 	
 	@Override

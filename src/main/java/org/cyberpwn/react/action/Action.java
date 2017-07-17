@@ -13,6 +13,7 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
+import org.cyberpwn.react.queue.TICK;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.N;
@@ -22,6 +23,7 @@ public class Action implements Actionable, Configurable
 {
 	public static String RC_NONCE = "%%__NONCE__%%";
 	public static String RC_UIVD = "%%__UID__%%";
+	public static int APT = 0;
 	protected final ActionController actionController;
 	protected final String name;
 	protected final String cname;
@@ -34,6 +36,11 @@ public class Action implements Actionable, Configurable
 	protected Boolean enabled;
 	protected Integer idealTick;
 	protected GList<String> aliases;
+	protected boolean sleepy;
+	protected double maxSleepFactor;
+	protected int sleepyTicks;
+	protected long lastTick;
+	protected double dfacx;
 	
 	public Action(ActionController actionController, Material material, String key, String cname, Integer idealTick, String name, String description, boolean manual)
 	{
@@ -49,6 +56,11 @@ public class Action implements Actionable, Configurable
 		this.cname = cname;
 		reactionTime = 0l;
 		this.manual = manual;
+		sleepy = true;
+		lastTick = TICK.tick;
+		maxSleepFactor = 3;
+		sleepyTicks = 20;
+		dfacx = 5.353;
 		
 		actionController.registerAction(this);
 	}
@@ -71,11 +83,48 @@ public class Action implements Actionable, Configurable
 			return;
 		}
 		
-		if(enabled && !React.isMef())
+		if(enabled)
 		{
-			N.t("Fired Action " + getName());
+			long since = TICK.tick - lastTick;
+			
+			if(isAsleep())
+			{
+				if(since < sleepyTicks)
+				{
+					return;
+				}
+			}
+			
+			nap();
+			lastTick = TICK.tick;
 			act();
+			APT++;
 		}
+	}
+	
+	public void nap()
+	{
+		sleepyTicks = (int) ((maxSleepFactor * idealTick * Math.random() * dfacx) + 2);
+	}
+	
+	public boolean isAsleep()
+	{
+		if(getActionController().getReact().getSampleController().isCaffeine())
+		{
+			return false;
+		}
+		
+		if(!sleepy)
+		{
+			return false;
+		}
+		
+		if(sleepyTicks > 0)
+		{
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override
@@ -89,6 +138,8 @@ public class Action implements Actionable, Configurable
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
 		React.instance().getServer().getPluginManager().callEvent(mae);
+		lastTick = TICK.tick;
+		nap();
 		
 		if(mae.isCancelled())
 		{

@@ -10,6 +10,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.cyberpwn.react.action.Action;
 import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.controller.ActionController;
@@ -19,7 +20,6 @@ import org.cyberpwn.react.controller.ConfigurationController;
 import org.cyberpwn.react.controller.ConsoleController;
 import org.cyberpwn.react.controller.Controllable;
 import org.cyberpwn.react.controller.DataController;
-import org.cyberpwn.react.controller.EventListenerController;
 import org.cyberpwn.react.controller.LagMapController;
 import org.cyberpwn.react.controller.LanguageController;
 import org.cyberpwn.react.controller.MonitorController;
@@ -43,6 +43,7 @@ import org.cyberpwn.react.nms.Title;
 import org.cyberpwn.react.queue.ParallelPoolManager;
 import org.cyberpwn.react.queue.TICK;
 import org.cyberpwn.react.util.ASYNC;
+import org.cyberpwn.react.util.Average;
 import org.cyberpwn.react.util.Base64;
 import org.cyberpwn.react.util.CFX;
 import org.cyberpwn.react.util.CPUTest;
@@ -107,7 +108,6 @@ public class React extends JavaPlugin implements Configurable
 	private ChannelListenController channelListenController;
 	private TimingsController timingsController;
 	private ScoreboardController scoreboardController;
-	private EventListenerController eventListenerController;
 	private LagMapController lagMapController;
 	private ConsoleController consoleController;
 	private TileController tileController;
@@ -127,6 +127,7 @@ public class React extends JavaPlugin implements Configurable
 	public static GList<Runnable> runnables;
 	public static String RC_NONCE = "%%__NONCE__%%";
 	public static String RC_UIVD = "%%__UID__%%";
+	public static Average afn;
 	
 	@Override
 	public void onEnable()
@@ -159,7 +160,7 @@ public class React extends JavaPlugin implements Configurable
 	{
 		d = new Dispatcher("React");
 		instance = this;
-		
+		afn = new Average(200);
 		setVerbose(false);
 		asr = false;
 		cc = new ClusterConfig();
@@ -193,7 +194,6 @@ public class React extends JavaPlugin implements Configurable
 		timingsController = new TimingsController(this);
 		channelListenController = new ChannelListenController(this);
 		worldController = new WorldController(this);
-		eventListenerController = new EventListenerController(this);
 		lagMapController = new LagMapController(this);
 		consoleController = new ConsoleController(this);
 		taskManager = new TaskManager(this);
@@ -287,6 +287,22 @@ public class React extends JavaPlugin implements Configurable
 		
 		stats = false;
 		
+		new TaskLater(100)
+		{
+			@Override
+			public void run()
+			{
+				File f = new File(getDataFolder(), "config.yml");
+				
+				if(f.length() == 0)
+				{
+					System.out.println("Failed to gen configs for react.");
+					System.out.println("Calling tweak method...");
+					getConfigurationController().rebuildConfigurations(Bukkit.getConsoleSender());
+				}
+			}
+		};
+		
 		new Task(0)
 		{
 			@Override
@@ -331,6 +347,10 @@ public class React extends JavaPlugin implements Configurable
 						
 					}
 				}
+				
+				int afm = Action.APT;
+				Action.APT = 0;
+				afn.put(afm);
 			}
 		};
 		
@@ -1057,11 +1077,6 @@ public class React extends JavaPlugin implements Configurable
 		React.nonce = nonce;
 	}
 	
-	public EventListenerController getEventListenerController()
-	{
-		return eventListenerController;
-	}
-	
 	public static boolean isDreact()
 	{
 		return dreact;
@@ -1075,11 +1090,6 @@ public class React extends JavaPlugin implements Configurable
 	public void setLagMapController(LagMapController lagMapController)
 	{
 		this.lagMapController = lagMapController;
-	}
-	
-	public void setEventListenerController(EventListenerController eventListenerController)
-	{
-		this.eventListenerController = eventListenerController;
 	}
 	
 	public static void setDreact(boolean dreact)

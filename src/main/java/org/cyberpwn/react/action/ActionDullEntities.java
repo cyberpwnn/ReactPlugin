@@ -32,6 +32,7 @@ public class ActionDullEntities extends Action implements Listener
 		
 		aliases.add("dm");
 		aliases.add("dull");
+		maxSleepFactor = 8.2;
 	}
 	
 	@Override
