@@ -86,12 +86,20 @@ public class RegionController extends Controller
 	{
 		GList<RegionProperty> rp = new GList<RegionProperty>();
 		
-		for(String i : getRegions(l))
+		try
 		{
-			rp.addAll(get(i));
+			for(String i : getRegions(l))
+			{
+				rp.addAll(get(i));
+			}
+			
+			rp.removeDuplicates();
 		}
 		
-		rp.removeDuplicates();
+		catch(Exception e)
+		{
+			
+		}
 		
 		return rp;
 	}
@@ -100,17 +108,25 @@ public class RegionController extends Controller
 	{
 		GList<String> g = new GList<String>();
 		
-		if(canUse())
+		try
 		{
-			WorldGuardPlugin worldGuard = WorldGuardPlugin.inst();
-			Vector pt = BukkitUtil.toVector(l);
-			RegionManager regionManager = worldGuard.getRegionManager(l.getWorld());
-			ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
-			
-			for(ProtectedRegion i : set.getRegions())
+			if(canUse())
 			{
-				g.add(i.getId());
+				WorldGuardPlugin worldGuard = WorldGuardPlugin.inst();
+				Vector pt = BukkitUtil.toVector(l);
+				RegionManager regionManager = worldGuard.getRegionManager(l.getWorld());
+				ApplicableRegionSet set = regionManager.getApplicableRegions(pt);
+				
+				for(ProtectedRegion i : set.getRegions())
+				{
+					g.add(i.getId());
+				}
 			}
+		}
+		
+		catch(Exception e)
+		{
+			
 		}
 		
 		return g;
