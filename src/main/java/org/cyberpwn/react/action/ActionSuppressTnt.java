@@ -15,6 +15,7 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.HandledEvent;
 
 public class ActionSuppressTnt extends Action implements Listener
 {
@@ -133,38 +134,46 @@ public class ActionSuppressTnt extends Action implements Listener
 	@EventHandler
 	public void onTNT(ExplosionPrimeEvent e)
 	{
-		if(!can(e.getEntity().getLocation()))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(dissd)
-		{
-			return;
-		}
-		
-		if(frozen)
-		{
-			e.setCancelled(true);
-		}
-		
-		else
-		{
-			int ims = 0;
 			
-			for(Entity i : e.getEntity().getLocation().getChunk().getEntities())
+			@Override
+			public void execute()
 			{
-				if(i.getType().equals(EntityType.PRIMED_TNT))
+				if(!can(e.getEntity().getLocation()))
 				{
-					ims++;
+					return;
 				}
 				
-				if(ims > cc.getInt(getCodeName() + ".max-tnt-per-chunk"))
+				if(dissd)
+				{
+					return;
+				}
+				
+				if(frozen)
 				{
 					e.setCancelled(true);
-					break;
+				}
+				
+				else
+				{
+					int ims = 0;
+					
+					for(Entity i : e.getEntity().getLocation().getChunk().getEntities())
+					{
+						if(i.getType().equals(EntityType.PRIMED_TNT))
+						{
+							ims++;
+						}
+						
+						if(ims > cc.getInt(getCodeName() + ".max-tnt-per-chunk"))
+						{
+							e.setCancelled(true);
+							break;
+						}
+					}
 				}
 			}
-		}
+		};
 	}
 }

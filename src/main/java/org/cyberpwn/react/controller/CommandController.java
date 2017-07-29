@@ -61,6 +61,7 @@ import org.cyberpwn.react.util.GPage;
 import org.cyberpwn.react.util.Gui;
 import org.cyberpwn.react.util.Gui.Pane;
 import org.cyberpwn.react.util.Gui.Pane.Element;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.LagMap;
 import org.cyberpwn.react.util.Platform;
@@ -1666,232 +1667,263 @@ public class CommandController extends Controller implements CommandExecutor
 	@EventHandler
 	public void onDrop(final PlayerInteractEvent e)
 	{
-		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
+		new HandledEvent()
 		{
-			if(e.getPlayer().getItemInHand() != null && e.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && e.getPlayer().getItemInHand().hasItemMeta())
+			
+			@Override
+			public void execute()
 			{
-				BookMeta bm = (BookMeta) e.getPlayer().getItemInHand().getItemMeta();
-				final ItemStack is = e.getPlayer().getItemInHand();
-				
-				if(bm.getAuthor().equals(Info.NAME))
+				if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))
 				{
-					react.scheduleSyncTask(1, new Runnable()
+					if(e.getPlayer().getItemInHand() != null && e.getPlayer().getItemInHand().getType().equals(Material.WRITTEN_BOOK) && e.getPlayer().getItemInHand().hasItemMeta())
 					{
-						@Override
-						public void run()
+						BookMeta bm = (BookMeta) e.getPlayer().getItemInHand().getItemMeta();
+						final ItemStack is = e.getPlayer().getItemInHand();
+						
+						if(bm.getAuthor().equals(Info.NAME))
 						{
-							e.getPlayer().getInventory().remove(is);
+							react.scheduleSyncTask(1, new Runnable()
+							{
+								@Override
+								public void run()
+								{
+									e.getPlayer().getInventory().remove(is);
+								}
+							});
 						}
-					});
+					}
 				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void omCommandPre(ServerCommandEvent e)
 	{
-		if(e.getCommand().equalsIgnoreCase("timings off"))
+		new HandledEvent()
 		{
-			React.instance().getTimingsController().off(null);
-		}
-		
-		if(e.getCommand().equalsIgnoreCase("timings on"))
-		{
-			React.instance().getTimingsController().on(null);
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(e.getCommand().equalsIgnoreCase("timings off"))
+				{
+					React.instance().getTimingsController().off(null);
+				}
+				
+				if(e.getCommand().equalsIgnoreCase("timings on"))
+				{
+					React.instance().getTimingsController().on(null);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void onServer(ServerCommandEvent e)
 	{
-		if(e.getCommand().equalsIgnoreCase("timings off"))
+		new HandledEvent()
 		{
-			if(e.getSender().hasPermission("bukkit.command.timings"))
+			
+			@Override
+			public void execute()
 			{
-				React.instance().getTimingsController().off(e.getSender());
-			}
-		}
-		
-		if(e.getCommand().equalsIgnoreCase("timings on"))
-		{
-			if(e.getSender().hasPermission("bukkit.command.timings"))
-			{
-				React.instance().getTimingsController().on(e.getSender());
-			}
-		}
-		
-		if(e.getCommand().equalsIgnoreCase("mem") || e.getCommand().equalsIgnoreCase("memory"))
-		{
-			if(React.isAllowMem())
-			{
-				e.setCancelled(true);
-				
-				CommandSender p = e.getSender();
-				
-				if(e.getSender().hasPermission(Info.PERM_MONITOR))
+				if(e.getCommand().equalsIgnoreCase("timings off"))
 				{
-					long d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong() + (getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
-					
-					if(d < 0)
+					if(e.getSender().hasPermission("bukkit.command.timings"))
 					{
-						d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong());
+						React.instance().getTimingsController().off(e.getSender());
 					}
-					
-					if(d < 0)
+				}
+				
+				if(e.getCommand().equalsIgnoreCase("timings on"))
+				{
+					if(e.getSender().hasPermission("bukkit.command.timings"))
 					{
-						d = 0;
+						React.instance().getTimingsController().on(e.getSender());
 					}
-					
-					p.sendMessage(String.format(Info.HRN, "Memory"));
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_MAX + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryMax() / 1024 / 1024)));
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_USED + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryUsed())) + " (" + F.pc(getReact().getSampleController().getSampleMemoryUsed().getPercent(), 0) + ")");
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_GARBAGE + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryGarbage())));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
-					p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
-					p.sendMessage(Info.HR);
 				}
 				
-				else
+				if(e.getCommand().equalsIgnoreCase("mem") || e.getCommand().equalsIgnoreCase("memory"))
 				{
-					e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+					if(React.isAllowMem())
+					{
+						e.setCancelled(true);
+						
+						CommandSender p = e.getSender();
+						
+						if(e.getSender().hasPermission(Info.PERM_MONITOR))
+						{
+							long d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong() + (getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+							
+							if(d < 0)
+							{
+								d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong());
+							}
+							
+							if(d < 0)
+							{
+								d = 0;
+							}
+							
+							p.sendMessage(String.format(Info.HRN, "Memory"));
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_MAX + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryMax() / 1024 / 1024)));
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_USED + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryUsed())) + " (" + F.pc(getReact().getSampleController().getSampleMemoryUsed().getPercent(), 0) + ")");
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_GARBAGE + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryGarbage())));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
+							p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
+							p.sendMessage(Info.HR);
+						}
+						
+						else
+						{
+							e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+						}
+					}
+				}
+				
+				if(e.getCommand().equalsIgnoreCase("tps"))
+				{
+					if(React.isAllowMem())
+					{
+						CommandSender p = e.getSender();
+						
+						if(e.getSender().hasPermission("bukkit.command.tps") || e.getSender().hasPermission(Info.PERM_MONITOR))
+						{
+							p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
+						}
+						
+						else
+						{
+							e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+						}
+					}
 				}
 			}
-		}
-		
-		if(e.getCommand().equalsIgnoreCase("tps"))
-		{
-			if(React.isAllowMem())
-			{
-				CommandSender p = e.getSender();
-				
-				if(e.getSender().hasPermission("bukkit.command.tps") || e.getSender().hasPermission(Info.PERM_MONITOR))
-				{
-					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
-				}
-				
-				else
-				{
-					e.getSender().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
-				}
-			}
-		}
+		};
 	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onCommandPre(PlayerCommandPreprocessEvent e)
 	{
-		if(e.getMessage().equalsIgnoreCase("/timings off"))
+		new HandledEvent()
 		{
-			if(e.getPlayer().hasPermission("bukkit.command.timings"))
+			@Override
+			public void execute()
 			{
-				React.instance().getTimingsController().off(e.getPlayer());
-			}
-		}
-		
-		if(e.getMessage().startsWith("/reacttp"))
-		{
-			if(e.getPlayer().hasPermission(Info.PERM_ACT))
-			{
-				String world = e.getMessage().split(" ")[1];
-				int x = Integer.valueOf(e.getMessage().split(" ")[2]);
-				int y = Integer.valueOf(e.getMessage().split(" ")[3]);
-				int z = Integer.valueOf(e.getMessage().split(" ")[4]);
-				e.getPlayer().teleport(new Location(Bukkit.getWorld(world), x, y, z));
-				e.setCancelled(true);
-				return;
-			}
-		}
-		
-		if(e.getMessage().equalsIgnoreCase("/timings on"))
-		{
-			if(e.getPlayer().hasPermission("bukkit.command.timings"))
-			{
-				React.instance().getTimingsController().on(e.getPlayer());
-			}
-		}
-		
-		if(e.getMessage().equalsIgnoreCase("/mem") || e.getMessage().equalsIgnoreCase("/memory"))
-		{
-			if(React.isAllowMem())
-			{
-				e.setCancelled(true);
-				
-				Player p = e.getPlayer();
-				
-				if(e.getPlayer().hasPermission(Info.PERM_MONITOR))
+				if(e.getMessage().equalsIgnoreCase("/timings off"))
 				{
-					long d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong() + (getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
-					
-					if(d < 0)
+					if(e.getPlayer().hasPermission("bukkit.command.timings"))
 					{
-						d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong());
+						React.instance().getTimingsController().off(e.getPlayer());
 					}
-					
-					if(d < 0)
+				}
+				
+				if(e.getMessage().startsWith("/reacttp"))
+				{
+					if(e.getPlayer().hasPermission(Info.PERM_ACT))
 					{
-						d = 0;
+						String world = e.getMessage().split(" ")[1];
+						int x = Integer.valueOf(e.getMessage().split(" ")[2]);
+						int y = Integer.valueOf(e.getMessage().split(" ")[3]);
+						int z = Integer.valueOf(e.getMessage().split(" ")[4]);
+						e.getPlayer().teleport(new Location(Bukkit.getWorld(world), x, y, z));
+						e.setCancelled(true);
+						return;
 					}
-					
-					p.sendMessage(String.format(Info.HRN, "Memory"));
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_MAX + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryMax() / 1024 / 1024)));
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_USED + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryUsed())) + " (" + F.pc(getReact().getSampleController().getSampleMemoryUsed().getPercent(), 0) + ")");
-					p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_GARBAGE + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryGarbage())));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
-					p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
-					p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
-					p.sendMessage(Info.HR);
 				}
 				
-				else
+				if(e.getMessage().equalsIgnoreCase("/timings on"))
 				{
-					e.getPlayer().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+					if(e.getPlayer().hasPermission("bukkit.command.timings"))
+					{
+						React.instance().getTimingsController().on(e.getPlayer());
+					}
+				}
+				
+				if(e.getMessage().equalsIgnoreCase("/mem") || e.getMessage().equalsIgnoreCase("/memory"))
+				{
+					if(React.isAllowMem())
+					{
+						e.setCancelled(true);
+						
+						Player p = e.getPlayer();
+						
+						if(e.getPlayer().hasPermission(Info.PERM_MONITOR))
+						{
+							long d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong() + (getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+							
+							if(d < 0)
+							{
+								d = ((long) ReactAPI.getMemoryUsed()) - (getReact().getSampleController().getSampleChunkMemory().getValue().getLong());
+							}
+							
+							if(d < 0)
+							{
+								d = 0;
+							}
+							
+							p.sendMessage(String.format(Info.HRN, "Memory"));
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_MAX + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryMax() / 1024 / 1024)));
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_MEMORY_USED + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryUsed())) + " (" + F.pc(getReact().getSampleController().getSampleMemoryUsed().getPercent(), 0) + ")");
+							p.sendMessage(Info.TAG + ChatColor.AQUA + L.MESSAGE_GARBAGE + ChatColor.GOLD + F.mem((long) (ReactAPI.getMemoryGarbage())));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLAYERS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong() * getReact().onlinePlayers().length));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_CHUNKS + ChatColor.GOLD + F.mem(getReact().getSampleController().getSampleChunkMemory().getValue().getLong()));
+							p.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_PLUGINS + ChatColor.GOLD + F.mem(d));
+							p.sendMessage(Info.TAG + ChatColor.GOLD + L.MESSAGE_UPTIME + ChatColor.YELLOW + getReact().getUptime().toString());
+							p.sendMessage(Info.HR);
+						}
+						
+						else
+						{
+							e.getPlayer().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+						}
+					}
+				}
+				
+				if(e.getMessage().equalsIgnoreCase("/tps"))
+				{
+					if(React.isAllowMem())
+					{
+						Player p = e.getPlayer();
+						
+						if(e.getPlayer().hasPermission("bukkit.command.tps"))
+						{
+							p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
+						}
+						
+						else
+						{
+							e.getPlayer().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
+						}
+					}
 				}
 			}
-		}
-		
-		if(e.getMessage().equalsIgnoreCase("/tps"))
-		{
-			if(React.isAllowMem())
-			{
-				Player p = e.getPlayer();
-				
-				if(e.getPlayer().hasPermission("bukkit.command.tps"))
-				{
-					p.sendMessage(Info.TAG + ChatColor.AQUA + "Current TPS (Exact): " + ChatColor.GREEN + F.f(React.instance().getSampleController().getSampleTicksPerSecond().getValue().getDouble(), 9));
-				}
-				
-				else
-				{
-					e.getPlayer().sendMessage(L.MESSAGE_INSUFFICIENT_PERMISSION);
-				}
-			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e)
 	{
-		try
-		{
-			if(e.getItemDrop().getItemStack() != null && e.getItemDrop().getItemStack().getType().equals(Material.WRITTEN_BOOK) && e.getItemDrop().getItemStack().hasItemMeta())
-			{
-				BookMeta bm = (BookMeta) e.getItemDrop().getItemStack().getItemMeta();
-				
-				if(bm.getAuthor().equals(Info.NAME))
-				{
-					E.r(e.getItemDrop());
-				}
-			}
-		}
-		
-		catch(Exception ee)
+		new HandledEvent()
 		{
 			
-		}
+			@Override
+			public void execute()
+			{
+				if(e.getItemDrop().getItemStack() != null && e.getItemDrop().getItemStack().getType().equals(Material.WRITTEN_BOOK) && e.getItemDrop().getItemStack().hasItemMeta())
+				{
+					BookMeta bm = (BookMeta) e.getItemDrop().getItemStack().getItemMeta();
+					
+					if(bm.getAuthor().equals(Info.NAME))
+					{
+						E.r(e.getItemDrop());
+					}
+				}
+			}
+		};
 	}
 	
 	public String isObfuscated()

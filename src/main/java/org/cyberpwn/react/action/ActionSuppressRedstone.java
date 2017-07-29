@@ -13,6 +13,7 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.MathUtils;
 
 public class ActionSuppressRedstone extends Action implements Listener
@@ -121,46 +122,54 @@ public class ActionSuppressRedstone extends Action implements Listener
 	@EventHandler
 	public void onRedstone(BlockPhysicsEvent e)
 	{
-		if(!can(e.getBlock().getLocation()))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		try
-		{
-			if(freezeAll)
+			
+			@Override
+			public void execute()
 			{
-				if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+				if(!can(e.getBlock().getLocation()))
 				{
-					e.setCancelled(true);
+					return;
 				}
 				
-				return;
-			}
-			
-			if(frozen)
-			{
-				if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+				try
 				{
-					try
+					if(freezeAll)
 					{
-						if(MathUtils.isWithin(e.getBlock().getChunk(), getActionController().getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk(), cc.getInt(getCodeName() + ".freeze-radius")))
+						if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
 						{
 							e.setCancelled(true);
 						}
+						
+						return;
 					}
 					
-					catch(Exception ex)
+					if(frozen)
 					{
-						
+						if(e.getChangedType().equals(Material.PISTON_BASE) || e.getChangedType().equals(Material.REDSTONE_LAMP_OFF) || e.getChangedType().equals(Material.REDSTONE_LAMP_ON) || e.getChangedType().equals(Material.PISTON_EXTENSION) || e.getChangedType().equals(Material.PISTON_MOVING_PIECE) || e.getChangedType().equals(Material.PISTON_STICKY_BASE) || e.getChangedType().equals(Material.REDSTONE_WIRE) || e.getChangedType().equals(Material.DIODE_BLOCK_OFF) || e.getChangedType().equals(Material.DIODE_BLOCK_ON) || e.getChangedType().equals(Material.REDSTONE_TORCH_OFF) || e.getChangedType().equals(Material.REDSTONE_TORCH_ON))
+						{
+							try
+							{
+								if(MathUtils.isWithin(e.getBlock().getChunk(), getActionController().getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk(), cc.getInt(getCodeName() + ".freeze-radius")))
+								{
+									e.setCancelled(true);
+								}
+							}
+							
+							catch(Exception ex)
+							{
+								
+							}
+						}
 					}
 				}
+				
+				catch(Exception ex)
+				{
+					
+				}
 			}
-		}
-		
-		catch(Exception ex)
-		{
-			
-		}
+		};
 	}
 }

@@ -9,6 +9,7 @@ import org.cyberpwn.react.cluster.Configurable;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.util.C;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.HandledEvent;
 
 public class TileController extends Controller implements Configurable
 {
@@ -26,23 +27,31 @@ public class TileController extends Controller implements Configurable
 	@EventHandler
 	public void on(BlockPlaceEvent e)
 	{
-		if(!is())
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		int btc = e.getBlock().getChunk().getTileEntities().length;
-		
-		if(e.getBlock().getState() instanceof InventoryHolder)
-		{
-			btc++;
-		}
-		
-		if(btc > maxTc)
-		{
-			e.setCancelled(true);
-			e.getPlayer().sendMessage(Info.TAG + C.RED + F.color(cc.getString("deny-message")));
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(!is())
+				{
+					return;
+				}
+				
+				int btc = e.getBlock().getChunk().getTileEntities().length;
+				
+				if(e.getBlock().getState() instanceof InventoryHolder)
+				{
+					btc++;
+				}
+				
+				if(btc > maxTc)
+				{
+					e.setCancelled(true);
+					e.getPlayer().sendMessage(Info.TAG + C.RED + F.color(cc.getString("deny-message")));
+				}
+			}
+		};
 	}
 	
 	@Override

@@ -10,6 +10,7 @@ import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.ASYNC;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
@@ -89,8 +90,16 @@ public class SampleTNTPerSecond extends Sample implements Listener
 	@EventHandler
 	public void onChunkLoad(ExplosionPrimeEvent e)
 	{
-		Lag.report(e.getEntity().getLocation(), InstabilityCause.TNT_EXPLOSIONS, 364);
-		loadedTick++;
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				Lag.report(e.getEntity().getLocation(), InstabilityCause.TNT_EXPLOSIONS, 364);
+				loadedTick++;
+			}
+		};
 	}
 	
 	@Override

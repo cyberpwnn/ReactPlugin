@@ -9,6 +9,7 @@ import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
@@ -62,11 +63,19 @@ public class SampleLiquidFlowPerSecond extends Sample implements Listener
 	@EventHandler
 	public void onBlockPhysics(BlockPhysicsEvent e)
 	{
-		if(e.getBlock().getType().equals(Material.WATER) || e.getBlock().getType().equals(Material.LAVA))
+		new HandledEvent()
 		{
-			Lag.report(e.getBlock().getLocation(), InstabilityCause.LIQUID, 150);
-			loadedTick++;
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(e.getBlock().getType().equals(Material.WATER) || e.getBlock().getType().equals(Material.LAVA))
+				{
+					Lag.report(e.getBlock().getLocation(), InstabilityCause.LIQUID, 150);
+					loadedTick++;
+				}
+			}
+		};
 	}
 	
 	@Override

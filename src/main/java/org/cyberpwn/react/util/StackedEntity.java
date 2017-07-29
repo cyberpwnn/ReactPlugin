@@ -62,12 +62,20 @@ public class StackedEntity implements Listener
 	@EventHandler
 	public void on(EntityDeathEvent e)
 	{
-		if(e.getEntity().equals(getHost()))
+		new HandledEvent()
 		{
-			e.setDroppedExp(getSize() * e.getDroppedExp());
-			getRoot().multiplyDrops(e.getDrops(), getSize());
-			destroy();
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(e.getEntity().equals(getHost()))
+				{
+					e.setDroppedExp(getSize() * e.getDroppedExp());
+					getRoot().multiplyDrops(e.getDrops(), getSize());
+					destroy();
+				}
+			}
+		};
 	}
 	
 	public void destroy()

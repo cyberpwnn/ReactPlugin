@@ -40,6 +40,7 @@ import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.LOAD;
 import org.cyberpwn.react.util.N;
 import org.cyberpwn.react.util.Platform;
@@ -785,264 +786,328 @@ public class MonitorController extends Controller implements Configurable
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e)
 	{
-		Player p = e.getPlayer();
-		ItemStack map = new ItemStack(Material.MAP);
-		map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
-		
-		if(p.hasPermission(Info.PERM_MONITOR))
+		new HandledEvent()
 		{
-			try
+			
+			@Override
+			public void execute()
 			{
-				PlayerData pd = pc.gpd(p);
-				pd.setMonitoring(isMonitoring(p));
-				pd.setMapping(isMapping(p));
-				pd.setLockedTab(locks.containsKey(p));
+				Player p = e.getPlayer();
+				ItemStack map = new ItemStack(Material.MAP);
+				map.addUnsafeEnchantment(Enchantment.DURABILITY, 1337);
 				
-				if(isMonitoring(p))
+				if(p.hasPermission(Info.PERM_MONITOR))
 				{
-					pd.setMonitoringTab(monitors.get(p).getB());
+					try
+					{
+						PlayerData pd = pc.gpd(p);
+						pd.setMonitoring(isMonitoring(p));
+						pd.setMapping(isMapping(p));
+						pd.setLockedTab(locks.containsKey(p));
+						
+						if(isMonitoring(p))
+						{
+							pd.setMonitoringTab(monitors.get(p).getB());
+						}
+						
+						pc.spd(p, pd);
+						pc.save(p);
+					}
+					
+					catch(Exception ex)
+					{
+						
+					}
 				}
 				
-				pc.spd(p, pd);
-				pc.save(p);
-			}
-			
-			catch(Exception ex)
-			{
-				
-			}
-		}
-		
-		if(p.getInventory().contains(map))
-		{
-			p.getInventory().remove(map);
-		}
-		
-		for(ItemStack i : p.getInventory().getContents())
-		{
-			if(i == null)
-			{
-				continue;
-			}
-			
-			if(i.getType().equals(Material.MAP))
-			{
-				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+				if(p.getInventory().contains(map))
 				{
-					p.getInventory().remove(i);
+					p.getInventory().remove(map);
 				}
+				
+				for(ItemStack i : p.getInventory().getContents())
+				{
+					if(i == null)
+					{
+						continue;
+					}
+					
+					if(i.getType().equals(Material.MAP))
+					{
+						if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+						{
+							p.getInventory().remove(i);
+						}
+					}
+				}
+				
+				pausedMonitors.remove(e.getPlayer());
+				monitors.remove(e.getPlayer());
+				compass.remove(e.getPlayer());
 			}
-		}
-		
-		pausedMonitors.remove(e.getPlayer());
-		monitors.remove(e.getPlayer());
-		compass.remove(e.getPlayer());
+		};
 	}
 	
 	@EventHandler
 	public void onJoin(final PlayerJoinEvent e)
 	{
-		react.scheduleSyncTask(0, new Runnable()
+		new HandledEvent()
 		{
+			
 			@Override
-			public void run()
+			public void execute()
 			{
-				try
+				react.scheduleSyncTask(0, new Runnable()
 				{
-					cc.getStringList("monitors").copy();
-				}
-				
-				catch(Exception e)
-				{
-					onNewConfig(cc);
-					return;
-				}
-				
-				for(String i : cc.getStringList("monitors").copy())
-				{
-					if(e.getPlayer().getUniqueId().toString().equals(i))
+					@Override
+					public void run()
 					{
-						if(!VersionBukkit.tc())
+						try
 						{
-							cc.set("monitors", cc.getStringList("monitors").qdel(e.getPlayer().getUniqueId().toString()));
+							cc.getStringList("monitors").copy();
+						}
+						
+						catch(Exception e)
+						{
+							onNewConfig(cc);
 							return;
 						}
 						
-						startMonitoring(e.getPlayer());
-						monitors.get(e.getPlayer()).setB(pc.gpd(e.getPlayer()).getMonitoringTab());
+						for(String i : cc.getStringList("monitors").copy())
+						{
+							if(e.getPlayer().getUniqueId().toString().equals(i))
+							{
+								if(!VersionBukkit.tc())
+								{
+									cc.set("monitors", cc.getStringList("monitors").qdel(e.getPlayer().getUniqueId().toString()));
+									return;
+								}
+								
+								startMonitoring(e.getPlayer());
+								monitors.get(e.getPlayer()).setB(pc.gpd(e.getPlayer()).getMonitoringTab());
+							}
+						}
+						
+						for(String i : cc.getStringList("mappers").copy())
+						{
+							if(e.getPlayer().getUniqueId().toString().equals(i))
+							{
+								startMapping(e.getPlayer());
+							}
+						}
 					}
-				}
-				
-				for(String i : cc.getStringList("mappers").copy())
-				{
-					if(e.getPlayer().getUniqueId().toString().equals(i))
-					{
-						startMapping(e.getPlayer());
-					}
-				}
+				});
 			}
-		});
+		};
 	}
 	
 	@EventHandler
 	public void onOpenInventory(InventoryOpenEvent e)
 	{
-		Player p = (Player) e.getPlayer();
-		
-		if(mappers.containsKey(p))
+		new HandledEvent()
 		{
-			stopMapping(p, false);
-			mapPause.add(p);
-		}
-		
-		if(hasCompass(p))
-		{
-			for(int i = 0; i < p.getInventory().getSize() * 9; i++)
+			
+			@Override
+			public void execute()
 			{
-				try
+				Player p = (Player) e.getPlayer();
+				
+				if(mappers.containsKey(p))
 				{
-					ItemStack is = p.getInventory().getItem(i);
-					
-					if(is != null && is.getType().equals(Material.COMPASS) && is.hasItemMeta())
+					stopMapping(p, false);
+					mapPause.add(p);
+				}
+				
+				if(hasCompass(p))
+				{
+					for(int i = 0; i < p.getInventory().getSize() * 9; i++)
 					{
-						ItemMeta im = is.getItemMeta();
-						
-						if(im.getDisplayName().startsWith(ChatColor.RED + "CPU Guage") && is.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
+						try
 						{
-							p.getInventory().setItem(i, new ItemStack(Material.AIR));
+							ItemStack is = p.getInventory().getItem(i);
+							
+							if(is != null && is.getType().equals(Material.COMPASS) && is.hasItemMeta())
+							{
+								ItemMeta im = is.getItemMeta();
+								
+								if(im.getDisplayName().startsWith(ChatColor.RED + "CPU Guage") && is.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
+								{
+									p.getInventory().setItem(i, new ItemStack(Material.AIR));
+								}
+							}
+						}
+						
+						catch(Exception ex)
+						{
+							
 						}
 					}
 				}
-				
-				catch(Exception ex)
-				{
-					
-				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void onCloseInventory(InventoryCloseEvent e)
 	{
-		Player p = (Player) e.getPlayer();
-		
-		if(mapPause.contains(p) && !getReact().getRegionController().getProperties(e.getPlayer().getLocation()).contains(RegionProperty.DENY_MAPPING))
+		new HandledEvent()
 		{
-			mapPause.remove(p);
-			startMapping(p, false);
-		}
-		
-		if(hasCompass(p))
-		{
-			ItemStack i = new ItemStack(Material.COMPASS);
-			ItemMeta im = i.getItemMeta();
-			im.setDisplayName(ChatColor.RED + "CPU Guage");
-			im.setLore(new GList<String>().qadd(ChatColor.GRAY + "Measures CPU Utilization via Dial").qadd(ChatColor.GREEN + "Usage: 0%"));
-			i.setItemMeta(im);
-			i.addUnsafeEnchantment(Enchantment.DURABILITY, 1336);
-			i.setAmount(1);
-			p.getInventory().addItem(i);
-		}
+			
+			@Override
+			public void execute()
+			{
+				Player p = (Player) e.getPlayer();
+				
+				if(mapPause.contains(p) && !getReact().getRegionController().getProperties(e.getPlayer().getLocation()).contains(RegionProperty.DENY_MAPPING))
+				{
+					mapPause.remove(p);
+					startMapping(p, false);
+				}
+				
+				if(hasCompass(p))
+				{
+					ItemStack i = new ItemStack(Material.COMPASS);
+					ItemMeta im = i.getItemMeta();
+					im.setDisplayName(ChatColor.RED + "CPU Guage");
+					im.setLore(new GList<String>().qadd(ChatColor.GRAY + "Measures CPU Utilization via Dial").qadd(ChatColor.GREEN + "Usage: 0%"));
+					i.setItemMeta(im);
+					i.addUnsafeEnchantment(Enchantment.DURABILITY, 1336);
+					i.setAmount(1);
+					p.getInventory().addItem(i);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void onDrop(PlayerDropItemEvent e)
 	{
-		if(mappers.containsKey(e.getPlayer()))
+		new HandledEvent()
 		{
-			ItemStack i = e.getItemDrop().getItemStack();
 			
-			if(i.getType().equals(Material.MAP))
+			@Override
+			public void execute()
 			{
-				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+				if(mappers.containsKey(e.getPlayer()))
 				{
-					e.setCancelled(true);
+					ItemStack i = e.getItemDrop().getItemStack();
+					
+					if(i.getType().equals(Material.MAP))
+					{
+						if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+						{
+							e.setCancelled(true);
+						}
+					}
+				}
+				
+				if(hasCompass(e.getPlayer()))
+				{
+					ItemStack i = e.getItemDrop().getItemStack();
+					
+					if(i.getType().equals(Material.COMPASS))
+					{
+						if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
+						{
+							e.setCancelled(true);
+						}
+					}
 				}
 			}
-		}
-		
-		if(hasCompass(e.getPlayer()))
-		{
-			ItemStack i = e.getItemDrop().getItemStack();
-			
-			if(i.getType().equals(Material.COMPASS))
-			{
-				if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1336)
-				{
-					e.setCancelled(true);
-				}
-			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void onPickup(InventoryClickEvent e)
 	{
-		ItemStack i = e.getCurrentItem();
-		
-		if(i == null)
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(i.getType().equals(Material.MAP))
-		{
-			if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+			
+			@Override
+			public void execute()
 			{
-				e.setCancelled(true);
-			}
-		}
-		
-		if(i.getType().equals(Material.WRITTEN_BOOK))
-		{
-			if(i != null && i.getType().equals(Material.WRITTEN_BOOK) && i.hasItemMeta())
-			{
-				BookMeta bm = (BookMeta) i.getItemMeta();
+				ItemStack i = e.getCurrentItem();
 				
-				if(bm.getAuthor().equals(Info.NAME))
+				if(i == null)
 				{
-					e.setCancelled(true);
-					e.getInventory().remove(i);
+					return;
+				}
+				
+				if(i.getType().equals(Material.MAP))
+				{
+					if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+					{
+						e.setCancelled(true);
+					}
+				}
+				
+				if(i.getType().equals(Material.WRITTEN_BOOK))
+				{
+					if(i != null && i.getType().equals(Material.WRITTEN_BOOK) && i.hasItemMeta())
+					{
+						BookMeta bm = (BookMeta) i.getItemMeta();
+						
+						if(bm.getAuthor().equals(Info.NAME))
+						{
+							e.setCancelled(true);
+							e.getInventory().remove(i);
+						}
+					}
 				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void onPickup(InventoryPickupItemEvent e)
 	{
-		ItemStack i = e.getItem().getItemStack();
-		
-		if(i.getType().equals(Material.MAP))
+		new HandledEvent()
 		{
-			if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+			
+			@Override
+			public void execute()
 			{
-				e.setCancelled(true);
+				ItemStack i = e.getItem().getItemStack();
+				
+				if(i.getType().equals(Material.MAP))
+				{
+					if(i.getEnchantmentLevel(Enchantment.DURABILITY) == 1337)
+					{
+						e.setCancelled(true);
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void onWorldChange(final PlayerTeleportEvent e)
 	{
-		if(!e.getFrom().getWorld().equals(e.getTo().getWorld()))
+		new HandledEvent()
 		{
-			if(isMapping(e.getPlayer()))
+			
+			@Override
+			public void execute()
 			{
-				Verbose.x("event", e.getPlayer().getName() + ChatColor.YELLOW + "World Change. SWAPPING MAPPING");
-				stopMapping(e.getPlayer());
-				
-				react.scheduleSyncTask(10, new Runnable()
+				if(!e.getFrom().getWorld().equals(e.getTo().getWorld()))
 				{
-					@Override
-					public void run()
+					if(isMapping(e.getPlayer()))
 					{
-						startMapping(e.getPlayer());
+						Verbose.x("event", e.getPlayer().getName() + ChatColor.YELLOW + "World Change. SWAPPING MAPPING");
+						stopMapping(e.getPlayer());
+						
+						react.scheduleSyncTask(10, new Runnable()
+						{
+							@Override
+							public void run()
+							{
+								startMapping(e.getPlayer());
+							}
+						});
 					}
-				});
+				}
 			}
-		}
+		};
 	}
 	
 	public void disp(String s)
@@ -1069,24 +1134,40 @@ public class MonitorController extends Controller implements Configurable
 	@EventHandler
 	public void onGC(final PostGCEvent e)
 	{
-		Verbose.x("memory", Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
-		
-		react.scheduleSyncTask(20, new Runnable()
+		new HandledEvent()
 		{
+			
 			@Override
-			public void run()
+			public void execute()
 			{
-				disp(Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
+				Verbose.x("memory", Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
+				
+				react.scheduleSyncTask(20, new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						disp(Info.COLOR_ERR + "GC <> " + ChatColor.YELLOW + F.mem(e.getSize()) + " " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getTime().getTotalDuration() / 1000.0), 2) + "s");
+					}
+				});
 			}
-		});
+		};
 		
 	}
 	
 	@EventHandler
 	public void onSpike(SpikeEvent e)
 	{
-		Verbose.x("performence", Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
-		disp(Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				Verbose.x("performence", Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
+				disp(Info.COLOR_ERR + "SPIKE <> " + ChatColor.LIGHT_PURPLE + F.f(((double) e.getLockTime().getTotalDuration() / 1000.0), 2) + "s");
+			}
+		};
 	}
 	
 	public GMap<Player, GBiset<Integer, Integer>> getMonitors()

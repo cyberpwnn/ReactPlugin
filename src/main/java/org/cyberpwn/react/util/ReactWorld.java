@@ -40,47 +40,55 @@ public class ReactWorld implements Configurable, Listener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void on(EntityExplodeEvent e)
 	{
-		if(Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") == null)
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(e.isCancelled() || e.blockList().isEmpty() || !cc.getBoolean("physics.async-tnt"))
-		{
-			return;
-		}
-		
-		GList<Block> blocks = new GList<Block>();
-		
-		for(Block i : new GList<Block>(e.blockList()))
-		{
-			if(!i.getType().equals(Material.TNT) && !i.getType().hasGravity())
-			{
-				blocks.add(i);
-				e.blockList().remove(i);
-			}
-		}
-		
-		World w = e.getLocation().getWorld();
-		GMap<Location, Material> matte = new GMap<Location, Material>();
-		
-		for(Block i : blocks)
-		{
-			Block b = w.getBlockAt(i.getX(), i.getY(), i.getZ());
 			
-			if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
+			@Override
+			public void execute()
 			{
-				b.breakNaturally();
+				if(Bukkit.getServer().getPluginManager().getPlugin("FastAsyncWorldEdit") == null)
+				{
+					return;
+				}
+				
+				if(e.isCancelled() || e.blockList().isEmpty() || !cc.getBoolean("physics.async-tnt"))
+				{
+					return;
+				}
+				
+				GList<Block> blocks = new GList<Block>();
+				
+				for(Block i : new GList<Block>(e.blockList()))
+				{
+					if(!i.getType().equals(Material.TNT) && !i.getType().hasGravity())
+					{
+						blocks.add(i);
+						e.blockList().remove(i);
+					}
+				}
+				
+				World w = e.getLocation().getWorld();
+				GMap<Location, Material> matte = new GMap<Location, Material>();
+				
+				for(Block i : blocks)
+				{
+					Block b = w.getBlockAt(i.getX(), i.getY(), i.getZ());
+					
+					if(b.getType().equals(Material.CHEST) || b.getType().equals(Material.TRAPPED_CHEST))
+					{
+						b.breakNaturally();
+					}
+					
+					else
+					{
+						FAU.q().set(b.getLocation(), Material.AIR);
+						matte.put(b.getLocation(), b.getType());
+					}
+				}
+				
+				FAU.q().flush();
 			}
-			
-			else
-			{
-				FAU.q().set(b.getLocation(), Material.AIR);
-				matte.put(b.getLocation(), b.getType());
-			}
-		}
-		
-		FAU.q().flush();
+		};
 	}
 	
 	@Override
@@ -206,78 +214,102 @@ public class ReactWorld implements Configurable, Listener
 	@EventHandler
 	public void onChunk(ChunkLoadEvent e)
 	{
-		if(e.isNewChunk() && cc.getBoolean("chunks.prevent-new-chunks"))
+		new HandledEvent()
 		{
-			e.getChunk().unload(false, false);
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(e.isNewChunk() && cc.getBoolean("chunks.prevent-new-chunks"))
+				{
+					e.getChunk().unload(false, false);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void onBlockFall(final EntityChangeBlockEvent e)
 	{
-		if(cc.getBoolean("physics.fast-fall"))
+		new HandledEvent()
 		{
-			if((e.getEntityType().equals(EntityType.FALLING_BLOCK)))
+			
+			@Override
+			public void execute()
 			{
-				final Location l = W.fall(e.getBlock().getLocation());
-				
-				if(l == null)
+				if(cc.getBoolean("physics.fast-fall"))
 				{
-					e.setCancelled(true);
-					e.getBlock().setType(Material.AIR);
-				}
-				
-				else
-				{
-					e.setCancelled(true);
-					l.getBlock().setType(e.getBlock().getType());
-					
-					new TaskLater(0)
+					if((e.getEntityType().equals(EntityType.FALLING_BLOCK)))
 					{
-						@Override
-						public void run()
+						final Location l = W.fall(e.getBlock().getLocation());
+						
+						if(l == null)
 						{
+							e.setCancelled(true);
 							e.getBlock().setType(Material.AIR);
 						}
-					};
+						
+						else
+						{
+							e.setCancelled(true);
+							l.getBlock().setType(e.getBlock().getType());
+							
+							new TaskLater(0)
+							{
+								@Override
+								public void run()
+								{
+									e.getBlock().setType(Material.AIR);
+								}
+							};
+						}
+					}
 				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler
 	public void blockBreak(LeavesDecayEvent e)
 	{
-		if(cc.getBoolean("physics.fast-decay"))
+		new HandledEvent()
 		{
-			Cuboid c = new Cuboid(e.getBlock().getLocation().clone().add(new Vector(3, 6, 3)), e.getBlock().getLocation().clone().add(new Vector(-3, -2, -3)));
-			final Iterator<Block> it = c.iterator();
-			final Material m = e.getBlock().getType();
 			
-			new Task(0)
+			@Override
+			public void execute()
 			{
-				@Override
-				public void run()
+				if(cc.getBoolean("physics.fast-decay"))
 				{
-					long ms = M.ms();
+					Cuboid c = new Cuboid(e.getBlock().getLocation().clone().add(new Vector(3, 6, 3)), e.getBlock().getLocation().clone().add(new Vector(-3, -2, -3)));
+					final Iterator<Block> it = c.iterator();
+					final Material m = e.getBlock().getType();
 					
-					while(it.hasNext() && M.ms() - ms < 1)
+					new Task(0)
 					{
-						Block b = it.next();
-						
-						if(b.getType().equals(m))
+						@Override
+						public void run()
 						{
-							b.breakNaturally();
+							long ms = M.ms();
+							
+							while(it.hasNext() && M.ms() - ms < 1)
+							{
+								Block b = it.next();
+								
+								if(b.getType().equals(m))
+								{
+									b.breakNaturally();
+								}
+							}
+							
+							if(!it.hasNext())
+							{
+								cancel();
+							}
 						}
-					}
+					};
 					
-					if(!it.hasNext())
-					{
-						cancel();
-					}
 				}
-			};
-			
-		}
+			}
+		};
 	}
 }

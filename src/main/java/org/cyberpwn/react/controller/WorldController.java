@@ -8,6 +8,7 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.api.PostGCEvent;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.Q;
 import org.cyberpwn.react.util.Q.P;
 import org.cyberpwn.react.util.ReactWorld;
@@ -76,22 +77,46 @@ public class WorldController extends Controller
 	@EventHandler
 	public void worldUnload(WorldUnloadEvent e)
 	{
-		getReact().unRegister(worlds.get(e.getWorld()));
-		worlds.remove(e.getWorld());
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				getReact().unRegister(worlds.get(e.getWorld()));
+				worlds.remove(e.getWorld());
+			}
+		};
 	}
 	
 	@EventHandler
 	public void gc(PostGCEvent e)
 	{
-		for(World i : worlds.k())
+		new HandledEvent()
 		{
-			worlds.get(i).save(true);
-		}
+			
+			@Override
+			public void execute()
+			{
+				for(World i : worlds.k())
+				{
+					worlds.get(i).save(true);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void worldLoad(WorldLoadEvent e)
 	{
-		worlds.put(e.getWorld(), new ReactWorld(e.getWorld()));
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				worlds.put(e.getWorld(), new ReactWorld(e.getWorld()));
+			}
+		};
 	}
 }

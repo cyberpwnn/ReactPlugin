@@ -206,141 +206,182 @@ public class Gui implements Listener
 	@EventHandler
 	public void onPlayerPickup(PlayerPickupItemEvent e)
 	{
-		if(!e.getPlayer().equals(player))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(openPane != null)
-		{
-			e.setCancelled(true);
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(!e.getPlayer().equals(player))
+				{
+					return;
+				}
+				
+				if(openPane != null)
+				{
+					e.setCancelled(true);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void onPlayerDrop(PlayerDropItemEvent e)
 	{
-		if(!e.getPlayer().equals(player))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(openPane != null)
-		{
-			e.setCancelled(true);
-		}
+			
+			@Override
+			public void execute()
+			{
+				
+				if(!e.getPlayer().equals(player))
+				{
+					return;
+				}
+				
+				if(openPane != null)
+				{
+					e.setCancelled(true);
+				}
+			}
+		};
 	}
 	
 	@EventHandler
 	public void onInventoryDrag(InventoryDragEvent e)
 	{
-		if(!e.getWhoClicked().equals(player))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		for(Pane i : panes)
-		{
-			if(i.getTitle().equals(e.getInventory().getTitle()))
+			
+			@Override
+			public void execute()
 			{
-				e.setCancelled(true);
+				if(!e.getWhoClicked().equals(player))
+				{
+					return;
+				}
+				
+				for(Pane i : panes)
+				{
+					if(i.getTitle().equals(e.getInventory().getTitle()))
+					{
+						e.setCancelled(true);
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onInventoryClose(InventoryCloseEvent e)
 	{
-		if(!e.getPlayer().equals(player))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		for(Pane i : panes)
-		{
-			if(i.getTitle().equals(e.getInventory().getTitle()))
+			
+			@Override
+			public void execute()
 			{
-				i.setState(PaneState.CLOSED);
-				openPane = null;
+				if(!e.getPlayer().equals(player))
+				{
+					return;
+				}
 				
-				v(e.getPlayer().getName() + " Closed Pane: " + i.getTitle() + " :: " + i.getUuid().toString());
+				for(Pane i : panes)
+				{
+					if(i.getTitle().equals(e.getInventory().getTitle()))
+					{
+						i.setState(PaneState.CLOSED);
+						openPane = null;
+						
+						v(e.getPlayer().getName() + " Closed Pane: " + i.getTitle() + " :: " + i.getUuid().toString());
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
 	public void onGuiClick(InventoryClickEvent e)
 	{
-		if(!e.getWhoClicked().equals(player))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta())
-		{
-			return;
-		}
-		
-		for(Pane i : panes.copy())
-		{
-			if(i.getTitle().equals(e.getInventory().getTitle()))
+			
+			@Override
+			public void execute()
 			{
-				for(Element j : i.getElements())
+				if(!e.getWhoClicked().equals(player))
 				{
-					if(j.getTitle().equals(e.getCurrentItem().getItemMeta().getDisplayName()))
-					{
-						v(e.getWhoClicked().getName() + " Clicked Pane: @" + i.getTitle() + "/" + j.getTitle() + " :: " + i.getUuid().toString() + "/" + j.getUuid().toString());
-						
-						if(j.getLink() != null)
-						{
-							if(e.getAction().equals(InventoryAction.PICKUP_ALL))
-							{
-								j.getLink().transfer();
-							}
-						}
-						
-						if(j.getRLink() != null)
-						{
-							if(e.getAction().equals(InventoryAction.PICKUP_HALF))
-							{
-								j.getRLink().transfer();
-							}
-						}
-						
-						if(j.getQuickRunnable() != null)
-						{
-							System.out.println("Act: " + e.getAction());
-							
-							if(e.getAction().equals(InventoryAction.PICKUP_ALL) || e.getAction().equals(InventoryAction.SWAP_WITH_CURSOR))
-							{
-								j.getQuickRunnable().run();
-							}
-						}
-						
-						for(Trigger k : j.getTriggers())
-						{
-							if(e.getAction().equals(InventoryAction.PICKUP_ALL))
-							{
-								if(k.getType().equals(TriggerType.LEFT_CLICK))
-								{
-									k.run();
-								}
-							}
-							
-							else if(e.getAction().equals(InventoryAction.PICKUP_HALF))
-							{
-								if(k.getType().equals(TriggerType.RIGHT_CLICK))
-								{
-									k.run();
-								}
-							}
-						}
-					}
+					return;
 				}
 				
-				e.setCancelled(true);
+				if(e.getCurrentItem() == null || !e.getCurrentItem().hasItemMeta())
+				{
+					return;
+				}
+				
+				for(Pane i : panes.copy())
+				{
+					if(i.getTitle().equals(e.getInventory().getTitle()))
+					{
+						for(Element j : i.getElements())
+						{
+							if(j.getTitle().equals(e.getCurrentItem().getItemMeta().getDisplayName()))
+							{
+								v(e.getWhoClicked().getName() + " Clicked Pane: @" + i.getTitle() + "/" + j.getTitle() + " :: " + i.getUuid().toString() + "/" + j.getUuid().toString());
+								
+								if(j.getLink() != null)
+								{
+									if(e.getAction().equals(InventoryAction.PICKUP_ALL))
+									{
+										j.getLink().transfer();
+									}
+								}
+								
+								if(j.getRLink() != null)
+								{
+									if(e.getAction().equals(InventoryAction.PICKUP_HALF))
+									{
+										j.getRLink().transfer();
+									}
+								}
+								
+								if(j.getQuickRunnable() != null)
+								{
+									System.out.println("Act: " + e.getAction());
+									
+									if(e.getAction().equals(InventoryAction.PICKUP_ALL) || e.getAction().equals(InventoryAction.SWAP_WITH_CURSOR))
+									{
+										j.getQuickRunnable().run();
+									}
+								}
+								
+								for(Trigger k : j.getTriggers())
+								{
+									if(e.getAction().equals(InventoryAction.PICKUP_ALL))
+									{
+										if(k.getType().equals(TriggerType.LEFT_CLICK))
+										{
+											k.run();
+										}
+									}
+									
+									else if(e.getAction().equals(InventoryAction.PICKUP_HALF))
+									{
+										if(k.getType().equals(TriggerType.RIGHT_CLICK))
+										{
+											k.run();
+										}
+									}
+								}
+							}
+						}
+						
+						e.setCancelled(true);
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	public class SoundEffect

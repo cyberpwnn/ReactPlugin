@@ -22,6 +22,7 @@ import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.VersionBukkit;
 
 public class ActionPurgeEntities extends Action implements Listener
@@ -144,14 +145,22 @@ public class ActionPurgeEntities extends Action implements Listener
 	@EventHandler
 	public void on(PlayerCommandPreprocessEvent e)
 	{
-		if(e.getMessage().equalsIgnoreCase("/killall all") && cc.getBoolean(getCodeName() + ".override.replace-kill-command"))
+		new HandledEvent()
 		{
-			if(e.getPlayer().hasPermission(Info.PERM_ACT))
+			
+			@Override
+			public void execute()
 			{
-				manual(e.getPlayer());
-				e.setCancelled(true);
+				if(e.getMessage().equalsIgnoreCase("/killall all") && cc.getBoolean(getCodeName() + ".override.replace-kill-command"))
+				{
+					if(e.getPlayer().hasPermission(Info.PERM_ACT))
+					{
+						manual(e.getPlayer());
+						e.setCancelled(true);
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	public boolean isTamed(Entity e)

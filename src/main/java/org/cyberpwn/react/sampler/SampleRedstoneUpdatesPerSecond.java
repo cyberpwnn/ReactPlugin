@@ -12,6 +12,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
@@ -88,15 +89,23 @@ public class SampleRedstoneUpdatesPerSecond extends Sample implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockFromTo(BlockRedstoneEvent e)
 	{
-		loadedTick++;
-		Lag.report(e.getBlock().getLocation(), InstabilityCause.REDSTONE, 178);
-		
-		if(!chunkMap.containsKey(e.getBlock().getChunk()))
+		new HandledEvent()
 		{
-			chunkMap.put(e.getBlock().getChunk(), 0);
-		}
-		
-		chunkMap.put(e.getBlock().getChunk(), chunkMap.get(e.getBlock().getChunk()) + 1);
+			
+			@Override
+			public void execute()
+			{
+				loadedTick++;
+				Lag.report(e.getBlock().getLocation(), InstabilityCause.REDSTONE, 178);
+				
+				if(!chunkMap.containsKey(e.getBlock().getChunk()))
+				{
+					chunkMap.put(e.getBlock().getChunk(), 0);
+				}
+				
+				chunkMap.put(e.getBlock().getChunk(), chunkMap.get(e.getBlock().getChunk()) + 1);
+			}
+		};
 	}
 	
 	public int getLoadedTick()

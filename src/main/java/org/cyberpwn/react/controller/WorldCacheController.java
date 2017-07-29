@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -21,6 +20,7 @@ import org.bukkit.event.world.WorldSaveEvent;
 import org.cyberpwn.react.React;
 import org.cyberpwn.react.util.GMap;
 import org.cyberpwn.react.util.GQuadraset;
+import org.cyberpwn.react.util.HandledEvent;
 
 public class WorldCacheController extends Controller
 {
@@ -33,6 +33,7 @@ public class WorldCacheController extends Controller
 		cache = new GMap<GQuadraset<String, Integer, Integer, Integer>, String>();
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public void start()
 	{
@@ -41,7 +42,7 @@ public class WorldCacheController extends Controller
 			try
 			{
 				new File(new File(getReact().getDataFolder(), "cache"), "wcache.rxs").createNewFile();
-			} 
+			}
 			
 			catch(IOException e)
 			{
@@ -95,11 +96,13 @@ public class WorldCacheController extends Controller
 		}
 	}
 	
+	@Override
 	public void tick()
 	{
-
+		
 	}
 	
+	@Override
 	public void stop()
 	{
 		try
@@ -132,24 +135,48 @@ public class WorldCacheController extends Controller
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void blockBreak(BlockBreakEvent e)
 	{
-		mod(e.getBlock().getLocation(), Material.AIR);
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				mod(e.getBlock().getLocation(), Material.AIR);
+			}
+		};
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void blockPlace(BlockPlaceEvent e)
 	{
-		mod(e.getBlock().getLocation(), e.getBlock().getType());
+		new HandledEvent()
+		{
+			
+			@Override
+			public void execute()
+			{
+				mod(e.getBlock().getLocation(), e.getBlock().getType());
+			}
+		};
 	}
 	
 	@EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
 	public void worldSave(WorldSaveEvent e)
 	{
-		for(GQuadraset<String, Integer, Integer, Integer> i : cache.k())
+		new HandledEvent()
 		{
-			if(i.getA().equals(e.getWorld().getName()))
+			
+			@Override
+			public void execute()
 			{
-				cache.remove(i);
+				for(GQuadraset<String, Integer, Integer, Integer> i : cache.k())
+				{
+					if(i.getA().equals(e.getWorld().getName()))
+					{
+						cache.remove(i);
+					}
+				}
 			}
-		}
+		};
 	}
 }

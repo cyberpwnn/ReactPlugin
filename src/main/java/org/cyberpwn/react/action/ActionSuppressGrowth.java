@@ -14,6 +14,7 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.HandledEvent;
 
 public class ActionSuppressGrowth extends Action implements Listener
 {
@@ -60,25 +61,33 @@ public class ActionSuppressGrowth extends Action implements Listener
 	@EventHandler
 	public void onGrowth(BlockGrowEvent e)
 	{
-		if(!can(e.getBlock().getLocation()))
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(cache.containsKey(e.getBlock().getChunk()))
-		{
-			cache.put(e.getBlock().getChunk(), cache.get(e.getBlock().getChunk()) + 1);
-		}
-		
-		else
-		{
-			cache.put(e.getBlock().getChunk(), 1);
-		}
-		
-		if(cache.get(e.getBlock().getChunk()) > maxPerInterval)
-		{
-			e.setCancelled(true);
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(!can(e.getBlock().getLocation()))
+				{
+					return;
+				}
+				
+				if(cache.containsKey(e.getBlock().getChunk()))
+				{
+					cache.put(e.getBlock().getChunk(), cache.get(e.getBlock().getChunk()) + 1);
+				}
+				
+				else
+				{
+					cache.put(e.getBlock().getChunk(), 1);
+				}
+				
+				if(cache.get(e.getBlock().getChunk()) > maxPerInterval)
+				{
+					e.setCancelled(true);
+				}
+			}
+		};
 	}
 	
 	@Override

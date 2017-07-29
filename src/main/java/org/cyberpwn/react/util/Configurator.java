@@ -1,7 +1,6 @@
 package org.cyberpwn.react.util;
 
 import java.io.File;
-
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -39,13 +38,13 @@ public class Configurator implements Listener
 	{
 		instance = this;
 		React.instance().register(this);
-		this.registered = true;
-		this.p = player;
-		this.gui = new Gui(p, React.instance());
-		this.listen = false;
-		this.c = React.instance().getConfigurationController();
-		this.runListen = null;
-		this.value = null;
+		registered = true;
+		p = player;
+		gui = new Gui(p, React.instance());
+		listen = false;
+		c = React.instance().getConfigurationController();
+		runListen = null;
+		value = null;
 		
 		Pane sel = gui.new Pane("Select a Configuration");
 		
@@ -180,6 +179,7 @@ public class Configurator implements Listener
 						
 						new TaskLater(1)
 						{
+							@Override
 							public void run()
 							{
 								React.instance().getConfigurationController().getCache().put(file, cc);
@@ -211,6 +211,7 @@ public class Configurator implements Listener
 									
 									new TaskLater(1)
 									{
+										@Override
 										public void run()
 										{
 											React.instance().getConfigurationController().getCache().put(file, cc);
@@ -229,7 +230,7 @@ public class Configurator implements Listener
 							}
 						};
 					}
-								
+					
 					else if(l.getType().equals(ClusterDataType.INTEGER))
 					{
 						gui.close();
@@ -251,6 +252,7 @@ public class Configurator implements Listener
 									
 									new TaskLater(1)
 									{
+										@Override
 										public void run()
 										{
 											React.instance().getConfigurationController().getCache().put(file, cc);
@@ -269,7 +271,7 @@ public class Configurator implements Listener
 							}
 						};
 					}
-								
+					
 					else if(l.getType().equals(ClusterDataType.STRING))
 					{
 						gui.close();
@@ -289,6 +291,7 @@ public class Configurator implements Listener
 								
 								new TaskLater(1)
 								{
+									@Override
 									public void run()
 									{
 										React.instance().getConfigurationController().getCache().put(file, cc);
@@ -307,7 +310,7 @@ public class Configurator implements Listener
 					}
 				}
 			});
-					
+			
 			ind++;
 		}
 		
@@ -361,15 +364,23 @@ public class Configurator implements Listener
 	@EventHandler
 	public void onChat(PlayerChatEvent e)
 	{
-		if(listen && e.getPlayer().equals(p))
+		new HandledEvent()
 		{
-			value = e.getMessage();
-			runListen.run();
-			listen = false;
-			runListen = null;
-			value = null;
-			e.setCancelled(true);
-			e.setMessage(null);
-		}
+			
+			@Override
+			public void execute()
+			{
+				if(listen && e.getPlayer().equals(p))
+				{
+					value = e.getMessage();
+					runListen.run();
+					listen = false;
+					runListen = null;
+					value = null;
+					e.setCancelled(true);
+					e.setMessage(null);
+				}
+			}
+		};
 	}
 }

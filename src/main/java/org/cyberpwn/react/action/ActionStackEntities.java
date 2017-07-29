@@ -30,6 +30,7 @@ import org.cyberpwn.react.util.Area;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GSound;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.StackedEntity;
 import org.cyberpwn.react.util.TaskLater;
 
@@ -152,25 +153,33 @@ public class ActionStackEntities extends Action implements Listener
 	@EventHandler
 	public void on(PlayerInteractAtEntityEvent e)
 	{
-		if(!isEnabled())
+		new HandledEvent()
 		{
-			return;
-		}
-		
-		if(!cc.getBoolean("modifications.allow-player-splitting"))
-		{
-			return;
-		}
-		
-		if(e.getRightClicked() != null && e.getRightClicked() instanceof LivingEntity && e.getPlayer().isSneaking() && isStacked((LivingEntity) e.getRightClicked()))
-		{
-			LivingEntity ee = (LivingEntity) e.getRightClicked();
 			
-			if(canUnstack(ee))
+			@Override
+			public void execute()
 			{
-				unstack(ee);
+				if(!isEnabled())
+				{
+					return;
+				}
+				
+				if(!cc.getBoolean("modifications.allow-player-splitting"))
+				{
+					return;
+				}
+				
+				if(e.getRightClicked() != null && e.getRightClicked() instanceof LivingEntity && e.getPlayer().isSneaking() && isStacked((LivingEntity) e.getRightClicked()))
+				{
+					LivingEntity ee = (LivingEntity) e.getRightClicked();
+					
+					if(canUnstack(ee))
+					{
+						unstack(ee);
+					}
+				}
 			}
-		}
+		};
 	}
 	
 	public void stack(Chunk c)

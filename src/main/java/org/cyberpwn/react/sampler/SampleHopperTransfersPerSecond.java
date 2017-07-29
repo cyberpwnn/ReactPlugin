@@ -13,6 +13,7 @@ import org.cyberpwn.react.controller.SampleController;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GMap;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.InstabilityCause;
 import org.cyberpwn.react.util.Lag;
 import org.cyberpwn.react.util.ValueType;
@@ -89,13 +90,21 @@ public class SampleHopperTransfersPerSecond extends Sample implements Listener
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onBlockFromTo(InventoryMoveItemEvent e)
 	{
-		loadedTick++;
-		
-		if(e.getSource().getHolder() instanceof Hopper)
+		new HandledEvent()
 		{
-			Block hopper = ((Hopper)e.getSource().getHolder()).getBlock();
-			Lag.report(hopper.getLocation(), InstabilityCause.HOPPER, 67);
-		}
+			
+			@Override
+			public void execute()
+			{
+				loadedTick++;
+				
+				if(e.getSource().getHolder() instanceof Hopper)
+				{
+					Block hopper = ((Hopper) e.getSource().getHolder()).getBlock();
+					Lag.report(hopper.getLocation(), InstabilityCause.HOPPER, 67);
+				}
+			}
+		};
 	}
 	
 	public int getLoadedTick()

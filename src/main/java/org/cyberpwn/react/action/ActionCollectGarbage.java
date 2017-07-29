@@ -14,6 +14,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GTime;
+import org.cyberpwn.react.util.HandledEvent;
 import org.cyberpwn.react.util.Timer;
 
 public class ActionCollectGarbage extends Action implements Listener
@@ -98,26 +99,33 @@ public class ActionCollectGarbage extends Action implements Listener
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent e)
 	{
-		if(cc.getBoolean(getCodeName() + ".auto.enabled"))
+		new HandledEvent()
 		{
-			load++;
-			
-			if(e.isNewChunk())
+			@Override
+			public void execute()
 			{
-				load += 4;
+				if(cc.getBoolean(getCodeName() + ".auto.enabled"))
+				{
+					load++;
+					
+					if(e.isNewChunk())
+					{
+						load += 4;
+					}
+					
+					if(load > cc.getInt(getCodeName() + ".auto.conditions.chunkloads") && canGC())
+					{
+						long mem = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryUsed();
+						Timer t = new Timer();
+						t.start();
+						System.gc();
+						t.stop();
+						last = System.currentTimeMillis();
+						load = 0;
+						React.instance().getD().s("Released " + F.mem((mem - getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + " of memory in " + F.nsMs(t.getTime()) + "ms");
+					}
+				}
 			}
-			
-			if(load > cc.getInt(getCodeName() + ".auto.conditions.chunkloads") && canGC())
-			{
-				long mem = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryUsed();
-				Timer t = new Timer();
-				t.start();
-				System.gc();
-				t.stop();
-				last = System.currentTimeMillis();
-				load = 0;
-				React.instance().getD().s("Released " + F.mem((mem - getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryUsed()) / 1024 / 1024) + " of memory in " + F.nsMs(t.getTime()) + "ms");
-			}
-		}
+		};
 	}
 }
