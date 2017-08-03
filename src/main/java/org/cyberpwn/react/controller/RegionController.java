@@ -134,7 +134,7 @@ public class RegionController extends Controller
 	
 	public boolean canUse()
 	{
-		return Bukkit.getPluginManager().getPlugin("WorldGuard") != null;
+		return Bukkit.getPluginManager().getPlugin("WorldGuard") != null && Bukkit.getPluginManager().getPlugin("WorldGuard").getDescription().getVersion().startsWith("6.2");
 	}
 	
 	public GList<RegionProperty> get(String s)

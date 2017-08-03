@@ -1604,10 +1604,71 @@ public class CommandController extends Controller implements CommandExecutor
 		{
 			React.instance().setTag();
 			
-			if(!sender.hasPermission(Info.PERM_ACT) && !sender.hasPermission(Info.PERM_MONITOR) && !sender.hasPermission(Info.PERM_RELOAD))
+			if(sender.hasPermission("react.monitor.ping") && (sub.equalsIgnoreCase("ping") || sub.equalsIgnoreCase("pong") || sub.equalsIgnoreCase("png")))
+			{
+				if(len == 0)
+				{
+					if(sender instanceof Player)
+					{
+						tabulate(sender, 1);
+					}
+					
+					else
+					{
+						int dist = 0;
+						
+						for(ReactCommand i : commands)
+						{
+							if(dist < i.getTriggers().get(0).length())
+							{
+								dist = i.getTriggers().get(0).length();
+							}
+						}
+						
+						for(ReactCommand i : commands)
+						{
+							sender.sendMessage(ChatColor.AQUA + "/react " + ChatColor.DARK_GRAY + i.getTriggers().get(0) + ChatColor.DARK_GRAY + StringUtils.repeat(" ", dist - i.getTriggers().get(0).length()) + " - " + i.getDescription());
+						}
+					}
+				}
+				
+				else
+				{
+					try
+					{
+						int m = Integer.valueOf(sub);
+						
+						if(m <= tabulations.size() && m > 0)
+						{
+							tabulate(sender, m);
+							return true;
+						}
+					}
+					
+					catch(NumberFormatException e)
+					{
+						
+					}
+					
+					fireCommand(sender, sub, args);
+				}
+				
+				return true;
+			}
+			
+			else if((sub.equalsIgnoreCase("ping") || sub.equalsIgnoreCase("pong") || sub.equalsIgnoreCase("png")))
 			{
 				sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
 				return true;
+			}
+			
+			else
+			{
+				if(!sender.hasPermission(Info.PERM_ACT) && !sender.hasPermission(Info.PERM_MONITOR) && !sender.hasPermission(Info.PERM_RELOAD))
+				{
+					sender.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_INSUFFICIENT_PERMISSION);
+					return true;
+				}
 			}
 			
 			if(len == 0)

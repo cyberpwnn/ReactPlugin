@@ -20,6 +20,9 @@ permissions:
   react.monitor:
     description: Gives access to react monitoring
     default: op
+  react.monitor.ping:
+    description: Allows players to see ping, highest and lowest
+    default: op
   react.monitor.actions:
     description: Allows players to see manually run actions
     default: op
