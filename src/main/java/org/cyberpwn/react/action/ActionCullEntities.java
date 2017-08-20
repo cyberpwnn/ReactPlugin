@@ -23,6 +23,7 @@ import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.VersionBukkit;
@@ -253,7 +254,7 @@ public class ActionCullEntities extends Action implements Listener
 				return;
 			}
 			
-			e.remove();
+			E.r(e);
 		}
 	}
 	
@@ -302,14 +303,21 @@ public class ActionCullEntities extends Action implements Listener
 	public int weight(Chunk chunk)
 	{
 		int w = 0;
-		
-		actionController.getActionCullDrops().cull(chunk);
+		int k = 0;
 		
 		for(Entity i : chunk.getEntities())
 		{
 			if(i.getType().equals(EntityType.DROPPED_ITEM))
 			{
-				React.instance().getActionController().getActionCullDrops().updateDrop((Item) i);
+				k++;
+				
+				if(k > getActionController().getActionCullDrops().getConfiguration().getInt("drops-per-chunk"))
+				{
+					if(!React.instance().getActionController().getActionCullDrops().isWorking(i))
+					{
+						React.instance().getActionController().getActionCullDrops().updateDrop((Item) i);
+					}
+				}
 			}
 			
 			if(isCullable(i))

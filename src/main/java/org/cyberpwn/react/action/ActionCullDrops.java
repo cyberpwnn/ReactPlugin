@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ import org.cyberpwn.react.cluster.ClusterConfig;
 import org.cyberpwn.react.controller.ActionController;
 import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GBiset;
 import org.cyberpwn.react.util.GList;
@@ -37,6 +39,7 @@ public class ActionCullDrops extends Action implements Listener
 	private GMap<Double, String> worths;
 	private GList<Double> worthsx;
 	private int lastCull;
+	private HashSet<Integer> working;
 	
 	public ActionCullDrops(ActionController actionController)
 	{
@@ -50,12 +53,13 @@ public class ActionCullDrops extends Action implements Listener
 		aliases.add("cd");
 		aliases.add("culld");
 		maxSleepFactor = 2.2;
+		working = new HashSet<Integer>();
 	}
 	
 	@Override
 	public void act()
 	{
-		cullAll();
+		//cullAll();
 	}
 	
 	public int cullAll()
@@ -104,6 +108,11 @@ public class ActionCullDrops extends Action implements Listener
 		return lastCull;
 	}
 	
+	public boolean isWorking(Entity e)
+	{
+		return working.contains(e.getEntityId());
+	}
+	
 	public void updateDrop(Item item)
 	{
 		if(!can(item.getLocation()))
@@ -116,9 +125,10 @@ public class ActionCullDrops extends Action implements Listener
 		int ticksLeft = max - alive;
 		int secondsLeft = ticksLeft / 20;
 		
-		if(ticksLeft < 1)
+		if(secondsLeft <= 0)
 		{
-			item.remove();
+			working.remove(item.getEntityId());
+			E.r(item);
 			return;
 		}
 		
@@ -132,8 +142,10 @@ public class ActionCullDrops extends Action implements Listener
 					item.setCustomName(form);
 					item.setCustomNameVisible(true);
 					
-					if(secondsLeft > 0)
+					if(secondsLeft >= 0)
 					{
+						working.add(item.getEntityId());
+						
 						new TaskLater(20)
 						{
 							@Override
@@ -190,6 +202,11 @@ public class ActionCullDrops extends Action implements Listener
 			}
 		}
 		
+		if(drops.size() < Math.abs(cc.getInt("drops-per-chunk")))
+		{
+			return 0;
+		}
+		
 		drops = sort(drops);
 		int ix = 0;
 		
@@ -210,7 +227,7 @@ public class ActionCullDrops extends Action implements Listener
 			return;
 		}
 		
-		item.remove();
+		E.r(item);
 	}
 	
 	public GList<Item> sort(GList<Item> d)

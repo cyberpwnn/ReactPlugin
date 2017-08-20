@@ -28,6 +28,11 @@ public class WorldController extends Controller
 	@Override
 	public void start()
 	{
+		if(!React.instance.isSWorld())
+		{
+			return;
+		}
+		
 		for(World i : getReact().getServer().getWorlds())
 		{
 			worlds.put(i, new ReactWorld(i));
@@ -55,11 +60,21 @@ public class WorldController extends Controller
 	
 	public boolean canStack(World w)
 	{
+		if(!React.instance.isSWorld())
+		{
+			return true;
+		}
+		
 		return !worlds.get(w).getConfiguration().getBoolean("entities.disable-stacking");
 	}
 	
 	public boolean canTouch(Entity e)
 	{
+		if(!React.instance.isSWorld())
+		{
+			return true;
+		}
+		
 		if(worlds.get(e.getWorld()).getConfiguration().getStringList("entities.assume-no-side-effects").contains(e.getType().toString()))
 		{
 			return false;
@@ -77,6 +92,11 @@ public class WorldController extends Controller
 	@EventHandler
 	public void worldUnload(WorldUnloadEvent e)
 	{
+		if(!React.instance.isSWorld())
+		{
+			return;
+		}
+		
 		new HandledEvent()
 		{
 			
@@ -92,6 +112,11 @@ public class WorldController extends Controller
 	@EventHandler
 	public void gc(PostGCEvent e)
 	{
+		if(!React.instance.isSWorld())
+		{
+			return;
+		}
+		
 		new HandledEvent()
 		{
 			
@@ -109,6 +134,11 @@ public class WorldController extends Controller
 	@EventHandler
 	public void worldLoad(WorldLoadEvent e)
 	{
+		if(!React.instance.isSWorld())
+		{
+			return;
+		}
+		
 		new HandledEvent()
 		{
 			

@@ -27,6 +27,7 @@ import org.cyberpwn.react.lang.Info;
 import org.cyberpwn.react.lang.L;
 import org.cyberpwn.react.nms.NMSX;
 import org.cyberpwn.react.util.Area;
+import org.cyberpwn.react.util.E;
 import org.cyberpwn.react.util.F;
 import org.cyberpwn.react.util.GList;
 import org.cyberpwn.react.util.GSound;
@@ -139,13 +140,13 @@ public class ActionStackEntities extends Action implements Listener
 			}
 		}
 		
-		e.remove();
+		E.r(e);
 		addStack(new StackedEntity((LivingEntity) ea, va));
 		addStack(new StackedEntity((LivingEntity) eb, vb));
 		animateStack((LivingEntity) ec, (LivingEntity) ea);
 		animateStack((LivingEntity) ed, (LivingEntity) eb);
-		ec.remove();
-		ed.remove();
+		E.r(ec);
+		E.r(ed);
 		unstack.add((LivingEntity) ea);
 		unstack.add((LivingEntity) eb);
 	}

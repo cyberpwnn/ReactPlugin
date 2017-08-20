@@ -545,7 +545,13 @@ public class React extends JavaPlugin implements Configurable
 		cc.set("commands.override.memory", true, L.CONFIG_REACT_OVERRIDES_MEMORY);
 		cc.set("commands.override.tps", true, L.CONFIG_REACT_OVERRIDES_TPS);
 		cc.set("messages.notify-instability", true, L.ACTION_INSTABILITYCAUSE);
+		cc.set("write-world-configs", true, "Should react write configs.");
 		cc.set("lang", "en", "Language code.");
+	}
+	
+	public boolean isSWorld()
+	{
+		return cc.getBoolean("write-world-configs");
 	}
 	
 	public void setTag()

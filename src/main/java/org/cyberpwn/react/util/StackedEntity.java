@@ -94,7 +94,7 @@ public class StackedEntity implements Listener
 		setSize(getSize() + getRoot().getSize(e));
 		getRoot().animateStack(e, getHost());
 		getRoot().removeStack(e);
-		e.remove();
+		E.r(e);
 		
 		if(React.instance().getActionController().getActionStackEntities().getConfiguration().getBoolean("modifications.stack-sounds"))
 		{

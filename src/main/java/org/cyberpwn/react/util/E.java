@@ -85,7 +85,7 @@ public class E
 		
 		catch(Exception ex)
 		{
-			
+			ex.printStackTrace();
 		}
 	}
 	
@@ -140,7 +140,7 @@ public class E
 		{
 			if(e instanceof LivingEntity)
 			{
-				((LivingEntity)e).setHealth(0);
+				((LivingEntity) e).setHealth(0);
 			}
 		}
 		
