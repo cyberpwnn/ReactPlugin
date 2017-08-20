@@ -1,6 +1,8 @@
 package com.volmit.react;
 
-public class React
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class React extends JavaPlugin
 {
 	
 }
