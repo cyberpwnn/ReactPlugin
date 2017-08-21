@@ -1,4 +1,4 @@
-package com.volmit.react.util;
+package com.volmit.react.core;
 
 public enum Trend
 {

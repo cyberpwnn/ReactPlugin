@@ -1,5 +1,7 @@
 package com.volmit.react.util;
 
+import com.volmit.react.core.Trend;
+
 public class Average
 {
 	private int limit;

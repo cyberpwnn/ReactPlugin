@@ -1,4 +1,4 @@
-package com.volmit.react.sample;
+package com.volmit.react.core;
 
 import com.volmit.react.util.F;
 

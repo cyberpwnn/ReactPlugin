@@ -1,7 +1,9 @@
 package com.volmit.react.sample;
 
+import com.volmit.react.core.SampledValue;
+import com.volmit.react.core.SleeperPayload;
+import com.volmit.react.core.Trend;
 import com.volmit.react.util.Average;
-import com.volmit.react.util.Trend;
 
 public abstract class BasicSampler implements Sampler
 {
@@ -11,7 +13,14 @@ public abstract class BasicSampler implements Sampler
 	private SampledValue rawValue;
 	private SampledValue allocValue;
 	private Average average;
+	private SleeperPayload sleeperPayload;
 	private Trend trend;
+	
+	@Override
+	public SleeperPayload getSleeper()
+	{
+		return sleeperPayload;
+	}
 	
 	@Override
 	public String getName()
@@ -28,10 +37,18 @@ public abstract class BasicSampler implements Sampler
 	@Override
 	public void onPreSample()
 	{
-		SampledValue alloc = allocValue;
-		alloc.setDouble(0);
-		onSample(alloc);
-		onPostSample(alloc);
+		if(getSleeper().trigger())
+		{
+			SampledValue alloc = allocValue;
+			alloc.setDouble(0);
+			onSample(alloc);
+			onPostSample(alloc);
+			
+			for(int i = 0; i < getSleeper().recycle(); i++)
+			{
+				onPreSample();
+			}
+		}
 	}
 	
 	@Override
@@ -70,7 +87,8 @@ public abstract class BasicSampler implements Sampler
 		average.setLimit(threshold);
 	}
 	
-	public Trend getTrend()
+	@Override
+	public Trend getValueTrend()
 	{
 		return trend;
 	}

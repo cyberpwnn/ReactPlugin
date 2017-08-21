@@ -1,6 +1,8 @@
 package com.volmit.react.sample;
 
-import com.volmit.react.util.Trend;
+import com.volmit.react.core.SampledValue;
+import com.volmit.react.core.SleeperPayload;
+import com.volmit.react.core.Trend;
 
 public interface Sampler
 {
@@ -23,4 +25,6 @@ public interface Sampler
 	public int getRollThreshold();
 	
 	public void setRollThreshold(int threshold);
+	
+	public SleeperPayload getSleeper();
 }
