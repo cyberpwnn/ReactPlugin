@@ -25,6 +25,7 @@ public class Average
 		if(size > 4)
 		{
 			GList<GList<Double>> dat = data.split();
+			
 			double a1 = M.avg(dat.get(0));
 			double a2 = M.avg(dat.get(1));
 			

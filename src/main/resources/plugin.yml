@@ -1,5 +1,5 @@
 name: React
-main: org.cyberpwn.react.reflect.R
+main: com.volmit.react.React
 version: ${project.version}
 description: React is a smart performance plugin designed to automatically fix lag from the source. This is different from lag clearers.
 author: cyberpwn

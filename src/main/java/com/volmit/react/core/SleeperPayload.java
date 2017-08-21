@@ -69,7 +69,7 @@ public class SleeperPayload
 			if(M.ms() - lastWake > targetDelay)
 			{
 				lastWake = M.ms();
-				saturation += (M.ms() - lastWake) - targetDelay;
+				saturation += ((M.ms() - lastWake) - targetDelay) > 0 ? (M.ms() - lastWake) - targetDelay : 0;
 				
 				return true;
 			}

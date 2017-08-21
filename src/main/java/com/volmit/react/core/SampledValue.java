@@ -41,6 +41,11 @@ public class SampledValue
 		return F.f(getDouble(), dec);
 	}
 	
+	public String formatDoubleForce(int dec)
+	{
+		return F.fd(getDouble(), dec);
+	}
+	
 	public String formatPercent(int dec)
 	{
 		return F.pc(getDouble(), dec);

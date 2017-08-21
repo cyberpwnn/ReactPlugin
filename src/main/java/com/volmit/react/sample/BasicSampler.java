@@ -16,6 +16,18 @@ public abstract class BasicSampler implements Sampler
 	private SleeperPayload sleeperPayload;
 	private Trend trend;
 	
+	public BasicSampler(String name, String description, SleeperPayload sleeperPayload)
+	{
+		this.name = name;
+		this.description = description;
+		this.sleeperPayload = sleeperPayload;
+		value = new SampledValue(0);
+		rawValue = new SampledValue(0);
+		allocValue = new SampledValue(0);
+		average = new Average(1);
+		trend = Trend.SMOOTH;
+	}
+	
 	@Override
 	public SleeperPayload getSleeper()
 	{

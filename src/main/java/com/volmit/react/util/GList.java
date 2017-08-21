@@ -123,7 +123,7 @@ public class GList<T> extends ArrayList<T>
 		
 		mtt.add(ma, mb);
 		
-		return null;
+		return mtt;
 	}
 	
 	public boolean hasIndex(int i)
