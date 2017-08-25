@@ -84,6 +84,13 @@
 			<version>1.8.8</version>
 		</dependency>
 		<dependency>
+			<artifactId>protocollib</artifactId>
+			<groupId>protocollib</groupId>
+			<version>4.2.1</version>
+			<systemPath>${react.libs}/ProtocolLib-4.2.1.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
+		<dependency>
 			<groupId>fawe</groupId>
 			<artifactId>fawe</artifactId>
 			<scope>system</scope>

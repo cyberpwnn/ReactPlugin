@@ -27,4 +27,6 @@ public interface Sampler
 	public void setRollThreshold(int threshold);
 	
 	public SleeperPayload getSleeper();
+	
+	public String onFormat();
 }

@@ -19,4 +19,7 @@ public abstract class ReactSampler extends BasicSampler implements Sampler
 	}
 	
 	public abstract void onConfigure();
+	
+	@Override
+	public abstract String onFormat();
 }

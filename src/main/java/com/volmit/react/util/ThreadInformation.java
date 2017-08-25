@@ -1,5 +1,7 @@
 package com.volmit.react.util;
 
+import com.volmit.react.sample.TICK;
+
 public class ThreadInformation
 {
 	private double ticksPerSecond;
