@@ -55,18 +55,18 @@ public class TICK implements Listener
 	public static long tst;
 	public static int rstt = 0;
 	public static int rsts = 0;
-	public static int redstoneTick;
-	public static int redstoneSecond;
 	public static int grtt = 0;
 	public static int grts = 0;
-	public static int growthTick;
-	public static int growthSecond;
 	public static int butt = 0;
 	public static int buts = 0;
-	public static int burnTick;
-	public static int burnSecond;
 	public static int litt = 0;
 	public static int lits = 0;
+	public static int redstoneTick;
+	public static int redstoneSecond;
+	public static int growthTick;
+	public static int growthSecond;
+	public static int burnTick;
+	public static int burnSecond;
 	public static int liquidTick;
 	public static int liquidSecond;
 	

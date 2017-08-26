@@ -36,6 +36,11 @@ public class TickTimer extends Thread
 					sleep = false;
 					tickTime = M.ns() - startSleep;
 				}
+				
+				if(!sleep && (M.ns() - startSleep) / 1000000 > 1000)
+				{
+					React.i.reportSpike();
+				}
 			}
 			
 			catch(InterruptedException e)
