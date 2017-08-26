@@ -1,10 +1,12 @@
 package com.volmit.react;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import com.volmit.cache.EntityCache;
 import com.volmit.react.sample.TICK;
 import com.volmit.react.sample.TickTimer;
 import com.volmit.react.util.Execution;
 import com.volmit.react.util.ParallelPoolManager;
+import com.volmit.timings.StackTraceProbe;
 
 public class React extends JavaPlugin
 {
@@ -14,6 +16,8 @@ public class React extends JavaPlugin
 	private SampleController sc;
 	public static React i;
 	private TickTimer timer;
+	private StackTraceProbe probe;
+	private EntityCache ecache;
 	
 	@Override
 	public void onEnable()
@@ -23,16 +27,19 @@ public class React extends JavaPlugin
 		mainThread = Thread.currentThread();
 		
 		// Initialize Threads
+		probe = new StackTraceProbe(mainThread);
 		timer = new TickTimer();
 		rs6 = new RScheduler();
 		pool = new ParallelPoolManager(4);
 		sc = new SampleController();
+		ecache = new EntityCache(32);
 		
 		// Start Threads
 		pool.start();
 		rs6.start();
 		sc.start();
 		timer.start();
+		getServer().getPluginManager().registerEvents(ecache, this);
 		
 		// Tick Sample
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
@@ -41,6 +48,7 @@ public class React extends JavaPlugin
 			public void run()
 			{
 				TICK.tick();
+				ecache.processWorldCache();
 			}
 		}, 0, 0);
 		
@@ -67,5 +75,12 @@ public class React extends JavaPlugin
 	public SampleController getSc()
 	{
 		return sc;
+	}
+	
+	public void reportSpike()
+	{
+		probe.clear();
+		probe.scan();
+		// TODO Use the fucking data
 	}
 }
