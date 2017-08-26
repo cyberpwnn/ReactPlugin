@@ -1,5 +1,6 @@
 package com.volmit.react;
 
+import com.volmit.cache.EntityCache;
 import com.volmit.react.core.SampledValue;
 import com.volmit.react.sample.ReactSampler;
 import com.volmit.react.sample.Sampler;
@@ -312,7 +313,7 @@ public class SampleController
 			@Override
 			public String onFormat()
 			{
-				return C.AQUA + "" + getValue().formatLong();
+				return C.AQUA + "" + getValue().formatLong() + C.BLUE + " <> " + F.f(EntityCache.cachedEntities);
 			}
 		});
 		
@@ -333,7 +334,7 @@ public class SampleController
 			@Override
 			public String onFormat()
 			{
-				return C.AQUA + "" + getValue().formatLong();
+				return C.AQUA + "" + getValue().formatLong() + C.BLUE + " <> " + F.f(EntityCache.cachedDrops);
 			}
 		});
 		
