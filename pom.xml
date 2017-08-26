@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn.react</groupId>
 	<artifactId>React</artifactId>
-	<version>5.2.3</version>
+	<version>6.0</version>
 	<name>React</name>
 	<description>Smart Server Performance</description>
 	<properties>
