@@ -123,7 +123,10 @@ public class TICK implements Listener
 		entities = countEntities();
 		drops = countDrops();
 		sampleTime = M.ns() - tst;
-		
+	}
+	
+	public static void printSamplers()
+	{
 		Bukkit.getConsoleSender().sendMessage(C.AQUA + "===============================================");
 		
 		for(Sampler i : React.i.getSc().getSamplers())
