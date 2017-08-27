@@ -1,7 +1,7 @@
 package com.volmit.react;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import com.volmit.cache.EntityCache;
+import com.volmit.cache.CachedSet;
 import com.volmit.react.sample.TICK;
 import com.volmit.react.sample.TickTimer;
 import com.volmit.react.util.Execution;
@@ -17,7 +17,7 @@ public class React extends JavaPlugin
 	public static React i;
 	private TickTimer timer;
 	private StackTraceProbe probe;
-	private EntityCache ecache;
+	private CachedSet cacheSet;
 	
 	@Override
 	public void onEnable()
@@ -32,14 +32,15 @@ public class React extends JavaPlugin
 		rs6 = new RScheduler();
 		pool = new ParallelPoolManager(4);
 		sc = new SampleController();
-		ecache = new EntityCache(32);
+		cacheSet = new CachedSet(12, 32);
 		
 		// Start Threads
 		pool.start();
 		rs6.start();
 		sc.start();
 		timer.start();
-		getServer().getPluginManager().registerEvents(ecache, this);
+		
+		getServer().getPluginManager().registerEvents(cacheSet, this);
 		
 		// Tick Sample
 		getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable()
@@ -48,7 +49,7 @@ public class React extends JavaPlugin
 			public void run()
 			{
 				TICK.tick();
-				ecache.processWorldCache();
+				cacheSet.tick();
 			}
 		}, 0, 0);
 		
