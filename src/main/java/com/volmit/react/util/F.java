@@ -143,6 +143,26 @@ public class F
 		return ofSize(s, 1024);
 	}
 	
+	public double[] sort(double[] array)
+	{
+		double[] rtt = new double[array.length];
+		
+		for(int i = 0; i < rtt.length; i++)
+		{
+			for(int j = i + 1; j < rtt.length; j++)
+			{
+				if((rtt[i] > rtt[j]) && (i != j))
+				{
+					double temp = rtt[j];
+					rtt[j] = rtt[i];
+					rtt[i] = temp;
+				}
+			}
+		}
+		
+		return rtt;
+	}
+	
 	/**
 	 * Get the timestamp of the time t (ms since 1970)
 	 * 
