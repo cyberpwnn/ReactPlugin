@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collections;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -48,11 +49,11 @@ public class ActionInstabilityCause extends Action implements Listener
 	private long maxRedstone;
 	private final GList<GStub> stubs;
 	public static GList<GStub> issues = new GList<GStub>();
-	
+
 	public ActionInstabilityCause(ActionController actionController)
 	{
 		super(actionController, Material.STONE, "x", "ActionInstabilityCause", 10, "Instability Trace", L.ACTION_INSTABILITYCAUSE, false);
-		
+
 		problems = new GMap<InstabilityCause, Integer>();
 		notified = new GList<InstabilityCause>();
 		stubs = new GList<GStub>();
@@ -63,12 +64,12 @@ public class ActionInstabilityCause extends Action implements Listener
 		maxSleepFactor = 1;
 		sleepy = false;
 	}
-	
+
 	public boolean su(Player p)
 	{
 		return false;
 	}
-	
+
 	@Override
 	public void act()
 	{
@@ -76,26 +77,26 @@ public class ActionInstabilityCause extends Action implements Listener
 		{
 			return;
 		}
-		
+
 		if(ReactAPI.getTicksPerSecond() > 17.5)
 		{
 			return;
 		}
-		
+
 		for(InstabilityCause i : new GList<InstabilityCause>(problems.keySet()))
 		{
 			problems.put(i, problems.get(i) - 1);
-			
+
 			if(problems.get(i) <= 0)
 			{
 				problems.remove(i);
 				notified.remove(i);
-				
+
 				if(i.equals(InstabilityCause.LAG))
 				{
 					continue;
 				}
-				
+
 				if(i.equals(InstabilityCause.CHUNK_GEN))
 				{
 					if(cc.getBoolean(getCodeName() + ".slow-fast-flyers-temporarily"))
@@ -110,21 +111,21 @@ public class ActionInstabilityCause extends Action implements Listener
 									{
 										k.sendMessage(Info.TAG + ChatColor.GREEN + L.MESSAGE_SLOWED_FIXED);
 									}
-									
+
 									k.setFlySpeed(speeds.get(k));
 								}
-								
+
 								catch(Exception e)
 								{
-									
+
 								}
 							}
 						}
 					}
-					
+
 					speeds.clear();
 				}
-				
+
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 				{
 					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
@@ -133,9 +134,9 @@ public class ActionInstabilityCause extends Action implements Listener
 						{
 							continue;
 						}
-						
+
 						N.t("Instability Fixed " + i.getName());
-						
+
 						if(!su(j))
 						{
 							j.sendMessage(Info.TAG + ChatColor.LIGHT_PURPLE + i.getName() + ": " + ChatColor.GREEN + ChatColor.UNDERLINE + L.MESSAGE_FIXED);
@@ -144,7 +145,7 @@ public class ActionInstabilityCause extends Action implements Listener
 				}
 			}
 		}
-		
+
 		final SampleController s = getActionController().getReact().getSampleController();
 		Long memoryMax = s.getSampleMemoryUsed().getMemoryMax();
 		Long memoryUsed = s.getSampleMemoryUsed().getValue().getLong();
@@ -159,61 +160,61 @@ public class ActionInstabilityCause extends Action implements Listener
 		final Double tps = s.getSampleTicksPerSecond().getValue().getDouble();
 		Double memoryPercent = (double) memoryUsed / (double) memoryMax;
 		Double memoryChunkPercent = (double) chunksMb / (double) memoryUsed;
-		
+
 		if(tps < cc.getDouble(getCodeName() + ".low.tps"))
 		{
 			lagging = true;
 			Verbose.x("instability", "LOW TPS: Analysing...");
-			
+
 			if(s.getExternalSampleWorldBorder().filling())
 			{
 				problems.put(InstabilityCause.WORLD_BORDER, 20);
 				Verbose.x("instability", "- WORLD BORDER");
 				return;
 			}
-			
+
 			if(spms < cc.getInt(getCodeName() + ".high.spms") && memoryPercent > cc.getDouble(getCodeName() + ".high.memory.percent"))
 			{
 				problems.put(InstabilityCause.MEMORY, 20);
 				Verbose.x("instability", "- MEMORY: " + memoryPercent);
-				
+
 				if(memoryChunkPercent > cc.getDouble(getCodeName() + ".high.memory.chunk.percent"))
 				{
 					problems.put(InstabilityCause.CHUNKS, 20);
 					Verbose.x("instability", "- CHUNKS: " + memoryChunkPercent);
 				}
 			}
-			
+
 			if(liquid > cc.getInt(getCodeName() + ".high.liquid"))
 			{
 				problems.put(InstabilityCause.LIQUID, 40);
 				Verbose.x("instability", "- LIQUID: " + liquid);
 			}
-			
+
 			int redm = cc.getInt(getCodeName() + ".high.redstone");
-			
+
 			if(redm < 1024)
 			{
 				redm = 1024;
 			}
-			
+
 			if(redstone > redm)
 			{
 				problems.put(InstabilityCause.REDSTONE, 30);
 				Verbose.x("instability", "- REDSTONE: " + redstone);
 			}
-			
+
 			if(tnt > cc.getInt(getCodeName() + ".high.tnt"))
 			{
 				problems.put(InstabilityCause.TNT_EXPLOSIONS, 100);
 				Verbose.x("instability", "- TNT: " + tnt);
 			}
-			
+
 			if(chunkGenPerSecond / 2 > cc.getInt(getCodeName() + ".high.chunk.generation"))
 			{
 				problems.put(InstabilityCause.CHUNK_GEN, 15);
 				Verbose.x("instability", "- CHUNKGEN/s: " + chunkGenPerSecond);
-				
+
 				if(cc.getBoolean(getCodeName() + ".slow-fast-flyers-temporarily"))
 				{
 					for(Player i : getActionController().getReact().onlinePlayers())
@@ -221,43 +222,44 @@ public class ActionInstabilityCause extends Action implements Listener
 						if(i.isFlying() && i.getFlySpeed() > 0.4 && !speeds.containsKey(i))
 						{
 							speeds.put(i, i.getFlySpeed());
-							
+
 							if(!su(i))
 							{
 								i.sendMessage(Info.TAG + Info.COLOR_ERR + L.MESSAGE_SLOWED);
 							}
-							
+
 							i.setFlySpeed(0.4f);
 						}
 					}
 				}
 			}
-			
+
 			if(entities > cc.getInt(getCodeName() + ".high.entity.count"))
 			{
 				problems.put(InstabilityCause.ENTITIES, 100);
 				Verbose.x("instability", "- ENTITIES: " + entities);
 			}
 		}
-		
+
 		else
 		{
 			lagging = false;
-			
+
 			if(redstone > maxRedstone)
 			{
 				maxRedstone = redstone;
 				Verbose.x("limit", "Max Redstone Reached since Load: " + maxRedstone);
 			}
 		}
-		
+
 		if(problems.containsKey(InstabilityCause.REDSTONE))
 		{
 			actionController.getActionSuppressRedstone().freeze();
 			Verbose.x("instability", "- REDSTONE FREEZE SMALL ENABLED");
-			
+
 			actionController.getReact().scheduleSyncTask(40, new Runnable()
 			{
+				@SuppressWarnings("unlikely-arg-type")
 				@Override
 				public void run()
 				{
@@ -265,7 +267,7 @@ public class ActionInstabilityCause extends Action implements Listener
 					{
 						Verbose.x("instability", "- REDSTONE: FORCE: TRUE");
 						force = true;
-						
+
 						if(s.getSampleTicksPerSecond().getValue().getDouble() < 11.0)
 						{
 							Verbose.x("instability", "- REDSTONE: TPS: < 11tps!!!");
@@ -281,7 +283,7 @@ public class ActionInstabilityCause extends Action implements Listener
 											{
 												continue;
 											}
-											
+
 											if(!su(j))
 											{
 												j.sendMessage(ChatColor.GOLD + "Redstone is making the server unplayable. " + Info.COLOR_ERR + " Applying Force.");
@@ -289,12 +291,12 @@ public class ActionInstabilityCause extends Action implements Listener
 										}
 									}
 								}
-								
+
 								Verbose.x("instability", "- REDSTONE: TPS: TOO MUCH CPU TIME!");
 								actionController.getActionSuppressRedstone().freezeAll();
 							}
 						}
-						
+
 						else
 						{
 							actionController.getReact().scheduleSyncTask(50, new Runnable()
@@ -305,7 +307,7 @@ public class ActionInstabilityCause extends Action implements Listener
 									if(problems.containsKey(InstabilityCause.REDSTONE))
 									{
 										Verbose.x("instability", "- REDSTONE: TOO LONG TO FIX: FORCE: TRUE");
-										
+
 										if(React.isNf())
 										{
 											for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
@@ -316,7 +318,7 @@ public class ActionInstabilityCause extends Action implements Listener
 													{
 														continue;
 													}
-													
+
 													if(!su(j))
 													{
 														j.sendMessage(ChatColor.GOLD + "Redstone is still lagging. " + Info.COLOR_ERR + " Applying Force.");
@@ -324,7 +326,7 @@ public class ActionInstabilityCause extends Action implements Listener
 												}
 											}
 										}
-										
+
 										actionController.getActionSuppressRedstone().freezeAll();
 									}
 								}
@@ -334,42 +336,42 @@ public class ActionInstabilityCause extends Action implements Listener
 				}
 			});
 		}
-		
+
 		else
 		{
 			actionController.getActionSuppressRedstone().unfreeze();
 			actionController.getActionSuppressRedstone().unfreezeAll();
 			force = false;
 		}
-		
+
 		if(problems.containsKey(InstabilityCause.TNT_EXPLOSIONS))
 		{
 			actionController.getActionSuppressTnt().freeze();
 			Verbose.x("instability", "- TNT: KILL: ON");
 		}
-		
+
 		else
 		{
 			actionController.getActionSuppressTnt().unfreeze();
 		}
-		
+
 		if(problems.size() == 0 && tps < cc.getDouble(getCodeName() + ".low.tps"))
 		{
 			Verbose.x("instability", "- UNKNOWN LAG SOURCE! USING LOG JUDGEMENT");
 			InstabilityCause ins = InstabilityCause.LAG;
-			
+
 			double pcliquid = MathUtils.percent(0, liquid, cc.getInt(getCodeName() + ".high.liquid"));
 			double pcredstone = MathUtils.percent(0, redstone, cc.getInt(getCodeName() + ".high.redstone"));
 			double pctnt = MathUtils.percent(0, liquid, cc.getInt(getCodeName() + ".high.tnt"));
-			
+
 			Verbose.x("instability", "-- LIQ: " + pcliquid);
 			Verbose.x("instability", "-- RED: " + pcredstone);
 			Verbose.x("instability", "-- TNT: " + pctnt);
-			
+
 			double[] ch = new double[] {pcliquid, pcredstone, pctnt};
 			double hpc = 33.0;
 			int index = -1;
-			
+
 			for(int i = 0; i < ch.length; i++)
 			{
 				if(ch[i] > hpc)
@@ -378,32 +380,32 @@ public class ActionInstabilityCause extends Action implements Listener
 					index = i;
 				}
 			}
-			
+
 			switch(index)
 			{
-				case 0:
-					ins = InstabilityCause.LIQUID;
-				case 1:
-					ins = InstabilityCause.REDSTONE;
-				case 2:
-					ins = InstabilityCause.TNT_EXPLOSIONS;
+			case 0:
+				ins = InstabilityCause.LIQUID;
+			case 1:
+				ins = InstabilityCause.REDSTONE;
+			case 2:
+				ins = InstabilityCause.TNT_EXPLOSIONS;
 			}
-			
+
 			Verbose.x("instability", "--- SELECTED: " + ins.toString());
 			problems.put(ins, 30);
 		}
-		
+
 		for(InstabilityCause i : problems.keySet())
 		{
 			getActionController().getReact().getSampleController().getSampleHitRate().hit(i);
-			
+
 			if(!notified.contains(i))
 			{
 				if(i.equals(InstabilityCause.LAG))
 				{
 					continue;
 				}
-				
+
 				for(Player j : getActionController().getReact().getServer().getOnlinePlayers())
 				{
 					if(j.hasPermission(Info.PERM_MONITOR) && i.isTalkative() && React.isNf())
@@ -412,19 +414,19 @@ public class ActionInstabilityCause extends Action implements Listener
 						{
 							continue;
 						}
-						
+
 						N.t("Instability Detected " + i.getName());
-						
+
 						if(i.equals(InstabilityCause.REDSTONE))
 						{
 							Chunk c = actionController.getReact().getSampleController().getSampleRedstoneUpdatesPerSecond().getChunk();
 							RawText t = new RawText();
-							
+
 							t.addText(i.getName() + ": " + L.MESSAGE_ISSUES, RawText.COLOR_RED);
 							t.addTextWithHoverCommand(" at " + c.getWorld().getName() + " [" + c.getX() + "," + c.getZ() + "]", RawText.COLOR_GOLD, "/tp " + c.getBlock(0, 0, 0).getX() + " " + level(c.getWorld(), c.getBlock(0, 0, 0).getX(), c.getBlock(0, 0, 0).getZ()) + " " + c.getBlock(0, 0, 0).getZ(), "Click to teleport near this area. Please be careful, as the location is not accurate.", RawText.COLOR_GREEN);
 							t.tellRawTo(getActionController().getReact(), j);
 						}
-						
+
 						else
 						{
 							if(!su(j))
@@ -434,56 +436,56 @@ public class ActionInstabilityCause extends Action implements Listener
 						}
 					}
 				}
-				
+
 				notified.add(i);
-				
+
 				if(!stubs.isEmpty() && stubs.get(stubs.size() - 1).getTitle().equals(i.getName()))
 				{
 					stubs.remove(stubs.size() - 1);
 				}
-				
+
 				stubs.add(new GStub(i.getName(), i.getProblem()));
-				
+
 				if(stubs.size() > 64)
 				{
 					stubs.remove(0);
 				}
 			}
 		}
-		
+
 		issues = stubs.copy().removeDuplicates();
 	}
-	
+
 	public GMap<String, Double> pollHeaftSamples()
 	{
 		GMap<String, Double> polled = new GMap<String, Double>();
-		
+
 		for(Samplable i : getActionController().getReact().getSampleController().getSamples().keySet())
 		{
 			polled.put(i.getName(), (double) (i.getReactionTime()) / 1000000.0);
 		}
-		
+
 		return polled;
 	}
-	
+
 	public GMap<String, Double> pollHeaftActions()
 	{
 		GMap<String, Double> polled = new GMap<String, Double>();
-		
+
 		for(Actionable i : getActionController().getActions().keySet())
 		{
-			polled.put(F.trim(i.getName(), 12), (double) (i.getReactionTime()) / 1000000.0);
+			polled.put(F.trim(i.getName(), 12), (i.getReactionTime()) / 1000000.0);
 		}
-		
+
 		return polled;
 	}
-	
+
 	public GList<String> sortHeaft(GMap<String, Double> heaft)
 	{
 		GList<String> order = new GList<String>();
 		GList<Double> vv = heaft.v();
 		Collections.sort(vv);
-		
+
 		for(Double i : vv)
 		{
 			for(String j : heaft.keySet())
@@ -494,66 +496,66 @@ public class ActionInstabilityCause extends Action implements Listener
 				}
 			}
 		}
-		
+
 		return order.reverse();
 	}
-	
+
 	public String pagePollSamples()
 	{
 		String s = "";
-		
+
 		GMap<String, Double> h = pollHeaftSamples();
 		GList<String> o = sortHeaft(h);
-		
+
 		for(String i : o)
 		{
 			if(h.get(i) > 5.0)
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_RED + ChatColor.BOLD + F.f(h.get(i), 2) + "ms\n";
 			}
-			
+
 			else if(h.get(i) > 2.5)
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_RED + F.f(h.get(i), 2) + "ms\n";
 			}
-			
+
 			else
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_BLUE + F.f(h.get(i), 2) + "ms\n";
 			}
 		}
-		
+
 		return s;
 	}
-	
+
 	public String pagePollActions()
 	{
 		String s = "";
-		
+
 		GMap<String, Double> h = pollHeaftActions();
 		GList<String> o = sortHeaft(h);
-		
+
 		for(String i : o)
 		{
 			if(h.get(i) > 5.0)
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_RED + ChatColor.BOLD + F.f(h.get(i), 2) + "ms\n";
 			}
-			
+
 			else if(h.get(i) > 2.5)
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_RED + F.f(h.get(i), 2) + "ms\n";
 			}
-			
+
 			else
 			{
 				s = s + ChatColor.DARK_AQUA + i + ": " + ChatColor.DARK_BLUE + F.f(h.get(i), 2) + "ms\n";
 			}
 		}
-		
+
 		return s;
 	}
-	
+
 	public GBook query()
 	{
 		GBook book = new GBook(Info.COLOR_ERR + "" + problems.size() + " Server Issue(s)");
@@ -570,9 +572,9 @@ public class ActionInstabilityCause extends Action implements Listener
 		book.addPage(stats);
 		book.addPage(timings);
 		book.addPage(actions);
-		
+
 		int pgs = 0;
-		
+
 		for(InstabilityCause i : problems.k().reverse())
 		{
 			GPage page = new GPage();
@@ -580,7 +582,7 @@ public class ActionInstabilityCause extends Action implements Listener
 			book.addPage(page);
 			pgs++;
 		}
-		
+
 		for(GStub i : stubs.copy().reverse())
 		{
 			GPage page = new GPage();
@@ -588,39 +590,39 @@ public class ActionInstabilityCause extends Action implements Listener
 			page.put(i.getTitle() + "\n" + Info.COLOR_ERR + ChatColor.BOLD + " (" + time.ago() + ")", i.getText());
 			book.addPage(page);
 			pgs++;
-			
+
 			if(pgs > 81)
 			{
 				break;
 			}
 		}
-		
+
 		return book;
 	}
-	
+
 	@Override
 	public void manual(CommandSender p)
 	{
 		p.sendMessage(getName() + L.MESSAGE_ACTION_FULLY_AUTOMATIC);
 	}
-	
+
 	@Override
 	public void start()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void stop()
 	{
-		
+
 	}
-	
+
 	public boolean isLagging()
 	{
 		return lagging;
 	}
-	
+
 	public int level(World w, int x, int z)
 	{
 		for(int i = 255; i > 0; i--)
@@ -630,15 +632,15 @@ public class ActionInstabilityCause extends Action implements Listener
 				return i + 1;
 			}
 		}
-		
+
 		return 255;
 	}
-	
+
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
-		
+
 		cc.set(getCodeName() + ".low.tps", 16.8, "What is considered a low tps? Lag?");
 		cc.set(getCodeName() + ".high.spms", 1, "Low SPMS");
 		cc.set(getCodeName() + ".high.memory.percent", 0.8, "A high percent?");
@@ -652,7 +654,7 @@ public class ActionInstabilityCause extends Action implements Listener
 		cc.set(getCodeName() + ".high.worldedit.bps", 10000, "High world edit BPS?");
 		cc.set(getCodeName() + ".slow-fast-flyers-temporarily", true, "Slow down flyers who are flying at \nvery fast speeds until chunk lag has stopped");
 	}
-	
+
 	public GPage queryPlugin(String name)
 	{
 		Plugin p = null;
@@ -663,85 +665,85 @@ public class ActionInstabilityCause extends Action implements Listener
 				p = i;
 			}
 		}
-		
+
 		if(p == null)
 		{
 			return null;
 		}
-		
+
 		PluginDescriptionFile pdf = p.getDescription();
 		GPage general = new GPage();
 		general.put(p.getName(), ChatColor.DARK_AQUA + "Version: " + ChatColor.DARK_RED + pdf.getVersion() + "\n" + ChatColor.DARK_AQUA + "Enabled: " + ChatColor.DARK_RED + (p.isEnabled() ? "Yes" : "No") + "\n" + ChatColor.DARK_AQUA + "Sync Tasks: " + ChatColor.DARK_RED + tasks(p).size() + "\n" + ChatColor.DARK_AQUA + "Event Listeners: " + ChatColor.DARK_RED + listeners(p).size());
-		
+
 		return general;
 	}
-	
+
 	public long guessPlayerLimit()
 	{
 		long playermb = getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong();
 		long playerch = (long) (((((Bukkit.getServer().getViewDistance() * 2) + 1) * 2)) / 12.8);
-		
+
 		long playerimp = playermb + playerch;
 		long max = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryMax() / 1024 / 1024;
-		
+
 		max -= getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().base();
 		return max / playerimp;
 	}
-	
+
 	public String guessRedstoneLimit()
 	{
 		if(maxRedstone < 1)
 		{
 			maxRedstone = cc.getInt(getCodeName() + ".high.redstone");
 		}
-		
+
 		return F.f(maxRedstone);
 	}
-	
+
 	public long guessPlayerLimit(long mb)
 	{
 		long playermb = getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong();
 		long playerch = (long) (((((Bukkit.getServer().getViewDistance() * 2) + 1) * 2)) / 12.8);
-		
+
 		long playerimp = playermb + playerch;
 		long max = mb;
-		
+
 		max -= getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().base();
 		return max / playerimp;
 	}
-	
+
 	public long guessPlayerOneChunk(long mb)
 	{
 		long playermb = getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong();
 		long playerch = (long) (((((Bukkit.getServer().getViewDistance() * 2) + 1) * 2)) / 12.8);
-		
+
 		long playerimp = (playermb - playerch) + 1;
 		long max = mb;
-		
+
 		return max / playerimp;
 	}
-	
+
 	public long guessPlayerOneChunk()
 	{
 		long playermb = getActionController().getReact().getSampleController().getSampleMemoryPerPlayer().getValue().getLong();
 		long playerch = (long) (((((Bukkit.getServer().getViewDistance() * 2) + 1) * 2)) / 12.8);
-		
+
 		long playerimp = playermb - playerch;
 		long max = getActionController().getReact().getSampleController().getSampleMemoryUsed().getMemoryMax() / 1024 / 1024;
-		
+
 		if(playerimp == 0)
 		{
 			playerimp = 1;
 		}
-		
+
 		return max / playerimp;
 	}
-	
+
 	public String queryGuess(long mb)
 	{
 		return Info.COLOR_ERR + "Guess: " + guessPlayerLimit(mb) + " ~ " + guessPlayerOneChunk(mb);
 	}
-	
+
 	public GBook queryGuess()
 	{
 		GBook book = new GBook(ChatColor.AQUA + "React's Guess");
@@ -750,11 +752,11 @@ public class ActionInstabilityCause extends Action implements Listener
 		book.addPage(pg1);
 		return book;
 	}
-	
+
 	public GList<BukkitTask> tasks(Plugin plugin)
 	{
 		GList<BukkitTask> br = new GList<BukkitTask>();
-		
+
 		for(BukkitTask i : getActionController().getReact().getServer().getScheduler().getPendingTasks())
 		{
 			if(i.getOwner().equals(plugin))
@@ -762,14 +764,14 @@ public class ActionInstabilityCause extends Action implements Listener
 				br.add(i);
 			}
 		}
-		
+
 		return br;
 	}
-	
+
 	public GList<BukkitWorker> tasksActive(Plugin plugin)
 	{
 		GList<BukkitWorker> br = new GList<BukkitWorker>();
-		
+
 		for(BukkitWorker i : getActionController().getReact().getServer().getScheduler().getActiveWorkers())
 		{
 			if(i.getOwner().equals(plugin))
@@ -777,30 +779,30 @@ public class ActionInstabilityCause extends Action implements Listener
 				br.add(i);
 			}
 		}
-		
+
 		return br;
 	}
-	
+
 	public GList<RegisteredListener> listeners(Plugin plugin)
 	{
 		return new GList<RegisteredListener>(HandlerList.getRegisteredListeners(plugin));
 	}
-	
+
 	public GMap<InstabilityCause, Integer> getProblems()
 	{
 		return problems;
 	}
-	
+
 	public GList<InstabilityCause> getNotified()
 	{
 		return notified;
 	}
-	
+
 	public GList<GStub> getStubs()
 	{
 		return stubs;
 	}
-	
+
 	public boolean issues()
 	{
 		if(!problems.isEmpty())
@@ -813,7 +815,7 @@ public class ActionInstabilityCause extends Action implements Listener
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

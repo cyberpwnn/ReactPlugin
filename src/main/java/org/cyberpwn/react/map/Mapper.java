@@ -12,7 +12,7 @@ public class Mapper
 	private Quadrant q1;
 	private Quadrant q2;
 	private Quadrant q3;
-	
+
 	public Mapper()
 	{
 		instance = this;
@@ -20,17 +20,17 @@ public class Mapper
 		q2 = new Quadrant(64, 0);
 		q3 = new Quadrant(0, 64);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void updateSlow(GTimeBank tb)
 	{
 		q3.flush();
-		
+
 		for(Double i : tb.get("stability"))
 		{
 			q3.put(MapPalette.DARK_GREEN, i);
 		}
-		
+
 		for(Double i : tb.get("players"))
 		{
 			if(i > 32)
@@ -39,17 +39,17 @@ public class Mapper
 				{
 					q3.put(MapPalette.BLUE, j);
 				}
-				
+
 				break;
 			}
 		}
-		
+
 		for(Double i : tb.get("memory"))
 		{
 			q3.put(MapPalette.RED, i);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void sample(SampleController s)
 	{
@@ -60,24 +60,41 @@ public class Mapper
 			q2.put(MapPalette.DARK_BROWN, 1.0 - s.getSampleChunkMemory().getPercent() * (s.getSampleMemoryUsed().getPercentAverage()));
 			q2.put(MapPalette.PALE_BLUE, 1.0 - (Bukkit.getServer().getOnlinePlayers().size() * s.getSampleMemoryPerPlayer().getPercentOfMem()) * (s.getSampleMemoryUsed().getPercentAverage()) / 2);
 			q2.put(MapPalette.RED, 1.0 - s.getSampleMemoryUsed().getPercentAverage());
+
+			q3.flush();
+
+			for(Double i : s.getReact().getDataController().getTb().get("stability"))
+			{
+				q3.put(MapPalette.LIGHT_GREEN, 1.0 - i);
+			}
+
+			for(Double i : s.getReact().getDataController().getTb().get("memory"))
+			{
+				q3.put(MapPalette.BROWN, 1.0 - i);
+			}
+
+			for(Double i : s.getReact().getDataController().getTb().get("players"))
+			{
+				q3.put(MapPalette.BLUE, 1.0 - i);
+			}
 		}
-		
+
 		catch(Exception e)
 		{
-			
+
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void render(MapCanvas canvas)
 	{
 		clear(canvas);
 		q1.renderDual(canvas, MapPalette.DARK_GREEN, MapPalette.LIGHT_GREEN);
 		q2.render(canvas);
-		q3.renderLogLog(canvas);
+		q3.render(canvas);
 		grid(canvas);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void clear(MapCanvas canvas)
 	{
@@ -89,7 +106,7 @@ public class Mapper
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void grid(MapCanvas canvas)
 	{
@@ -104,7 +121,7 @@ public class Mapper
 			}
 		}
 	}
-	
+
 	public static Mapper instance()
 	{
 		return instance;
