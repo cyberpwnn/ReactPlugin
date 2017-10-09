@@ -268,6 +268,8 @@ public class React extends JavaPlugin implements Configurable
 		FileConfiguration fc = new YamlConfiguration();
 		File fx = new GFile(new GFile(getDataFolder(), "cache"), "mcache");
 
+		new BStats(this);
+
 		new TaskLater(10)
 		{
 			@Override
@@ -466,6 +468,27 @@ public class React extends JavaPlugin implements Configurable
 	public void onLoad()
 	{
 		readCurrentTick();
+	}
+
+	public static void saveMainConfig()
+	{
+		File f = new File(instance.getDataFolder(), "config.yml");
+
+		try
+		{
+			instance.cc.toYaml().save(f);
+		}
+
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public static void reload()
+	{
+		Bukkit.getServer().getPluginManager().disablePlugin(instance);
+		Bukkit.getServer().getPluginManager().enablePlugin(instance);
 	}
 
 	private void readCurrentTick()
