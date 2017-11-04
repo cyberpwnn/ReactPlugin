@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn.react</groupId>
 	<artifactId>React</artifactId>
-	<version>5.4.3</version>
+	<version>5.5</version>
 	<name>React</name>
 	<description>Smart Server Performance</description>
 	<properties>
@@ -123,7 +123,6 @@
 			<systemPath>${react.libs}/jsoup-1.7.2.jar</systemPath>
 			<version>1.8.8</version>
 		</dependency>
-
 		<dependency>
 			<groupId>craftbukkit.org</groupId>
 			<artifactId>craftbukkit-1.8.8</artifactId>

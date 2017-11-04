@@ -15,21 +15,20 @@ public class TileController extends Controller implements Configurable
 {
 	private int maxTc;
 	private ClusterConfig cc;
-	
+
 	public TileController(React react)
 	{
 		super(react);
-		
+
 		maxTc = 256;
 		cc = new ClusterConfig();
 	}
-	
+
 	@EventHandler
 	public void on(BlockPlaceEvent e)
 	{
 		new HandledEvent()
 		{
-			
 			@Override
 			public void execute()
 			{
@@ -37,14 +36,14 @@ public class TileController extends Controller implements Configurable
 				{
 					return;
 				}
-				
+
 				int btc = e.getBlock().getChunk().getTileEntities().length;
-				
+
 				if(e.getBlock().getState() instanceof InventoryHolder)
 				{
 					btc++;
 				}
-				
+
 				if(btc > maxTc)
 				{
 					e.setCancelled(true);
@@ -53,7 +52,7 @@ public class TileController extends Controller implements Configurable
 			}
 		};
 	}
-	
+
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
@@ -61,30 +60,30 @@ public class TileController extends Controller implements Configurable
 		cc.set("deny-message", "There are too many tile entities in this chunk!");
 		cc.set("enable-tile-control", false);
 	}
-	
+
 	@Override
 	public void onReadConfig()
 	{
 		maxTc = cc.getInt("max-tiles-per-chunk");
 	}
-	
+
 	@Override
 	public ClusterConfig getConfiguration()
 	{
 		return cc;
 	}
-	
+
 	@Override
 	public String getCodeName()
 	{
 		return "tile-controller";
 	}
-	
+
 	public boolean is()
 	{
 		return cc.getBoolean("enable-tile-control");
 	}
-	
+
 	public int getMaxTc()
 	{
 		return maxTc;
