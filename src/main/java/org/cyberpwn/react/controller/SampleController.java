@@ -47,7 +47,7 @@ public class SampleController extends Controller
 	private Long tick;
 	private Long reactionTime;
 	private boolean caffeine;
-	
+
 	private final SampleStability sampleStability;
 	private final SampleReactionTime sampleReactionTime;
 	private final SampleTicksPerSecond sampleTicksPerSecond;
@@ -74,13 +74,13 @@ public class SampleController extends Controller
 	private final SamplePHTimings samplePHTimings;
 	private final SamplePHEntities samplePHEntities;
 	private final SamplePHPhoton samplePHPhoton;
-	
+
 	private final ExternalSampleWorldBorder externalSampleWorldBorder;
-	
+
 	public SampleController(React react)
 	{
 		super(react);
-		
+
 		samples = new GMap<Samplable, Integer>();
 		externalSamples = new GMap<ExternallySamplable, Integer>();
 		tick = 0l;
@@ -112,77 +112,56 @@ public class SampleController extends Controller
 		samplePHEntities = new SamplePHEntities(this);
 		samplePHPhoton = new SamplePHPhoton(this);
 		sampleGarbageDirection = new SampleGarbageDirection(this);
-		
+
 		externalSampleWorldBorder = new ExternalSampleWorldBorder(this);
 	}
-	
+
 	public void load()
 	{
 		dispatcher.v("Loading Samplers...");
-		
-		for(Samplable i : samples.keySet())
-		{
-			if(i instanceof Configurable)
-			{
-				Configurable c = (Configurable) i;
-				react.getDataController().load("samplers", c);
-				w("Loaded Configuration for " + ChatColor.LIGHT_PURPLE + c.getCodeName());
-			}
-		}
-		
-		for(ExternallySamplable i : externalSamples.keySet())
-		{
-			if(i instanceof Configurable)
-			{
-				Configurable c = (Configurable) i;
-				react.getDataController().load("samplers", c);
-				w("Loaded Configuration for " + ChatColor.LIGHT_PURPLE + c.getCodeName());
-			}
-		}
-		
 		s("Loaded " + ChatColor.LIGHT_PURPLE + samples.size() + " Samplers!");
 	}
-	
+
 	@Override
 	public void start()
 	{
 		load();
 		reactionTime = 0l;
-		
+
 		o("Starting Samplers...");
-		
+
 		for(Samplable i : samples.keySet())
 		{
 			i.onStart();
 			i.setCurrentDelay(i.getIdealDelay());
 			dispatcher.w("Started " + ChatColor.AQUA + "Sampler:" + i.getClass().getSimpleName() + ChatColor.LIGHT_PURPLE + " @t: " + i.getCurrentDelay());
 		}
-		
+
 		if(!React.hashed.contains("raw.githubusercontent"))
 		{
 			React.setMef(true);
 		}
-		
+
 		for(ExternallySamplable i : externalSamples.k())
 		{
 			try
 			{
 				i.onStart();
 			}
-			
+
 			catch(Exception e)
 			{
 				f("FAILED TO LOAD SAMPLER: Plugin: " + i.getPlugin());
 				f("Is the plugin up to date?");
-				
+
 				externalSamples.remove(i);
 			}
-			
+
 			i.setCurrentDelay(i.getIdealDelay());
 			dispatcher.w("Started EXT " + ChatColor.AQUA + "Sampler:" + i.getClass().getSimpleName() + ChatColor.LIGHT_PURPLE + " @t: " + i.getCurrentDelay());
 		}
 	}
-	
+
 	@Override
 	public void stop()
 	{
@@ -190,35 +169,35 @@ public class SampleController extends Controller
 		{
 			i.onStop();
 		}
-		
+
 		for(ExternallySamplable i : externalSamples.keySet())
 		{
 			i.onStop();
 		}
 	}
-	
+
 	@Override
 	public void tick()
 	{
 		tick++;
 		reactionTime = 0l;
-		
+
 		if(React.isMef())
 		{
 			return;
 		}
-		
+
 		for(Samplable i : new GList<Samplable>(samples.keySet()))
 		{
 			try
 			{
 				samples.put(i, samples.get(i) - 1);
-				
+
 				if(i.isAsleep() && !caffeine)
 				{
 					continue;
 				}
-				
+
 				if(samples.get(i) <= 0)
 				{
 					if(i.isPooled())
@@ -237,7 +216,7 @@ public class SampleController extends Controller
 							}
 						};
 					}
-					
+
 					else
 					{
 						long nsx = System.nanoTime();
@@ -248,25 +227,25 @@ public class SampleController extends Controller
 						reactionTime += i.getReactionTime();
 					}
 				}
-				
+
 				if(ReactAPI.getTicksPerSecond() > 17.5 && !caffeine)
 				{
 					i.sleep((int) (10 + (Math.random() * 40)));
 				}
 			}
-			
+
 			catch(Exception ee)
 			{
-				
+
 			}
 		}
-		
+
 		for(ExternallySamplable i : new GList<ExternallySamplable>(externalSamples.keySet()))
 		{
 			try
 			{
 				externalSamples.put(i, externalSamples.get(i) - 1);
-				
+
 				if(externalSamples.get(i) <= 0)
 				{
 					long nsx = System.nanoTime();
@@ -276,236 +255,236 @@ public class SampleController extends Controller
 					externalSamples.put(i, i.getCurrentDelay());
 				}
 			}
-			
+
 			catch(Exception ee)
 			{
-				
+
 			}
 		}
-		
+
 		reactionTime = 0l;
-		
+
 		for(Samplable i : new GList<Samplable>(samples.keySet()))
 		{
 			reactionTime += i.getReactionTime();
 		}
-		
+
 		for(ExternallySamplable i : new GList<ExternallySamplable>(externalSamples.keySet()))
 		{
 			reactionTime += i.getReactionTime();
 		}
-		
+
 		for(Samplable i : samples.keySet())
 		{
 			Configurable c = (Configurable) i;
 			React.getPacket().put(c.getCodeName(), i.get());
 		}
-		
+
 		React.getPacket().put("mem-max", new Value(getSampleMemoryUsed().getMemoryMax() / 1024 / 1024));
 	}
-	
+
 	public long getTick()
 	{
 		return tick;
 	}
-	
+
 	public void tick(Samplable samplable)
 	{
 		long lastTick = System.currentTimeMillis();
 		samplable.onTick();
 		samplable.setLastTick(lastTick);
 	}
-	
+
 	public void registerSample(Samplable samplable)
 	{
 		samples.put(samplable, 1);
 	}
-	
+
 	public void registerExternalSample(ExternallySamplable samplable)
 	{
 		Plugin plugin = Bukkit.getPluginManager().getPlugin(samplable.getPlugin());
-		
+
 		if(plugin != null)
 		{
 			externalSamples.put(samplable, 1);
 		}
 	}
-	
+
 	public GMap<Samplable, Integer> getSamples()
 	{
 		return samples;
 	}
-	
+
 	public void setSamples(GMap<Samplable, Integer> samples)
 	{
 		this.samples = samples;
 	}
-	
+
 	public void setTick(Long tick)
 	{
 		this.tick = tick;
 	}
-	
+
 	public Long getReactionTime()
 	{
 		return reactionTime;
 	}
-	
+
 	public void setReactionTime(Long reactionTime)
 	{
 		this.reactionTime = reactionTime;
 	}
-	
+
 	public GMap<ExternallySamplable, Integer> getExternalSamples()
 	{
 		return externalSamples;
 	}
-	
+
 	public void setExternalSamples(GMap<ExternallySamplable, Integer> externalSamples)
 	{
 		this.externalSamples = externalSamples;
 	}
-	
+
 	public SampleStability getSampleStability()
 	{
 		return sampleStability;
 	}
-	
+
 	public SampleTicksPerSecond getSampleTicksPerSecond()
 	{
 		return sampleTicksPerSecond;
 	}
-	
+
 	public SampleMemoryUsed getSampleMemoryUsed()
 	{
 		return sampleMemoryUsed;
 	}
-	
+
 	public SampleMemoryAllocationsPerSecond getSampleMemoryVolatility()
 	{
 		return sampleMemoryVolatility;
 	}
-	
+
 	public SampleMemorySweepFrequency getSampleMemorySweepFrequency()
 	{
 		return sampleMemorySweepFrequency;
 	}
-	
+
 	public SampleChunksLoaded getSampleChunksLoaded()
 	{
 		return sampleChunksLoaded;
 	}
-	
+
 	public SampleChunkLoadPerSecond getSampleChunkLoadPerSecond()
 	{
 		return sampleChunkLoadPerSecond;
 	}
-	
+
 	public SampleLiquidFlowPerSecond getSampleLiquidFlowPerSecond()
 	{
 		return sampleLiquidFlowPerSecond;
 	}
-	
+
 	public SampleRedstoneUpdatesPerSecond getSampleRedstoneUpdatesPerSecond()
 	{
 		return sampleRedstoneUpdatesPerSecond;
 	}
-	
+
 	public SampleReactionTime getSampleReactionTime()
 	{
 		return sampleReactionTime;
 	}
-	
+
 	public SampleChunkGenPerSecond getSampleChunkGenPerSecond()
 	{
 		return sampleChunkGenPerSecond;
 	}
-	
+
 	public SampleChunkMemory getSampleChunkMemory()
 	{
 		return sampleChunkMemory;
 	}
-	
+
 	public SampleTNTPerSecond getSampleTNTPerSecond()
 	{
 		return sampleTNTPerSecond;
 	}
-	
+
 	public SampleMonitoredPlugins getSampleMonitoredPlugins()
 	{
 		return sampleMonitoredPlugins;
 	}
-	
+
 	public SampleMemoryPerPlayer getSampleMemoryPerPlayer()
 	{
 		return sampleMemoryPerPlayer;
 	}
-	
+
 	public SampleEntities getSampleEntities()
 	{
 		return sampleEntities;
 	}
-	
+
 	public SampleDrops getSampleDrops()
 	{
 		return sampleDrops;
 	}
-	
+
 	public ExternalSampleWorldBorder getExternalSampleWorldBorder()
 	{
 		return externalSampleWorldBorder;
 	}
-	
+
 	public SampleHistory getSampleHistory()
 	{
 		return sampleHistory;
 	}
-	
+
 	public SampleHitRate getSampleHitRate()
 	{
 		return sampleHitRate;
 	}
-	
+
 	public SamplePlayers getSamplePlayers()
 	{
 		return samplePlayers;
 	}
-	
+
 	public SampleTimings getSampleTimings()
 	{
 		return sampleTimings;
 	}
-	
+
 	public SamplePHTimings getSamplePHTimings()
 	{
 		return samplePHTimings;
 	}
-	
+
 	public SamplePHEntities getSamplePHEntities()
 	{
 		return samplePHEntities;
 	}
-	
+
 	public SampleGarbageDirection getSampleGarbageDirection()
 	{
 		return sampleGarbageDirection;
 	}
-	
+
 	public SamplePHPhoton getSamplePHPhoton()
 	{
 		return samplePHPhoton;
 	}
-	
+
 	public boolean isCaffeine()
 	{
 		return caffeine;
 	}
-	
+
 	public void setCaffeine(boolean caffeine)
 	{
 		this.caffeine = caffeine;
 	}
-	
+
 	public SampleHopperTransfersPerSecond getSampleHopperTransfersPerSecond()
 	{
 		return sampleHopperTransfersPerSecond;
