@@ -12,7 +12,6 @@ import org.cyberpwn.react.action.ActionPurgeDrops;
 import org.cyberpwn.react.action.ActionPurgeEntities;
 import org.cyberpwn.react.action.ActionReStackEntities;
 import org.cyberpwn.react.action.ActionStackEntities;
-import org.cyberpwn.react.action.ActionSuppressGrowth;
 import org.cyberpwn.react.action.ActionSuppressRedstone;
 import org.cyberpwn.react.action.ActionSuppressTnt;
 import org.cyberpwn.react.action.ActionUnStackEntities;
@@ -33,7 +32,6 @@ public class ActionController extends Controller
 	private final ActionCollectGarbage actionCollectGarbage;
 	private final ActionPurgeChunks actionPurgeChunks;
 	private final ActionCullDrops actionCullDrops;
-	private final ActionSuppressGrowth actionSuppressGrowth;
 	private final ActionPurgeDrops actionPurgeDrops;
 	private final ActionPurgeEntities actionPurgeEntities;
 	private final ActionHeavyChunk actionHeavyChunk;
@@ -55,7 +53,6 @@ public class ActionController extends Controller
 		actionCollectGarbage = new ActionCollectGarbage(this);
 		actionPurgeChunks = new ActionPurgeChunks(this);
 		actionCullDrops = new ActionCullDrops(this);
-		actionSuppressGrowth = new ActionSuppressGrowth(this);
 		actionPurgeEntities = new ActionPurgeEntities(this);
 		actionPurgeDrops = new ActionPurgeDrops(this);
 		actionHeavyChunk = new ActionHeavyChunk(this);
@@ -183,11 +180,6 @@ public class ActionController extends Controller
 	public ActionCullDrops getActionCullDrops()
 	{
 		return actionCullDrops;
-	}
-	
-	public ActionSuppressGrowth getActionSuppressGrowth()
-	{
-		return actionSuppressGrowth;
 	}
 	
 	public ActionPurgeDrops getActionPurgeDrops()
