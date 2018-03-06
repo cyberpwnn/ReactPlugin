@@ -29,41 +29,41 @@ public class ActionPurgeEntities extends Action implements Listener
 {
 	public static String RC_NONCE = "%%__NONCE__%%";
 	public static String RC_UIVD = "%%__UID__%%";
-	
+
 	public ActionPurgeEntities(ActionController actionController)
 	{
 		super(actionController, Material.FLINT_AND_STEEL, "purge-mobs", "ActionPurgeEntities", 100, "Mob Purger", L.ACTION_PURGEENTITIES, true);
-		
+
 		React.instance().register(this);
-		
+
 		aliases.add("purgee");
 		aliases.add("pe");
 		aliases.add("purgem");
 		aliases.add("pm");
 		maxSleepFactor = 1.2;
 	}
-	
+
 	@Override
 	public void act()
 	{
-		
+
 	}
-	
+
 	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
 		React.instance().getServer().getPluginManager().callEvent(mae);
-		
+
 		if(mae.isCancelled())
 		{
 			return;
 		}
-		
+
 		super.manual(p);
 		long ms = System.currentTimeMillis();
 		int v = 0;
-		
+
 		for(World i : Bukkit.getWorlds())
 		{
 			for(Entity j : i.getEntities())
@@ -72,44 +72,44 @@ public class ActionPurgeEntities extends Action implements Listener
 				{
 					continue;
 				}
-				
+
 				if(cc.getStringList(getCodeName() + ".cullable").contains(j.getType().toString()))
 				{
 					if(j.getType().toString().equals("PLAYER"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("COMPLEX_PART"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("PAINTING"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("PAINTING"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("ITEM_FRAME"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("ARMOR_STAND"))
 					{
 						continue;
 					}
-					
+
 					if(j.getType().toString().equals("WITHER_SKULL"))
 					{
 						continue;
 					}
-					
+
 					if(NMSX.getEntityName(j) != null)
 					{
 						if(cc.getBoolean(getCodeName() + ".filter.ignore-named-entities"))
@@ -117,7 +117,7 @@ public class ActionPurgeEntities extends Action implements Listener
 							continue;
 						}
 					}
-					
+
 					if(j.getType().equals(EntityType.VILLAGER))
 					{
 						if(cc.getBoolean(getCodeName() + ".filter.ignore-villagers"))
@@ -125,29 +125,29 @@ public class ActionPurgeEntities extends Action implements Listener
 							continue;
 						}
 					}
-					
+
 					if(isTamed(j) && cc.getBoolean(getCodeName() + ".filter.ignore-tamed-entities"))
 					{
 						continue;
 					}
-					
+
 					E.r(j);
 					v++;
 				}
 			}
 		}
-		
+
 		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " purged " + ChatColor.WHITE + F.f(v) + ChatColor.GRAY + " entities in " + ChatColor.WHITE + (System.currentTimeMillis() - ms) + "ms";
 		p.sendMessage(Info.TAG + msg);
 		notifyOf(msg, p);
 	}
-	
+
 	@EventHandler
 	public void on(PlayerCommandPreprocessEvent e)
 	{
 		new HandledEvent()
 		{
-			
+
 			@Override
 			public void execute()
 			{
@@ -162,51 +162,51 @@ public class ActionPurgeEntities extends Action implements Listener
 			}
 		};
 	}
-	
+
 	public boolean isTamed(Entity e)
 	{
 		if(e instanceof LivingEntity)
 		{
 			LivingEntity ee = (LivingEntity) e;
-			
+
 			if(ee instanceof Tameable)
 			{
 				Tameable t = (Tameable) ee;
-				
+
 				if(t.isTamed())
 				{
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
 		GList<String> allow = new GList<String>();
-		
+
 		for(EntityType i : EntityType.values())
 		{
 			if(!VersionBukkit.get().equals(VersionBukkit.V7))
 			{
-				if(i.equals(i.equals(EntityType.ARMOR_STAND)))
+				if(i.toString().equals("ARMOR_STAND"))
 				{
 					continue;
 				}
 			}
-			
+
 			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING))
 			{
 				continue;
 			}
-			
+
 			allow.add(i.toString());
 		}
-		
+
 		cc.set(getCodeName() + ".cullable", allow, "Remove entities from here you dont want being purged.");
 		cc.set(getCodeName() + ".filter.ignore-tamed-entities", true, "Ignore tamed entities");
 		cc.set(getCodeName() + ".filter.ignore-named-entities", false, "Ignore entities with names.");

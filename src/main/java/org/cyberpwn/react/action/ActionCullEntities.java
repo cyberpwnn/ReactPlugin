@@ -1,6 +1,7 @@
 package org.cyberpwn.react.action;
 
 import java.util.Collections;
+
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,11 +35,11 @@ public class ActionCullEntities extends Action implements Listener
 	public static String RC_UIVD = "%%__UID__%%";
 	private int lastCulled;
 	private int lastTick;
-	
+
 	public ActionCullEntities(ActionController actionController)
 	{
 		super(actionController, Material.SHEARS, "cull-mobs", "ActionCullEntities", 100, "Mob Culler", L.ACTION_CULLENTITIES, true);
-		
+
 		lastCulled = 0;
 		lastTick = 0;
 		aliases.add("cm");
@@ -47,80 +48,80 @@ public class ActionCullEntities extends Action implements Listener
 		aliases.add("culle");
 		maxSleepFactor = 1.2;
 	}
-	
+
 	@Override
 	public void act()
 	{
 		lastCulled = 0;
 		lastTick = 0;
-		
+
 		for(World i : Bukkit.getWorlds())
 		{
 			cull(i);
 			lastTick++;
 		}
 	}
-	
+
 	@Override
 	public void start()
 	{
 		React.instance().register(this);
 	}
-	
+
 	public boolean isTamed(Entity e)
 	{
 		if(e instanceof LivingEntity)
 		{
 			LivingEntity ee = (LivingEntity) e;
-			
+
 			if(ee instanceof Tameable)
 			{
 				Tameable t = (Tameable) ee;
-				
+
 				if(t.isTamed())
 				{
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	@Override
 	public void stop()
 	{
 		React.instance().unRegister(this);
 	}
-	
+
 	@Override
 	public void manual(CommandSender p)
 	{
 		ManualActionEvent mae = new ManualActionEvent(p, this);
 		React.instance().getServer().getPluginManager().callEvent(mae);
-		
+
 		if(mae.isCancelled())
 		{
 			return;
 		}
-		
+
 		super.manual(p);
 		String msg = ChatColor.WHITE + getName() + ChatColor.GRAY + " culled " + ChatColor.WHITE + lastCulled + " Mobs" + ChatColor.GRAY + " across " + ChatColor.WHITE + F.f((lastTick * 50), 1) + " ticks" + ChatColor.GRAY;
 		p.sendMessage(Info.TAG + msg);
 		notifyOf(msg, p);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void cull(Chunk c)
 	{
 		if(c.getEntities().length > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 		{
 			int tc = c.getEntities().length - cc.getInt(getCodeName() + ".max-entities-per-chunk");
-			
+
 			GList<Entity> e = new GList<Entity>();
 			GList<Entity> p = new GList<Entity>();
 			GList<Entity> b = new GList<Entity>();
-			
+
 			for(Entity i : c.getEntities())
 			{
 				if(isCullable(i))
@@ -129,11 +130,11 @@ public class ActionCullEntities extends Action implements Listener
 					{
 						continue;
 					}
-					
+
 					e.add(i);
 				}
 			}
-			
+
 			if(cc.getBoolean(getCodeName() + ".selective-bias.contrasted-bias"))
 			{
 				for(int i = 0; i < 15; i++)
@@ -146,12 +147,12 @@ public class ActionCullEntities extends Action implements Listener
 						}
 					}
 				}
-				
+
 				e.clear();
 				e.addAll(p);
 				p.clear();
 			}
-			
+
 			if(cc.getBoolean(getCodeName() + ".selective-bias.passive-bias"))
 			{
 				for(Entity i : e.copy())
@@ -165,27 +166,27 @@ public class ActionCullEntities extends Action implements Listener
 						}
 					}
 				}
-				
+
 				for(Entity i : e.copy())
 				{
 					if(!can(i.getLocation()))
 					{
 						continue;
 					}
-					
+
 					p.add(i);
 				}
-				
+
 				e.clear();
 				e.addAll(p);
 				p.clear();
 			}
-			
+
 			if(tc >= e.size())
 			{
 				b.addAll(e);
 			}
-			
+
 			if(tc < e.size())
 			{
 				for(int i = 0; i < tc; i++)
@@ -193,21 +194,21 @@ public class ActionCullEntities extends Action implements Listener
 					b.add(e.pop());
 				}
 			}
-			
+
 			e.clear();
 			cull(b);
 			lastCulled += b.size();
-			
+
 			if(b.size() == 1)
 			{
 				notify(c, 1, StringUtils.capitalise(b.get(0).getType().getName()));
 			}
-			
+
 			else
 			{
 				boolean same = true;
 				EntityType et = b.get(0).getType();
-				
+
 				for(Entity i : b)
 				{
 					if(!i.getType().equals(et))
@@ -216,12 +217,12 @@ public class ActionCullEntities extends Action implements Listener
 						break;
 					}
 				}
-				
+
 				if(same)
 				{
 					notify(c, b.size(), StringUtils.capitalise(b.get(0).getType().getName()));
 				}
-				
+
 				else
 				{
 					notify(c, b.size(), "Mob");
@@ -229,22 +230,22 @@ public class ActionCullEntities extends Action implements Listener
 			}
 		}
 	}
-	
+
 	public void cull(GList<Entity> ent)
 	{
 		Collections.shuffle(ent);
-		
+
 		for(Entity i : ent)
 		{
 			if(!can(i.getLocation()))
 			{
 				continue;
 			}
-			
+
 			cull(i);
 		}
 	}
-	
+
 	public void cull(Entity e)
 	{
 		if(isCullable(e))
@@ -253,64 +254,64 @@ public class ActionCullEntities extends Action implements Listener
 			{
 				return;
 			}
-			
+
 			E.r(e);
 		}
 	}
-	
+
 	public void cull(World w)
 	{
 		GList<Chunk> c = new GList<Chunk>(w.getLoadedChunks());
-		
+
 		if(c.isEmpty())
 		{
 			return;
 		}
-		
+
 		if(c.isEmpty())
 		{
 			return;
 		}
-		
+
 		for(Chunk i : c)
 		{
 			getActionController().getActionStackEntities().stack(i);
-			
+
 			if(weight(i) > cc.getInt(getCodeName() + ".max-entities-per-chunk"))
 			{
 				cull(i);
 			}
-			
+
 			actionController.getActionDullEntities().dull(i);
 		}
 	}
-	
+
 	public boolean isCullable(Entity e)
 	{
 		if(isTamed(e) && cc.getBoolean(getCodeName() + ".filter.ignore-tamed-entities"))
 		{
 			return false;
 		}
-		
+
 		if(!can(e.getLocation()))
 		{
 			return false;
 		}
-		
+
 		return cc.getStringList(getCodeName() + ".cullable").contains(e.getType().toString());
 	}
-	
+
 	public int weight(Chunk chunk)
 	{
 		int w = 0;
 		int k = 0;
-		
+
 		for(Entity i : chunk.getEntities())
 		{
 			if(i.getType().equals(EntityType.DROPPED_ITEM))
 			{
 				k++;
-				
+
 				if(k > getActionController().getActionCullDrops().getConfiguration().getInt("drops-per-chunk"))
 				{
 					if(!React.instance().getActionController().getActionCullDrops().isWorking(i))
@@ -319,28 +320,28 @@ public class ActionCullEntities extends Action implements Listener
 					}
 				}
 			}
-			
+
 			if(isCullable(i))
 			{
 				w++;
 			}
 		}
-		
+
 		return w;
 	}
-	
+
 	public void notify(Chunk c, int amt, String type)
 	{
 		if(cc.getBoolean(getCodeName() + ".notify.enable"))
 		{
 			String msg = cc.getString(getCodeName() + ".notify.message");
-			
+
 			for(Entity i : c.getEntities())
 			{
 				if(i instanceof Player)
 				{
 					Player p = (Player) i;
-					
+
 					if(p.hasPermission(Info.PERM_MONITOR) || cc.getBoolean(getCodeName() + ".notify.enable-non-react-admins"))
 					{
 						NMSX.sendActionBar(p, F.color(msg.replaceAll("%amount%", String.valueOf(amt)).replaceAll("%type%", type + (amt > 1 ? "s" : ""))));
@@ -349,28 +350,28 @@ public class ActionCullEntities extends Action implements Listener
 			}
 		}
 	}
-	
+
 	@Override
 	public void onNewConfig(ClusterConfig cc)
 	{
 		super.onNewConfig(cc);
 		GList<String> allow = new GList<String>();
-		
+
 		for(EntityType i : EntityType.values())
 		{
-			if(VersionBukkit.tc() && i.equals(EntityType.ARMOR_STAND))
+			if(VersionBukkit.tc() && i.toString().equals("ARMOR_STAND"))
 			{
 				continue;
 			}
-			
+
 			if(i.equals(EntityType.PLAYER) || i.equals(EntityType.ARROW) || i.equals(EntityType.BOAT) || i.equals(EntityType.COMPLEX_PART) || i.equals(EntityType.WITHER_SKULL) || i.equals(EntityType.DROPPED_ITEM) || i.equals(EntityType.UNKNOWN) || i.equals(EntityType.THROWN_EXP_BOTTLE) || i.equals(EntityType.EGG) || i.equals(EntityType.ENDER_CRYSTAL) || i.equals(EntityType.ENDER_PEARL) || i.equals(EntityType.ENDER_SIGNAL) || i.equals(EntityType.ITEM_FRAME) || i.equals(EntityType.PAINTING))
 			{
 				continue;
 			}
-			
+
 			allow.add(i.toString());
 		}
-		
+
 		cc.set(getCodeName() + ".filter.ignore-tamed-entities", true, "Ignore tamed entities");
 		cc.set(getCodeName() + ".notify.message", "&cRemoved %amount%x %type%", "Message to notify culls.");
 		cc.set(getCodeName() + ".notify.enable", true);

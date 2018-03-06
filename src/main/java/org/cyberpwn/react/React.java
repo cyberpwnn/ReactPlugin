@@ -462,6 +462,13 @@ public class React extends JavaPlugin implements Configurable
 		{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA + "React " + Version.V + " Started!");
 		}
+
+		File f = new File(getDataFolder(), "r5x");
+
+		if(!f.exists())
+		{
+			f.mkdirs();
+		}
 	}
 
 	@Override
